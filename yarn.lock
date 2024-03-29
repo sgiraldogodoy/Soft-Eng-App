@@ -946,6 +946,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:5.28.9":
+  version: 5.28.9
+  resolution: "@tanstack/query-core@npm:5.28.9"
+  checksum: b336a16af70a7eaebe2fae90ce3ed1f9ad5cdc69b0a7979868ab1870777d9e9a306c370e9853e4526028c0c2473193838a77b94320f7bfee7e30db831731438e
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:^5.28.9":
+  version: 5.28.9
+  resolution: "@tanstack/react-query@npm:5.28.9"
+  dependencies:
+    "@tanstack/query-core": "npm:5.28.9"
+  peerDependencies:
+    react: ^18.0.0
+  checksum: dd03f5fb751f73918a583245ac97fdbe43ecd7fbd28d727f0ff6d80ba5c9c978126003a1250f54ab980a3c2070b6788197f1a241f07fbe95883e985aab007f20
+  languageName: node
+  linkType: hard
+
 "@tanstack/react-table@npm:^8.9.3":
   version: 8.11.6
   resolution: "@tanstack/react-table@npm:8.11.6"
@@ -965,10 +983,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trpc/server@npm:^10.45.2":
-  version: 10.45.2
-  resolution: "@trpc/server@npm:10.45.2"
-  checksum: 0f3fdb5cd505c9f6947e00d67d61663cf87c51c9a591e5f3443f62b37b7d78e1f729cc6784090ec46e4a3c38e73277170590be8eeb8c4ee3dffcc80a3557c1a4
+"@trpc/client@npm:11.0.0-next.327":
+  version: 11.0.0-next.327
+  resolution: "@trpc/client@npm:11.0.0-next.327"
+  peerDependencies:
+    "@trpc/server": 11.0.0-next.327+1c757e8d3
+  checksum: c3011905d5207920f3f2c9fdd073f4da6abe535dad223a28725e5f0291906d6b052407f668b95aac692b4b97322c056e11eb43ca68faa485966bc2ef61f91160
+  languageName: node
+  linkType: hard
+
+"@trpc/react-query@npm:11.0.0-next.327":
+  version: 11.0.0-next.327
+  resolution: "@trpc/react-query@npm:11.0.0-next.327"
+  peerDependencies:
+    "@tanstack/react-query": ^5.25.0
+    "@trpc/client": 11.0.0-next.327+1c757e8d3
+    "@trpc/server": 11.0.0-next.327+1c757e8d3
+    react: ">=18.2.0"
+    react-dom: ">=18.2.0"
+  checksum: a91d240a3e448f462d8c5e01913cabea64a9715de2a0a2f4cfba4c1be6002977330f55c73779148c5e5d3122909a06e8e7701c3777453d9c40239175564e952e
+  languageName: node
+  linkType: hard
+
+"@trpc/server@npm:11.0.0-next.327":
+  version: 11.0.0-next.327
+  resolution: "@trpc/server@npm:11.0.0-next.327"
+  checksum: 72d6a1c4191eb830105f8f5d492473c65eb0a7ec61dc3222cd00b03d50bfeacd3040a1393214cd7088f1a31fa29d1cfe136d03552bdf37c929cff27bc90b4824
   languageName: node
   linkType: hard
 
@@ -1929,17 +1969,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"api@workspace:packages/api":
+"api@workspace:^, api@workspace:packages/api":
   version: 0.0.0-use.local
   resolution: "api@workspace:packages/api"
   dependencies:
-    "@trpc/server": "npm:^10.45.2"
+    "@trpc/server": "npm:11.0.0-next.327"
     database: "workspace:^"
     eslint: "npm:latest"
     eslint-config-custom: "workspace:*"
     prettier: "npm:latest"
     prettier-config-custom: "workspace:*"
-    superjson: "npm:^2.2.1"
+    superjson: "npm:1.13.3"
     tsconfig-custom: "workspace:*"
     typescript: "npm:^5.0.4"
     vitest: "npm:^0.34.1"
@@ -2054,6 +2094,7 @@ __metadata:
   dependencies:
     "@swc/core": "npm:^1.3.60"
     "@swc/helpers": "npm:^0.5.1"
+    "@trpc/server": "npm:11.0.0-next.327"
     "@types/cookie-parser": "npm:^1.4.3"
     "@types/express": "npm:^4.17.17"
     "@types/http-errors": "npm:^2.0.1"
@@ -2061,6 +2102,7 @@ __metadata:
     "@types/node": "npm:^20.2.3"
     "@types/pg": "npm:^8.10.1"
     "@types/supertest": "npm:^2.0.12"
+    api: "workspace:^"
     common: "workspace:*"
     cookie-parser: "npm:~1.4.4"
     database: "workspace:*"
@@ -3655,7 +3697,11 @@ __metadata:
   dependencies:
     "@auth0/auth0-react": "npm:^2.1.1"
     "@popperjs/core": "npm:^2.11.8"
+    "@tanstack/react-query": "npm:^5.28.9"
     "@tanstack/react-table": "npm:^8.9.3"
+    "@trpc/client": "npm:11.0.0-next.327"
+    "@trpc/react-query": "npm:11.0.0-next.327"
+    "@trpc/server": "npm:11.0.0-next.327"
     "@types/bootstrap": "npm:^5.2.6"
     "@types/node": "npm:^20.2.5"
     "@types/prop-types": "npm:^15.7.5"
@@ -3665,6 +3711,7 @@ __metadata:
     "@types/react-router-bootstrap": "npm:^0.26.0"
     "@types/react-router-dom": "npm:^5.3.3"
     "@vitejs/plugin-react-swc": "npm:^3.0.0"
+    api: "workspace:^"
     autoprefixer: "npm:^10.4.18"
     axios: "npm:^1.4.0"
     bootstrap: "npm:^5.2.3"
@@ -3688,6 +3735,7 @@ __metadata:
     sass: "npm:^1.62.1"
     serve: "npm:^14.2.0"
     sort-by: "npm:^1.2.0"
+    superjson: "npm:1.13.3"
     tailwindcss: "npm:^3.4.1"
     tsconfig-custom: "workspace:*"
     typescript: "npm:^5.0.2"
@@ -6603,12 +6651,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"superjson@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "superjson@npm:2.2.1"
+"superjson@npm:1.13.3":
+  version: 1.13.3
+  resolution: "superjson@npm:1.13.3"
   dependencies:
     copy-anything: "npm:^3.0.2"
-  checksum: bb8743a87c97f7845e0c27af1af0731d3185b32099ebce2aee0e67ac9a6ae9a7c4b9edfca7e1fe48693a78b56d5922d1cd13ef80c2fa12b788d3fc0ca25afe47
+  checksum: 71a186c513a9821e58264c0563cd1b3cf07d3b5ba53a09cc5c1a604d8ffeacac976a6ba1b5d5b3c71b6ab5a1941dfba5a15e3f106ad3ef22fe8d5eee3e2be052
   languageName: node
   linkType: hard
 
