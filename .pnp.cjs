@@ -2951,7 +2951,7 @@ const RAW_RUNTIME_STATE =
           ["prettier", "npm:3.2.4"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
           ["priorityqueuejs", "npm:2.0.0"],\
-          ["superjson", "npm:2.2.1"],\
+          ["superjson", "npm:1.13.3"],\
           ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
           ["vitest", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:0.34.6"],\
@@ -9159,14 +9159,6 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/superjson-npm-1.13.3-25a5e9e483-71a186c513.zip/node_modules/superjson/",\
         "packageDependencies": [\
           ["superjson", "npm:1.13.3"],\
-          ["copy-anything", "npm:3.0.5"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["npm:2.2.1", {\
-        "packageLocation": "./.yarn/cache/superjson-npm-2.2.1-4e5de95cff-bb8743a87c.zip/node_modules/superjson/",\
-        "packageDependencies": [\
-          ["superjson", "npm:2.2.1"],\
           ["copy-anything", "npm:3.0.5"]\
         ],\
         "linkType": "HARD"\
