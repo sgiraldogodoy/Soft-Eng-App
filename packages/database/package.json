@@ -7,7 +7,6 @@
   "browser": "./src/index.ts",
   "module": "true",
   "devDependencies": {
-    "@types/priorityqueuejs": "^1.0.4",
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
     "prettier": "latest",
@@ -30,7 +29,6 @@
   },
   "dependencies": {
     "@prisma/client": "4.15.0",
-    "priorityqueuejs": "^2.0.0",
     "prisma": "4.15.0"
   }
 }
