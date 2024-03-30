@@ -2520,11 +2520,13 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["api", "workspace:packages/api"],\
           ["@trpc/server", "npm:10.45.2"],\
+          ["@types/priorityqueuejs", "npm:1.0.4"],\
           ["database", "workspace:packages/database"],\
           ["eslint", "npm:8.56.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["prettier", "npm:3.2.4"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
+          ["priorityqueuejs", "npm:2.0.0"],\
           ["superjson", "npm:2.2.1"],\
           ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\

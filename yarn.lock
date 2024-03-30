@@ -1941,11 +1941,13 @@ __metadata:
   resolution: "api@workspace:packages/api"
   dependencies:
     "@trpc/server": "npm:^10.45.2"
+    "@types/priorityqueuejs": "npm:^1.0.4"
     database: "workspace:^"
     eslint: "npm:latest"
     eslint-config-custom: "workspace:*"
     prettier: "npm:latest"
     prettier-config-custom: "workspace:*"
+    priorityqueuejs: "npm:^2.0.0"
     superjson: "npm:^2.2.1"
     tsconfig-custom: "workspace:*"
     typescript: "npm:^5.0.4"

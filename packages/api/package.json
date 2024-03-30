@@ -7,6 +7,7 @@
   "browser": "./src/index.ts",
   "module": "true",
   "devDependencies": {
+    "@types/priorityqueuejs": "^1.0.4",
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
     "prettier": "latest",
@@ -22,6 +23,7 @@
   "dependencies": {
     "@trpc/server": "^10.45.2",
     "database": "workspace:^",
+    "priorityqueuejs": "^2.0.0",
     "superjson": "^2.2.1",
     "zod": "^3.22.4"
   }
