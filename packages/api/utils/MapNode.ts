@@ -23,8 +23,8 @@ export class MapNode {
    */
   constructor(
     nodeID: string,
-    xcord: number,
-    ycord: number,
+    xcords: number,
+    ycords: number,
     floor: string,
     building: string,
     nodeType: string,
@@ -32,8 +32,8 @@ export class MapNode {
     shortName: string,
   ) {
     this.nodeID = nodeID;
-    this.xcord = xcord;
-    this.ycord = ycord;
+    this.xcord = xcords;
+    this.ycord = ycords;
     this.floor = floor;
     this.building = building;
     this.nodeType = nodeType;

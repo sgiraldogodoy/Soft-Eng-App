@@ -1,5 +1,6 @@
 import { MapNode } from "./MapNode.ts";
 import PriorityQueue from "priorityqueuejs";
+//import { db } from 'database'
 
 const arbHeuristic: number = 100;
 export class PathFinding {
@@ -114,3 +115,21 @@ class NodePath {
     this.cost = cost;
   }
 }
+
+/**
+
+let node = db.node.findUnique({
+    where: {
+        nodeId: '1'
+    },
+    include: {
+        outgoing: {
+            include: {
+                endNode: true
+            }
+        }
+    }
+});
+
+node.outgoing[0].endN
+*/
