@@ -16,7 +16,12 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.1.1",
     "@popperjs/core": "^2.11.8",
+    "@tanstack/react-query": "^5.28.9",
     "@tanstack/react-table": "^8.9.3",
+    "@trpc/client": "11.0.0-next.327",
+    "@trpc/react-query": "11.0.0-next.327",
+    "@trpc/server": "11.0.0-next.327",
+    "api": "workspace:^",
     "autoprefixer": "^10.4.18",
     "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
@@ -32,6 +37,7 @@
     "react-zoom-pan-pinch": "^3.1.0",
     "serve": "^14.2.0",
     "sort-by": "^1.2.0",
+    "superjson": "1.13.3",
     "tailwindcss": "^3.4.1"
   },
   "devDependencies": {

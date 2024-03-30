@@ -1,30 +1,28 @@
-import React from "react";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import ExampleRoute from "./routes/ExampleRoute.tsx";
-function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      errorElement: <div />,
-      element: <Root />,
-      children: [
-        {
-          path: "",
-          element: <ExampleRoute />,
-        },
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { httpBatchLink } from "@trpc/client";
+import superjson from "superjson";
+import { useState } from "react";
+import { trpc } from "./utils/trpc";
+import ExampleRoute from "./routes/ExampleRoute";
+
+export default function App() {
+  const [queryClient] = useState(() => new QueryClient());
+  const [trpcClient] = useState(() =>
+    trpc.createClient({
+      links: [
+        httpBatchLink({
+          url: "http://localhost:3000/api/trpc",
+          transformer: superjson,
+        }),
       ],
-    },
-  ]);
+    }),
+  );
 
-  return <RouterProvider router={router} />;
-  function Root() {
-    return (
-      <div className="w-full flex flex-col px-20 gap-5">
-        <h1>Welcome to your starter code.</h1>
-        <Outlet />
-      </div>
-    );
-  }
+  return (
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <ExampleRoute />
+      </QueryClientProvider>
+    </trpc.Provider>
+  );
 }
-
-export default App;
