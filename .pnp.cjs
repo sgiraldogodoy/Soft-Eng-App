@@ -9164,6 +9164,14 @@ const RAW_RUNTIME_STATE =
           ["copy-anything", "npm:3.0.5"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:2.2.1", {\
+        "packageLocation": "./.yarn/cache/superjson-npm-2.2.1-4e5de95cff-bb8743a87c.zip/node_modules/superjson/",\
+        "packageDependencies": [\
+          ["superjson", "npm:2.2.1"],\
+          ["copy-anything", "npm:3.0.5"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["supertest", [\
@@ -15916,8 +15924,7 @@ function applyPatch(pnpapi, opts) {
     return requireStack;
   }
   const originalModuleLoad = require$$0.Module._load;
-  require$$0.Module._load = function(request, parent, is
-                                     ) {
+  require$$0.Module._load = function(request, parent, isMain) {
     if (request === `pnpapi`) {
       const parentApiPath = opts.manager.getApiPathFromParent(parent);
       if (parentApiPath) {
