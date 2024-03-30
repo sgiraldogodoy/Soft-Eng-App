@@ -16,7 +16,7 @@
     "vitest": "^0.34.1"
   },
   "scripts": {
-    "lint": "yarn shared:prettierlint && prisma validate && yarn shared:eslint && yarn shared:tslint",
+    "lint": "dotenv -e ../../.env -- (yarn shared:prettierlint && prisma validate && yarn shared:eslint && yarn shared:tslint)",
     "lint:fix": "yarn shared:prettierlint:fix && prisma format && yarn shared:eslint:fix && yarn shared:tslint",
     "build": "yarn -T run pnpify prisma generate",
     "build:dev": "yarn -T run pnpify prisma generate",
