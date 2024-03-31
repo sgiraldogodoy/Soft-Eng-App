@@ -1,4 +1,3 @@
-
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -22,26 +21,26 @@ model Node {
   nodeType      String
   longName      String
   shortName     String
-  outgoing      Edge[]          @relation(name: "startNode")
-  incoming      Edge[]          @relation(name: "endNode")
-  flowerRequest FlowerRequest[] @relation(name: "node")
+  outgoing      Edge[]          @relation(name: "NodeOutgoingEdge")
+  incoming      Edge[]          @relation(name: "NodeIncomingEdge")
+  flowerRequest FlowerRequest[] @relation(name: "FlowerRequest")
 }
 
 model Edge {
   edgeId      String @id
   startNodeId String
   endNodeId   String
-  startNode   Node   @relation(name: "startNode", fields: [startNodeId], references: [nodeId])
-  endNode     Node   @relation(name: "endNode", fields: [endNodeId], references: [nodeId])
+  startNode   Node   @relation(name: "NodeOutgoingEdge", fields: [startNodeId], references: [nodeId])
+  endNode     Node   @relation(name: "NodeIncomingEdge", fields: [endNodeId], references: [nodeId])
 }
 
 model FlowerRequest {
-  id          String @id
-  roomToDeliver      String
-  node        Node   @relation(name: "node", fields: [roomToDeliver], references: [nodeId])
-  flowerName String
-  requestDate DateTime @default(now())
-  loginName String
+  id              String   @id
+  nodeId          String
+  node            Node     @relation(name: "FlowerRequest", fields: [nodeId], references: [nodeId])
+  flowerName      String
+  requestDate     DateTime @default(now())
+  loginName       String
   commentOnFlower String
-  totalPayment Float
+  totalPayment    Float
 }
