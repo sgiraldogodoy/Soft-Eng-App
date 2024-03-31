@@ -1,3 +1,4 @@
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -12,9 +13,24 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
-// example table used in the express router example
-model HighScore {
-  id    Int      @id @default(autoincrement())
-  time  DateTime
-  score Int
+model Node {
+  nodeId        String          @id
+  xcords        Float
+  ycords        Float
+  building      String
+  floor         String
+  nodeType      String
+  longName      String
+  shortName     String
+  outgoing      Edge[]          @relation(name: "startNode")
+  incoming      Edge[]          @relation(name: "endNode")
 }
+
+model Edge {
+  edgeId      String @id
+  startNodeId String
+  endNodeId   String
+  startNode   Node   @relation(name: "startNode", fields: [startNodeId], references: [nodeId])
+  endNode     Node   @relation(name: "endNode", fields: [endNodeId], references: [nodeId])
+}
+
