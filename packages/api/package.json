@@ -7,6 +7,7 @@
   "browser": "./src/index.ts",
   "module": "true",
   "devDependencies": {
+    "@types/priorityqueuejs": "^1.0.4",
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
     "prettier": "latest",
@@ -20,9 +21,10 @@
     "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint"
   },
   "dependencies": {
-    "@trpc/server": "^10.45.2",
+    "@trpc/server": "11.0.0-next.327",
     "database": "workspace:^",
-    "superjson": "^2.2.1",
+    "priorityqueuejs": "^2.0.0",
+    "superjson": "1.13.3",
     "zod": "^3.22.4"
   }
 }
