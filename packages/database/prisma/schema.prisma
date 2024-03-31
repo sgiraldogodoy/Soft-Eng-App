@@ -24,6 +24,7 @@ model Node {
   shortName     String
   outgoing      Edge[]          @relation(name: "startNode")
   incoming      Edge[]          @relation(name: "endNode")
+  flowerRequest FlowerRequest[] @relation(name: "node")
 }
 
 model Edge {
@@ -34,3 +35,13 @@ model Edge {
   endNode     Node   @relation(name: "endNode", fields: [endNodeId], references: [nodeId])
 }
 
+model FlowerRequest {
+  id          String @id
+  roomToDeliver      String
+  node        Node   @relation(name: "node", fields: [roomToDeliver], references: [nodeId])
+  flowerName String
+  requestDate DateTime @default(now())
+  loginName String
+  commentOnFlower String
+  totalPayment Float
+}
