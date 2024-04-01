@@ -1,5 +1,5 @@
 import PriorityQueue from "priorityqueuejs";
-import { Node } from "database";
+import type { Node } from "database";
 import type { PrismaClient } from "database";
 
 const arbHeuristic: number = 100;
