@@ -1,7 +1,7 @@
 import React from "react";
-import { ExampleComponent } from "../components/ExampleComponent.tsx";
+import { ExampleComponent } from "@/components/ExampleComponent.tsx";
 import { trpc } from "../utils/trpc.ts";
-import { Button } from "../../../../@/components/ui/button.tsx";
+import { Button } from "@/components/ui/button.tsx";
 
 export default function ExampleRoute() {
   const query = trpc.base.hello.useQuery();
