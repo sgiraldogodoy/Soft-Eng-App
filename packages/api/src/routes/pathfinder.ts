@@ -3,8 +3,8 @@ import z from "zod";
 import { PathFinding } from "../../utils/PathFinding.ts";
 
 export const pathfinder = router({
-  getNodes: publicProcedure.query(({ ctx }) => {
-    const data = ctx.db.node.findMany();
+  getNodes: publicProcedure.query(async ({ ctx }) => {
+    const data = await ctx.db.node.findMany();
 
     return data;
   }),
