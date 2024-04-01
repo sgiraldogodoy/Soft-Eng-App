@@ -74,7 +74,7 @@ const RAW_RUNTIME_STATE =
           ["@vitest/ui", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.33.0"],\
           ["@yarnpkg/pnpify", "npm:4.0.1"],\
           ["dotenv", "npm:16.4.5"],\
-          ["dotenv-cli", "npm:7.4.0"],\
+          ["dotenv-cli", "npm:7.4.1"],\
           ["eslint", "npm:8.56.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["happy-dom", "npm:10.11.2"],\
@@ -4140,6 +4140,8 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["database", "workspace:packages/database"],\
           ["@prisma/client", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:4.15.0"],\
+          ["dotenv", "npm:16.4.5"],\
+          ["dotenv-cli", "npm:7.4.1"],\
           ["eslint", "npm:8.56.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["prettier", "npm:3.2.4"],\
@@ -4474,10 +4476,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["dotenv-cli", [\
-      ["npm:7.4.0", {\
-        "packageLocation": "./.yarn/cache/dotenv-cli-npm-7.4.0-c614aa6c80-521e2c61cc.zip/node_modules/dotenv-cli/",\
+      ["npm:7.4.1", {\
+        "packageLocation": "./.yarn/cache/dotenv-cli-npm-7.4.1-ac1a13f3cf-213ed2a446.zip/node_modules/dotenv-cli/",\
         "packageDependencies": [\
-          ["dotenv-cli", "npm:7.4.0"],\
+          ["dotenv-cli", "npm:7.4.1"],\
           ["cross-spawn", "npm:7.0.3"],\
           ["dotenv", "npm:16.4.5"],\
           ["dotenv-expand", "npm:10.0.0"],\
@@ -9100,7 +9102,7 @@ const RAW_RUNTIME_STATE =
           ["@vitest/ui", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.33.0"],\
           ["@yarnpkg/pnpify", "npm:4.0.1"],\
           ["dotenv", "npm:16.4.5"],\
-          ["dotenv-cli", "npm:7.4.0"],\
+          ["dotenv-cli", "npm:7.4.1"],\
           ["eslint", "npm:8.56.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["happy-dom", "npm:10.11.2"],\

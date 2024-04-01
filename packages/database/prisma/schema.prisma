@@ -12,9 +12,36 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
-// example table used in the express router example
-model HighScore {
-  id    Int      @id @default(autoincrement())
-  time  DateTime
-  score Int
+model Node {
+  nodeId        String          @id
+  xcords        Float
+  ycords        Float
+  building      String
+  floor         String
+  nodeType      String
+  longName      String
+  shortName     String
+  outgoing      Edge[]          @relation(name: "NodeOutgoingEdge")
+  incoming      Edge[]          @relation(name: "NodeIncomingEdge")
+  flowerRequest FlowerRequest[] @relation(name: "FlowerRequest")
+}
+
+model Edge {
+  edgeId      String @id
+  startNodeId String
+  endNodeId   String
+  startNode   Node   @relation(name: "NodeOutgoingEdge", fields: [startNodeId], references: [nodeId])
+  endNode     Node   @relation(name: "NodeIncomingEdge", fields: [endNodeId], references: [nodeId])
+}
+
+model FlowerRequest {
+  id              String   @id
+  nodeId          String
+  node            Node     @relation(name: "FlowerRequest", fields: [nodeId], references: [nodeId])
+  flowerName      String
+  requestDate     DateTime @default(now())
+  loginName       String
+  commentOnFlower String
+  totalPayment    Float
+  delivered       Boolean
 }
