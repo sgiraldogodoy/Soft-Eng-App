@@ -10,7 +10,7 @@ export const pathfinder = router({
   }),
   findPathBFS: publicProcedure
     .input(z.object({ startNodeId: z.string(), endNodeId: z.string() }))
-    .query(({ input, ctx }) => {
+    .query(async ({ input, ctx }) => {
       return await PathFinding.breadthFirstSearch(
         input.startNodeId,
         input.endNodeId,
