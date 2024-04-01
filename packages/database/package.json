@@ -7,6 +7,8 @@
   "browser": "./src/index.ts",
   "module": "true",
   "devDependencies": {
+    "dotenv": "^16.4.5",
+    "dotenv-cli": "^7.4.1",
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
     "prettier": "latest",
@@ -16,11 +18,11 @@
     "vitest": "^0.34.1"
   },
   "scripts": {
-    "lint": "dotenv -e ../../.env -- (yarn shared:prettierlint && prisma validate && yarn shared:eslint && yarn shared:tslint)",
-    "lint:fix": "yarn shared:prettierlint:fix && prisma format && yarn shared:eslint:fix && yarn shared:tslint",
+    "lint": "dotenv -e ${PROJECT_CWD}/.env -- yarn shared:prettierlint && dotenv -e ${PROJECT_CWD}/.env -- prisma validate && dotenv -e ${PROJECT_CWD}/.env -- yarn shared:eslint && dotenv -e ${PROJECT_CWD}/.env -- yarn shared:tslint",
+    "lint:fix": "dotenv -e ${PROJECT_CWD}/.env -- yarn shared:prettierlint:fix && dotenv -e ${PROJECT_CWD}/.env -- prisma format && dotenv -e ${PROJECT_CWD}/.env -- yarn shared:eslint:fix && dotenv -e ${PROJECT_CWD}/.env -- yarn shared:tslint",
     "build": "yarn -T run pnpify prisma generate",
     "build:dev": "yarn -T run pnpify prisma generate",
-    "migrate:dev": "prisma migrate dev --skip-generate",
+    "migrate:dev": "yarn run dotenv -e ../../.env -- prisma migrate dev --skip-generate",
     "migrate:reset": "prisma migrate reset --skip-generate",
     "migrate:deploy": "prisma migrate deploy",
     "migrate:resolve": "prisma migrate resolve",

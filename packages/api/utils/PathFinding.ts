@@ -1,6 +1,6 @@
-import { MapNode } from "./MapNode.ts";
 import PriorityQueue from "priorityqueuejs";
-//import { db } from 'database'
+import type { Node } from "database";
+import type { PrismaClient } from "database";
 
 const arbHeuristic: number = 100;
 export class PathFinding {
@@ -8,22 +8,56 @@ export class PathFinding {
    * breadthFirstSearch function that returns a path between two nodes
    * @param root the start node
    * @param goal the end node
+   * @param db the database
    * @returns currently just the end node if found. Will eventually be the path between the two nodes
    */
-  static breadthFirstSearch(root: MapNode, goal: MapNode): MapNode[] {
-    const queue: { curNode: MapNode; path: MapNode[] }[] = [];
+  static async breadthFirstSearch(
+    root: string,
+    goal: string,
+    db: PrismaClient,
+  ): Promise<Node[]> {
     const visited: string[] = [];
 
-    queue.push({ curNode: root, path: [root] });
+    const nodeArray = await db.node.findMany({
+      include: {
+        outgoing: {
+          include: {
+            endNode: true,
+          },
+        },
+      },
+    });
+
+    type NodeWithOutgoing = typeof nodeArray extends Array<infer T> ? T : never;
+
+    const nodeRecord: Record<string, NodeWithOutgoing> = nodeArray.reduce(
+      (acc, node) => {
+        return {
+          ...acc,
+          [node.nodeId]: node,
+        };
+      },
+      {},
+    );
+
+    const queue: { currNode: NodeWithOutgoing; path: Node[] }[] = [];
+
+    const startNode = nodeRecord[root];
+    const goalNode = nodeRecord[goal];
+
+    queue.push({ currNode: startNode, path: [startNode] });
     while (queue.length > 0) {
-      const { curNode, path } = queue.shift()!;
-      if (curNode.getNodeID() == goal.getNodeID()) {
+      const { currNode, path } = queue.shift()!;
+      if (currNode.nodeId == goalNode.nodeId) {
         return path;
       }
-      for (const neighbor of curNode.getEdges()) {
-        if (!visited.includes(neighbor.getNodeID())) {
-          visited.push(neighbor.getNodeID());
-          queue.push({ curNode: neighbor, path: [...path, neighbor] });
+
+      for (const outgoingEdge of currNode.outgoing) {
+        const neighbor = nodeRecord[outgoingEdge.endNode.nodeId];
+
+        if (!visited.includes(neighbor.nodeId)) {
+          visited.push(neighbor.nodeId);
+          queue.push({ currNode: neighbor, path: [...path, neighbor] });
         }
       }
     }
@@ -35,35 +69,65 @@ export class PathFinding {
    * aStar function that returns a path between two nodes using the A* algorithm
    * @param root start node
    * @param goal goal node
+   * @param db the database
    */
-  static aStar(root: MapNode, goal: MapNode): MapNode[] {
-    const priorityQueue = new PriorityQueue<NodePath>(
-      (a, b) => a.cost - b.cost,
-    );
-    const visited: string[] = []; //push root
+  static async aStar(
+    root: string,
+    goal: string,
+    db: PrismaClient,
+  ): Promise<Node[]> {
+    const visited: string[] = [];
+    const nodeArray = await db.node.findMany({
+      include: {
+        outgoing: {
+          include: {
+            endNode: true,
+          },
+        },
+      },
+    });
 
-    priorityQueue.enq(new NodePath(root, [root], 0));
-    visited.push(root.getNodeID());
+    type NodeWithOutgoing = typeof nodeArray extends Array<infer T> ? T : never;
+    const priorityQueue = new PriorityQueue<
+      NodeWithOutgoing & { path: Node[]; cost: number }
+    >((a, b) => a.cost - b.cost);
+    const nodeRecord: Record<string, NodeWithOutgoing> = nodeArray.reduce(
+      (acc, node) => {
+        return {
+          ...acc,
+          [node.nodeId]: node,
+        };
+      },
+      {},
+    );
+
+    const startNode = nodeRecord[root];
+    const goalNode = nodeRecord[goal];
+
+    priorityQueue.enq({ ...startNode, path: [startNode], cost: 0 });
+    visited.push(startNode.nodeId);
     while (!priorityQueue.isEmpty()) {
-      const nodeP = priorityQueue.deq(); //grab highest priority (lowest Dist)
-      const currNode = nodeP.node;
-      const path = nodeP.path;
-      const priority = nodeP.cost;
-      if (currNode.getNodeID() == goal.getNodeID()) {
+      const currNode = priorityQueue.deq(); //grab highest priority (lowest Dist)
+      const path = currNode.path;
+      const priority = currNode.cost;
+      if (currNode.nodeId == goalNode.nodeId) {
         return path;
       }
 
-      for (const neighbor of currNode.getEdges()) {
-        if (!visited.includes(neighbor.getNodeID())) {
-          visited.push(neighbor.getNodeID());
+      for (const outgoingEdge of currNode.outgoing) {
+        const neighbor = nodeRecord[outgoingEdge.endNode.nodeId];
+        if (!visited.includes(neighbor.nodeId)) {
+          visited.push(neighbor.nodeId);
           const newPriority =
             priority +
-            this.pythDist(neighbor, goal) +
-            this.floorDist(neighbor, goal) +
-            this.manHatt(neighbor, goal);
-          priorityQueue.enq(
-            new NodePath(neighbor, [...path, neighbor], newPriority),
-          );
+            this.pythDist(neighbor, goalNode) +
+            this.floorDist(neighbor, goalNode) +
+            this.manHatt(neighbor, goalNode);
+          priorityQueue.enq({
+            ...neighbor,
+            path: [...path, neighbor],
+            cost: newPriority,
+          });
         }
       }
     }
@@ -76,10 +140,10 @@ export class PathFinding {
    * @param currNode start node
    * @param goal end node
    */
-  static pythDist(currNode: MapNode, goal: MapNode): number {
+  static pythDist(currNode: Node, goal: Node): number {
     return Math.sqrt(
-      Math.pow(currNode.getCord().x - goal.getCord().x, 2) +
-        Math.pow(currNode.getCord().y - goal.getCord().y, 2),
+      Math.pow(currNode.xcords - goal.xcords, 2) +
+        Math.pow(currNode.ycords - goal.ycords, 2),
     );
   }
 
@@ -88,8 +152,19 @@ export class PathFinding {
    * @param currNode start node
    * @param goal end node
    */
-  static floorDist(currNode: MapNode, goal: MapNode): number {
-    return arbHeuristic * Math.abs(currNode.getFloor() - goal.getFloor());
+  static floorDist(currNode: Node, goal: Node): number {
+    const currNodeFloor: string = currNode.floor;
+    const goalNodeFloor: string = goal.floor;
+    return (
+      arbHeuristic *
+      Math.abs(this.floorToInt(currNodeFloor) - this.floorToInt(goalNodeFloor))
+    );
+  }
+
+  static floorToInt(floor: string): number {
+    if (floor == "L1") return -1;
+    else if (floor == "L2") return -2;
+    return parseInt(floor);
   }
 
   /**
@@ -97,39 +172,10 @@ export class PathFinding {
    * @param currNode start node
    * @param goal end node
    */
-  static manHatt(currNode: MapNode, goal: MapNode): number {
+  static manHatt(currNode: Node, goal: Node): number {
     return (
-      Math.abs(currNode.getCord().x - goal.getCord().x) +
-      Math.abs(currNode.getCord().y - goal.getCord().y)
+      Math.abs(currNode.xcords - goal.xcords) +
+      Math.abs(currNode.ycords - goal.ycords)
     );
   }
 }
-
-class NodePath {
-  node: MapNode;
-  path: MapNode[];
-  cost: number;
-  constructor(node: MapNode, path: MapNode[], cost: number) {
-    this.node = node;
-    this.path = path;
-    this.cost = cost;
-  }
-}
-
-/**
-
-let node = db.node.findUnique({
-    where: {
-        nodeId: '1'
-    },
-    include: {
-        outgoing: {
-            include: {
-                endNode: true
-            }
-        }
-    }
-});
-
-node.outgoing[0].endN
-*/
