@@ -21,5 +21,4 @@ services:
     expose:
       - *pg-port
     # Use the DB args defined above
-    environment:
-      *db-args
+    environment: *db-args
