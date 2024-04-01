@@ -3,7 +3,7 @@ import { httpBatchLink } from "@trpc/client";
 import superjson from "superjson";
 import { useState } from "react";
 import { trpc } from "./utils/trpc";
-import HomePage from "@/components/HomePage.tsx";
+import { AppRouter } from "./routes/AppRouter.tsx";
 
 export default function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -21,7 +21,7 @@ export default function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <HomePage />
+        <AppRouter />
       </QueryClientProvider>
     </trpc.Provider>
   );
