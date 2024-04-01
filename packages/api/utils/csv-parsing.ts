@@ -1,22 +1,16 @@
-import fs from "fs";
-import readline from "readline";
 import type { Prisma } from "database";
 
 type Node = Prisma.NodeCreateManyInput;
 type Edge = Prisma.EdgeCreateManyInput;
 
-export async function parseCSVNode(path: string) {
+export async function parseCSVNode(csv: string) {
   const nodes: Node[] = [];
 
+  const lines = csv.split("\n");
   // Parse nodes CSV
-  const nodeStream = readline.createInterface({
-    input: fs.createReadStream(path),
-    output: process.stdout,
-    terminal: false,
-  });
 
   let i = 0;
-  for await (const line of nodeStream) {
+  for await (const line of lines) {
     if (i == 0) {
       i++;
       continue;
@@ -50,18 +44,14 @@ export async function parseCSVNode(path: string) {
   return nodes;
 }
 
-export async function parseCSVEdge(path: string) {
+export async function parseCSVEdge(csv: string) {
   const edges: Edge[] = [];
 
   // Parse edges CSV
-  const edgeStream = readline.createInterface({
-    input: fs.createReadStream(path),
-    output: process.stdout,
-    terminal: false,
-  });
+  const lines = csv.split("\n");
 
   let i = 0;
-  for await (const line of edgeStream) {
+  for await (const line of lines) {
     if (i == 0) {
       i++;
       continue;
@@ -75,7 +65,6 @@ export async function parseCSVEdge(path: string) {
       startNodeId: endNodeId,
       endNodeId: startNodeId,
     });
-    console.log("processing Edge: " + line);
   }
 
   return edges;
