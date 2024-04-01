@@ -28,7 +28,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@auth0/auth0-react@npm:^2.1.1":
+"@auth0/auth0-react@npm:^2.2.4":
   version: 2.2.4
   resolution: "@auth0/auth0-react@npm:2.2.4"
   dependencies:
@@ -4415,7 +4415,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "frontend@workspace:apps/frontend"
   dependencies:
-    "@auth0/auth0-react": "npm:^2.1.1"
+    "@auth0/auth0-react": "npm:^2.2.4"
     "@popperjs/core": "npm:^2.11.8"
     "@radix-ui/react-slot": "npm:^1.0.2"
     "@tanstack/react-query": "npm:^5.28.9"
