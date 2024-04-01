@@ -32,7 +32,8 @@
     "build": "turbo run build",
     "docker:upload": "turbo run docker:upload --concurrency=1",
     "commitlint": "commitlint --edit",
-    "commit": "commit"
+    "commit": "commit",
+    "prepare": "husky install"
   },
   "packageManager": "yarn@4.0.2",
   "devDependencies": {
