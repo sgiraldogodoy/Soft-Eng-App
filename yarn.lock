@@ -894,13 +894,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@remix-run/router@npm:1.14.2":
-  version: 1.14.2
-  resolution: "@remix-run/router@npm:1.14.2"
-  checksum: 422844e88b985f1e287301b302c6cf8169c9eea792f80d40464f97b25393bb2e697228ebd7a7b61444d5a51c5873c4a637aad20acde5886a5caf62e833c5ceee
-  languageName: node
-  linkType: hard
-
 "@restart/hooks@npm:^0.4.9":
   version: 0.4.15
   resolution: "@restart/hooks@npm:0.4.15"
@@ -1425,13 +1418,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/history@npm:^4.7.11":
-  version: 4.7.11
-  resolution: "@types/history@npm:4.7.11"
-  checksum: 1da529a3485f3015daf794effa3185493bf7dd2551c26932389c614f5a0aab76ab97645897d1eef9c74ead216a3848fcaa019f165bbd6e4b71da6eff164b4c68
-  languageName: node
-  linkType: hard
-
 "@types/http-cache-semantics@npm:*":
   version: 4.0.4
   resolution: "@types/http-cache-semantics@npm:4.0.4"
@@ -1510,6 +1496,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^20.12.2":
+  version: 20.12.2
+  resolution: "@types/node@npm:20.12.2"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: f1f0ebfe475aefa183763b856e0023b81b76554196e8676a45b9fcfd1012cdd20d32adefb3c0330001c0011e074676603c34c24821a4924228250ea13a75da43
+  languageName: node
+  linkType: hard
+
 "@types/pg@npm:^8.10.1":
   version: 8.10.9
   resolution: "@types/pg@npm:8.10.9"
@@ -1573,27 +1568,6 @@ __metadata:
   dependencies:
     "@types/react": "npm:*"
   checksum: 9a1d419c0b74186d1fa1795da77cb675725356d51fec03a40a436db8fddc0030eba6a18470cde038c8cacf758d7bad98e44f2dc132b22801c2ed34621022a82d
-  languageName: node
-  linkType: hard
-
-"@types/react-router-dom@npm:^5.3.3":
-  version: 5.3.3
-  resolution: "@types/react-router-dom@npm:5.3.3"
-  dependencies:
-    "@types/history": "npm:^4.7.11"
-    "@types/react": "npm:*"
-    "@types/react-router": "npm:*"
-  checksum: 28c4ea48909803c414bf5a08502acbb8ba414669b4b43bb51297c05fe5addc4df0b8fd00e0a9d1e3535ec4073ef38aaafac2c4a2b95b787167d113bc059beff3
-  languageName: node
-  linkType: hard
-
-"@types/react-router@npm:*":
-  version: 5.1.20
-  resolution: "@types/react-router@npm:5.1.20"
-  dependencies:
-    "@types/history": "npm:^4.7.11"
-    "@types/react": "npm:*"
-  checksum: 72d78d2f4a4752ec40940066b73d7758a0824c4d0cbeb380ae24c8b1cdacc21a6fc835a99d6849b5b295517a3df5466fc28be038f1040bd870f8e39e5ded43a4
   languageName: node
   linkType: hard
 
@@ -2288,6 +2262,7 @@ __metadata:
   resolution: "api@workspace:packages/api"
   dependencies:
     "@trpc/server": "npm:11.0.0-next.327"
+    "@types/node": "npm:^20.12.2"
     "@types/priorityqueuejs": "npm:^1.0.4"
     database: "workspace:^"
     eslint: "npm:latest"
@@ -4338,7 +4313,6 @@ __metadata:
     "@types/react-bootstrap": "npm:^0.32.32"
     "@types/react-dom": "npm:^18.0.11"
     "@types/react-router-bootstrap": "npm:^0.26.0"
-    "@types/react-router-dom": "npm:^5.3.3"
     "@vitejs/plugin-react-swc": "npm:^3.0.0"
     api: "workspace:^"
     autoprefixer: "npm:^10.4.18"
@@ -4359,7 +4333,6 @@ __metadata:
     react-bootstrap: "npm:^2.7.4"
     react-dom: "npm:^18.2.0"
     react-router-bootstrap: "npm:^0.26.2"
-    react-router-dom: "npm:^6.11.2"
     react-zoom-pan-pinch: "npm:^3.1.0"
     sass: "npm:^1.62.1"
     serve: "npm:^14.2.0"
@@ -4371,6 +4344,7 @@ __metadata:
     vite: "npm:^4.3.9"
     vite-plugin-eslint: "npm:^1.8.1"
     vitest: "npm:^0.34.1"
+    wouter: "npm:^3.1.0"
   languageName: unknown
   linkType: soft
 
@@ -5717,6 +5691,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mitt@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "mitt@npm:3.0.1"
+  checksum: 287c70d8e73ffc25624261a4989c783768aed95ecb60900f051d180cf83e311e3e59865bfd6e9d029cdb149dc20ba2f128a805e9429c5c4ce33b1416c65bbd14
+  languageName: node
+  linkType: hard
+
 "mkdirp@npm:^1.0.3":
   version: 1.0.4
   resolution: "mkdirp@npm:1.0.4"
@@ -6862,30 +6843,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^6.11.2":
-  version: 6.21.3
-  resolution: "react-router-dom@npm:6.21.3"
-  dependencies:
-    "@remix-run/router": "npm:1.14.2"
-    react-router: "npm:6.21.3"
-  peerDependencies:
-    react: ">=16.8"
-    react-dom: ">=16.8"
-  checksum: 6e23e35d02e5c83847c8e47d7912d1f6c2c42a35f2317802031bdd993a8205468138a045ff34f67fe807fe9f7dc9d0995ee05bab25aedc0bf978e620ac132815
-  languageName: node
-  linkType: hard
-
-"react-router@npm:6.21.3":
-  version: 6.21.3
-  resolution: "react-router@npm:6.21.3"
-  dependencies:
-    "@remix-run/router": "npm:1.14.2"
-  peerDependencies:
-    react: ">=16.8"
-  checksum: 3d5107cfdb440519d84e6ad6d95454e3bf41ec97677b95f7b2a7f281f8ddf191b765cf1b599ead951f3cd33ed4429f140590d74a01cfdf835dc2f812023a978a
-  languageName: node
-  linkType: hard
-
 "react-transition-group@npm:^4.4.5":
   version: 4.4.5
   resolution: "react-transition-group@npm:4.4.5"
@@ -6953,6 +6910,13 @@ __metadata:
   version: 0.14.1
   resolution: "regenerator-runtime@npm:0.14.1"
   checksum: 5db3161abb311eef8c45bcf6565f4f378f785900ed3945acf740a9888c792f75b98ecb77f0775f3bf95502ff423529d23e94f41d80c8256e8fa05ed4b07cf471
+  languageName: node
+  linkType: hard
+
+"regexparam@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "regexparam@npm:3.0.0"
+  checksum: 80574803cb9f31d1ec7b10ce1db5be629868794ce331c7098fd9725c4c0891347c2fedc18b17de17bda2441da6ef30218b1ad2d481a4081e33ef773de04f9082
   languageName: node
   linkType: hard
 
@@ -7518,6 +7482,7 @@ __metadata:
     "@commitlint/cli": "npm:^19.2.1"
     "@commitlint/config-conventional": "npm:^19.1.0"
     "@commitlint/prompt-cli": "npm:^19.2.0"
+    "@types/node": "npm:^20.12.2"
     "@types/react": "npm:^18.0.37"
     "@types/react-dom": "npm:^18.0.11"
     "@vitest/ui": "npm:^0.33.0"
@@ -8267,6 +8232,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"use-sync-external-store@npm:^1.0.0":
+  version: 1.2.0
+  resolution: "use-sync-external-store@npm:1.2.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: a676216affc203876bd47981103f201f28c2731361bb186367e12d287a7566763213a8816910c6eb88265eccd4c230426eb783d64c373c4a180905be8820ed8e
+  languageName: node
+  linkType: hard
+
 "util-deprecate@npm:^1.0.1, util-deprecate@npm:^1.0.2":
   version: 1.0.2
   resolution: "util-deprecate@npm:1.0.2"
@@ -8622,6 +8596,19 @@ __metadata:
   dependencies:
     string-width: "npm:^5.0.1"
   checksum: 64c48cf27171221be5f86fc54b94dd29879165bdff1a7aa92dde723d9a8c99fb108312768a5d62c8c2b80b701fa27bbd36a1ddc58367585cd45c0db7920a0cba
+  languageName: node
+  linkType: hard
+
+"wouter@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "wouter@npm:3.1.0"
+  dependencies:
+    mitt: "npm:^3.0.1"
+    regexparam: "npm:^3.0.0"
+    use-sync-external-store: "npm:^1.0.0"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: a7dcd1d30bd941c179a915670b4d70798b08cb0a844fad00dc548456742c4c7c0a32f610147a432eecc64eed8b128da5261331110578c82123bc38a5dd99529d
   languageName: node
   linkType: hard
 
