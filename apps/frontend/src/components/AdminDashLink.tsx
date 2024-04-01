@@ -1,7 +1,9 @@
+import { ArrowRight } from "lucide-react";
+
 export default function AdminDashLink() {
   return (
-    <>
-      <h1 className="text-theme-blue flex justify-center">Hello World</h1>
-    </>
+    <a className="text-theme-dark">
+      Administrator Dashboard <ArrowRight />{" "}
+    </a>
   );
 }
