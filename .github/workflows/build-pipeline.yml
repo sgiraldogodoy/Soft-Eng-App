@@ -34,4 +34,3 @@ jobs:
           target: prod-backend
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKER_REPO }}:backend
-
