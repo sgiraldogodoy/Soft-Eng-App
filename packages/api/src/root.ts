@@ -1,8 +1,8 @@
-import { baseRouter } from "./routes";
+import {serviceRequestRouter} from "./routes";
 import { router } from "./trpc";
 
 export const appRouter = router({
-  base: baseRouter,
+  service: serviceRequestRouter,
 });
 
 export type AppRouter = typeof appRouter;
