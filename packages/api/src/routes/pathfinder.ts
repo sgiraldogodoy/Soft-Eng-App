@@ -11,7 +11,7 @@ export const pathfinder = router({
   findPathBFS: publicProcedure
     .input(z.object({ startNodeId: z.string(), endNodeId: z.string() }))
     .query(({ input, ctx }) => {
-      return PathFinding.breadthFirstSearch(
+      return await PathFinding.breadthFirstSearch(
         input.startNodeId,
         input.endNodeId,
         ctx.db,
