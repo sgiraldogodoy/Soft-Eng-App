@@ -1510,6 +1510,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^20.12.2":
+  version: 20.12.2
+  resolution: "@types/node@npm:20.12.2"
+  dependencies:
+    undici-types: "npm:~5.26.4"
+  checksum: f1f0ebfe475aefa183763b856e0023b81b76554196e8676a45b9fcfd1012cdd20d32adefb3c0330001c0011e074676603c34c24821a4924228250ea13a75da43
+  languageName: node
+  linkType: hard
+
 "@types/pg@npm:^8.10.1":
   version: 8.10.9
   resolution: "@types/pg@npm:8.10.9"
@@ -2288,6 +2297,7 @@ __metadata:
   resolution: "api@workspace:packages/api"
   dependencies:
     "@trpc/server": "npm:11.0.0-next.327"
+    "@types/node": "npm:^20.12.2"
     "@types/priorityqueuejs": "npm:^1.0.4"
     database: "workspace:^"
     eslint: "npm:latest"
@@ -7518,6 +7528,7 @@ __metadata:
     "@commitlint/cli": "npm:^19.2.1"
     "@commitlint/config-conventional": "npm:^19.1.0"
     "@commitlint/prompt-cli": "npm:^19.2.0"
+    "@types/node": "npm:^20.12.2"
     "@types/react": "npm:^18.0.37"
     "@types/react-dom": "npm:^18.0.11"
     "@vitest/ui": "npm:^0.33.0"
