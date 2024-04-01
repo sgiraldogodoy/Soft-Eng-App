@@ -15,6 +15,11 @@ export default {
     },
     extend: {
       colors: {
+        "theme-blue": "#009CA6",
+        "theme-yellow": "#F6BD38",
+        "theme-dark": "#000022",
+        "theme-gray": "#6C8976",
+        "theme-white": "#FFF7F8",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

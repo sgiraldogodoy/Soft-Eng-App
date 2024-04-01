@@ -2,5 +2,9 @@
 import { Button } from "@/components/ui/button";
 
 export default function MapButton() {
-  return <Button variant="secondary">Hello</Button>;
+  return (
+    <Button variant="secondary" className="text-theme-blue">
+      Hello
+    </Button>
+  );
 }
