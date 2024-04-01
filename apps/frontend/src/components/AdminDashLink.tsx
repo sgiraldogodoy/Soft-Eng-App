@@ -1,3 +1,7 @@
 export default function AdminDashLink() {
-  return <a>Administrator Dashboard</a>;
+  return (
+    <>
+      <h1 className="text-blue-900 flex justify-center">Hello World</h1>
+    </>
+  );
 }

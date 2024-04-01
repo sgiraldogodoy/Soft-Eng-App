@@ -3,7 +3,7 @@ import { httpBatchLink } from "@trpc/client";
 import superjson from "superjson";
 import { useState } from "react";
 import { trpc } from "./utils/trpc";
-import FlowerRequest from "@/routes/FlowerRequest.tsx";
+import AdminDashLink from "@/components/AdminDashLink.tsx";
 
 export default function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -21,7 +21,7 @@ export default function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <FlowerRequest />
+        <AdminDashLink />
       </QueryClientProvider>
     </trpc.Provider>
   );
