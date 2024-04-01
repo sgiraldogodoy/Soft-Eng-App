@@ -1,5 +1,6 @@
 import { publicProcedure, router } from "../trpc";
 import z from "zod";
+import {PathFinding} from "../../utils/PathFinding.ts";
 
 export const pathfinder = router({
   getNodes: publicProcedure.query(({ ctx }) => {
@@ -7,9 +8,9 @@ export const pathfinder = router({
 
     return data;
   }),
-  findPath: publicProcedure
+  findPathBFS: publicProcedure
     .input(z.object({ startNodeId: z.string(), endNodeId: z.string() }))
-    .query(() => {
-      return null;
+    .query(({input, ctx}) => {
+        return PathFinding.breadthFirstSearch(input.startNodeId, input.endNodeId, ctx.db);
     }),
 });
