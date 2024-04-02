@@ -34,15 +34,15 @@ export default function PathFind() {
 
   return (
     <div className="inputs">
-      <h1 className="text-2xl flex items-center justify-center font-bold mb-4">
+      <h1 className="text-2xl flex items-center justify-center font-bold mb-4 w-5/6">
         Where would you like to go?
       </h1>
 
-      <div className="flex flex-row items-center gap-4 justify-center mw">
+      <div className="flex flex-row items-center gap-4 justify-center w-5/6">
         <div className="w-1/2">
           {" "}
           {/* This div takes up 50% of the screen width */}
-          <div className="flex flex-row items-center gap-4 justify-center">
+          <div className="flex flex-row gap-4 items-end">
             <div className="flex flex-col gap-2 flex-1">
               <label className="inline-block mb-4">Starting Room ID:</label>
               <Input
@@ -72,8 +72,7 @@ export default function PathFind() {
       </div>
 
       <div className="flex gap-2">
-        <div className="w-1/6" />
-        <div className="w-4/6 flex items-center justify-center">
+        <div className="w-5/6 flex items-center justify-center">
           <Map onNodeClick={handleNodeClickInApp} path={nodes} />
         </div>
         <div className="w-1/6 flex flex-col items-start justify-start">
