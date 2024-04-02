@@ -1,6 +1,5 @@
 import { trpc } from "../utils/trpc.ts";
 import { useState, useRef, useEffect, useCallback } from "react";
-import imgUrl from "/00_thelowerlevel1.png";
 import { Nodes } from "./Nodes.tsx";
 import { Node } from "database";
 import { Lines } from "./Lines.tsx";
@@ -41,7 +40,7 @@ export default function Map({ onNodeClick, path }: MapProps) {
     <div className="relative">
       <img
         ref={image}
-        src={imgUrl}
+        src="00_thelowerlevel1.png"
         className="w-full"
         alt="Map"
         onLoad={handleResize}
