@@ -5,7 +5,7 @@ export default function Navbar() {
       <div className="absolute flex flex-col min-h-screen max-w-[324px] font-inter justify-between px-5 py-5">
         <div className="space-y-4">
           <div className="flex flex-row gap-3 text-theme-blue">
-            <img src="public/BWH%20Logo.svg" alt="BWH Logo" />
+            <img src="BWH%20Logo.svg" alt="BWH Logo" />
             <h1 className="text-left font-inter text-2xl font-bold">
               Brigham and
               <br />
