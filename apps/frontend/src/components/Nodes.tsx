@@ -1,24 +1,9 @@
 import React, { useState } from "react";
 import { Node } from "database";
+import { scaleCoordinate } from "../utils/scaleCoordinate.ts";
 
 const origImageWidth = 5000;
 const origImageHeight = 3400;
-
-/**
- * scaleCoordinate function that scales the coordinate to the image size
- * @param coordinate coordinate on non-edited image
- * @param curSize current size of the image
- * @param origSize original size of image
- * @param offset image offset
- */
-const scaleCoordinate = (
-  coordinate: number,
-  currSize: number,
-  origSize: number,
-  offset: number,
-) => {
-  return coordinate * (currSize / origSize) + offset;
-};
 
 interface NodesProps {
   onNodeClick: (nodeID: string) => void;
@@ -30,30 +15,6 @@ interface NodesProps {
 const Nodes = ({ onNodeClick, nodes, imgWidth, imgHeight }: NodesProps) => {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null); //set hovered node
   const [clickedNodeID, setClickedNodeID] = useState<string | null>(null); //set clicked node ID
-
-  /**
-   * handleNodeHover function that sets the hovered node
-   * @param node the node that is hovered by mouse
-   */
-  const handleNodeHover = (node: Node) => {
-    setHoveredNode(node.nodeId);
-  };
-
-  /**
-   * handleNodeClick function that sets the clicked node
-   * @param node the node that is clicked by mouse
-   */
-  const handleNodeClick = (node: Node) => {
-    setClickedNodeID(node.nodeId);
-    onNodeClick(node.nodeId);
-  };
-
-  /**
-   * handleMouseLeave function that sets the hovered node to null
-   */
-  const handleMouseLeave = () => {
-    setHoveredNode(null);
-  };
 
   return (
     <div>
@@ -87,9 +48,12 @@ const Nodes = ({ onNodeClick, nodes, imgWidth, imgHeight }: NodesProps) => {
             transform: "translate(-50%, -50%)",
             cursor: "pointer",
           }}
-          onMouseEnter={() => handleNodeHover(node)}
-          onMouseLeave={handleMouseLeave}
-          onClick={() => handleNodeClick(node)}
+          onMouseEnter={() => setHoveredNode(node.nodeId)}
+          onMouseLeave={() => setHoveredNode(null)}
+          onClick={() => {
+            setClickedNodeID(node.nodeId);
+            onNodeClick(node.nodeId);
+          }}
         />
       ))}
       {hoveredNode && (

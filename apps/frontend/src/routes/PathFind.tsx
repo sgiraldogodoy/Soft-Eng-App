@@ -32,7 +32,6 @@ export default function PathFind() {
   return (
     <div className="inputs">
       <h1>Where would you like to go?</h1>
-      <br></br>
       <label>Starting Room ID:</label>
       <input
         type="text"
@@ -41,8 +40,6 @@ export default function PathFind() {
         value={startNode}
         onChange={(e) => setStartNode(e.target.value)}
       />
-      <br></br>
-      <br></br>
       <label>Room ID You Would Like Navigation To:</label>
       <input
         type="text"
@@ -51,10 +48,6 @@ export default function PathFind() {
         value={goalNode}
         onChange={(e) => setGoalNode(e.target.value)}
       />
-      <br></br>
-      <br></br>
-      <br />
-      <br />
       <div id="pathResult">{pathString}</div>
 
       <Map onNodeClick={handleNodeClickInApp} path={nodes} />
