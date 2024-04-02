@@ -13,9 +13,10 @@ export default function App() {
     trpc.createClient({
       links: [
         httpBatchLink({
-          url: import.meta.env.PROD
-            ? "ec2-18-117-101-196.us-east-2.compute.amazonaws.com"
-            : "http://localhost:3000" + "/api/trpc",
+          url:
+            (import.meta.env.PROD
+              ? "ec2-18-117-101-196.us-east-2.compute.amazonaws.com"
+              : "http://localhost:3000") + "/api/trpc",
           transformer: superjson,
         }),
       ],
