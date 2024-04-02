@@ -3,9 +3,8 @@ import { httpBatchLink } from "@trpc/client";
 import superjson from "superjson";
 import { useState } from "react";
 import { trpc } from "./utils/trpc";
+import { AppRouter } from "./routes/AppRouter.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
-// import {AppRouter} from "@/routes/AppRouter.tsx";
-import Navbar from "@/Navbar.tsx";
 
 export default function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -30,7 +29,7 @@ export default function App() {
             redirect_uri: window.location.origin,
           }}
         >
-          <Navbar />
+          <AppRouter />
         </Auth0Provider>
       </QueryClientProvider>
     </trpc.Provider>
