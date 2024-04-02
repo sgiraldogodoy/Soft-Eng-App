@@ -1,5 +1,4 @@
-import React from "react";
-import { ExampleComponent } from "../components/ExampleComponent.tsx";
+import { ExampleComponent } from "@/components/ExampleComponent.tsx";
 import { trpc } from "../utils/trpc.ts";
 
 export default function ExampleRoute() {
