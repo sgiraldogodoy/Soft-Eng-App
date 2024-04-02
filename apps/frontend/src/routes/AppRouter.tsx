@@ -1,7 +1,7 @@
 import { Route, Switch } from "wouter";
 import HomePage from "@/components/HomePage.tsx";
 import PathFind from "@/routes/PathFind.tsx";
-import NavbarLayout from "@/NavbarLayout.tsx";
+import NavbarLayout from "@/components/NavbarLayout.tsx";
 import Test from "@/components/Test.tsx";
 
 export function AppRouter() {
