@@ -45,9 +45,8 @@ export default function PathFind() {
         Where would you like to go?
       </h1>
 
-      <div className="flex flex-row items-end gap-4 justify-center w-5/6">
+      <div className="flex flex-row items-center gap-4 justify-center w-5/6">
         <div className="w-1/2">
-          {" "}
           {/* This div takes up 50% of the screen width */}
           <div className="flex flex-row gap-4 items-end">
             <div className="flex flex-col gap-2 flex-1">
@@ -76,8 +75,15 @@ export default function PathFind() {
             </div>
           </div>
         </div>
+        <div className="font-bold">
+          <label className="inline-block">Choose Algorithm:</label>
+          <div className="flex flex-row gap-2 justify-center">
+            <label>BFS</label>
+            <Switch checked={isChecked} onCheckedChange={setChecked} />
+            <label>A*</label>
+          </div>
+        </div>
       </div>
-
       <div className="flex gap-2">
         <div className="w-5/6 flex items-center justify-center">
           <Map
@@ -85,14 +91,6 @@ export default function PathFind() {
             path={nodes}
             startNode={startNode}
           />
-        </div>
-        <div className="w-1/6 flex flex-col items-start justify-start">
-          <label className="inline-block mb-4">Choose Algorithm:</label>
-          <div className="flex flex-row gap-4 items-end">
-            <label>BFS</label>
-            <Switch checked={isChecked} onCheckedChange={setChecked} />
-            <label>A*</label>
-          </div>
         </div>
       </div>
     </div>
