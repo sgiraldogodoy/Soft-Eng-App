@@ -39,6 +39,10 @@ app.use(function (req: Request, res: Response, next: NextFunction): void {
   next(createError(404));
 });
 
+app.use("/healthcheck", (_req, res) => {
+  res.status(200).send();
+});
+
 /**
  * Generic error handler
  */
