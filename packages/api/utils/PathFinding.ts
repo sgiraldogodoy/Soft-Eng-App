@@ -2,7 +2,7 @@ import PriorityQueue from "priorityqueuejs";
 import type { Node } from "database";
 import type { PrismaClient } from "database";
 
-const arbHeuristic: number = 100;
+const arbHeuristic: number = 1;
 export class PathFinding {
   /**
    * breadthFirstSearch function that returns a path between two nodes
@@ -90,7 +90,7 @@ export class PathFinding {
     type NodeWithOutgoing = typeof nodeArray extends Array<infer T> ? T : never;
     const priorityQueue = new PriorityQueue<
       NodeWithOutgoing & { path: Node[]; cost: number }
-    >((a, b) => a.cost - b.cost);
+    >((a, b) => b.cost - a.cost);
     const nodeRecord: Record<string, NodeWithOutgoing> = nodeArray.reduce(
       (acc, node) => {
         return {

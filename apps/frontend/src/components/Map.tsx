@@ -1,5 +1,5 @@
 import { trpc } from "../utils/trpc.ts";
-import React, { useState, useRef, useLayoutEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import imgUrl from "/00_thelowerlevel1.png";
 import { Nodes } from "./Nodes.tsx";
 import { Node } from "database";
@@ -16,15 +16,14 @@ export default function Map({ onNodeClick, path }: MapProps) {
   const nodes = trpc.pathfinder.getNodes.useQuery();
   const image = useRef<HTMLImageElement>(null);
 
-  useLayoutEffect(() => {
-    const handleResize = () => {
-      setImageWidth(image.current!.getBoundingClientRect().width);
-      setImageHeight(image.current!.getBoundingClientRect().height);
-    };
-
-    window.addEventListener("load", handleResize);
-    window.addEventListener("resize", handleResize);
+  const handleResize = useCallback(() => {
+    setImageWidth(image.current!.getBoundingClientRect().width);
+    setImageHeight(image.current!.getBoundingClientRect().height);
   }, [image]);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+  }, [image, handleResize]);
 
   if (nodes.isLoading) {
     return <p>Loading...</p>;
@@ -39,24 +38,28 @@ export default function Map({ onNodeClick, path }: MapProps) {
   }
 
   return (
-    <div>
-      <div className="relative">
-        <img ref={image} src={imgUrl} />
-        <Nodes
+    <div className="relative">
+      <img
+        ref={image}
+        src={imgUrl}
+        className="w-full"
+        alt="Map"
+        onLoad={handleResize}
+      />
+      <Nodes
+        imgWidth={imgWidth}
+        imgHeight={imgHeight}
+        onNodeClick={onNodeClick}
+        nodes={nodes.data}
+      />
+      {path && (
+        <Lines
           imgWidth={imgWidth}
           imgHeight={imgHeight}
-          onNodeClick={onNodeClick}
           nodes={nodes.data}
+          path={path}
         />
-        {path && (
-          <Lines
-            imgWidth={imgWidth}
-            imgHeight={imgHeight}
-            nodes={nodes.data}
-            path={path}
-          />
-        )}
-      </div>
+      )}
     </div>
   );
 }
