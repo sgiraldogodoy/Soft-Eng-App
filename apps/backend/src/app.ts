@@ -30,6 +30,9 @@ app.use(
     createContext: createTRPCContext,
   }),
 );
+app.use("/healthcheck", (_req, res) => {
+  res.status(200).send();
+});
 
 /**
  * Catch all 404 errors, and forward them to the error handler
@@ -37,10 +40,6 @@ app.use(
 app.use(function (req: Request, res: Response, next: NextFunction): void {
   // Have the next (generic error handler) process a 404 error
   next(createError(404));
-});
-
-app.use("/healthcheck", (_req, res) => {
-  res.status(200).send();
 });
 
 /**
