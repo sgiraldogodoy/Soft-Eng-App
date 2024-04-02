@@ -5,11 +5,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel.tsx";
-import Sweet from "../../../public/sweetandpretty.png";
-import Dreamscape from "../../../public/dreamscape.png";
-import Fiesta from "../../../public/fiesta.png";
-import Luminous from "../../../public/luminous.png";
-import Marmalade from "../../../public/marmalade.png";
 import { Button } from "@/components/ui/button.tsx";
 
 export default function FlowerCarousel() {
@@ -18,23 +13,23 @@ export default function FlowerCarousel() {
       <Carousel>
         <CarouselContent className="w-[400px] h-[450px] text-center">
           <CarouselItem>
-            <img src={Sweet} className="rounded-xl" />
+            <img src="/public/sweetandpretty.png" className="rounded-xl" />
             <span className="text-2xl">Sweet & Pretty</span>
           </CarouselItem>
           <CarouselItem>
-            <img src={Dreamscape} className="rounded-xl" />
+            <img src="/public/dreamscape.png" className="rounded-xl" />
             <span className="text-2xl">Dreamscape</span>
           </CarouselItem>
           <CarouselItem>
-            <img src={Fiesta} className="rounded-xl" />
+            <img src="/public/fiesta.png" className="rounded-xl" />
             <span className="text-2xl">Fiesta Bouquet</span>
           </CarouselItem>
           <CarouselItem>
-            <img src={Luminous} className="rounded-xl" />
+            <img src="/public/luminous.png" className="rounded-xl" />
             <span className="text-2xl">Luminous Morning Bouquet</span>
           </CarouselItem>
           <CarouselItem>
-            <img src={Marmalade} className="rounded-xl" />
+            <img src="/public/marmalade.png" className="rounded-xl" />
             <span className="text-2xl"> Marmalade Skies Bouquet</span>
           </CarouselItem>
         </CarouselContent>
