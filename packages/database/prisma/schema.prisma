@@ -35,7 +35,7 @@ model Edge {
 }
 
 model FlowerRequest {
-  id              String   @id
+  id              String   @id @default(uuid())
   nodeId          String
   node            Node     @relation(name: "FlowerRequest", fields: [nodeId], references: [nodeId])
   flowerName      String

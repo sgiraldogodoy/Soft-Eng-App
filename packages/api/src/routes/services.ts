@@ -8,7 +8,6 @@ export const serviceRequestRouter = router({
   createFlowerRequest: publicProcedure
     .input(
       z.object({
-        id: z.string(),
         nodeId: z.string(),
         flowerName: z.string(),
         requestDate: z.date().optional(),
