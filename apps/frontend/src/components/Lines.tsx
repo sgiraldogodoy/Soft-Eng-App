@@ -12,7 +12,7 @@ interface LineProps {
   imgHeight: number;
 }
 
-export function Lines ({ nodes, path, imgWidth, imgHeight }: LineProps)  {
+export function Lines({ nodes, path, imgWidth, imgHeight }: LineProps) {
   if (!path || path.length < 2) return null; // Path must have at least two nodes to draw lines
   return (
     <svg
@@ -66,6 +66,4 @@ export function Lines ({ nodes, path, imgWidth, imgHeight }: LineProps)  {
       })}
     </svg>
   );
-};
-
-export { Lines };
+}

@@ -12,7 +12,7 @@ interface NodesProps {
   imgHeight: number;
 }
 
-const Nodes = ({ onNodeClick, nodes, imgWidth, imgHeight }: NodesProps) => {
+export function Nodes({ onNodeClick, nodes, imgWidth, imgHeight }: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null); //set hovered node
   const [clickedNodeID, setClickedNodeID] = useState<string | null>(null); //set clicked node ID
 
@@ -86,6 +86,4 @@ const Nodes = ({ onNodeClick, nodes, imgWidth, imgHeight }: NodesProps) => {
       )}
     </div>
   );
-};
-
-export { Nodes };
+}
