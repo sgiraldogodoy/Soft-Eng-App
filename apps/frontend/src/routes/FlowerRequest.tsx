@@ -1,10 +1,13 @@
+"use client";
 import React from "react";
-import { Button } from "@/components/ui/button.tsx";
+import FlowerCarousel from "@/components/ui/FlowerCarousel.tsx";
+import FlowerRequestForm from "@/components/FlowerRequestForm.tsx";
 
 export default function FlowerRequest() {
   return (
-    <div className="px-9">
-      <Button>Hello World</Button>
+    <div className="w-screen h-screen flex flex-row px-60 py-64 space-x-72 font-inter outline-transparent">
+      <FlowerRequestForm />
+      <FlowerCarousel />
     </div>
   );
 }
