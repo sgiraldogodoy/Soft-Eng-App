@@ -7,4 +7,5 @@ module.exports = {
   rules: {
     "react-hooks/exhaustive-deps": "error",
   },
+  ignorePatterns: ["src/components/ui/*"],
 };
