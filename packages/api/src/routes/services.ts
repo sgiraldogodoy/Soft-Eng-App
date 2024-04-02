@@ -1,7 +1,8 @@
 import { publicProcedure } from "../trpc";
 import { router } from "../trpc";
 import { z } from "zod";
-import { validateNode, addFlowerDatabase } from "../../utils/db.ts";
+import { addFlowerDatabase } from "../../utils/db.ts";
+import { validateNode } from "../../utils/validators.ts";
 
 export const serviceRequestRouter = router({
   createFlowerRequest: publicProcedure
@@ -43,4 +44,19 @@ export const serviceRequestRouter = router({
     // get all flower requests
     return ctx.db.flowerRequest.findMany();
   }),
+  deleteFlowerRequest: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      // delete a flower request
+      ctx.db.flowerRequest.delete({
+        where: {
+          id: input.id,
+        },
+      });
+      return { message: "Flower request deleted" };
+    }),
 });

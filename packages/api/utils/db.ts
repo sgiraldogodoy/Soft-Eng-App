@@ -93,33 +93,3 @@ export async function addFlowerDatabase(
   });
   return { message: "flower request created" };
 }
-
-export async function validateNode(nodeId: string, prisma: PrismaClient) {
-  //check if the node already exists
-  const node = await prisma.node.findUnique({
-    where: {
-      nodeId: nodeId,
-    },
-  });
-  return !!node;
-}
-
-export async function validateEdge(edgeId: string, prisma: PrismaClient) {
-  //check if the edge already exists
-  const edge = await prisma.edge.findUnique({
-    where: {
-      edgeId: edgeId,
-    },
-  });
-  return !!edge;
-}
-
-export async function validateFlower(flowerId: string, prisma: PrismaClient) {
-  //check if the flower already exists
-  const flower = await prisma.flowerRequest.findUnique({
-    where: {
-      id: flowerId,
-    },
-  });
-  return !!flower;
-}

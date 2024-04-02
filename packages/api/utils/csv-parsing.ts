@@ -1,4 +1,16 @@
-import type { Prisma } from "database";
+import { Prisma, PrismaClient } from "database";
+import {
+  validateNodeType,
+  validateNodeBuilding,
+  validateNodeElevatorLetter,
+  validateNodeFloor,
+  validateNodeLongName,
+  validateNodeRoomNumber,
+  validateNodeShortName,
+  validateNodeXcords,
+  validateNodeYcords,
+  validateEdgeId,
+} from "./validators.ts";
 
 type Node = Prisma.NodeCreateManyInput;
 type Edge = Prisma.EdgeCreateManyInput;
@@ -16,17 +28,39 @@ export async function parseCSVNode(csv: string) {
       continue;
     }
     const [
-      nodeId,
-      xcordsString,
-      ycordsString,
-      floor,
-      building,
-      nodeType,
-      longName,
-      shortName,
+      nodeIdCSV,
+      xcordsStringCSV,
+      ycordsStringCSV,
+      floorCSV,
+      buildingCSV,
+      nodeTypeCSV,
+      longNameCSV,
+      shortNameCSV,
     ] = line.split(",");
-    const xcords = Number(xcordsString);
-    const ycords = Number(ycordsString);
+    let nodeIdTest = "";
+    const number = nodeIdCSV.slice(5, 8);
+
+    const nodeType = validateNodeType(nodeTypeCSV);
+    const building = validateNodeBuilding(buildingCSV);
+    const floor = validateNodeFloor(floorCSV);
+    if (nodeType === "ELEV") {
+      const elevatorLetter = validateNodeElevatorLetter(number.slice(2, 3));
+      nodeIdTest = `${nodeType}${elevatorLetter}${floor}`;
+      if (nodeIdTest !== nodeIdCSV.slice(1)) {
+        throw new Error("Node ID does not match the node type and floor");
+      }
+    } else {
+      const room = validateNodeRoomNumber(number);
+      nodeIdTest = `${nodeType}${room}${floor}`;
+      if (nodeIdTest !== nodeIdCSV.slice(1)) {
+        throw new Error("Node ID does not match the node type and floor");
+      }
+    }
+    const nodeId = nodeIdCSV;
+    const xcords = validateNodeXcords(xcordsStringCSV);
+    const ycords = validateNodeYcords(ycordsStringCSV);
+    const longName = validateNodeLongName(longNameCSV);
+    const shortName = validateNodeShortName(shortNameCSV);
     nodes.push({
       nodeId,
       xcords,
@@ -44,7 +78,7 @@ export async function parseCSVNode(csv: string) {
   return nodes;
 }
 
-export async function parseCSVEdge(csv: string) {
+export async function parseCSVEdge(csv: string, prisma: PrismaClient) {
   const edges: Edge[] = [];
 
   // Parse edges CSV
@@ -57,7 +91,8 @@ export async function parseCSVEdge(csv: string) {
       continue;
     }
     const [startNodeId, endNodeId] = line.split(",");
-    const edgeId = `${startNodeId}-${endNodeId}`;
+
+    const edgeId = await validateEdgeId(`${startNodeId}-${endNodeId}`, prisma);
     edges.push({ edgeId, startNodeId, endNodeId });
     const reverseId = `${endNodeId}-${startNodeId}`;
     edges.push({
