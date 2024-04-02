@@ -1,10 +1,14 @@
-// import { Switch, Route } from "wouter";
+import { Route, Switch } from "wouter";
+import HomePage from "@/components/HomePage.tsx";
+import Test from "@/components/Test.tsx";
 
 export function AppRouter() {
   return (
     <>
-      {/* <Route path="/" component={Login} */}
-      <p>Placeholder</p>
+      <Switch>
+        <Route path="/" component={HomePage} />
+        <Route path="/test" component={Test} />
+      </Switch>
     </>
   );
 }
