@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Node } from "database";
 
 const origImageWidth = 5000;
@@ -13,33 +13,23 @@ const origImageHeight = 3400;
  */
 const scaleCoordinate = (
   coordinate: number,
-  curSize: number,
+  currSize: number,
   origSize: number,
   offset: number,
 ) => {
-  return coordinate * (curSize / origSize) + offset;
+  return coordinate * (currSize / origSize) + offset;
 };
 
 interface NodesProps {
   onNodeClick: (nodeID: string) => void;
   nodes: Node[];
+  imgWidth: number;
+  imgHeight: number;
 }
 
-const Nodes = ({ onNodeClick, nodes}: NodesProps) => {
-  const [imageWidth, setImageWidth] = useState(0); //set image width
-  const [imageHeight, setImageHeight] = useState(0); //set image height
+const Nodes = ({ onNodeClick, nodes, imgWidth, imgHeight }: NodesProps) => {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null); //set hovered node
   const [clickedNodeID, setClickedNodeID] = useState<string | null>(null); //set clicked node ID
-
-  const image = useRef<HTMLImageElement>(null);
-
-  //useEffect to load image and calculate nodes
-  useEffect(() => {
-    if (!image.current) return;
-
-    setImageWidth(image.current.height);
-    setImageHeight(image.current.width);
-  }, [image]);
 
   /**
    * handleNodeHover function that sets the hovered node
@@ -66,15 +56,15 @@ const Nodes = ({ onNodeClick, nodes}: NodesProps) => {
   };
 
   return (
-    <div style={{ position: "relative", display: "inline-block" }}>
+    <div>
       {nodes.map((node, index) => (
         //Node Positioning
         <div
           key={index}
           style={{
             position: "absolute",
-            left: scaleCoordinate(node.xcords, imageWidth, origImageWidth, 0),
-            top: scaleCoordinate(node.ycords, imageHeight, origImageHeight, 0),
+            left: scaleCoordinate(node.xcords, imgWidth, origImageWidth, 0),
+            top: scaleCoordinate(node.ycords, imgHeight, origImageHeight, 0),
             width:
               node.nodeId === hoveredNode
                 ? "10px"
