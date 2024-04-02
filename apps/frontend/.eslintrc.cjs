@@ -5,7 +5,6 @@ module.exports = {
   parserOptions: { ecmaVersion: "ESNext", sourceType: "module" },
   plugins: ["react-refresh"],
   rules: {
-    "react-refresh/only-export-components": "warn",
     "react-hooks/exhaustive-deps": "error",
   },
 };
