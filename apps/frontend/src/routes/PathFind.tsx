@@ -85,7 +85,7 @@ export default function PathFind() {
         </div>
       </div>
       <div className="flex gap-2">
-        <div className="w-5/6 flex items-center justify-center">
+        <div className="w-full flex items-center justify-center">
           <Map
             onNodeClick={handleNodeClickInApp}
             path={nodes}
