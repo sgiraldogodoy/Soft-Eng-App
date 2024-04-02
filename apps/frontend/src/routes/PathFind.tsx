@@ -3,23 +3,30 @@ import { trpc } from "../utils/trpc.ts";
 import { skipToken } from "@tanstack/react-query";
 import Map from "../components/Map.tsx";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 
 export default function PathFind() {
   const [startNode, setStartNode] = useState("");
   const [goalNode, setGoalNode] = useState("");
+  const [isChecked, setChecked] = useState(false);
 
-  const path = trpc.pathfinder.findPathAStar.useQuery(
+  const pathQuery = isChecked
+    ? trpc.pathfinder.findPathAStar
+    : trpc.pathfinder.findPathBFS;
+
+  const path = pathQuery.useQuery(
     startNode && goalNode
       ? { startNodeId: startNode, endNodeId: goalNode }
       : skipToken,
   );
   const nodes = path.data;
-  let pathString = "Directions:";
-  if (nodes)
-    if (nodes.length > 0)
-      pathString =
-        "Directions: " + nodes.map((Node) => Node.nodeId).join(" > ");
-    else pathString = "Directions: No path found.";
+
+  // let pathString = "Directions:";
+  // if (nodes)
+  //   if (nodes.length > 0)
+  //     pathString =
+  //       "Directions: " + nodes.map((Node) => Node.nodeId).join(" > ");
+  //   else pathString = "Directions: No path found.";
 
   const handleNodeClickInApp = (clickedNode: string) => {
     if (startNode && goalNode) {
@@ -34,15 +41,15 @@ export default function PathFind() {
 
   return (
     <div className="inputs">
-      <h1 className="text-2xl flex items-center justify-center font-bold mb-4">
+      <h1 className="text-2xl flex items-center justify-center font-bold mb-4 w-5/6">
         Where would you like to go?
       </h1>
 
-      <div className="flex flex-row items-center gap-4 justify-center mw">
+      <div className="flex flex-row items-end gap-4 justify-center w-5/6">
         <div className="w-1/2">
           {" "}
           {/* This div takes up 50% of the screen width */}
-          <div className="flex flex-row items-center gap-4 justify-center">
+          <div className="flex flex-row gap-4 items-end">
             <div className="flex flex-col gap-2 flex-1">
               <label className="inline-block mb-4">Starting Room ID:</label>
               <Input
@@ -72,12 +79,20 @@ export default function PathFind() {
       </div>
 
       <div className="flex gap-2">
-        <div className="w-1/6" />
-        <div className="w-4/6 flex items-center justify-center">
-          <Map onNodeClick={handleNodeClickInApp} path={nodes} />
+        <div className="w-5/6 flex items-center justify-center">
+          <Map
+            onNodeClick={handleNodeClickInApp}
+            path={nodes}
+            startNode={startNode}
+          />
         </div>
         <div className="w-1/6 flex flex-col items-start justify-start">
-          <div id="pathResult">{pathString}</div>
+          <label className="inline-block mb-4">Choose Algorithm:</label>
+          <div className="flex flex-row gap-4 items-end">
+            <label>BFS</label>
+            <Switch checked={isChecked} onCheckedChange={setChecked} />
+            <label>A*</label>
+          </div>
         </div>
       </div>
     </div>
