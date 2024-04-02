@@ -39,24 +39,22 @@ export default function Map({ onNodeClick, path }: MapProps) {
   }
 
   return (
-    <div>
-      <div className="relative">
-        <img ref={image} src={imgUrl} />
-        <Nodes
+    <div className="relative">
+      <img ref={image} src={imgUrl} className="w-full" alt="Map" />
+      <Nodes
+        imgWidth={imgWidth}
+        imgHeight={imgHeight}
+        onNodeClick={onNodeClick}
+        nodes={nodes.data}
+      />
+      {path && (
+        <Lines
           imgWidth={imgWidth}
           imgHeight={imgHeight}
-          onNodeClick={onNodeClick}
           nodes={nodes.data}
+          path={path}
         />
-        {path && (
-          <Lines
-            imgWidth={imgWidth}
-            imgHeight={imgHeight}
-            nodes={nodes.data}
-            path={path}
-          />
-        )}
-      </div>
+      )}
     </div>
   );
 }
