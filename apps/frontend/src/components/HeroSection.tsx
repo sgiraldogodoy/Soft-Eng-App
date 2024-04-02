@@ -2,7 +2,7 @@ export default function HeroSection() {
   return (
     <>
       <div className="flex gap-6 justify-center items-center">
-        <img src="public/BWH%20Logo.svg" alt="BWH Logo" className="" />
+        <img src="BWH%20Logo.svg" alt="BWH Logo" className="" />
         <h1 className="text-left font-inter text-3xl font-bold">
           Welcome to <br />{" "}
           <span className="text-theme-blue font-bold">
