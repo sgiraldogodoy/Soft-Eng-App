@@ -12,7 +12,7 @@ export default function HeroSection() {
       </div>
       <div className="max-h-[390px] max-w-[1202px] overflow-clip">
         <img
-          src="../../public/bwh-corridor.jpeg"
+          src="bwh-corridor.jpeg"
           alt="BWH Corridor"
           className=" object-cover w-[1220px] h-[390px]"
         />

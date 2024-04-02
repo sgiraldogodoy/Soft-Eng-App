@@ -11,15 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
-import RequestTable from "@/components/DTPage.tsx";
+import RequestTable from "@/components/services/DTPage.tsx";
 
-import { RequestNotes } from "@/components/RequestNotes.ts";
-
-type RequestNotesProps = {
-  rNote: RequestNotes["notes"];
-};
-
-export default function RequestSummary(noteProp: RequestNotesProps) {
+export default function RequestSummary() {
   return (
     <div className="w-full flex flex-col px-20 gap-20 items-center">
       <div className="navDiv py-3">
@@ -66,7 +60,7 @@ export default function RequestSummary(noteProp: RequestNotesProps) {
                 className="border-color rounded-[6px]"
                 placeholder=""
                 id="message-2"
-                value={noteProp.rNote}
+                value={""}
               />
               <p className="text-sm text-muted-foreground">
                 Notes regarding the Specified Request
