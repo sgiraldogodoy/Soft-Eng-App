@@ -42,7 +42,6 @@ export function Lines ({ nodes, path, imgWidth, imgHeight }: LineProps)  {
             (n) => n.nodeId === path[index + 1].nodeId,
           );
 
-          console.log(currentNode);
           if (currentNode && nextNode) {
             return (
               // Line Positioning
