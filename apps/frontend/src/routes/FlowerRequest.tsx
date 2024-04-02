@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import FlowerCarousel from "@/components/ui/FlowerCarousel.tsx";
+import FlowerCarousel from "@/components/FlowerCarousel.tsx";
 import FlowerRequestForm from "@/components/FlowerRequestForm.tsx";
 
 export default function FlowerRequest() {
