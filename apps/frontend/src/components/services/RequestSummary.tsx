@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 
-import RequestTable from "@/components/services/DTPage.tsx";
+import RequestTable from "@/components/services/RequestTable";
 
 export default function RequestSummary() {
   return (
