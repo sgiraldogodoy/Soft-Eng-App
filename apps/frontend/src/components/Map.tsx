@@ -9,6 +9,7 @@ interface MapProps {
   onNodeClick: (clickedNode: string) => void;
   path: Node[] | undefined;
 }
+
 export default function Map({ onNodeClick, path }: MapProps) {
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height

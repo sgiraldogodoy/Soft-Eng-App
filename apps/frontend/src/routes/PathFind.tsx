@@ -8,7 +8,7 @@ export default function PathFind() {
   const [startNode, setStartNode] = useState("");
   const [goalNode, setGoalNode] = useState("");
 
-  const path = trpc.pathfinder.findPathBFS.useQuery(
+  const path = trpc.pathfinder.findPathAStar.useQuery(
     startNode && goalNode
       ? { startNodeId: startNode, endNodeId: goalNode }
       : skipToken,
@@ -16,7 +16,10 @@ export default function PathFind() {
   const nodes = path.data;
   let pathString = "";
   if (nodes)
-    pathString = "Path found: " + nodes.map((Node) => Node.nodeId).join(" > ");
+    if (nodes.length > 0)
+      pathString =
+        "Path found: " + nodes.map((Node) => Node.nodeId).join(" > ");
+    else pathString = "No path found.";
 
   const handleNodeClickInApp = (clickedNode: string) => {
     if (startNode && goalNode) {

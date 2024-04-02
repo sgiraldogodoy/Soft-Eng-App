@@ -17,4 +17,13 @@ export const pathfinder = router({
         ctx.db,
       );
     }),
+  findPathAStar: publicProcedure
+    .input(z.object({ startNodeId: z.string(), endNodeId: z.string() }))
+    .query(async ({ input, ctx }) => {
+      return await PathFinding.aStar(
+        input.startNodeId,
+        input.endNodeId,
+        ctx.db,
+      );
+    }),
 });

@@ -1,14 +1,13 @@
-import { Switch, Route } from "wouter";
-import { InspectDatabase } from "./InspectDatabase";
+import { Route, Switch } from "wouter";
+import HomePage from "@/components/HomePage.tsx";
+import PathFind from "@/routes/PathFind.tsx";
 
 export function AppRouter() {
   return (
     <>
-      {/* <Route path="/" component={Login} */}
       <Switch>
-        <Route path="/">
-          <InspectDatabase />
-        </Route>
+        <Route path="/" component={HomePage} />
+        <Route path="/pathfind" component={PathFind} />
       </Switch>
     </>
   );
