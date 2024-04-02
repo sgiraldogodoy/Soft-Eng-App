@@ -4,6 +4,9 @@ import { skipToken } from "@tanstack/react-query";
 import Map from "../components/Map.tsx";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { SquareArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 
 export default function PathFind() {
   const [startNode, setStartNode] = useState("");
@@ -41,11 +44,18 @@ export default function PathFind() {
 
   return (
     <div className="max-h-screen overflow-hidden">
-      <h1 className="mt-4 text-2xl flex items-center justify-center font-bold mb-4 w-5/6">
+      <h1 className="mt-4 text-2xl flex items-center justify-center font-bold mb-4">
         Where would you like to go?
+        <div className="absolute top-0 right-0 mt-4 mr-4">
+          <Link to="/">
+            <Button>
+              <SquareArrowLeft size={20} />
+            </Button>
+          </Link>
+        </div>
       </h1>
 
-      <div className="flex flex-row items-center gap-4 justify-center w-5/6">
+      <div className="flex flex-row items-center gap-4 justify-center">
         <div className="w-1/2">
           {/* This div takes up 50% of the screen width */}
           <div className="flex flex-row gap-4 items-end">
