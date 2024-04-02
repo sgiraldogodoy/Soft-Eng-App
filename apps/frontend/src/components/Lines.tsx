@@ -11,9 +11,25 @@ interface LineProps {
   imgWidth: number;
   imgHeight: number;
 }
-
 export function Lines({ nodes, path, imgWidth, imgHeight }: LineProps) {
   if (!path || path.length < 2) return null; // Path must have at least two nodes to draw lines
+
+  // Define the arrowhead marker
+  const arrowMarker = (
+    <marker
+      id="arrow"
+      markerWidth="3" // Adjust the width
+      markerHeight="3" // Adjust the height
+      refX="2" // Adjust the position of the arrowhead
+      refY="1.5" // Adjust the position of the arrowhead
+      orient="auto"
+      markerUnits="strokeWidth"
+    >
+      <path d="M0,0 L0,3 L3,1.5 z" fill="red" />
+      // Adjust the size and position of the path
+    </marker>
+  );
+
   return (
     <svg
       width={imgWidth}
@@ -21,6 +37,7 @@ export function Lines({ nodes, path, imgWidth, imgHeight }: LineProps) {
       style={{ position: "absolute", top: 0, left: 0 }}
       className="pointer-events-none"
     >
+      <defs>{arrowMarker}</defs>
       {path.map((node, index) => {
         if (index < path.length - 1) {
           const currentNode = nodes.find((n) => n.nodeId === node.nodeId);
@@ -30,7 +47,7 @@ export function Lines({ nodes, path, imgWidth, imgHeight }: LineProps) {
 
           if (currentNode && nextNode) {
             return (
-              // Line Positioning
+              // Line with arrowhead
               <line
                 key={index}
                 x1={scaleCoordinate(
@@ -58,6 +75,7 @@ export function Lines({ nodes, path, imgWidth, imgHeight }: LineProps) {
                   0,
                 )}
                 style={{ stroke: "red", strokeWidth: 2 }}
+                markerEnd="url(#arrow)"
               />
             );
           }
