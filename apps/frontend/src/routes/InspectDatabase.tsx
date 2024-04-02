@@ -7,10 +7,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Node } from "database";
+import { trpc } from "@/utils/trpc";
 
 export function InspectDatabase() {
-  const nodes: Node[] = [];
+  const { data, isError, isLoading } = trpc.db.getAllNodes.useQuery();
+
+  if (isError) {
+    return <p>Error!</p>;
+  }
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!data) {
+    return <p>Something went wrong.</p>;
+  }
 
   return (
     <>
@@ -30,7 +42,7 @@ export function InspectDatabase() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {nodes.map((n) => (
+            {data.map((n) => (
               <TableRow>
                 <TableCell>{n.nodeId}</TableCell>
                 <TableCell>{n.ycords}</TableCell>
