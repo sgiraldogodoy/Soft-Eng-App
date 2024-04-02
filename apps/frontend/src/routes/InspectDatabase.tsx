@@ -1,60 +1,85 @@
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { EdgesTable } from "./EdgesTable";
+import { NodesTable } from "./NodesTable";
+import { Button } from "@/components/ui/button";
+import { useRef } from "react";
 import { trpc } from "@/utils/trpc";
+import { getBase64 } from "@/utils/files";
 
 export function InspectDatabase() {
-  const { data, isError, isLoading } = trpc.db.getAllNodes.useQuery();
+  const uploadButton = useRef<HTMLInputElement>(null);
 
-  if (isError) {
-    return <p>Error!</p>;
-  }
+  const utils = trpc.useUtils();
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (!data) {
-    return <p>Something went wrong.</p>;
-  }
+  const nodeMutation = trpc.db.csvUploadNodes.useMutation();
+  const edgeMutation = trpc.db.csvUploadEdges.useMutation();
 
   return (
     <>
       <div className="w-screen h-screen">
-        <Table>
-          <TableCaption>Nodes</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Node ID</TableHead>
-              <TableHead>X Coordinate</TableHead>
-              <TableHead>Y Coordinate</TableHead>
-              <TableHead>Building</TableHead>
-              <TableHead>Floor</TableHead>
-              <TableHead>Node Type</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Short Name</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.map((n) => (
-              <TableRow>
-                <TableCell>{n.nodeId}</TableCell>
-                <TableCell>{n.ycords}</TableCell>
-                <TableCell>{n.building}</TableCell>
-                <TableCell>{n.floor}</TableCell>
-                <TableCell>{n.nodeType}</TableCell>
-                <TableCell>{n.longName}</TableCell>
-                <TableCell>{n.shortName}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <Tabs defaultValue="nodes">
+          <div className="w-full flex items-center justify-center p-4">
+            <TabsList>
+              <TabsTrigger value="nodes">Nodes</TabsTrigger>
+              <TabsTrigger value="edges">Edges</TabsTrigger>
+            </TabsList>
+          </div>
+          <TabsContent value="nodes">
+            <NodesTable />
+          </TabsContent>
+          <TabsContent value="edges">
+            <EdgesTable />
+          </TabsContent>
+        </Tabs>
+        <Button
+          onClick={() => {
+            uploadButton.current?.click();
+          }}
+          className="absolute top-[16px] right-4"
+        >
+          Upload
+        </Button>
+        <input
+          ref={uploadButton}
+          onChange={async (e) => {
+            const files = e.target.files;
+
+            console.log("changed");
+
+            if (!files || files.length == 0) return;
+
+            const text = await files[0].text();
+            const base64: string = (await getBase64(files[0])) as string;
+            console.log(base64);
+
+            if (text.includes("nodeID")) {
+              nodeMutation.mutate(
+                {
+                  buffer: base64,
+                },
+                {
+                  onSuccess() {
+                    utils.db.getAllNodes.invalidate();
+                  },
+                },
+              );
+            } else {
+              edgeMutation.mutate(
+                {
+                  buffer: base64,
+                },
+                {
+                  onSuccess() {
+                    utils.db.getAllEdges.invalidate();
+                  },
+                },
+              );
+            }
+          }}
+          type="file"
+          multiple={false}
+          hidden
+        />
       </div>
     </>
   );

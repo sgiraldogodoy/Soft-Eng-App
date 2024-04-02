@@ -15,8 +15,9 @@ export const dbRouter = router({
     .input(z.object({ buffer: z.string() }))
     .mutation(async ({ input, ctx }) => {
       try {
-        console.log("parsing nodes");
-        const nodes = await parseCSVNode(input.buffer);
+        const file = await fetch(input.buffer);
+        const str = await file.text();
+        const nodes = await parseCSVNode(str);
         console.log("creating nodes");
         await createNodes(nodes, ctx.db);
         return { message: "Nodes added" };
@@ -29,7 +30,9 @@ export const dbRouter = router({
     .input(z.object({ buffer: z.string() }))
     .mutation(async ({ input, ctx }) => {
       try {
-        const edges = await parseCSVEdge(input.buffer, ctx.db);
+        const file = await fetch(input.buffer);
+        const str = await file.text();
+        const edges = await parseCSVEdge(str, ctx.db);
         await createEdges(edges, ctx.db);
         return { message: "Edges added" };
       } catch (e) {
