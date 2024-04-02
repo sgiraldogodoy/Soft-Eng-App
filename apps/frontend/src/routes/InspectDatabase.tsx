@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useRef } from "react";
 import { trpc } from "@/utils/trpc";
 import { getBase64 } from "@/utils/files";
+import { toast } from "sonner";
 
 export function InspectDatabase() {
   const uploadButton = useRef<HTMLInputElement>(null);
@@ -53,25 +54,39 @@ export function InspectDatabase() {
             console.log(base64);
 
             if (text.includes("nodeID")) {
-              nodeMutation.mutate(
-                {
-                  buffer: base64,
-                },
-                {
-                  onSuccess() {
-                    utils.db.getAllNodes.invalidate();
+              toast.promise(
+                nodeMutation.mutateAsync(
+                  {
+                    buffer: base64,
                   },
+                  {
+                    onSuccess() {
+                      utils.db.getAllNodes.invalidate();
+                    },
+                  },
+                ),
+                {
+                  loading: "Adding nodes...",
+                  success: "Done!",
+                  error: "An error occured.",
                 },
               );
             } else {
-              edgeMutation.mutate(
-                {
-                  buffer: base64,
-                },
-                {
-                  onSuccess() {
-                    utils.db.getAllEdges.invalidate();
+              toast.promise(
+                edgeMutation.mutateAsync(
+                  {
+                    buffer: base64,
                   },
+                  {
+                    onSuccess() {
+                      utils.db.getAllEdges.invalidate();
+                    },
+                  },
+                ),
+                {
+                  loading: "Adding nodes...",
+                  success: "Done!",
+                  error: "An error occured.",
                 },
               );
             }

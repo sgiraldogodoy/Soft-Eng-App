@@ -5,6 +5,7 @@ import { useState } from "react";
 import { trpc } from "./utils/trpc";
 //import PathFind from "./routes/PathFind.tsx";
 import { AppRouter } from "./routes/AppRouter.tsx";
+import { Toaster } from "./components/ui/sonner.tsx";
 
 export default function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -22,6 +23,7 @@ export default function App() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
+        <Toaster />
         <AppRouter />
       </QueryClientProvider>
     </trpc.Provider>
