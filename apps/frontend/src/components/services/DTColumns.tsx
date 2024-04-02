@@ -1,5 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
 import type { FlowerRequest } from "database";
+import { ArrowRight, Check, X } from "lucide-react";
 
 export const columns: ColumnDef<FlowerRequest>[] = [
   {
@@ -16,18 +18,31 @@ export const columns: ColumnDef<FlowerRequest>[] = [
   },
   {
     accessorKey: "requestDate",
-    header: "requestDate",
+    header: "Date",
   },
   {
     accessorKey: "loginName",
     header: "Requestor",
   },
   {
-    accessorKey: "commentOnFlower",
-    header: "Comments",
-  },
-  {
     accessorKey: "delivered",
     header: "Delivered",
+    cell: (props) => {
+      return props.getValue() ? <Check /> : <X />;
+    },
+  },
+  {
+    id: "select",
+    cell: ({ row }) => {
+      return (
+        <Button
+          disabled={row.getIsSelected()}
+          onClick={() => row.toggleSelected()}
+          variant={"secondary"}
+        >
+          <ArrowRight />
+        </Button>
+      );
+    },
   },
 ];
