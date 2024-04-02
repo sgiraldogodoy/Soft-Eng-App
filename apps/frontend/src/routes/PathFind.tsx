@@ -40,7 +40,7 @@ export default function PathFind() {
   };
 
   return (
-    <div className="inputs">
+    <div className="max-h-screen overflow-hidden">
       <h1 className="mt-4 text-2xl flex items-center justify-center font-bold mb-4 w-5/6">
         Where would you like to go?
       </h1>
