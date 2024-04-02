@@ -7,9 +7,10 @@ import { Lines } from "./Lines.tsx";
 interface MapProps {
   onNodeClick: (clickedNode: string) => void;
   path: Node[] | undefined;
+  startNode: string;
 }
 
-export default function Map({ onNodeClick, path }: MapProps) {
+export default function Map({ onNodeClick, path, startNode }: MapProps) {
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height
   const nodes = trpc.pathfinder.getNodes.useQuery();
@@ -50,6 +51,7 @@ export default function Map({ onNodeClick, path }: MapProps) {
         imgHeight={imgHeight}
         onNodeClick={onNodeClick}
         nodes={nodes.data}
+        startNode={startNode}
       />
       {path && (
         <Lines

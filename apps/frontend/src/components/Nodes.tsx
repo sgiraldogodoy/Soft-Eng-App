@@ -10,9 +10,16 @@ interface NodesProps {
   nodes: Node[];
   imgWidth: number;
   imgHeight: number;
+  startNode: string;
 }
 
-export function Nodes({ onNodeClick, nodes, imgWidth, imgHeight }: NodesProps) {
+export function Nodes({
+  onNodeClick,
+  nodes,
+  imgWidth,
+  imgHeight,
+  startNode,
+}: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null); //set hovered node
   const [clickedNodeID, setClickedNodeID] = useState<string | null>(null); //set clicked node ID
 
@@ -30,20 +37,26 @@ export function Nodes({ onNodeClick, nodes, imgWidth, imgHeight }: NodesProps) {
               node.nodeId === hoveredNode
                 ? "10px"
                 : node.nodeId === clickedNodeID
-                  ? "8px"
-                  : "5px",
+                  ? "10px"
+                  : node.nodeId === startNode
+                    ? "10px"
+                    : "7px",
             height:
               node.nodeId === hoveredNode
                 ? "10px"
                 : node.nodeId === clickedNodeID
-                  ? "8px"
-                  : "5px",
+                  ? "10px"
+                  : node.nodeId === startNode
+                    ? "10px"
+                    : "7px",
             backgroundColor:
               node.nodeId === hoveredNode
                 ? "cyan"
                 : node.nodeId === clickedNodeID
                   ? "red"
-                  : "black",
+                  : node.nodeId === startNode
+                    ? "blue"
+                    : "black",
             borderRadius: "50%",
             transform: "translate(-50%, -50%)",
             cursor: "pointer",
