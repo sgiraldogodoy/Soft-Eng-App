@@ -12,10 +12,21 @@ import Fiesta from "../../public/fiesta.png";
 import Luminous from "../../public/luminous.png";
 import Marmalade from "../../public/marmalade.png";
 import toast, { Toaster } from "react-hot-toast";
+import { FlowerFormFields } from "@/routes/FlowerRequest.tsx";
+import React from "react";
 
-const notify = (name: string) => toast(`You have selected: ${name}.`);
+export default function FlowerCarousel({
+  flowerState,
+  setFlowerState,
+}: {
+  flowerState: FlowerFormFields;
+  setFlowerState: React.Dispatch<React.SetStateAction<FlowerFormFields>>;
+}) {
+  const notify = (name: string) => {
+    setFlowerState({ ...flowerState, flowerChoice: name });
+    toast(`You have selected: ${name}.`);
+  };
 
-export default function FlowerCarousel() {
   return (
     <div className="flex flex-col">
       <Toaster />
