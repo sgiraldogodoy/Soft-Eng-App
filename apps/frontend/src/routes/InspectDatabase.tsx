@@ -17,7 +17,7 @@ export function InspectDatabase() {
 
   return (
     <>
-      <div className="w-screen h-screen">
+      <div className="w-full h-screen">
         <Tabs defaultValue="nodes">
           <div className="w-full flex items-center justify-center p-4">
             <TabsList>

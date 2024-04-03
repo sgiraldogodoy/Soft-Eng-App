@@ -75,12 +75,26 @@ export function Nodes({
             position: "absolute",
             top: 10,
             left: 10,
-            backgroundColor: "cyan",
+            backgroundColor: "white",
             padding: "5px",
             borderRadius: "5px",
           }}
         >
-          Node ID: {hoveredNode}
+          Hovered ID: {hoveredNode}
+        </div>
+      )}
+      {startNode && (
+        <div
+          style={{
+            position: "absolute",
+            top: 50,
+            left: 10,
+            backgroundColor: "white",
+            padding: "5px",
+            borderRadius: "5px",
+          }}
+        >
+          Goal ID: {startNode}
         </div>
       )}
       {clickedNodeID && (
@@ -89,12 +103,12 @@ export function Nodes({
             position: "absolute",
             top: 50,
             left: 10,
-            backgroundColor: "red",
+            backgroundColor: "white",
             padding: "5px",
             borderRadius: "5px",
           }}
         >
-          Node ID: {clickedNodeID}
+          Goal ID: {clickedNodeID}
         </div>
       )}
     </div>
