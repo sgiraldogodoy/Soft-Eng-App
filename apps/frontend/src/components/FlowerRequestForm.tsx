@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button.tsx";
 import React from "react";
 import type { FlowerFormFields } from "@/routes/FlowerRequest.tsx";
 
-export default function FlowerRequest({
+export default function FlowerRequestForm({
   flowerState,
   setFlowerState,
   handleSubmit,
