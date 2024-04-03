@@ -3,6 +3,7 @@ import { Map, Database, Flower } from "lucide-react";
 import { Link } from "wouter";
 import { useAuth0 } from "@auth0/auth0-react";
 import LogOutButton from "@/components/LogOutButton.tsx";
+import { BookText } from "lucide-react";
 
 // import NavbarLayout from "@components/NavbarLayout.tsx";
 
@@ -55,6 +56,16 @@ export default function NavbarLayout({ children }: React.PropsWithChildren) {
               <Link to="/database">
                 <Database className="h-6 w-6" />
                 Database
+              </Link>
+            </Button>
+            <Button
+              asChild
+              className="flex flex-row gap-3 justify-start text-xl w-full"
+              variant="ghost"
+            >
+              <Link to="/requestsummary">
+                <BookText className="h-6 w-6" />
+                Request Summary
               </Link>
             </Button>
           </div>
