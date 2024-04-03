@@ -7,11 +7,14 @@ import { Switch } from "@/components/ui/switch";
 import { SquareArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function PathFind() {
   const [startNode, setStartNode] = useState("");
   const [goalNode, setGoalNode] = useState("");
   const [isChecked, setChecked] = useState(false);
+
+  const { isAuthenticated } = useAuth0();
 
   const pathQuery = isChecked
     ? trpc.pathfinder.findPathAStar
@@ -46,13 +49,15 @@ export default function PathFind() {
     <div className="max-h-screen overflow-hidden">
       <h1 className="mt-4 text-2xl flex items-center justify-center font-bold mb-4">
         Where would you like to go?
-        <div className="absolute top-0 right-0 mt-4 mr-4">
-          <Link to="/">
-            <Button>
-              <SquareArrowLeft size={20} />
-            </Button>
-          </Link>
-        </div>
+        {!isAuthenticated && (
+          <div className="absolute top-0 right-0 mt-4 mr-4">
+            <Link to="/">
+              <Button>
+                <SquareArrowLeft size={20} />
+              </Button>
+            </Link>
+          </div>
+        )}
       </h1>
 
       <div className="flex flex-row items-center gap-4 justify-center">
