@@ -4,6 +4,7 @@ import {
   RowSelectionState,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -33,8 +34,17 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange: setSelectionState,
     enableMultiRowSelection: false,
+    initialState: {
+      sorting: [
+        {
+          id: "id",
+          desc: false,
+        },
+      ],
+    },
     state: {
       rowSelection: selectionState,
     },
