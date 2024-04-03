@@ -91,5 +91,5 @@ export async function addFlowerDatabase(
   await prisma.flowerRequest.create({
     data: flower,
   });
-  return { message: "flower request created" };
+  return { message: `flower request created with id ${flower.id}` };
 }

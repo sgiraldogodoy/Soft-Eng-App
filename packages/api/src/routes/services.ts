@@ -8,7 +8,7 @@ export const serviceRequestRouter = router({
   createFlowerRequest: publicProcedure
     .input(
       z.object({
-        id: z.string(),
+        id: z.string().optional(),
         nodeId: z.string(),
         flowerName: z.string(),
         requestDate: z.date().optional(),
@@ -23,7 +23,7 @@ export const serviceRequestRouter = router({
       if (!node) {
         return { message: "node does not exist" };
       }
-      return addFlowerDatabase(input, ctx.db);
+      return await addFlowerDatabase(input, ctx.db);
     }),
   getFlowerRequest: publicProcedure
     .input(
@@ -34,7 +34,7 @@ export const serviceRequestRouter = router({
     .query(async ({ input, ctx }) => {
       // get a flower request
 
-      return ctx.db.flowerRequest.findUnique({
+      return await ctx.db.flowerRequest.findUnique({
         where: {
           id: input.id,
         },
@@ -52,11 +52,30 @@ export const serviceRequestRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       // delete a flower request
-      ctx.db.flowerRequest.delete({
+      await ctx.db.flowerRequest.delete({
         where: {
           id: input.id,
         },
       });
+
       return { message: "Flower request deleted" };
+    }),
+  deliver: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const res = await ctx.db.flowerRequest.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          delivered: true,
+        },
+      });
+
+      console.log(res);
+
+      return {
+        message: "Flower request updated.",
+      };
     }),
 });

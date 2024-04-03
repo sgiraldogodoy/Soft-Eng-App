@@ -42,11 +42,17 @@ export const dbRouter = router({
     }),
   csvExportNodes: publicProcedure.query(async ({ ctx }) => {
     // get all nodes
-    return exportNodesToDb(ctx.db);
+    const nodeStr = await exportNodesToDb(ctx.db);
+    const b64str = Buffer.from(nodeStr, "utf8").toString("base64");
+
+    return b64str;
   }),
   csvExportEdges: publicProcedure.query(async ({ ctx }) => {
     // get all edges
-    return exportEdgesToDb(ctx.db);
+    const edgesStr = await exportEdgesToDb(ctx.db);
+    const b64str = Buffer.from(edgesStr, "utf8").toString("base64");
+
+    return b64str;
   }),
   getAllNodes: publicProcedure.query(async ({ ctx }) => {
     // get all nodes
