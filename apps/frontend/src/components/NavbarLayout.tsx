@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button.tsx";
-import { Home } from "lucide-react";
-import { Flower } from "lucide-react";
 import { Map } from "lucide-react";
+import { Flower } from "lucide-react";
 import { Link } from "wouter";
 import { useAuth0 } from "@auth0/auth0-react";
 import LogOutButton from "@/components/LogOutButton.tsx";
@@ -13,7 +12,7 @@ export default function NavbarLayout({ children }: React.PropsWithChildren) {
   console.log(isAuthenticated);
 
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return <div></div>;
   }
   return (
     <div className="flex flex-row gap-2">
@@ -35,7 +34,7 @@ export default function NavbarLayout({ children }: React.PropsWithChildren) {
               variant="ghost"
             >
               <Link to="/pathfind">
-                <Home className="h-6 w-6" />
+                <Map className="h-6 w-6" />
                 Home
               </Link>
             </Button>
@@ -45,16 +44,6 @@ export default function NavbarLayout({ children }: React.PropsWithChildren) {
             >
               <Flower className="h-6 w-6" />
               Service Requests
-            </Button>
-            <Button
-              asChild
-              className="flex flex-row gap-3 justify-start text-xl w-full"
-              variant="ghost"
-            >
-              <Link to="/pathfind">
-                <Map className="h-6 w-6" />
-                Map
-              </Link>
             </Button>
           </div>
           <div className="flex flex-col gap-5">
