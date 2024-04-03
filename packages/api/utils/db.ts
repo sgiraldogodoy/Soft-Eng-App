@@ -77,16 +77,6 @@ export async function addFlowerDatabase(
   flower: Prisma.FlowerRequestCreateManyInput,
   prisma: PrismaClient,
 ) {
-  //check if the flower already exists
-  const flowerExists = await prisma.flowerRequest.findUnique({
-    where: {
-      id: flower.id,
-    },
-  });
-  if (flowerExists) {
-    console.log(`Flower with ID ${flower.id} already exists`);
-    return { message: "flower request already exists" };
-  }
   //add the flower to the database
   await prisma.flowerRequest.create({
     data: flower,
