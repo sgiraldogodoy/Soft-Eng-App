@@ -39,11 +39,14 @@ export default function NavbarLayout({ children }: React.PropsWithChildren) {
               </Link>
             </Button>
             <Button
+              asChild
               className="flex flex-row gap-3 justify-start text-xl w-full"
               variant="ghost"
             >
-              <Flower className="h-6 w-6" />
-              Service Requests
+              <Link to="/services">
+                <Flower className="h-6 w-6" />
+                Service Requests
+              </Link>
             </Button>
           </div>
           <div className="flex flex-col gap-5">
