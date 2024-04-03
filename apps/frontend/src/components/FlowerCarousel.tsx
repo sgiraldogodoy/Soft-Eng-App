@@ -6,11 +6,6 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel.tsx";
 
-import Sweet from "../../public/sweetandpretty.png";
-import Dreamscape from "../../public/dreamscape.png";
-import Fiesta from "../../public/fiesta.png";
-import Luminous from "../../public/luminous.png";
-import Marmalade from "../../public/marmalade.png";
 import toast, { Toaster } from "react-hot-toast";
 import { FlowerFormFields } from "@/routes/FlowerRequest.tsx";
 import React from "react";
@@ -34,31 +29,31 @@ export default function FlowerCarousel({
         <CarouselContent className="w-[400px] h-[450px] text-center">
           <CarouselItem>
             <button onClick={() => notify("Sweet & Pretty")}>
-              <img src={Sweet} className="rounded-xl" />
+              <img src={"/sweetandpretty.png"} className="rounded-xl" />
             </button>
             <span className="text-2xl">Sweet & Pretty</span>
           </CarouselItem>
           <CarouselItem>
             <button onClick={() => notify("Dreamscape")}>
-              <img src={Dreamscape} className="rounded-xl" />
+              <img src={"/dreamscape.png"} className="rounded-xl" />
             </button>
             <span className="text-2xl">Dreamscape</span>
           </CarouselItem>
           <CarouselItem>
             <button onClick={() => notify("Fiesta Bouquet")}>
-              <img src={Fiesta} className="rounded-xl" />
+              <img src={"/fiesta.png"} className="rounded-xl" />
             </button>
             <span className="text-2xl">Fiesta Bouquet</span>
           </CarouselItem>
           <CarouselItem>
             <button onClick={() => notify("Luminous Morning Bouquet")}>
-              <img src={Luminous} className="rounded-xl" />
+              <img src={"/luminous.png"} className="rounded-xl" />
             </button>
             <span className="text-2xl">Luminous Morning Bouquet</span>
           </CarouselItem>
           <CarouselItem>
             <button onClick={() => notify("Marmalade Skies Bouquet")}>
-              <img src={Marmalade} className="rounded-xl" />
+              <img src={"/marmalade.png"} className="rounded-xl" />
             </button>
             <span className="text-2xl"> Marmalade Skies Bouquet</span>
           </CarouselItem>
