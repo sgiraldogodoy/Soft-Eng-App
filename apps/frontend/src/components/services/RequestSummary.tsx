@@ -1,12 +1,3 @@
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
@@ -56,38 +47,8 @@ export default function RequestSummary() {
     : undefined;
 
   return (
-    <div className="w-full flex flex-col px-20 gap-20 items-center">
-      <div className="navDiv py-3">
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>
-                A11Y Service Requests
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <NavigationMenuLink>Link1</NavigationMenuLink>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>
-                Translation Service Requests
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <NavigationMenuLink>Link2</NavigationMenuLink>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>
-                Flower Service Requests
-              </NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <NavigationMenuLink>Link3</NavigationMenuLink>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
-      <div className="w-full flex flex-col justify-evenly max-h-[80dvh] gap-4">
+    <div className="w-full h-screen flex flex-col gap-20 justify-center items-center overflow-y-scroll p-4">
+      <div className="w-full flex flex-col justify-evenly gap-4 max-h-screen overflow-y-scroll">
         <div className="overflow-scroll">
           <RequestTable
             data={servicesQuery.data}
