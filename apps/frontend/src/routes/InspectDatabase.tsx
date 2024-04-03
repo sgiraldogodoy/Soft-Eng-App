@@ -6,9 +6,13 @@ import { useRef } from "react";
 import { trpc } from "@/utils/trpc";
 import { getBase64 } from "@/utils/files";
 import { toast } from "sonner";
+import {createPortal} from "react-dom";
 
 export function InspectDatabase() {
   const uploadButton = useRef<HTMLInputElement>(null);
+
+  const downloadNodes = trpc.db.csvExportNodes.useQuery();
+  const downloadEdges = trpc.db.csvExportEdges.useQuery();
 
   const utils = trpc.useUtils();
 
@@ -27,19 +31,47 @@ export function InspectDatabase() {
           </div>
           <TabsContent value="nodes">
             <NodesTable />
+              {createPortal(   <Button
+                  onClick={() => {
+                      console.log(downloadNodes.data);
+                      const base64String = downloadNodes.data ?? '';
+                      const decodedString = atob(base64String);
+                      const blob = new Blob([decodedString], { type: 'text/csv' });
+                      const anchor = document.createElement('a');
+                      anchor.href = window.URL.createObjectURL(blob);
+                      anchor.download = 'my-csv-file.csv';
+                      document.body.appendChild(anchor);
+
+                      anchor.click();
+
+                  }}
+                  className="bg-theme-yellow absolute top-[16px] right-[100px] text-theme-dark bg-gradient-to-r from-yellow-300 to-yellow-400 hover:bg-gradient-to-l shadow-lg shadow-theme-yellow/30"
+              >
+                  Download
+              </Button>, document.body)}
           </TabsContent>
           <TabsContent value="edges">
             <EdgesTable />
+              {createPortal(   <Button
+                  onClick={() => {
+                      document.location = 'data:application/csv;base64,' + downloadEdges.data;
+
+                  }}
+                  className="bg-theme-yellow absolute top-[16px] right-[100px] text-theme-dark bg-gradient-to-r from-yellow-300 to-yellow-400 hover:bg-gradient-to-l shadow-lg shadow-theme-yellow/30"
+              >
+                  Download
+              </Button>, document.body)}
           </TabsContent>
         </Tabs>
         <Button
           onClick={() => {
             uploadButton.current?.click();
           }}
-          className="absolute top-[16px] right-4"
+          className="bg-theme-yellow absolute top-[16px] right-4 text-theme-dark bg-gradient-to-r from-yellow-300 to-yellow-400 hover:bg-gradient-to-l shadow-lg shadow-theme-yellow/30"
         >
           Upload
         </Button>
+
         <input
           ref={uploadButton}
           onChange={async (e) => {
