@@ -94,14 +94,14 @@ export function Nodes({
             borderRadius: "5px",
           }}
         >
-          Goal ID: {startNode}
+          Start ID: {startNode}
         </div>
       )}
       {clickedNodeID && (
         <div
           style={{
             position: "absolute",
-            top: 50,
+            top: 90,
             left: 10,
             backgroundColor: "white",
             padding: "5px",
