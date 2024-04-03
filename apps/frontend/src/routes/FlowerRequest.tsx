@@ -44,7 +44,7 @@ export default function FlowerRequest() {
   };
 
   return (
-    <div className="w-screen h-screen flex flex-row px-60 py-64 space-x-72 font-inter outline-transparent">
+    <div className="w-full h-screen flex flex-row px-60 py-64 gap-40 font-inter items-center justify-center">
       <FlowerRequestForm
         flowerState={flowerState}
         setFlowerState={setFlowerState}
