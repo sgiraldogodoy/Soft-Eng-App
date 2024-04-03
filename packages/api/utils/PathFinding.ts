@@ -2,7 +2,7 @@ import PriorityQueue from "priorityqueuejs";
 import type { Node } from "database";
 import type { PrismaClient } from "database";
 
-const arbHeuristic: number = 100;
+const arbHeuristic: number = 1;
 export class PathFinding {
   /**
    * breadthFirstSearch function that returns a path between two nodes
@@ -89,8 +89,8 @@ export class PathFinding {
 
     type NodeWithOutgoing = typeof nodeArray extends Array<infer T> ? T : never;
     const priorityQueue = new PriorityQueue<
-      NodeWithOutgoing & { path: Node[]; cost: number }
-    >((a, b) => a.cost - b.cost);
+      NodeWithOutgoing & { path: Node[]; cost: number; priority: number }
+    >((a, b) => b.priority - a.priority);
     const nodeRecord: Record<string, NodeWithOutgoing> = nodeArray.reduce(
       (acc, node) => {
         return {
@@ -104,13 +104,19 @@ export class PathFinding {
     const startNode = nodeRecord[root];
     const goalNode = nodeRecord[goal];
 
-    priorityQueue.enq({ ...startNode, path: [startNode], cost: 0 });
+    priorityQueue.enq({
+      ...startNode,
+      path: [startNode],
+      cost: 0,
+      priority: 0,
+    });
     visited.push(startNode.nodeId);
     while (!priorityQueue.isEmpty()) {
       const currNode = priorityQueue.deq(); //grab highest priority (lowest Dist)
       const path = currNode.path;
-      const priority = currNode.cost;
+      const cost = currNode.cost;
       if (currNode.nodeId == goalNode.nodeId) {
+        console.log(cost);
         return path;
       }
 
@@ -118,15 +124,17 @@ export class PathFinding {
         const neighbor = nodeRecord[outgoingEdge.endNode.nodeId];
         if (!visited.includes(neighbor.nodeId)) {
           visited.push(neighbor.nodeId);
+          const pyth = this.pythDist(currNode, neighbor);
           const newPriority =
-            priority +
-            this.pythDist(neighbor, goalNode) +
+            cost +
+            pyth +
             this.floorDist(neighbor, goalNode) +
             this.manHatt(neighbor, goalNode);
           priorityQueue.enq({
             ...neighbor,
             path: [...path, neighbor],
-            cost: newPriority,
+            cost: cost + pyth,
+            priority: newPriority,
           });
         }
       }

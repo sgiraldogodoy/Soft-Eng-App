@@ -1,24 +1,26 @@
-import { Route, Switch } from "wouter";
+import { Redirect, Route, Switch } from "wouter";
 import HomePage from "@/components/HomePage.tsx";
 import PathFind from "@/routes/PathFind.tsx";
-import FlowerRequest from "./FlowerRequest";
+import NavbarLayout from "@/components/NavbarLayout.tsx";
+import { useAuth0 } from "@auth0/auth0-react";
+import { InspectDatabase } from "@/routes/InspectDatabase.tsx";
 
 export function AppRouter() {
+  const { isAuthenticated } = useAuth0();
   return (
-    <>
+    <Route>
       <Switch>
         <Route path="/" component={HomePage} />
-        <Route path="/pathfind" component={PathFind} />
-        <Route path="/services" nest>
-          <Switch>
-            <Route path="/request" nest>
-              <Switch>
-                <Route path="/flowers" nest component={FlowerRequest} />
-              </Switch>
-            </Route>
-          </Switch>
-        </Route>
+        <NavbarLayout>
+          <Route path="/pathfind">
+            <PathFind />
+          </Route>
+          <Route path="/database">
+            <InspectDatabase />
+            {!isAuthenticated && <Redirect to="/" />}
+          </Route>
+        </NavbarLayout>
       </Switch>
-    </>
+    </Route>
   );
 }
