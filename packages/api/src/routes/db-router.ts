@@ -34,6 +34,7 @@ export const dbRouter = router({
         const file = await fetch(input.buffer);
         const str = await file.text();
         const edges = await parseCSVEdge(str, ctx.db);
+        await ctx.db.edge.deleteMany();
         await createEdges(edges, ctx.db);
         return { message: "Edges added" };
       } catch (e) {
