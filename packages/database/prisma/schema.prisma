@@ -30,14 +30,14 @@ model Edge {
   edgeId      String @id
   startNodeId String
   endNodeId   String
-  startNode   Node   @relation(name: "NodeOutgoingEdge", fields: [startNodeId], references: [nodeId])
-  endNode     Node   @relation(name: "NodeIncomingEdge", fields: [endNodeId], references: [nodeId])
+  startNode   Node   @relation(name: "NodeOutgoingEdge", fields: [startNodeId], references: [nodeId], onDelete: Cascade)
+  endNode     Node   @relation(name: "NodeIncomingEdge", fields: [endNodeId], references: [nodeId], onDelete: Cascade)
 }
 
 model FlowerRequest {
   id              String   @id @default(uuid())
-  nodeId          String
-  node            Node     @relation(name: "FlowerRequest", fields: [nodeId], references: [nodeId])
+  nodeId          String?
+  node            Node?    @relation(name: "FlowerRequest", fields: [nodeId], references: [nodeId], onUpdate: Cascade, onDelete: SetNull)
   flowerName      String
   requestDate     DateTime @default(now())
   loginName       String

@@ -96,7 +96,7 @@ export function InspectDatabase() {
             const base64: string = (await getBase64(files[0])) as string;
             console.log(base64);
 
-            if (text.includes("nodeID")) {
+            if (text.includes("nodeId")) {
               toast.promise(
                 nodeMutation.mutateAsync(
                   {

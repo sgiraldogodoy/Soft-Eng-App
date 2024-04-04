@@ -19,6 +19,7 @@ export const dbRouter = router({
         const str = await file.text();
         const nodes = await parseCSVNode(str);
         console.log("creating nodes");
+        await ctx.db.node.deleteMany();
         await createNodes(nodes, ctx.db);
         return { message: "Nodes added" };
       } catch (e) {
