@@ -1,5 +1,6 @@
 # Production arguments passed to both containers
-x-prod-args: &prod-args # Port that both servers will run production on
+x-prod-args: &prod-args
+  # Port that both servers will run production on
   PRODUCTION_PORT: &prod-port 80
   PORT: *prod-port # Duplicate this under the name that the env variable will expect. Build args will override as necessary
 
@@ -32,30 +33,15 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
 
-      # This is what will actually be used
-      - "--entrypoints.websecure.address=:443"
-
       # Expose the standard HTTP port, have it automatically redirect to https
       - "--entrypoints.web.address=:80"
-      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
-
-      # Auto-certificate generation parameters
-      - "--certificatesresolvers.letsencrypt.acme.email=kmccrudden@wpi.edu"
-      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
-
-      # Used during resolution
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
-    # Everything enters through Traefik, so this exposes the environment
+      - "--log.level=DEBUG"
     ports:
       - "80:80"
-      - "443:443"
     # Traefik requirement
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       # Mount the certificate, so that we don't try to renew the cert every time we start up
-      - acme_cert:/etc/traefik/acme
     restart: always
     depends_on:
       frontend:
@@ -84,15 +70,16 @@ services:
       - "traefik.enable=true"
 
       # The 443 entrypoint is the actual site
-      - "traefik.http.routers.frontend-https.entrypoints=websecure"
+      - "traefik.http.routers.frontend-https.entrypoints=web"
       - "traefik.http.routers.frontend-https.rule=Host(`ec2-18-117-101-196.us-east-2.compute.amazonaws.com`)"
-      - "traefik.http.routers.frontend-https.tls=true"
+      - "traefik.http.routers.frontend-https.tls=false"
 
       # Despite the "loadbalancer" naming, this just describes what port this container exposes
       - "traefik.http.services.frontend-https.loadbalancer.server.port=80"
     image: kevinmccrudden/cs3733teamq:frontend
     restart: always
-    healthcheck: *health-check
+    healthcheck:
+      *health-check
 
   # Backend (API)
   backend:
@@ -103,7 +90,7 @@ services:
     # Environment allows this to work with prebuilt images
     environment:
       # Ignore the warnings, this just merges those three
-      <<: [*prod-args, *db-args, *db-loc]
+      <<: [ *prod-args, *db-args, *db-loc ]
     build:
       # Taken from our github repo
       context: .
@@ -118,14 +105,16 @@ services:
       - "traefik.enable=true"
 
       # The 443 entrypoint is the actual site
-      - "traefik.http.routers.backend-https.entrypoints=websecure"
+      - "traefik.http.routers.backend-https.entrypoints=web"
       - "traefik.http.routers.backend-https.rule=Host(`ec2-18-117-101-196.us-east-2.compute.amazonaws.com`) && PathPrefix(`/api`)"
-      - "traefik.http.routers.backend-https.tls=true"
+      - "traefik.http.routers.backend-https.tls=false"
 
       # Despite the "loadbalancer" naming, this just describes what port this container exposes
       - "traefik.http.services.backend-https.loadbalancer.server.port=80"
     image: kevinmccrudden/cs3733teamq:backend
     restart: always
-    healthcheck: *health-check
+    healthcheck:
+      *health-check
 volumes:
   acme_cert:
+
