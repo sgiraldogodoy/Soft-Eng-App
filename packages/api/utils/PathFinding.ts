@@ -3,19 +3,20 @@ import type { Node } from "database";
 import type { PrismaClient } from "database";
 
 const arbHeuristic: number = 1;
-export class PathFinding {
+
+export interface PathFinding {
+  run(root: string, goal: string, db: PrismaClient): Promise<Node[]>;
+}
+
+export class breadthFirstSearch implements PathFinding {
   /**
    * breadthFirstSearch function that returns a path between two nodes
    * @param root the start node
    * @param goal the end node
    * @param db the database
-   * @returns currently just the end node if found. Will eventually be the path between the two nodes
+   * @returns the path between the two nodes
    */
-  static async breadthFirstSearch(
-    root: string,
-    goal: string,
-    db: PrismaClient,
-  ): Promise<Node[]> {
+  async run(root: string, goal: string, db: PrismaClient): Promise<Node[]> {
     const visited: string[] = [];
 
     const nodeArray = await db.node.findMany({
@@ -64,18 +65,16 @@ export class PathFinding {
 
     return [];
   }
+}
 
-  /**
-   * aStar function that returns a path between two nodes using the A* algorithm
-   * @param root start node
-   * @param goal goal node
-   * @param db the database
-   */
-  static async aStar(
-    root: string,
-    goal: string,
-    db: PrismaClient,
-  ): Promise<Node[]> {
+/**
+ * aStar function that returns a path between two nodes using the A* algorithm
+ * @param root start node
+ * @param goal goal node
+ * @param db the database
+ */
+export class aStar implements PathFinding {
+  async run(root: string, goal: string, db: PrismaClient): Promise<Node[]> {
     const visited: string[] = [];
     const nodeArray = await db.node.findMany({
       include: {
@@ -115,7 +114,7 @@ export class PathFinding {
       const currNode = priorityQueue.deq(); //grab highest priority (lowest Dist)
       const path = currNode.path;
       const cost = currNode.cost;
-      if (currNode.nodeId == goalNode.nodeId) {
+      if (currNode.nodeId === goalNode.nodeId) {
         console.log(cost);
         return path;
       }
@@ -148,7 +147,7 @@ export class PathFinding {
    * @param currNode start node
    * @param goal end node
    */
-  static pythDist(currNode: Node, goal: Node): number {
+  private pythDist(currNode: Node, goal: Node): number {
     return Math.sqrt(
       Math.pow(currNode.xcords - goal.xcords, 2) +
         Math.pow(currNode.ycords - goal.ycords, 2),
@@ -160,7 +159,7 @@ export class PathFinding {
    * @param currNode start node
    * @param goal end node
    */
-  static floorDist(currNode: Node, goal: Node): number {
+  private floorDist(currNode: Node, goal: Node): number {
     const currNodeFloor: string = currNode.floor;
     const goalNodeFloor: string = goal.floor;
     return (
@@ -169,9 +168,9 @@ export class PathFinding {
     );
   }
 
-  static floorToInt(floor: string): number {
-    if (floor == "L1") return -1;
-    else if (floor == "L2") return -2;
+  private floorToInt(floor: string): number {
+    if (floor === "L1") return -1;
+    else if (floor === "L2") return -2;
     return parseInt(floor);
   }
 
@@ -180,10 +179,97 @@ export class PathFinding {
    * @param currNode start node
    * @param goal end node
    */
-  static manHatt(currNode: Node, goal: Node): number {
+  private manHatt(currNode: Node, goal: Node): number {
     return (
       Math.abs(currNode.xcords - goal.xcords) +
       Math.abs(currNode.ycords - goal.ycords)
     );
+  }
+}
+
+export class depthFirstSearch implements PathFinding {
+  /**
+   * breadthFirstSearch function that returns a path between two nodes
+   * @param root the start node
+   * @param goal the end node
+   * @param db the database
+   * @returns the path between the two nodes
+   */
+  async run(root: string, goal: string, db: PrismaClient): Promise<Node[]> {
+    const visited: string[] = [];
+
+    const nodeArray = await db.node.findMany({
+      include: {
+        outgoing: {
+          include: {
+            endNode: true,
+          },
+        },
+      },
+    });
+
+    type NodeWithOutgoing = typeof nodeArray extends Array<infer T> ? T : never;
+
+    const nodeRecord: Record<string, NodeWithOutgoing> = nodeArray.reduce(
+      (acc, node) => {
+        return {
+          ...acc,
+          [node.nodeId]: node,
+        };
+      },
+      {},
+    );
+
+    const queue: { currNode: NodeWithOutgoing; path: Node[] }[] = [];
+
+    const startNode = nodeRecord[root];
+    const goalNode = nodeRecord[goal];
+
+    queue.push({ currNode: startNode, path: [startNode] });
+    while (queue.length > 0) {
+      const { currNode, path } = queue.pop()!;
+      if (currNode.nodeId == goalNode.nodeId) {
+        return path;
+      }
+
+      for (const outgoingEdge of currNode.outgoing) {
+        const neighbor = nodeRecord[outgoingEdge.endNode.nodeId];
+
+        if (!visited.includes(neighbor.nodeId)) {
+          visited.push(neighbor.nodeId);
+          queue.push({ currNode: neighbor, path: [...path, neighbor] });
+        }
+      }
+    }
+
+    return [];
+  }
+}
+
+export class Context {
+  private pathFindingAlg: PathFinding | undefined;
+
+  get getPathFindingAlg(): PathFinding | undefined {
+    return this.pathFindingAlg;
+  }
+
+  set setPathFindingAlg(newPathFindingAlg: PathFinding) {
+    this.pathFindingAlg = newPathFindingAlg;
+  }
+
+  constructor() {
+    //Dont need to do anything here
+  }
+
+  setFindPathAlg(newPathFindingAlg: PathFinding): string {
+    this.pathFindingAlg = newPathFindingAlg;
+    return "";
+  }
+
+  async run(root: string, goal: string, db: PrismaClient): Promise<Node[]> {
+    if (this.pathFindingAlg) {
+      return this.pathFindingAlg.run(root, goal, db);
+    }
+    return [];
   }
 }

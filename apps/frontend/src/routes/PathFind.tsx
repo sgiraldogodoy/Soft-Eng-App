@@ -16,13 +16,13 @@ export default function PathFind() {
 
   const { isAuthenticated } = useAuth0();
 
-  const pathQuery = isChecked
-    ? trpc.pathfinder.findPathAStar
-    : trpc.pathfinder.findPathBFS;
+  const whichAlg = isChecked ? "A*" : "BFS";
+
+  const pathQuery = trpc.pathfinder.findPath;
 
   const path = pathQuery.useQuery(
     startNode && goalNode
-      ? { startNodeId: startNode, endNodeId: goalNode }
+      ? { startNodeId: startNode, endNodeId: goalNode, algorithm: whichAlg }
       : skipToken,
   );
   const nodes = path.data;
@@ -105,6 +105,7 @@ export default function PathFind() {
             onNodeClick={handleNodeClickInApp}
             path={nodes}
             startNode={startNode}
+            goalNode={goalNode}
           />
         </div>
       </div>

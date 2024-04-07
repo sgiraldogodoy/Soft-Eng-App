@@ -69,7 +69,7 @@ export function Lines({ nodes, path, imgWidth, imgHeight }: LineProps) {
           attributeName="stroke-dashoffset"
           from="0"
           to={-totalLength}
-          dur={`${totalLength / 20}s`} // Speed
+          dur={`${totalLength / 18}s`} // Speed
           repeatCount="indefinite"
         />
       </path>
