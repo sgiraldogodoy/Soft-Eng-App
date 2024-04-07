@@ -59,6 +59,7 @@ export default function Map({
         nodes={nodes.data}
         startNode={startNode}
         goalNode={goalNode}
+        floor="L1" //implement to be reactive to the page the user is on
       />
       {path && (
         <Lines

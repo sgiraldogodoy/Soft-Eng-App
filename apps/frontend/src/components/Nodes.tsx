@@ -12,6 +12,7 @@ interface NodesProps {
   imgHeight: number;
   startNode: string;
   goalNode: string;
+  floor: string;
 }
 
 export function Nodes({
@@ -21,13 +22,16 @@ export function Nodes({
   imgHeight,
   startNode,
   goalNode,
+  floor,
 }: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null); //set hovered node
   const [clickedNodeID, setClickedNodeID] = useState<string | null>(null); //set clicked node ID
 
+  const filteredNodes = nodes.filter((node) => node.floor === floor);
+
   return (
     <div>
-      {nodes.map((node, index) => (
+      {filteredNodes.map((node, index) => (
         //Node Positioning
         <div
           key={index}
