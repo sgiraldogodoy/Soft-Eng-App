@@ -13,7 +13,20 @@ interface LineProps {
 }
 
 export function Lines({ nodes, path, imgWidth, imgHeight }: LineProps) {
-  if (!path || path.length < 2) return null; // Path must have at least two nodes to draw lines
+  if (!path || path.length < 2) return null; // At least two for path
+
+  // Calculate total length of the path to dynamically animate the path
+  let totalLength = 0;
+  for (let i = 1; i < path.length; i++) {
+    const currentNode = nodes.find((n) => n.nodeId === path[i].nodeId);
+    const prevNode = nodes.find((n) => n.nodeId === path[i - 1].nodeId);
+    if (currentNode && prevNode) {
+      totalLength += Math.sqrt(
+        Math.pow(currentNode.xcords - prevNode.xcords, 2) +
+          Math.pow(currentNode.ycords - prevNode.ycords, 2),
+      );
+    }
+  }
 
   // Construct the path string
   const pathString = path
@@ -45,8 +58,21 @@ export function Lines({ nodes, path, imgWidth, imgHeight }: LineProps) {
     >
       <path
         d={pathString}
-        style={{ stroke: "red", strokeWidth: 2, fill: "none" }}
-      />
+        style={{
+          stroke: "red",
+          strokeWidth: 2,
+          fill: "none",
+          strokeDasharray: "5,5",
+        }}
+      >
+        <animate
+          attributeName="stroke-dashoffset"
+          from="0"
+          to={-totalLength}
+          dur={`${totalLength / 20}s`} // Speed
+          repeatCount="indefinite"
+        />
+      </path>
     </svg>
   );
 }
