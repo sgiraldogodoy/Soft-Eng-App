@@ -11,6 +11,7 @@ interface NodesProps {
   imgWidth: number;
   imgHeight: number;
   startNode: string;
+  goalNode: string;
 }
 
 export function Nodes({
@@ -19,6 +20,7 @@ export function Nodes({
   imgWidth,
   imgHeight,
   startNode,
+  goalNode,
 }: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null); //set hovered node
   const [clickedNodeID, setClickedNodeID] = useState<string | null>(null); //set clicked node ID
@@ -97,7 +99,7 @@ export function Nodes({
           Start ID: {startNode}
         </div>
       )}
-      {clickedNodeID && (
+      {goalNode && (
         <div
           style={{
             position: "absolute",
@@ -108,7 +110,7 @@ export function Nodes({
             borderRadius: "5px",
           }}
         >
-          Goal ID: {clickedNodeID}
+          Goal ID: {goalNode}
         </div>
       )}
     </div>

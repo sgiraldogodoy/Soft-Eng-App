@@ -8,9 +8,15 @@ interface MapProps {
   onNodeClick: (clickedNode: string) => void;
   path: Node[] | undefined;
   startNode: string;
+  goalNode: string;
 }
 
-export default function Map({ onNodeClick, path, startNode }: MapProps) {
+export default function Map({
+  onNodeClick,
+  path,
+  startNode,
+  goalNode,
+}: MapProps) {
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height
   const nodes = trpc.pathfinder.getNodes.useQuery();
@@ -41,7 +47,7 @@ export default function Map({ onNodeClick, path, startNode }: MapProps) {
     <div className="relative">
       <img
         ref={image}
-        src="00_thelowerlevel1.png"
+        src="/00_thelowerlevel1.png"
         className="w-full"
         alt="Map"
         onLoad={handleResize}
@@ -52,6 +58,7 @@ export default function Map({ onNodeClick, path, startNode }: MapProps) {
         onNodeClick={onNodeClick}
         nodes={nodes.data}
         startNode={startNode}
+        goalNode={goalNode}
       />
       {path && (
         <Lines
