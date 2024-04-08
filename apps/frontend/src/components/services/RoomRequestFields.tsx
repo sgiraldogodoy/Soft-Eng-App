@@ -25,12 +25,12 @@ export default function RoomRequest({
   form: UseFormReturn<z.infer<typeof RoomRequestFormSchema>, unknown>;
 }) {
   return (
-    <div>
+    <div className="flex gap-2 items-center flex-1">
       <FormField
         control={form.control}
         name="startTime"
         render={({ field }) => (
-          <FormItem>
+          <FormItem className="flex-1">
             <FormLabel>Start Time</FormLabel>
             <FormControl>
               <Input type="date" {...field} />
@@ -44,7 +44,7 @@ export default function RoomRequest({
         control={form.control}
         name="endTime"
         render={({ field }) => (
-          <FormItem>
+          <FormItem className="flex-1">
             <FormLabel>End Time</FormLabel>
             <FormControl>
               <Input type="date" {...field} />

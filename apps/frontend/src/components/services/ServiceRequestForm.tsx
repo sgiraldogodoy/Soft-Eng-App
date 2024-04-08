@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import {
   Card,
   CardHeader,
@@ -74,17 +74,12 @@ export default function InputForm({ variant }: Props) {
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields;
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    console.log("attempting");
+    console.log(data);
+    toast("Success");
   }
   return (
-    <Card className="w-2/3 m-4">
+    <Card className="w-2/3">
       <CardHeader>
         <CardTitle className="capitalize">
           {FORMTYPE_RECORD[variant].longName}
