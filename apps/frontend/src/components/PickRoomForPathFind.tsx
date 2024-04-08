@@ -3,6 +3,7 @@ import { Check, ChevronsUpDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Node } from "database";
 import {
   Command,
   CommandEmpty,
@@ -15,33 +16,42 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useEffect } from "react";
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
+interface PickRoomForPathFindProps {
+  // onSelect: (room: string) => void;
+  Rooms: Node[] | undefined;
+  onChange: (selectedNodeId: string) => void;
+  selectedNode: string;
+}
 
-export function ComboboxDemo() {
+export function PathFindRoomSelection({
+  Rooms,
+  onChange,
+  selectedNode,
+}: PickRoomForPathFindProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
+
+  useEffect(() => {
+    if (selectedNode) {
+      setValue(selectedNode); // Set the combobox value to the selected node's label
+    } else {
+      setValue(""); // Reset the combobox to "Select framework..."
+    }
+  }, [selectedNode]);
+
+  if (!Rooms) {
+    return <p>No rooms found</p>;
+  }
+  const filteredNodes = Rooms.filter((node) => node.nodeType !== "HALL");
+  const frameworksUnSorted = filteredNodes.map((node) => ({
+    label: node.longName,
+    value: node.nodeId,
+  }));
+  const frameworks = frameworksUnSorted.sort((a, b) =>
+    a.label.localeCompare(b.label),
+  );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -52,13 +62,22 @@ export function ComboboxDemo() {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
+          <div
+            style={{
+              maxWidth: "100%",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {value
+              ? frameworks.find((framework) => framework.value === value)?.label
+              : "Select framework..."}
+          </div>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[200px] p-0 max-h-80 overflow-y-auto">
         <Command>
           <CommandInput placeholder="Search framework..." />
           <CommandEmpty>No framework found.</CommandEmpty>
@@ -67,9 +86,10 @@ export function ComboboxDemo() {
               <CommandItem
                 key={framework.value}
                 value={framework.value}
-                onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue);
+                onSelect={() => {
+                  setValue(framework.value);
                   setOpen(false);
+                  onChange(framework.value);
                 }}
               >
                 <Check

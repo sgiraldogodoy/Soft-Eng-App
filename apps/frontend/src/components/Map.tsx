@@ -1,4 +1,3 @@
-import { trpc } from "../utils/trpc.ts";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Nodes } from "./Nodes.tsx";
 import { Node } from "database";
@@ -6,6 +5,7 @@ import { Lines } from "./Lines.tsx";
 
 interface MapProps {
   onNodeClick: (clickedNode: string) => void;
+  nodes: Node[] | undefined; // Change prop type
   path: Node[] | undefined;
   startNode: string;
   goalNode: string;
@@ -13,13 +13,13 @@ interface MapProps {
 
 export default function Map({
   onNodeClick,
+  nodes, // Access nodes directly from props
   path,
   startNode,
   goalNode,
 }: MapProps) {
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height
-  const nodes = trpc.pathfinder.getNodes.useQuery();
   const image = useRef<HTMLImageElement>(null);
 
   const handleResize = useCallback(() => {
@@ -29,17 +29,12 @@ export default function Map({
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
-  }, [image, handleResize]);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [handleResize]);
 
-  if (nodes.isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (nodes.isError) {
-    return <p>Error: {nodes.error.message}</p>;
-  }
-
-  if (!nodes.data) {
+  if (!nodes) {
     return <p>No nodes found</p>;
   }
 
@@ -56,7 +51,7 @@ export default function Map({
         imgWidth={imgWidth}
         imgHeight={imgHeight}
         onNodeClick={onNodeClick}
-        nodes={nodes.data}
+        nodes={nodes}
         startNode={startNode}
         goalNode={goalNode}
         floor="L1" //implement to be reactive to the page the user is on
@@ -65,7 +60,7 @@ export default function Map({
         <Lines
           imgWidth={imgWidth}
           imgHeight={imgHeight}
-          nodes={nodes.data}
+          nodes={nodes}
           path={path}
         />
       )}

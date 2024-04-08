@@ -2,37 +2,33 @@ import { useState } from "react";
 import { trpc } from "../utils/trpc.ts";
 import { skipToken } from "@tanstack/react-query";
 import Map from "../components/Map.tsx";
-import { Input } from "@/components/ui/input";
+// import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { SquareArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { useAuth0 } from "@auth0/auth0-react";
+import { PathFindRoomSelection } from "@/components/PickRoomForPathFind.tsx";
 
 export default function PathFind() {
   const [startNode, setStartNode] = useState("");
   const [goalNode, setGoalNode] = useState("");
   const [isChecked, setChecked] = useState(false);
-
   const { isAuthenticated } = useAuth0();
 
   const whichAlg = isChecked ? "A*" : "BFS";
 
-  const pathQuery = trpc.pathfinder.findPath;
+  // Node query
+  const nodesQuery = trpc.pathfinder.getNodes.useQuery();
 
+  // Path query
+  const pathQuery = trpc.pathfinder.findPath;
   const path = pathQuery.useQuery(
     startNode && goalNode
       ? { startNodeId: startNode, endNodeId: goalNode, algorithm: whichAlg }
       : skipToken,
   );
-  const nodes = path.data;
-
-  // let pathString = "Directions:";
-  // if (nodes)
-  //   if (nodes.length > 0)
-  //     pathString =
-  //       "Directions: " + nodes.map((Node) => Node.nodeId).join(" > ");
-  //   else pathString = "Directions: No path found.";
+  const pathData = path.data;
 
   const handleNodeClickInApp = (clickedNode: string) => {
     if (startNode && goalNode) {
@@ -65,27 +61,23 @@ export default function PathFind() {
           {/* This div takes up 50% of the screen width */}
           <div className="flex flex-row gap-4 items-end">
             <div className="flex flex-col gap-2 flex-1">
-              <label className="inline-block mb-4">Starting Room ID:</label>
-              <Input
-                type="text"
-                id="startNode"
-                name="startNode"
-                value={startNode}
-                onChange={(e) => setStartNode(e.target.value)}
-                className="border border-gray-300 px-3 py-2 mb-4 rounded-md focus:outline-none focus:ring focus:border-blue-300 w-full"
-              />
+              {/*    className="border border-gray-300 px-3 py-2 mb-4 rounded-md focus:outline-none focus:ring focus:border-blue-300 w-full"*/}
+              <div className="flex flex-col gap-2 flex-1 mb-4">
+                <label className="inline-block mb-4">Start Location:</label>
+                <PathFindRoomSelection
+                  Rooms={nodesQuery.data}
+                  onChange={(e) => setStartNode(e)}
+                  selectedNode={startNode}
+                />
+              </div>
             </div>
-            <div className="flex flex-col gap-2 flex-1">
-              <label className="inline-block mb-4">
-                Room ID You Would Like Navigation To:
-              </label>
-              <Input
-                type="text"
-                id="goalNode"
-                name="goalNode"
-                value={goalNode}
-                onChange={(e) => setGoalNode(e.target.value)}
-                className="border border-gray-300 px-3 py-2 mb-4 rounded-md focus:outline-none focus:ring focus:border-blue-300 w-full"
+            {/*<PickRoomForPathFind Rooms={nodesQuery.data} />*/}
+            <div className="flex flex-col gap-2 flex-1 mb-4">
+              <label className="inline-block mb-4">Target Location:</label>
+              <PathFindRoomSelection
+                Rooms={nodesQuery.data}
+                onChange={(e) => setGoalNode(e)}
+                selectedNode={goalNode}
               />
             </div>
           </div>
@@ -103,7 +95,8 @@ export default function PathFind() {
         <div className="w-full flex items-center justify-center">
           <Map
             onNodeClick={handleNodeClickInApp}
-            path={nodes}
+            nodes={nodesQuery.data} // Pass node data as a prop
+            path={pathData} // Pass path data as a prop
             startNode={startNode}
             goalNode={goalNode}
           />
