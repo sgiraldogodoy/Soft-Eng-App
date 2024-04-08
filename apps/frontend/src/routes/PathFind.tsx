@@ -15,11 +15,12 @@ export default function PathFind() {
   const [goalNode, setGoalNode] = useState("");
   const [isChecked, setChecked] = useState(false);
   const { isAuthenticated } = useAuth0();
-
+  const imgURL = "/00_thelowerlevel1.png";
+  const floor = "L1";
   const whichAlg = isChecked ? "A*" : "BFS";
 
   // Node query
-  const nodesQuery = trpc.pathfinder.getNodes.useQuery();
+  const nodesQuery = trpc.db.getAllNodes.useQuery();
 
   // Path query
   const pathQuery = trpc.pathfinder.findPath;
@@ -60,16 +61,13 @@ export default function PathFind() {
         <div className="w-1/2">
           {/* This div takes up 50% of the screen width */}
           <div className="flex flex-row gap-4 items-end">
-            <div className="flex flex-col gap-2 flex-1">
-              {/*    className="border border-gray-300 px-3 py-2 mb-4 rounded-md focus:outline-none focus:ring focus:border-blue-300 w-full"*/}
-              <div className="flex flex-col gap-2 flex-1 mb-4">
-                <label className="inline-block mb-4">Start Location:</label>
-                <PathFindRoomSelection
-                  Rooms={nodesQuery.data}
-                  onChange={(e) => setStartNode(e)}
-                  selectedNode={startNode}
-                />
-              </div>
+            <div className="flex flex-col gap-2 flex-1 mb-4">
+              <label className="inline-block mb-4">Start Location:</label>
+              <PathFindRoomSelection
+                Rooms={nodesQuery.data}
+                onChange={(e) => setStartNode(e)}
+                selectedNode={startNode}
+              />
             </div>
             {/*<PickRoomForPathFind Rooms={nodesQuery.data} />*/}
             <div className="flex flex-col gap-2 flex-1 mb-4">
@@ -99,6 +97,8 @@ export default function PathFind() {
             path={pathData} // Pass path data as a prop
             startNode={startNode}
             goalNode={goalNode}
+            imgURL={imgURL}
+            floor={floor}
           />
         </div>
       </div>

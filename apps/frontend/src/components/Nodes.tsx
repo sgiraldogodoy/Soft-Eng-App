@@ -6,12 +6,12 @@ const origImageWidth = 5000;
 const origImageHeight = 3400;
 
 interface NodesProps {
-  onNodeClick: (nodeID: string) => void;
+  onNodeClick?: (nodeID: string) => void;
   nodes: Node[];
   imgWidth: number;
   imgHeight: number;
-  startNode: string;
-  goalNode: string;
+  startNode?: string;
+  goalNode?: string;
   floor: string;
 }
 
@@ -70,7 +70,7 @@ export function Nodes({
           onMouseEnter={() => setHoveredNode(node.nodeId)}
           onMouseLeave={() => setHoveredNode(null)}
           onClick={() => {
-            onNodeClick(node.nodeId);
+            if (onNodeClick) onNodeClick(node.nodeId);
           }}
         />
       ))}

@@ -35,9 +35,9 @@ export function PathFindRoomSelection({
 
   useEffect(() => {
     if (selectedNode) {
-      setValue(selectedNode); // Set the combobox value to the selected node's label
+      setValue(selectedNode); // Set the combobox value to the selected node
     } else {
-      setValue(""); // Reset the combobox to "Select framework..."
+      setValue(""); // Reset the combobox to "Select Location"
     }
   }, [selectedNode]);
 
@@ -46,7 +46,7 @@ export function PathFindRoomSelection({
   }
   const filteredNodes = Rooms.filter((node) => node.nodeType !== "HALL");
   const frameworksUnSorted = filteredNodes.map((node) => ({
-    label: node.longName,
+    label: node.longName.trim(),
     value: node.nodeId,
   }));
   const frameworks = frameworksUnSorted.sort((a, b) =>
@@ -72,14 +72,14 @@ export function PathFindRoomSelection({
           >
             {value
               ? frameworks.find((framework) => framework.value === value)?.label
-              : "Select framework..."}
+              : "Select Location"}
           </div>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0 max-h-80 overflow-y-auto">
+      <PopoverContent className="w-[200px] p-0 max-h-96 overflow-y-auto ">
         <Command>
-          <CommandInput placeholder="Search framework..." />
+          <CommandInput placeholder="Select Location" />
           <CommandEmpty>No framework found.</CommandEmpty>
           <CommandGroup>
             {frameworks.map((framework) => (
