@@ -6,11 +6,14 @@ const origImageWidth = 5000;
 const origImageHeight = 3400;
 
 interface NodesProps {
-  onNodeClick: (nodeID: string) => void;
+  onNodeClick?: (nodeID: string) => void;
   nodes: Node[];
   imgWidth: number;
   imgHeight: number;
-  startNode: string;
+  startNode?: string;
+  goalNode?: string;
+  floor: string;
+  filter?: boolean;
 }
 
 export function Nodes({
@@ -19,13 +22,19 @@ export function Nodes({
   imgWidth,
   imgHeight,
   startNode,
+  goalNode,
+  floor,
+  filter,
 }: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null); //set hovered node
-  const [clickedNodeID, setClickedNodeID] = useState<string | null>(null); //set clicked node ID
+
+  let filteredNodes = nodes.filter((node) => node.floor === floor);
+  if (!filter)
+    filteredNodes = filteredNodes.filter((node) => node.nodeType !== "HALL");
 
   return (
     <div>
-      {nodes.map((node, index) => (
+      {filteredNodes.map((node, index) => (
         //Node Positioning
         <div
           key={index}
@@ -36,7 +45,7 @@ export function Nodes({
             width:
               node.nodeId === hoveredNode
                 ? "10px"
-                : node.nodeId === clickedNodeID
+                : node.nodeId === goalNode
                   ? "10px"
                   : node.nodeId === startNode
                     ? "10px"
@@ -44,7 +53,7 @@ export function Nodes({
             height:
               node.nodeId === hoveredNode
                 ? "10px"
-                : node.nodeId === clickedNodeID
+                : node.nodeId === goalNode
                   ? "10px"
                   : node.nodeId === startNode
                     ? "10px"
@@ -52,7 +61,7 @@ export function Nodes({
             backgroundColor:
               node.nodeId === hoveredNode
                 ? "cyan"
-                : node.nodeId === clickedNodeID
+                : node.nodeId === goalNode
                   ? "red"
                   : node.nodeId === startNode
                     ? "blue"
@@ -64,8 +73,7 @@ export function Nodes({
           onMouseEnter={() => setHoveredNode(node.nodeId)}
           onMouseLeave={() => setHoveredNode(null)}
           onClick={() => {
-            setClickedNodeID(node.nodeId);
-            onNodeClick(node.nodeId);
+            if (onNodeClick) onNodeClick(node.nodeId);
           }}
         />
       ))}
@@ -97,7 +105,7 @@ export function Nodes({
           Start ID: {startNode}
         </div>
       )}
-      {clickedNodeID && (
+      {goalNode && (
         <div
           style={{
             position: "absolute",
@@ -108,7 +116,7 @@ export function Nodes({
             borderRadius: "5px",
           }}
         >
-          Goal ID: {clickedNodeID}
+          Goal ID: {goalNode}
         </div>
       )}
     </div>

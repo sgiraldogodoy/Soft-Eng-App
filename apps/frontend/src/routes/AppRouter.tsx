@@ -6,6 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { InspectDatabase } from "@/routes/InspectDatabase.tsx";
 import RequestSummary from "../components/services/RequestSummary";
 import ServiceRequestForm from "@/components/services/ServiceRequestForm";
+import FloorTabs from "./MapEdit";
 
 export function AppRouter() {
   const { isAuthenticated } = useAuth0();
@@ -13,6 +14,7 @@ export function AppRouter() {
     <Route>
       <Switch>
         <Route path="/" component={HomePage} />
+
         <NavbarLayout>
           <Route path="/pathfind">
             <PathFind />
@@ -26,6 +28,9 @@ export function AppRouter() {
           </Route>
           <Route path="/requestsummary">
             <RequestSummary />
+          </Route>
+          <Route path="/mapediting">
+            <FloorTabs />
           </Route>
         </NavbarLayout>
       </Switch>

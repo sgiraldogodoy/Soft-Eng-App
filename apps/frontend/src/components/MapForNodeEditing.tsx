@@ -1,26 +1,22 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Nodes } from "./Nodes.tsx";
-import { Node } from "database";
-import { Lines } from "./Lines.tsx";
+import { Node, Edge } from "database";
+import { Edges } from "../components/Edges.tsx";
 
 interface MapProps {
-  onNodeClick?: (clickedNode: string) => void;
   nodes: Node[] | undefined; // Change prop type
-  path: Node[] | undefined;
-  startNode: string;
-  goalNode: string;
+  edges: Edge[] | undefined;
   imgURL: string;
   floor: string;
+  className: string;
 }
 
-export default function Map({
-  onNodeClick,
+export default function MapForNodeEditing({
   nodes, // Access nodes directly from props
-  path,
-  startNode,
-  goalNode,
   imgURL,
   floor,
+  className,
+  edges,
 }: MapProps) {
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height
@@ -57,7 +53,7 @@ export default function Map({
   //   };
   // }, [handleResize]);
 
-  if (!nodes) {
+  if (!nodes || !edges) {
     return <p>No nodes found</p>;
   }
 
@@ -68,24 +64,22 @@ export default function Map({
         src={imgURL}
         alt="${imgURL} image"
         onLoad={handleResize}
+        className={className}
       />
       <Nodes
         imgWidth={imgWidth}
         imgHeight={imgHeight}
-        onNodeClick={onNodeClick}
         nodes={nodes}
-        startNode={startNode}
-        goalNode={goalNode}
+        floor={floor}
+        filter={true}
+      />
+      <Edges
+        imgWidth={imgWidth}
+        imgHeight={imgHeight}
+        nodes={nodes}
+        edges={edges}
         floor={floor}
       />
-      {path && (
-        <Lines
-          imgWidth={imgWidth}
-          imgHeight={imgHeight}
-          nodes={nodes}
-          path={path}
-        />
-      )}
     </div>
   );
 }
