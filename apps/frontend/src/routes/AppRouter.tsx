@@ -6,6 +6,7 @@ import { InspectDatabase } from "@/routes/InspectDatabase.tsx";
 import RequestSummary from "../components/services/RequestSummary";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import ServiceRequestForm from "@/components/services/ServiceRequestForm";
+import FloorTabs from "./MapEdit";
 
 export function AppRouter() {
   const { isAuthenticated } = useAuth0();
@@ -22,10 +23,15 @@ export function AppRouter() {
             {!isAuthenticated && <Redirect to="/" />}
           </Route>
           <Route path="/services">
-            <ServiceRequestForm variant="room-request" />
+            <div className="w-full h-full flex items-center justify-center">
+              <ServiceRequestForm variant="room-request" />
+            </div>
           </Route>
           <Route path="/requestsummary">
             <RequestSummary />
+          </Route>
+          <Route path="/mapediting">
+            <FloorTabs />
           </Route>
         </DashboardLayout>
       </Switch>

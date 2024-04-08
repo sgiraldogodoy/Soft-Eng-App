@@ -1,6 +1,14 @@
 import { publicProcedure, router } from "../trpc";
 import z from "zod";
-import { PathFinding } from "../../utils/PathFinding.ts";
+import {
+  Context,
+  aStar,
+  breadthFirstSearch,
+  depthFirstSearch,
+} from "../../utils/PathFinding.ts";
+
+const myPathFinding: Context = new Context();
+myPathFinding.setPathFindingAlg = new aStar();
 
 export const pathfinder = router({
   getNodes: publicProcedure.query(({ ctx }) => {
@@ -8,19 +16,23 @@ export const pathfinder = router({
 
     return data;
   }),
-  findPathBFS: publicProcedure
-    .input(z.object({ startNodeId: z.string(), endNodeId: z.string() }))
+
+  findPath: publicProcedure
+    .input(
+      z.object({
+        startNodeId: z.string(),
+        endNodeId: z.string(),
+        algorithm: z.string(),
+      }),
+    )
     .query(async ({ input, ctx }) => {
-      return await PathFinding.breadthFirstSearch(
-        input.startNodeId,
-        input.endNodeId,
-        ctx.db,
-      );
-    }),
-  findPathAStar: publicProcedure
-    .input(z.object({ startNodeId: z.string(), endNodeId: z.string() }))
-    .query(async ({ input, ctx }) => {
-      return await PathFinding.aStar(
+      if (input.algorithm === "DFS") {
+        myPathFinding.setFindPathAlg(new depthFirstSearch());
+      } else if (input.algorithm === "BFS") {
+        myPathFinding.setFindPathAlg(new breadthFirstSearch());
+      } else myPathFinding.setFindPathAlg(new aStar());
+
+      return await myPathFinding.run(
         input.startNodeId,
         input.endNodeId,
         ctx.db,

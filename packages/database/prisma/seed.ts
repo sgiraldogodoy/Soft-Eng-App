@@ -10,7 +10,7 @@ async function main() {
 
   // Parse nodes CSV
   const nodeStream = readline.createInterface({
-    input: fs.createReadStream("prisma/L1Nodes.csv"),
+    input: fs.createReadStream("prisma/nodes.csv"),
     terminal: false,
   });
 
@@ -51,7 +51,7 @@ async function main() {
 
   // Parse edges CSV
   const edgeStream = readline.createInterface({
-    input: fs.createReadStream("prisma/L1Edges.csv"),
+    input: fs.createReadStream("prisma/modedges.csv"),
     terminal: false,
   });
 
