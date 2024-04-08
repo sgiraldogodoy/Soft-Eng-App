@@ -1,8 +1,25 @@
--- DropForeignKey
-ALTER TABLE "Edge" DROP CONSTRAINT "Edge_endNodeId_fkey";
+-- CreateTable
+CREATE TABLE "Node" (
+    "nodeId" TEXT NOT NULL,
+    "xcords" DOUBLE PRECISION NOT NULL,
+    "ycords" DOUBLE PRECISION NOT NULL,
+    "building" TEXT NOT NULL,
+    "floor" TEXT NOT NULL,
+    "nodeType" TEXT NOT NULL,
+    "longName" TEXT NOT NULL,
+    "shortName" TEXT NOT NULL,
 
--- DropForeignKey
-ALTER TABLE "Edge" DROP CONSTRAINT "Edge_startNodeId_fkey";
+    CONSTRAINT "Node_pkey" PRIMARY KEY ("nodeId")
+);
+
+-- CreateTable
+CREATE TABLE "Edge" (
+    "edgeId" TEXT NOT NULL,
+    "startNodeId" TEXT NOT NULL,
+    "endNodeId" TEXT NOT NULL,
+
+    CONSTRAINT "Edge_pkey" PRIMARY KEY ("edgeId")
+);
 
 -- CreateTable
 CREATE TABLE "FlowerRequest" (
