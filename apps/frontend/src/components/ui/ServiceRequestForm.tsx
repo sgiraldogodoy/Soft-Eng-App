@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -30,23 +28,19 @@ import {
   CardContent,
 } from "@/components/ui/card.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
+import { trpc } from "@/utils/trpc";
 
 const FormSchema = z
   .object({
     recipient: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
+      message: "Recipient must be at least 2 characters.",
     }),
 
     location: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
+      message: "Location must be at least 2 characters.",
     }),
-
-    priority: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
-    }),
-    notes: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
-    }),
+    priority: z.enum(["Low", "Medium", "High", "Emergency"]),
+    notes: z.string().optional(),
   })
   .and(
     z.discriminatedUnion("type", [
@@ -65,11 +59,18 @@ const FormSchema = z
     ]),
   );
 
+const VARIANTID_LONGNAME: Record<string, string> = {
+  flower: "Flowers",
+  medicine: "Medicine",
+};
+
 interface Props {
   variant: "medicine" | "flower";
 }
 
 export default function InputForm({ variant }: Props) {
+  const nodesQuery = trpc.db.getAllNodes.useQuery();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -94,7 +95,9 @@ export default function InputForm({ variant }: Props) {
   return (
     <Card className="w-2/3 m-4">
       <CardHeader>
-        <CardTitle>Request</CardTitle>
+        <CardTitle className="capitalize">
+          Request {VARIANTID_LONGNAME[variant]}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -109,7 +112,7 @@ export default function InputForm({ variant }: Props) {
                 <FormItem>
                   <FormLabel>Recipient</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormDescription>
                     Who should receive the service.
@@ -135,7 +138,16 @@ export default function InputForm({ variant }: Props) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="placeholder">placeholder</SelectItem>
+                        {nodesQuery.data?.map((n, index) => {
+                          return (
+                            <SelectItem
+                              key={`location-${index}`}
+                              value={n.nodeId}
+                            >
+                              {n.longName}
+                            </SelectItem>
+                          );
+                        })}
                       </SelectContent>
                     </Select>
                     <FormDescription>
@@ -168,7 +180,7 @@ export default function InputForm({ variant }: Props) {
                       </SelectContent>
                     </Select>
                     <FormDescription>
-                      This is your public display name.
+                      This is the urgency of the request.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -198,7 +210,8 @@ export default function InputForm({ variant }: Props) {
                     />
                   </FormControl>
                   <FormDescription>
-                    This is your public display name.
+                    These are any extra notes for the employee who services the
+                    request.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
