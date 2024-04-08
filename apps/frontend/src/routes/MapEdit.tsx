@@ -5,10 +5,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/mapaccordion.tsx";
 import { trpc } from "@/utils/trpc.ts";
-import Map from "@/components/Map.tsx";
+import MapForNodeEditing from "@/components/MapForNodeEditing.tsx";
 
 export default function FloorTabs() {
   const nodesQuery = trpc.db.getAllNodes.useQuery();
+  const edgeQuery = trpc.db.getAllEdges.useQuery();
+
   return (
     <Mapaccordion
       type="single"
@@ -23,11 +25,12 @@ export default function FloorTabs() {
         <AccordionTrigger>Third Floor</AccordionTrigger>
         <AccordionContent className="relative h-full">
           <div className="absolute top-0 bottom-0 w-full flex justify-center">
-            <Map
+            <MapForNodeEditing
               nodes={nodesQuery.data} // Pass node data as a prop
               imgURL="/03_thethirdfloor.png"
               floor="3"
               className="object-cover h-full"
+              edges={edgeQuery.data}
             />
             {/*<img*/}
             {/*  src="/03_thethirdfloor.png"*/}
@@ -44,11 +47,12 @@ export default function FloorTabs() {
         <AccordionTrigger>Second Floor</AccordionTrigger>
         <AccordionContent className="relative h-full">
           <div className="absolute top-0 bottom-0 w-full flex justify-center">
-            <Map
+            <MapForNodeEditing
               nodes={nodesQuery.data} // Pass node data as a prop
               imgURL="/02_thesecondfloor.png"
               floor="2"
               className="object-cover h-full"
+              edges={edgeQuery.data}
             />
             {/*<img*/}
             {/*  src="/02_thesecondfloor.png"*/}
@@ -65,11 +69,12 @@ export default function FloorTabs() {
         <AccordionTrigger>First Floor</AccordionTrigger>
         <AccordionContent className="relative h-full">
           <div className="absolute top-0 bottom-0 w-full flex justify-center">
-            <Map
+            <MapForNodeEditing
               nodes={nodesQuery.data} // Pass node data as a prop
               imgURL="/01_thefirstfloor.png"
               floor="1"
               className="object-cover h-full"
+              edges={edgeQuery.data}
             />
             {/*<img*/}
             {/*  src="/01_thefirstfloor.png"*/}
@@ -86,11 +91,12 @@ export default function FloorTabs() {
         <AccordionTrigger>Lower Level One</AccordionTrigger>
         <AccordionContent className="relative h-full">
           <div className="absolute top-0 bottom-0 w-full flex justify-center">
-            <Map
+            <MapForNodeEditing
               nodes={nodesQuery.data} // Pass node data as a prop
               imgURL="/00_thelowerlevel1.png"
               floor="L1"
               className="object-cover h-full"
+              edges={edgeQuery.data}
             />
             {/*<img*/}
             {/*  src="/00_thelowerlevel1.png"*/}
@@ -107,11 +113,12 @@ export default function FloorTabs() {
         <AccordionTrigger>Lower Level Two</AccordionTrigger>
         <AccordionContent className="relative h-full">
           <div className="absolute top-0 bottom-0 w-full flex justify-center">
-            <Map
+            <MapForNodeEditing
               nodes={nodesQuery.data} // Pass node data as a prop
               imgURL="/00_thelowerlevel2.png"
               floor="L2"
               className="object-cover h-full"
+              edges={edgeQuery.data}
             />
             {/*<img*/}
             {/*  src="/00_thelowerlevel2.png"*/}
