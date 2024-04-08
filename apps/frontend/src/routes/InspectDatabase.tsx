@@ -6,7 +6,6 @@ import { useRef } from "react";
 import { trpc } from "@/utils/trpc";
 import { getBase64 } from "@/utils/files";
 import { toast } from "sonner";
-import { createPortal } from "react-dom";
 
 export function InspectDatabase() {
   const uploadButton = useRef<HTMLInputElement>(null);
@@ -21,7 +20,7 @@ export function InspectDatabase() {
 
   return (
     <>
-      <div className="w-full h-screen">
+      <div className="w-full h-screen relative">
         <Tabs defaultValue="nodes">
           <div className="w-full flex items-center justify-center p-4">
             <TabsList>
@@ -31,47 +30,41 @@ export function InspectDatabase() {
           </div>
           <TabsContent value="nodes">
             <NodesTable />
-            {createPortal(
-              <Button
-                onClick={() => {
-                  const base64String = downloadNodes.data ?? "";
-                  const decodedString = atob(base64String);
-                  const blob = new Blob([decodedString], { type: "text/csv" });
-                  const anchor = document.createElement("a");
-                  anchor.href = window.URL.createObjectURL(blob);
-                  anchor.download = "nodes-csv-file.csv";
-                  document.body.appendChild(anchor);
+            <Button
+              onClick={() => {
+                const base64String = downloadNodes.data ?? "";
+                const decodedString = atob(base64String);
+                const blob = new Blob([decodedString], { type: "text/csv" });
+                const anchor = document.createElement("a");
+                anchor.href = window.URL.createObjectURL(blob);
+                anchor.download = "nodes-csv-file.csv";
+                document.body.appendChild(anchor);
 
-                  anchor.click();
-                }}
-                className="bg-theme-yellow absolute top-[16px] right-[100px] text-theme-dark bg-gradient-to-r from-yellow-300 to-yellow-400 hover:bg-gradient-to-l shadow-lg shadow-theme-yellow/30"
-              >
-                Download
-              </Button>,
-              document.body,
-            )}
+                anchor.click();
+              }}
+              className="bg-theme-yellow absolute top-[16px] right-[100px] text-theme-dark bg-gradient-to-r from-yellow-300 to-yellow-400 hover:bg-gradient-to-l shadow-lg shadow-theme-yellow/30"
+            >
+              Download
+            </Button>
           </TabsContent>
           <TabsContent value="edges">
             <EdgesTable />
-            {createPortal(
-              <Button
-                onClick={() => {
-                  const base64String = downloadEdges.data ?? "";
-                  const decodedString = atob(base64String);
-                  const blob = new Blob([decodedString], { type: "text/csv" });
-                  const anchor = document.createElement("a");
-                  anchor.href = window.URL.createObjectURL(blob);
-                  anchor.download = "edges-csv-file.csv";
-                  document.body.appendChild(anchor);
+            <Button
+              onClick={() => {
+                const base64String = downloadEdges.data ?? "";
+                const decodedString = atob(base64String);
+                const blob = new Blob([decodedString], { type: "text/csv" });
+                const anchor = document.createElement("a");
+                anchor.href = window.URL.createObjectURL(blob);
+                anchor.download = "edges-csv-file.csv";
+                document.body.appendChild(anchor);
 
-                  anchor.click();
-                }}
-                className="bg-theme-yellow absolute top-[16px] right-[100px] text-theme-dark bg-gradient-to-r from-yellow-300 to-yellow-400 hover:bg-gradient-to-l shadow-lg shadow-theme-yellow/30"
-              >
-                Download
-              </Button>,
-              document.body,
-            )}
+                anchor.click();
+              }}
+              className="bg-theme-yellow absolute top-[16px] right-[100px] text-theme-dark bg-gradient-to-r from-yellow-300 to-yellow-400 hover:bg-gradient-to-l shadow-lg shadow-theme-yellow/30"
+            >
+              Download
+            </Button>
           </TabsContent>
         </Tabs>
         <Button
