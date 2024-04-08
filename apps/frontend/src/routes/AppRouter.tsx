@@ -5,7 +5,7 @@ import NavbarLayout from "@/components/NavbarLayout.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import { InspectDatabase } from "@/routes/InspectDatabase.tsx";
 import RequestSummary from "../components/services/RequestSummary";
-import ServiceRequestForm from "@/components/ui/ServiceRequestForm";
+import ServiceRequestForm from "@/components/services/ServiceRequestForm";
 
 export function AppRouter() {
   const { isAuthenticated } = useAuth0();
@@ -22,7 +22,7 @@ export function AppRouter() {
             {!isAuthenticated && <Redirect to="/" />}
           </Route>
           <Route path="/services">
-            <ServiceRequestForm variant="flower" />
+            <ServiceRequestForm variant="room-request" />
           </Route>
           <Route path="/requestsummary">
             <RequestSummary />

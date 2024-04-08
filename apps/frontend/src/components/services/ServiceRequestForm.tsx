@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { UseFormReturn, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -29,43 +29,34 @@ import {
 } from "@/components/ui/card.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { trpc } from "@/utils/trpc";
+import RoomRequestFields, { RoomRequestSchema } from "./RoomRequestFields";
+import { BaseFormSchema } from "./formSchema";
 
-const FormSchema = z
-  .object({
-    recipient: z.string().min(2, {
-      message: "Recipient must be at least 2 characters.",
-    }),
+// Add your type-specific form schema to this array.
+const FormSchema = z.discriminatedUnion("type", [
+  BaseFormSchema.merge(RoomRequestSchema),
+]);
 
-    location: z.string().min(2, {
-      message: "Location must be at least 2 characters.",
-    }),
-    priority: z.enum(["Low", "Medium", "High", "Emergency"]),
-    notes: z.string().optional(),
-  })
-  .and(
-    z.discriminatedUnion("type", [
-      z.object({
-        type: z.literal("medicine"),
-        medicine: z.string().min(2, {
-          message: "Medicine must be at least 2 characters.",
-        }),
-      }),
-      z.object({
-        type: z.literal("flower"),
-        flower: z.string().min(2, {
-          message: "Flower must be at least 2 characters.",
-        }),
-      }),
-    ]),
-  );
+type FormSchemaType = z.infer<typeof FormSchema>;
+type FormTypes = FormSchemaType["type"];
 
-const VARIANTID_LONGNAME: Record<string, string> = {
-  flower: "Flowers",
-  medicine: "Medicine",
+// Add your components and long names to this record. It should map the type id to the title name and form component that the form will display.
+const FORMTYPE_RECORD: Record<
+  FormTypes,
+  {
+    longName: string;
+    formFields: ({
+      form,
+    }: {
+      form: UseFormReturn<z.infer<typeof FormSchema>>;
+    }) => JSX.Element;
+  }
+> = {
+  "room-request": { longName: "Request a Room", formFields: RoomRequestFields },
 };
 
 interface Props {
-  variant: "medicine" | "flower";
+  variant: FormTypes;
 }
 
 export default function InputForm({ variant }: Props) {
@@ -80,7 +71,7 @@ export default function InputForm({ variant }: Props) {
     },
   });
 
-  // const variant = form.watch('extras.type')
+  const ActiveFormFields = FORMTYPE_RECORD[variant].formFields;
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     toast({
@@ -96,7 +87,7 @@ export default function InputForm({ variant }: Props) {
     <Card className="w-2/3 m-4">
       <CardHeader>
         <CardTitle className="capitalize">
-          Request {VARIANTID_LONGNAME[variant]}
+          {FORMTYPE_RECORD[variant].longName}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -187,15 +178,7 @@ export default function InputForm({ variant }: Props) {
                 )}
               />
             </div>
-            {/*{variant === 'medicine' && (
-                                    <MedicineFields form={form} />
-                                )}
-                                {variant === 'medicine' && (
-                                    <MedicineFields form={form} />
-                                )}
-                                {variant === 'medicine' && (
-                                    <MedicineFields form={form} />
-                                )} */}
+            {<ActiveFormFields form={form} />}
             <FormField
               control={form.control}
               name="notes"
