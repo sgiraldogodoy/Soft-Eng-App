@@ -13,6 +13,7 @@ interface NodesProps {
   startNode?: string;
   goalNode?: string;
   floor: string;
+  filter?: boolean;
 }
 
 export function Nodes({
@@ -23,11 +24,13 @@ export function Nodes({
   startNode,
   goalNode,
   floor,
+  filter,
 }: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null); //set hovered node
-  const filteredNodes = nodes.filter(
-    (node) => node.floor === floor && node.nodeType !== "HALL",
-  );
+
+  let filteredNodes = nodes.filter((node) => node.floor === floor);
+  if (!filter)
+    filteredNodes = filteredNodes.filter((node) => node.nodeType !== "HALL");
 
   return (
     <div>
