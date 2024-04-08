@@ -28,7 +28,7 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
       <div className="flex flex-col gap-[15px] py-[23px] px-[10px] border-r border-slate-300 items-center">
         <TooltipProvider delayDuration={0}>
           <ButtonLink link="/pathfind" icon={HomeIcon} name={"Home"} />
-          <ButtonLink link="/pathfind" icon={MapIcon} name={"Map Editor"} />
+          <ButtonLink link="/mapediting" icon={MapIcon} name={"Map Editor"} />
           <ButtonLink
             link="/services"
             icon={HammerIcon}
