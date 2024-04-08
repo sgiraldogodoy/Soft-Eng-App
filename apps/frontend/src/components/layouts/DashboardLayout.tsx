@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import {
-  ArrowRightIcon,
+  // ArrowRightIcon,
   DatabaseIcon,
   HammerIcon,
   HomeIcon,
@@ -13,7 +13,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Link } from "wouter";
+import { TooltipProvider } from "../ui/tooltip";
+import { ButtonLink } from "../ButtonLink";
 
 export default function DashboardLayout({ children }: React.PropsWithChildren) {
   const session = useAuth0();
@@ -24,23 +25,20 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
 
   return (
     <div className="h-screen min-w-screen flex">
-      <div className="flex flex-col gap-[37px] py-[23px] px-[19px] border-r border-slate-300">
-        <Link to="/pathfind">
-          <HomeIcon size={30} />
-        </Link>
-        {/* TODO: Fix link */}
-        <Link to="/pathfind">
-          <MapIcon size={30} />
-        </Link>
-        <Link to="/services">
-          <HammerIcon size={30} />
-        </Link>
-        <Link to="/database">
-          <DatabaseIcon size={30} />
-        </Link>
-        <ArrowRightIcon size={30} className="mt-auto" />
+      <div className="flex flex-col gap-[15px] py-[23px] px-[10px] border-r border-slate-300 items-center">
+        <TooltipProvider delayDuration={0}>
+          <ButtonLink link="/pathfind" icon={HomeIcon} name={"Home"} />
+          <ButtonLink link="/pathfind" icon={MapIcon} name={"Map Editor"} />
+          <ButtonLink
+            link="/services"
+            icon={HammerIcon}
+            name={"Service Requests"}
+          />
+          <ButtonLink link="/database" icon={DatabaseIcon} name={"DB Editor"} />
+        </TooltipProvider>
+        {/* <ArrowRightIcon size={30} className="mt-auto" /> */}
       </div>
-      <div className="flex flex-col max-h-screen h-full">
+      <div className="flex flex-col max-h-screen h-full flex-1">
         <div className="flex px-[17px] py-[22px] border-b border-slate-300 items-center gap-2">
           <svg
             width="29"
