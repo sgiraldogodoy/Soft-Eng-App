@@ -5,6 +5,7 @@ import { addFlowerDatabase } from "../../utils/db.ts";
 import { validateNode } from "../../utils/validators.ts";
 
 export const serviceRequestRouter = router({
+  //Flower Request Service
   createFlowerRequest: publicProcedure
     .input(
       z.object({
@@ -21,7 +22,9 @@ export const serviceRequestRouter = router({
     .mutation(async ({ input, ctx }) => {
       const node = await validateNode(input.nodeId, ctx.db);
       if (!node) {
-        return { message: "node does not exist" };
+        throw new Error(
+          "Node does not exist. Please create a node with that Id first.",
+        );
       }
       return await addFlowerDatabase(input, ctx.db);
     }),
@@ -34,7 +37,7 @@ export const serviceRequestRouter = router({
     .query(async ({ input, ctx }) => {
       // get a flower request
 
-      return await ctx.db.flowerRequest.findUnique({
+      return ctx.db.flowerRequest.findUnique({
         where: {
           id: input.id,
         },
