@@ -15,7 +15,7 @@ export default function FloorTabs() {
     <Mapaccordion
       type="single"
       collapsible
-      className="w-full flex flex-col h-screen"
+      className="w-full flex flex-col h-full"
       defaultValue="firstfloor"
     >
       <AccordionItem
