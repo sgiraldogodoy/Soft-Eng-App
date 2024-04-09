@@ -30,6 +30,8 @@ import {
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { trpc } from "@/utils/trpc";
 import RoomRequestFields, { RoomRequestSchema } from "./RoomRequestFields";
+import AVRequestFields, { AVRequestSchema } from "./AVRequestFields";
+
 import FlowerRequestFields, {
   FlowerRequestSchema,
 } from "./FlowerRequestFields";
@@ -39,6 +41,7 @@ import ServiceGradient from "../ServiceGradient";
 // Add your type-specific form schema to this array.
 const FormSchema = z.discriminatedUnion("type", [
   BaseFormSchema.merge(RoomRequestSchema),
+  BaseFormSchema.merge(AVRequestSchema),
   BaseFormSchema.merge(FlowerRequestSchema),
 ]);
 
@@ -65,6 +68,10 @@ const FORMTYPE_RECORD: Record<
   }
 > = {
   "room-request": { longName: "Request a Room", formFields: RoomRequestFields },
+  "av-request": {
+    longName: "Request AV Equipment",
+    formFields: AVRequestFields,
+  },
   "flower-request": {
     longName: "Request Flowers",
     formFields: FlowerRequestFields,
