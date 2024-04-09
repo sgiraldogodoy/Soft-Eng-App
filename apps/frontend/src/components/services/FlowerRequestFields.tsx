@@ -7,31 +7,21 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { UseFormReturn } from "react-hook-form";
-import { BaseFormSchema } from "./formSchema";
 import {
   CarouselContent,
   Carousel,
   CarouselItem,
 } from "@/components/ui/carousel.tsx";
-import { FormComponent } from "@/components/services/ServiceRequestForm.tsx";
 
 export const FlowerRequestSchema = z.object({
   type: z.literal("flower-request"),
   flowerChoice: z.string(),
 });
 
-const FlowerRequestFormSchema = BaseFormSchema.merge(FlowerRequestSchema);
-
-const FlowerRequest: FormComponent<z.infer<typeof FlowerRequestFormSchema>> = ({
-  form,
-}: {
-  form: UseFormReturn<z.infer<typeof FlowerRequestFormSchema>>;
-}) => {
+const FlowerRequest = () => {
   return (
     <div className="flex gap-2 items-center flex-1">
       <FormField
-        control={form.control}
         name="flowerChoice"
         render={() => (
           <FormItem className="flex-1">
