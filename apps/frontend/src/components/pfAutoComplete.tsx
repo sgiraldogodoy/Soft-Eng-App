@@ -19,7 +19,9 @@ export function PFAutoComplete({
     return <p>No rooms found</p>;
   }
 
-  const unsortedRooms = Rooms.map((node) => ({
+  const removedHall = Rooms.filter((node) => !(node.nodeType === "HALL"));
+
+  const unsortedRooms = removedHall.map((node) => ({
     label: node.longName.trim(),
     value: node.nodeId,
   }));

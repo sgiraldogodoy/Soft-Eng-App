@@ -2,7 +2,7 @@ import PriorityQueue from "priorityqueuejs";
 import type { Node } from "database";
 import type { PrismaClient } from "database";
 
-const arbHeuristic: number = 1;
+const arbHeuristic: number = 10000;
 
 export interface PathFinding {
   run(root: string, goal: string, db: PrismaClient): Promise<Node[]>;
