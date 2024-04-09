@@ -37,12 +37,16 @@ import FlowerRequestFields, {
 } from "./FlowerRequestFields";
 import { BaseFormSchema } from "./formSchema";
 import ServiceGradient from "../ServiceGradient";
+import SecurityRequestFields, {
+  SecurityRequestSchema,
+} from "@/components/services/SecurityRequestFields.tsx";
 
 // Add your type-specific form schema to this array.
 const FormSchema = z.discriminatedUnion("type", [
   BaseFormSchema.merge(RoomRequestSchema),
   BaseFormSchema.merge(AVRequestSchema),
   BaseFormSchema.merge(FlowerRequestSchema),
+  BaseFormSchema.merge(SecurityRequestSchema),
 ]);
 
 type FormSchemaType = z.infer<typeof FormSchema>;
@@ -75,6 +79,10 @@ const FORMTYPE_RECORD: Record<
   "flower-request": {
     longName: "Request Flowers",
     formFields: FlowerRequestFields,
+  },
+  "security-request": {
+    longName: "Request Security",
+    formFields: SecurityRequestFields,
   },
 };
 
