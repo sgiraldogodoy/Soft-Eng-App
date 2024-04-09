@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import type { FlowerRequest } from "database";
-import { ArrowRight } from "lucide-react";
+import { ReceiptText } from "lucide-react";
 
 export const columns: ColumnDef<FlowerRequest>[] = [
   {
@@ -9,6 +9,7 @@ export const columns: ColumnDef<FlowerRequest>[] = [
     accessorKey: "id",
     header: "ID",
     enableSorting: true,
+    size: 30,
   },
   {
     accessorKey: "flowerName",
@@ -16,14 +17,16 @@ export const columns: ColumnDef<FlowerRequest>[] = [
   },
   {
     id: "select",
+    size: 40,
     cell: ({ row }) => {
       return (
         <Button
           disabled={row.getIsSelected()}
           onClick={() => row.toggleSelected()}
-          variant={"secondary"}
+          variant="ghost"
+          size="icon"
         >
-          <ArrowRight />
+          <ReceiptText />
         </Button>
       );
     },
