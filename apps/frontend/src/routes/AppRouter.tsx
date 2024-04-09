@@ -24,7 +24,7 @@ export function AppRouter() {
           </Route>
           <Route path="/services">
             <div className="w-full h-full flex items-center justify-center">
-              <ServiceRequestForm variant="room-request" />
+              <ServiceRequestForm variant="flower-request" />
             </div>
           </Route>
           <Route path="/requestsummary">
