@@ -10,6 +10,7 @@ import {
 import { UseFormReturn } from "react-hook-form";
 import { Input } from "../ui/input";
 import { BaseFormSchema } from "./formSchema";
+import { FormComponent } from "@/components/services/ServiceRequestForm.tsx";
 
 export const RoomRequestSchema = z.object({
   type: z.literal("room-request"),
@@ -19,11 +20,11 @@ export const RoomRequestSchema = z.object({
 
 const RoomRequestFormSchema = BaseFormSchema.merge(RoomRequestSchema);
 
-export default function RoomRequest({
+const RoomRequest: FormComponent<z.infer<typeof RoomRequestFormSchema>> = ({
   form,
 }: {
-  form: UseFormReturn<z.infer<typeof RoomRequestFormSchema>, unknown>;
-}) {
+  form: UseFormReturn<z.infer<typeof RoomRequestFormSchema>>;
+}) => {
   return (
     <div className="flex gap-2 items-center flex-1">
       <FormField
@@ -56,4 +57,6 @@ export default function RoomRequest({
       />
     </div>
   );
-}
+};
+
+export default RoomRequest;
