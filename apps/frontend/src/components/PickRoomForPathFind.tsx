@@ -94,7 +94,7 @@ export function PathFindRoomSelection({
               >
                 <Check
                   className={cn(
-                    "mr-2 h-4 w-4",
+                    "mr-2 h-4 w-4 flex-shrink-0",
                     value === framework.value ? "opacity-100" : "opacity-0",
                   )}
                 />

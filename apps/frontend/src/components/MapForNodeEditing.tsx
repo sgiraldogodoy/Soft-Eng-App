@@ -36,6 +36,7 @@ export default function MapForNodeEditing({
         }
       });
     });
+    window.addEventListener("resize", handleResize);
 
     if (image.current) {
       resizeObserver.observe(image.current);
@@ -43,6 +44,7 @@ export default function MapForNodeEditing({
 
     return () => {
       resizeObserver.disconnect();
+      window.removeEventListener("resize", handleResize);
     };
   }, [handleResize]);
 

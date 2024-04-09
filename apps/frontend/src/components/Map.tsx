@@ -7,8 +7,8 @@ interface MapProps {
   onNodeClick?: (clickedNode: string) => void;
   nodes: Node[] | undefined; // Change prop type
   path: Node[] | undefined;
-  startNode: string;
-  goalNode: string;
+  startNode?: string;
+  goalNode?: string;
   imgURL: string;
   floor: string;
 }
@@ -170,6 +170,7 @@ export default function Map({
           transform: `scale(${scale}) translate(${offset.x}px, ${offset.y}px)`,
         }}
         onLoad={handleResize}
+        className="inset-0 w-full h-full overflow-hidden"
       />
       <Nodes
         imgWidth={imgWidth}
@@ -190,6 +191,7 @@ export default function Map({
           path={path}
           dragOffset={offset}
           scale={scale}
+          floor={floor}
         />
       )}
     </div>
