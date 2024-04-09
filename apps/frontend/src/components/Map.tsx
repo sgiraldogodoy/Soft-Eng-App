@@ -54,9 +54,22 @@ export default function Map({
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
       const scaleAdjustment = e.deltaY > 0 ? 0.95 : 1.05;
-      setScale((prevScale) =>
-        Math.max(1, Math.min(prevScale * scaleAdjustment, 10)),
-      );
+      const nextScale = Math.max(1, Math.min(scale * scaleAdjustment, 10));
+      setScale(nextScale);
+
+      const limitX: number =
+        ((imgWidth * nextScale) / 2 - imgWidth / 2) / nextScale;
+      const limitY: number =
+        ((imgHeight * nextScale) / 2 - imgHeight / 2) / nextScale;
+
+      const adjustedX: number = Math.min(Math.max(offset.x, -limitX), limitX);
+      const adjustedY: number = Math.min(Math.max(offset.y, -limitY), limitY);
+
+      const newOffset = {
+        x: adjustedX,
+        y: adjustedY,
+      };
+      setOffset(newOffset);
     };
 
     //const panScaleAdjustment = (1 / scale); Trying to make pan slower at high zoom; doesn't work rn
