@@ -7,10 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { UseFormReturn } from "react-hook-form";
 import { Input } from "../ui/input";
-import { BaseFormSchema } from "./formSchema";
-import { FormComponent } from "@/components/services/ServiceRequestForm.tsx";
 
 export const RoomRequestSchema = z.object({
   type: z.literal("room-request"),
@@ -18,17 +15,10 @@ export const RoomRequestSchema = z.object({
   endTime: z.string(),
 });
 
-const RoomRequestFormSchema = BaseFormSchema.merge(RoomRequestSchema);
-
-const RoomRequest: FormComponent<z.infer<typeof RoomRequestFormSchema>> = ({
-  form,
-}: {
-  form: UseFormReturn<z.infer<typeof RoomRequestFormSchema>>;
-}) => {
+const RoomRequest = () => {
   return (
     <div className="flex gap-2 items-center flex-1">
       <FormField
-        control={form.control}
         name="startTime"
         render={({ field }) => (
           <FormItem className="flex-1">
@@ -42,7 +32,6 @@ const RoomRequest: FormComponent<z.infer<typeof RoomRequestFormSchema>> = ({
         )}
       />
       <FormField
-        control={form.control}
         name="endTime"
         render={({ field }) => (
           <FormItem className="flex-1">
