@@ -171,7 +171,7 @@ export default function InputForm({ variant }: Props) {
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[200px] p-0">
+                        <PopoverContent className="w-[200px] max-h-[200px] overflow-scroll p-0">
                           <Command>
                             <CommandInput
                               placeholder="Search locations..."

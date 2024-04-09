@@ -17,14 +17,14 @@ export default function ServiceRequestPage() {
           onValueChange={(v) => {
             setVariant(v as FormTypes);
           }}
-          className="w-full flex items-center justify-center w-full"
+          className="w-full flex items-center justify-center bg-transparent"
         >
-          <TabsList className="w-full">
+          <TabsList className="w-full bg-white/80 backdrop-blur-md shadow-inner rounded shadow-md">
             <TabsTrigger className="flex-1" value="flower-request">
               Flower Request
             </TabsTrigger>
             <TabsTrigger className="flex-1" value="room-request">
-              Flower Request
+              Room Request
             </TabsTrigger>
           </TabsList>
         </Tabs>
