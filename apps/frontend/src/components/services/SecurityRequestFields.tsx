@@ -29,7 +29,7 @@ const SecurityRequest = () => {
       <FormField
         name="securityType"
         render={({ field }) => (
-          <FormItem className="flex-1">
+          <FormItem className="">
             <FormLabel>Time</FormLabel>
             <FormControl>
               <Input type="time" {...field} />
@@ -42,7 +42,7 @@ const SecurityRequest = () => {
       <FormField
         name="threatLevel"
         render={() => (
-          <FormItem className="flex-1">
+          <FormItem className="">
             <FormLabel>Threat Level</FormLabel>
             <FormControl>
               <Select>
@@ -58,6 +58,21 @@ const SecurityRequest = () => {
               </Select>
             </FormControl>
             <FormDescription>What is the threat level?</FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        name="securityType"
+        render={({ field }) => (
+          <FormItem className="">
+            <FormLabel>Date</FormLabel>
+            <FormControl>
+              <Input type="Date" {...field} />
+            </FormControl>
+            <FormDescription>
+              What date does the request need to be made?
+            </FormDescription>
             <FormMessage />
           </FormItem>
         )}
