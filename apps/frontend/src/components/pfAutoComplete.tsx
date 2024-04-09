@@ -19,6 +19,8 @@ export function PFAutoComplete({
     return <p>No rooms found</p>;
   }
 
+  const longName = Rooms.find((node) => node.nodeId === selectedNode)?.longName;
+
   const removedHall = Rooms.filter((node) => !(node.nodeType === "HALL"));
 
   const unsortedRooms = removedHall.map((node) => ({
@@ -35,7 +37,7 @@ export function PFAutoComplete({
       onValueChange={setValue}
       value={value}
       onChange={onChange}
-      selectedNode={selectedNode}
+      selectedNode={longName}
     />
   );
 }

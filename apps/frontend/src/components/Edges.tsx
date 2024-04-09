@@ -12,12 +12,6 @@ interface LineProps {
   imgHeight: number;
   floor: string;
 }
-// {scaleCoordinate(
-//           currentNode.ycords,
-//           imgHeight,
-//           origImageHeight,
-//           0,
-//         )}`
 
 export function Edges({ nodes, edges, imgWidth, imgHeight, floor }: LineProps) {
   if (!edges || edges.length < 2) return null; // At least two for path

@@ -29,7 +29,7 @@ type AutoCompleteProps = {
   disabled?: boolean;
   placeholder?: string;
   onChange?: (nodeId: string) => void;
-  selectedNode: string;
+  selectedNode?: string;
 };
 
 export const AutoComplete = ({

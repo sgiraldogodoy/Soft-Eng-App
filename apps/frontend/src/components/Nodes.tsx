@@ -27,7 +27,9 @@ export function Nodes({
   filter,
 }: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null); //set hovered node
-
+  const hoveredNodeString = nodes.find(
+    (node) => node.nodeId === hoveredNode,
+  )?.longName;
   let filteredNodes = nodes.filter((node) => node.floor === floor);
   if (!filter)
     filteredNodes = filteredNodes.filter((node) => node.nodeType !== "HALL");
@@ -88,35 +90,7 @@ export function Nodes({
             borderRadius: "5px",
           }}
         >
-          Hovered ID: {hoveredNode}
-        </div>
-      )}
-      {startNode && (
-        <div
-          style={{
-            position: "absolute",
-            top: 50,
-            left: 10,
-            backgroundColor: "white",
-            padding: "5px",
-            borderRadius: "5px",
-          }}
-        >
-          Start ID: {startNode}
-        </div>
-      )}
-      {goalNode && (
-        <div
-          style={{
-            position: "absolute",
-            top: 90,
-            left: 10,
-            backgroundColor: "white",
-            padding: "5px",
-            borderRadius: "5px",
-          }}
-        >
-          Goal ID: {goalNode}
+          Hovered ID: {hoveredNodeString}
         </div>
       )}
     </div>

@@ -1,14 +1,12 @@
 import { Redirect, Route, Switch } from "wouter";
 import HomePage from "@/components/HomePage.tsx";
-import PathFind from "@/routes/PathFind.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import { InspectDatabase } from "@/routes/InspectDatabase.tsx";
 import RequestSummary from "../components/services/RequestSummary";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import ServiceRequestForm from "@/components/services/ServiceRequestForm";
 import FloorTabs from "./MapEdit";
-import NewPathFind from "@/routes/NewPathFind.tsx";
-import FloorSelection from "@/components/FloorSelection.tsx";
+import PathFind from "@/routes/PathFind.tsx";
 
 export function AppRouter() {
   const { isAuthenticated } = useAuth0();
@@ -34,12 +32,6 @@ export function AppRouter() {
           </Route>
           <Route path="/mapediting">
             <FloorTabs />
-          </Route>
-          <Route path="/newpathfind">
-            <NewPathFind />
-          </Route>
-          <Route path="/floorselection">
-            <FloorSelection />
           </Route>
         </DashboardLayout>
       </Switch>

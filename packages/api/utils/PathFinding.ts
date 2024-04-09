@@ -115,7 +115,7 @@ export class aStar implements PathFinding {
       const path = currNode.path;
       const cost = currNode.cost;
       if (currNode.nodeId === goalNode.nodeId) {
-        console.log(cost);
+        //console.log(cost);
         return path;
       }
 
@@ -127,6 +127,7 @@ export class aStar implements PathFinding {
           const newPriority =
             cost +
             pyth +
+            this.pythDist(neighbor, goalNode) +
             this.floorDist(neighbor, goalNode) +
             this.manHatt(neighbor, goalNode);
           priorityQueue.enq({
