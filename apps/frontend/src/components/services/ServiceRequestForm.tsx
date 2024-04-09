@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UseFormReturn, useForm } from "react-hook-form";
+import { CaretSortIcon } from "@radix-ui/react-icons";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -36,18 +37,33 @@ import FlowerRequestFields, {
   FlowerRequestSchema,
 } from "./FlowerRequestFields";
 import { BaseFormSchema } from "./formSchema";
-import ServiceGradient from "../ServiceGradient";
+import SecurityRequestFields, {
+  SecurityRequestSchema,
+} from "@/components/services/SecurityRequestFields.tsx";
+import { cn } from "@/lib/utils";
+import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "../ui/command";
+import { PopoverContent } from "../ui/popover";
+import { CheckIcon } from "lucide-react";
+import { useEffect } from "react";
 
 // Add your type-specific form schema to this array.
 const FormSchema = z.discriminatedUnion("type", [
   BaseFormSchema.merge(RoomRequestSchema),
   BaseFormSchema.merge(AVRequestSchema),
   BaseFormSchema.merge(FlowerRequestSchema),
+  BaseFormSchema.merge(SecurityRequestSchema),
 ]);
 
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-type FormTypes = FormSchemaType["type"];
+export type FormTypes = FormSchemaType["type"];
 
 const options = FormSchema.options;
 
@@ -56,7 +72,7 @@ type SpecialSchemas = z.infer<typeof options extends (infer T)[] ? T : never>;
 export type FormComponent<T> = ({
   form,
 }: {
-  form: UseFormReturn<T extends infer U extends SpecialSchemas ? U : never>;
+  form?: UseFormReturn<T extends infer U extends SpecialSchemas ? U : never>;
 }) => JSX.Element;
 
 // Add your components and long names to this record. It should map the type id to the title name and form component that the form will display.
@@ -76,6 +92,10 @@ const FORMTYPE_RECORD: Record<
     longName: "Request Flowers",
     formFields: FlowerRequestFields,
   },
+  "security-request": {
+    longName: "Request Security",
+    formFields: SecurityRequestFields,
+  },
 };
 
 interface Props {
@@ -87,11 +107,7 @@ export default function InputForm({ variant }: Props) {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      recipient: "",
-      location: "",
-      type: variant,
-    },
+    shouldUnregister: true,
   });
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
@@ -101,12 +117,23 @@ export default function InputForm({ variant }: Props) {
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("attempting");
     console.log(data);
-    toast("Success");
+    toast(
+      <div>
+        <p className="font-semibold">Success! (Data not stored yet!)</p>
+        <pre>
+          <code>{JSON.stringify(data, null, 4)}</code>
+        </pre>
+      </div>,
+    );
   }
+
+  useEffect(() => {
+    form.setValue("type", variant);
+  }, [variant, form]);
+
   return (
     <>
-      <ServiceGradient />
-      <Card className="w-2/3 bg-white/80 shadow-inner shadow-md backdrop-blur-md">
+      <Card className="bg-white/80 shadow-inner shadow-md backdrop-blur-md">
         <CardHeader>
           <CardTitle className="capitalize">
             {FORMTYPE_RECORD[variant].longName}
@@ -134,37 +161,66 @@ export default function InputForm({ variant }: Props) {
                   </FormItem>
                 )}
               />
-              <div className="flex flex-row gap-2">
+              <div className="flex flex-row gap-2 items-stretch">
                 <FormField
                   control={form.control}
                   name="location"
                   render={({ field }) => (
-                    <FormItem className="flex-1">
+                    <FormItem className="flex flex-col justify-between flex-1">
                       <FormLabel>Location</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a Location" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {nodesQuery.data?.map((n, index) => {
-                            return (
-                              <SelectItem
-                                key={`location-${index}`}
-                                value={n.nodeId}
-                              >
-                                {n.longName}
-                              </SelectItem>
-                            );
-                          })}
-                        </SelectContent>
-                      </Select>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-full justify-between",
+                                !field.value && "text-muted-foreground",
+                              )}
+                            >
+                              {field.value
+                                ? nodesQuery.data?.find(
+                                    (node) => node.nodeId === field.value,
+                                  )?.longName
+                                : "Select location"}
+                              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[200px] max-h-[200px] overflow-scroll p-0">
+                          <Command>
+                            <CommandInput
+                              placeholder="Search locations..."
+                              className="h-9"
+                            />
+                            <CommandEmpty>No location found.</CommandEmpty>
+                            <CommandGroup>
+                              {nodesQuery.data?.map((location) => (
+                                <CommandItem
+                                  value={location.nodeId}
+                                  key={location.nodeId}
+                                  onSelect={() => {
+                                    form.setValue("location", location.nodeId);
+                                  }}
+                                >
+                                  {location.longName}
+                                  <CheckIcon
+                                    className={cn(
+                                      "ml-auto h-4 w-4",
+                                      location.nodeId === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0",
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                       <FormDescription>
-                        Choose a location for delivery.
+                        Where should the request be serviced?
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -174,7 +230,7 @@ export default function InputForm({ variant }: Props) {
                   control={form.control}
                   name="priority"
                   render={({ field }) => (
-                    <FormItem className="flex-1">
+                    <FormItem className="flex flex-col flex-1">
                       <FormLabel>Priority</FormLabel>
                       <Select
                         onValueChange={field.onChange}
@@ -222,6 +278,7 @@ export default function InputForm({ variant }: Props) {
                   </FormItem>
                 )}
               />
+              <input type="hidden" {...form.register("type")} />
               <Button type="submit">Submit</Button>
             </form>
           </Form>
