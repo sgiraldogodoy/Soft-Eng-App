@@ -16,6 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { HoverBorderGradient } from "@/components/hover-border-gradient.tsx";
+import React from "react";
 
 export const SecurityRequestSchema = z.object({
   type: z.literal("security-request"),
@@ -70,6 +72,25 @@ const SecurityRequest = () => {
             <FormControl>
               <Input type="Date" {...field} />
             </FormControl>
+            <FormDescription>
+              What date does the request need to be made?
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        name="TestGradient"
+        render={() => (
+          <FormItem className="">
+            <FormLabel>Date</FormLabel>
+            <HoverBorderGradient
+              containerClassName="rounded-full"
+              as="button"
+              className="dark:bg-black bg-white text-black dark:text-white flex items-center space-x-2"
+            >
+              <span>Cole is a pookie</span>
+            </HoverBorderGradient>
             <FormDescription>
               What date does the request need to be made?
             </FormDescription>
