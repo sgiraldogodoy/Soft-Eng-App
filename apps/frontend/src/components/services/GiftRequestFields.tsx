@@ -7,10 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { UseFormReturn } from "react-hook-form";
 
-import { BaseFormSchema } from "./formSchema";
-import { FormComponent } from "@/components/services/ServiceRequestForm.tsx";
 import { Checkbox } from "../ui/checkbox";
 import {
   Select,
@@ -28,62 +25,55 @@ export const GiftRequestSchema = z.object({
   giftMessage: z.string(),
 });
 
-const GiftRequestFormSchema = BaseFormSchema.merge(GiftRequestSchema);
-
-const GiftRequest: FormComponent<z.infer<typeof GiftRequestFormSchema>> = ({
-  form,
-}: {
-  form: UseFormReturn<z.infer<typeof GiftRequestFormSchema>>;
-}) => {
+const GiftRequest = () => {
   return (
-    <div className="flex gap-2 items-center flex-1">
-      <FormField
-        control={form.control}
-        name="giftType"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Gift Type</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a Gift Type" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                <SelectItem value="Electronic">Electronic</SelectItem>
-                <SelectItem value="Food&Drinks">Food&Drinks</SelectItem>
-                <SelectItem value="Toy">Toy</SelectItem>
-              </SelectContent>
-            </Select>
-            <FormDescription>
-              What type of gift would you like to request?
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="giftWrap"
-        render={({ field }) => (
-          <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-            <FormControl>
-              <Checkbox
-                checked={field.value}
-                onCheckedChange={field.onChange}
-              />
-            </FormControl>
-            <div className="space-y-1 leading-none">
-              <FormLabel>Gift Wrapped</FormLabel>
+    <div>
+      <div className="flex gap-2 items-center flex-1">
+        <FormField
+          name="giftType"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Gift Type</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a Gift Type" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="Electronic">Electronic</SelectItem>
+                  <SelectItem value="Food&Drinks">Food&Drinks</SelectItem>
+                  <SelectItem value="Toy">Toy</SelectItem>
+                </SelectContent>
+              </Select>
               <FormDescription>
-                Would you like the gift to be wrapped on delivery?
+                What type of gift would you like to request?
               </FormDescription>
-            </div>
-          </FormItem>
-        )}
-      />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="giftWrap"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-2">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormLabel>Gift Wrapped</FormLabel>
+              <div className="space-y-1 leading-none">
+                <FormDescription>
+                  Would you like the gift to be wrapped on delivery?
+                </FormDescription>
+              </div>
+            </FormItem>
+          )}
+        />
+      </div>
       <FormField
-        control={form.control}
         name="giftMessage"
         render={({ field }) => (
           <FormItem>
