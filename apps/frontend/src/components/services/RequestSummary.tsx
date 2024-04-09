@@ -50,11 +50,18 @@ export default function RequestSummary() {
     <div className="w-full h-screen flex flex-col gap-20 justify-center items-center overflow-y-scroll p-4">
       <div className="w-full flex flex-col justify-evenly gap-4 max-h-screen overflow-y-scroll">
         <div className="overflow-scroll">
-          <RequestTable
-            data={servicesQuery.data}
-            selectionState={rowSelectionState}
-            setSelectionState={setRowSelectionState}
-          />
+          <Card className="">
+            <CardHeader>
+              <CardTitle>Open Requests</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <RequestTable
+                data={servicesQuery.data}
+                selectionState={rowSelectionState}
+                setSelectionState={setRowSelectionState}
+              />
+            </CardContent>
+          </Card>
         </div>
         {selectedRow && (
           <Card className="p-4">
