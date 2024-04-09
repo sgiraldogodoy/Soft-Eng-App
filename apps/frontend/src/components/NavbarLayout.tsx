@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button.tsx";
-import { Map, Database, Flower } from "lucide-react";
+import { Map, Database, Flower, Settings2 } from "lucide-react";
 import { Link } from "wouter";
 import { useAuth0 } from "@auth0/auth0-react";
 import LogOutButton from "@/components/LogOutButton.tsx";
@@ -66,6 +66,16 @@ export default function NavbarLayout({ children }: React.PropsWithChildren) {
               <Link to="/requestsummary">
                 <BookText className="h-6 w-6" />
                 Request Summary
+              </Link>
+            </Button>
+            <Button
+              asChild
+              className="flex flex-row gap-3 justify-start text-xl w-full"
+              variant="ghost"
+            >
+              <Link to="/mapediting">
+                <Settings2 className="h-6 w-6" />
+                Map Editing
               </Link>
             </Button>
           </div>

@@ -32,33 +32,49 @@ import { trpc } from "@/utils/trpc";
 import RoomRequestFields, { RoomRequestSchema } from "./RoomRequestFields";
 import AVRequestFields, { AVRequestSchema } from "./AVRequestFields";
 
+import FlowerRequestFields, {
+  FlowerRequestSchema,
+} from "./FlowerRequestFields";
 import { BaseFormSchema } from "./formSchema";
+import ServiceGradient from "../ServiceGradient";
 
 // Add your type-specific form schema to this array.
 const FormSchema = z.discriminatedUnion("type", [
   BaseFormSchema.merge(RoomRequestSchema),
   BaseFormSchema.merge(AVRequestSchema),
+  BaseFormSchema.merge(FlowerRequestSchema),
 ]);
 
 type FormSchemaType = z.infer<typeof FormSchema>;
+
 type FormTypes = FormSchemaType["type"];
+
+const options = FormSchema.options;
+
+type SpecialSchemas = z.infer<typeof options extends (infer T)[] ? T : never>;
+
+export type FormComponent<T> = ({
+  form,
+}: {
+  form: UseFormReturn<T extends infer U extends SpecialSchemas ? U : never>;
+}) => JSX.Element;
 
 // Add your components and long names to this record. It should map the type id to the title name and form component that the form will display.
 const FORMTYPE_RECORD: Record<
   FormTypes,
   {
     longName: string;
-    formFields: ({
-      form,
-    }: {
-      form: UseFormReturn<z.infer<typeof FormSchema>>;
-    }) => JSX.Element;
+    formFields: FormComponent<unknown>;
   }
 > = {
   "room-request": { longName: "Request a Room", formFields: RoomRequestFields },
   "av-request": {
     longName: "Request AV Equipment",
     formFields: AVRequestFields,
+  },
+  "flower-request": {
+    longName: "Request Flowers",
+    formFields: FlowerRequestFields,
   },
 };
 
@@ -78,7 +94,9 @@ export default function InputForm({ variant }: Props) {
     },
   });
 
-  const ActiveFormFields = FORMTYPE_RECORD[variant].formFields;
+  const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
+    z.infer<typeof FormSchema>
+  >;
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("attempting");
@@ -86,126 +104,129 @@ export default function InputForm({ variant }: Props) {
     toast("Success");
   }
   return (
-    <Card className="w-2/3">
-      <CardHeader>
-        <CardTitle className="capitalize">
-          {FORMTYPE_RECORD[variant].longName}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full flex flex-col justify-between items-stretch gap-2"
-          >
-            <FormField
-              control={form.control}
-              name="recipient"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Recipient</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    Who should receive the service.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex flex-row gap-2">
+    <>
+      <ServiceGradient />
+      <Card className="w-2/3 bg-white/80 shadow-inner shadow-md backdrop-blur-md">
+        <CardHeader>
+          <CardTitle className="capitalize">
+            {FORMTYPE_RECORD[variant].longName}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="w-full flex flex-col justify-between items-stretch gap-2"
+            >
               <FormField
                 control={form.control}
-                name="location"
+                name="recipient"
                 render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Location</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a Location" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {nodesQuery.data?.map((n, index) => {
-                          return (
-                            <SelectItem
-                              key={`location-${index}`}
-                              value={n.nodeId}
-                            >
-                              {n.longName}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
+                  <FormItem>
+                    <FormLabel>Recipient</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
                     <FormDescription>
-                      Choose a location for delivery.
+                      Who should receive the service.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              <div className="flex flex-row gap-2">
+                <FormField
+                  control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Location</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a Location" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {nodesQuery.data?.map((n, index) => {
+                            return (
+                              <SelectItem
+                                key={`location-${index}`}
+                                value={n.nodeId}
+                              >
+                                {n.longName}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        Choose a location for delivery.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="priority"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Priority</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a Priority for the Request" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Low">Low</SelectItem>
+                          <SelectItem value="Medium">Medium</SelectItem>
+                          <SelectItem value="High">High</SelectItem>
+                          <SelectItem value="Emergency">Emergency</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        This is the urgency of the request.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              {<ActiveFormFields form={form} />}
               <FormField
                 control={form.control}
-                name="priority"
+                name="notes"
                 render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Priority</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a Priority for the Request" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Low">Low</SelectItem>
-                        <SelectItem value="Medium">Medium</SelectItem>
-                        <SelectItem value="High">High</SelectItem>
-                        <SelectItem value="Emergency">Emergency</SelectItem>
-                      </SelectContent>
-                    </Select>
+                  <FormItem>
+                    <FormLabel>Notes</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Tell us a little bit about yourself"
+                        className="resize-none"
+                        {...field}
+                      />
+                    </FormControl>
                     <FormDescription>
-                      This is the urgency of the request.
+                      These are any extra notes for the employee who services
+                      the request.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            </div>
-            {<ActiveFormFields form={form} />}
-            <FormField
-              control={form.control}
-              name="notes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Notes</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Tell us a little bit about yourself"
-                      className="resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    These are any extra notes for the employee who services the
-                    request.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Submit</Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+              <Button type="submit">Submit</Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </>
   );
 }

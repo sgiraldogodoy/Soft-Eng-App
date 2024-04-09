@@ -18,6 +18,7 @@ import {
 import { UseFormReturn } from "react-hook-form";
 import { Input } from "../ui/input";
 import { BaseFormSchema } from "./formSchema";
+import { FormComponent } from "./ServiceRequestForm";
 
 export const AVRequestSchema = z.object({
   type: z.literal("av-request"),
@@ -27,11 +28,11 @@ export const AVRequestSchema = z.object({
 
 const AVRequestFormSchema = BaseFormSchema.merge(AVRequestSchema);
 
-export default function AVRequest({
+const AVRequest: FormComponent<z.infer<typeof AVRequestFormSchema>> = ({
   form,
 }: {
   form: UseFormReturn<z.infer<typeof AVRequestFormSchema>, unknown>;
-}) {
+}) => {
   return (
     <div className="flex gap-2 items-center flex-1">
       <FormField
@@ -77,4 +78,6 @@ export default function AVRequest({
       />
     </div>
   );
-}
+};
+
+export default AVRequest;
