@@ -43,9 +43,7 @@ const AVRequest = () => {
                 <SelectItem value="Both">Both</SelectItem>
               </SelectContent>
             </Select>
-            <FormDescription>
-              Do you want audio and/or video equipment?
-            </FormDescription>
+            <FormDescription>What type of equipment?</FormDescription>
             <FormMessage />
           </FormItem>
         )}
@@ -58,9 +56,7 @@ const AVRequest = () => {
             <FormControl>
               <Input type="date" {...field} />
             </FormControl>
-            <FormDescription>
-              When do you want everything set up?
-            </FormDescription>
+            <FormDescription>When does it need to be set up?</FormDescription>
             <FormMessage />
           </FormItem>
         )}
