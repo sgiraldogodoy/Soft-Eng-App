@@ -265,7 +265,7 @@ export default function InputForm({ variant }: Props) {
                     <FormLabel>Notes</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Tell us a little bit about yourself"
+                        placeholder="Any other information?"
                         className="resize-none"
                         {...field}
                       />
