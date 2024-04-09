@@ -74,19 +74,15 @@ export default function Map({
       setOffset(newOffset);
     };
 
-    const updateStartDragOffset = (e: MouseEvent) => {
-      const newOffset = {
-        x: e.clientX - offset.x * scale,
-        y: e.clientY - offset.y * scale,
-      };
-      setStartDragOffset(newOffset);
-    };
-
     // initializes panning when mouse is held down
     const handleMouseDown = (e: MouseEvent) => {
       if (e.button === 0) {
         setDragging(true);
-        updateStartDragOffset(e);
+        const newOffset = {
+          x: e.clientX - offset.x * scale,
+          y: e.clientY - offset.y * scale,
+        };
+        setStartDragOffset(newOffset);
 
         e.preventDefault();
       }
@@ -110,9 +106,11 @@ export default function Map({
         y: adjustedY,
       };
       setOffset(newOffset);
-      if (adjustedX != dx || adjustedY != dy) {
-        updateStartDragOffset(e);
-      }
+      const newStartOffset = {
+        x: adjustedX != dx ? e.clientX - offset.x * scale : startDragOffset.x,
+        y: adjustedY != dy ? e.clientY - offset.y * scale : startDragOffset.y,
+      };
+      setStartDragOffset(newStartOffset);
     };
 
     // ends panning when mouse button released
