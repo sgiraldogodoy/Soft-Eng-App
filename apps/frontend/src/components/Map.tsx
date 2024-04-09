@@ -81,8 +81,8 @@ export default function Map({
       if (e.button === 0) {
         setDragging(true);
         const newOffset = {
-          x: e.clientX - offset.x,
-          y: e.clientY - offset.y,
+          x: e.clientX - offset.x * scale,
+          y: e.clientY - offset.y * scale,
         };
         setStartDragOffset(newOffset);
 
@@ -93,10 +93,10 @@ export default function Map({
     // pans map when mouse is dragged while mouse button down
     const handleMouseMove = (e: MouseEvent) => {
       if (!dragging) return;
-      const dx = e.clientX - startDragOffset.x;
-      const dy = e.clientY - startDragOffset.y;
+      const dx = (e.clientX - startDragOffset.x) / scale;
+      const dy = (e.clientY - startDragOffset.y) / scale;
 
-      // prevents the map from being panned off screen
+      // prevents the map from being panned off-screen
       const limitX: number = ((imgWidth * scale) / 2 - imgWidth / 2) / scale;
       const limitY: number = ((imgHeight * scale) / 2 - imgHeight / 2) / scale;
 
