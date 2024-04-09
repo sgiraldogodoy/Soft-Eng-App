@@ -11,6 +11,8 @@ interface LineProps {
   nodes: Node[];
   imgWidth: number;
   imgHeight: number;
+  dragOffset: { x: number; y: number };
+  scale: number;
   floor: string;
 }
 
@@ -34,7 +36,15 @@ const getFloorColor = (floorIndex: string) => {
   return floorColors[num];
 };
 
-export function Lines({ nodes, path, imgWidth, imgHeight, floor }: LineProps) {
+export function Lines({
+  nodes,
+  path,
+  imgWidth,
+  imgHeight,
+  floor,
+  scale,
+  dragOffset,
+}: LineProps) {
   const pathColor = useMemo(() => {
     return getFloorColor(floor);
   }, [floor]); // Get the color for the active floor
@@ -65,30 +75,7 @@ export function Lines({ nodes, path, imgWidth, imgHeight, floor }: LineProps) {
     }
   }
 
-  //
-  // // Construct the path string
-  // const pathString = path
-  //     .map((node, index) => {
-  //         const currentNode = nodes.find((n) => n.nodeId === node.nodeId);
-  //         if (currentNode) {
-  //             return `${index === 0 ? "M" : "L"} ${scaleCoordinate(
-  //                 currentNode.xcords,
-  //                 imgWidth,
-  //                 origImageWidth,
-  //                 0,
-  //             )} ${scaleCoordinate(
-  //                 currentNode.ycords,
-  //                 imgHeight,
-  //                 origImageHeight,
-  //                 0,
-  //             )}`;
-  //         }
-  //         return "";
-  //     })
-  //     .join(" ");
-  // Define different colors for different floors
-
-  // Generate PathStrings using transitions
+  // Construct the path string
   const pathStrings = transitions.map((transition) => {
     const [currentNode, nextNode] = transition;
     const currentFloorIndex = currentNode.floor; // set floor index to current node floor
@@ -99,17 +86,30 @@ export function Lines({ nodes, path, imgWidth, imgHeight, floor }: LineProps) {
         imgWidth,
         origImageWidth,
         0,
+        dragOffset.x,
+        scale,
       )} ${scaleCoordinate(
         currentNode.ycords,
         imgHeight,
         origImageHeight,
         0,
+        dragOffset.y,
+        scale,
       )} L ${scaleCoordinate(
         nextNode.xcords,
         imgWidth,
         origImageWidth,
         0,
-      )} ${scaleCoordinate(nextNode.ycords, imgHeight, origImageHeight, 0)}`;
+        dragOffset.x,
+        scale,
+      )} ${scaleCoordinate(
+        nextNode.ycords,
+        imgHeight,
+        origImageHeight,
+        0,
+        dragOffset.y,
+        scale,
+      )}`;
     }
     return ""; // Return empty string for paths not on active floor :D
   });
@@ -117,20 +117,6 @@ export function Lines({ nodes, path, imgWidth, imgHeight, floor }: LineProps) {
   // Join strings together
   const finalPathString = pathStrings.join(" ");
 
-  // style path color, only one for now can change in code above if need
-
-  // const elevatorPoints = path.filter((node, index, array) => {
-  //     // Check if the current node is an elevator and on the desired floor
-  //     if (node.nodeType === "ELEV" && node.floor === floor) {
-  //         // Check if it's not the first node and the previous node had a different floor
-  //         if (index > 0 && array[index - 1].floor !== node.floor || (index === 0 && array.length > 1 && array[index + 1].floor !== node.floor) ||
-  //             (index > 0 && array[index + 1].floor !== node.floor)) {
-  //             return true; // Include this elevator point since theres a floor change
-  //         }
-  //     }
-  //     return false; // Exclude this node
-  // });
-  //const elevatorPoints: Node[] = useMemo( () => { return transitions.flatMap((transition) => {return transition[0].floor !== transition[1].floor ? transition : [];}); }, [transitions]);
   const elevatorPoints: Node[] = transitions.flatMap((transition) => {
     return transition[0].floor !== transition[1].floor ? transition : [];
   });
@@ -147,15 +133,15 @@ export function Lines({ nodes, path, imgWidth, imgHeight, floor }: LineProps) {
           d={finalPathString}
           style={{
             stroke: pathColor,
-            strokeWidth: 2,
+            strokeWidth: 2 * scale,
             fill: "none",
-            strokeDasharray: "5,5",
+            strokeDasharray: 5 * scale,
           }}
         >
           <animate
             attributeName="stroke-dashoffset"
             from="0"
-            to={-totalLength}
+            to={-totalLength * scale}
             dur={`${totalLength / 18}s`} // Speed
             repeatCount="indefinite"
           />
@@ -169,12 +155,16 @@ export function Lines({ nodes, path, imgWidth, imgHeight, floor }: LineProps) {
           imgWidth,
           origImageWidth,
           0,
+          dragOffset.x,
+          scale,
         );
         const scaledY = scaleCoordinate(
           point.ycords,
           imgHeight,
           origImageHeight,
           0,
+          dragOffset.y,
+          scale,
         );
 
         return (

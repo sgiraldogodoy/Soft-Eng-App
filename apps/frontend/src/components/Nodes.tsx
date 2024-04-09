@@ -14,6 +14,8 @@ interface NodesProps {
   goalNode?: string;
   floor: string;
   filter?: boolean;
+  dragOffset: { x: number; y: number };
+  scale: number;
 }
 
 export function Nodes({
@@ -25,6 +27,8 @@ export function Nodes({
   goalNode,
   floor,
   filter,
+  dragOffset,
+  scale,
 }: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null); //set hovered node
   const hoveredNodeString = nodes.find(
@@ -42,8 +46,22 @@ export function Nodes({
           key={index}
           style={{
             position: "absolute",
-            left: scaleCoordinate(node.xcords, imgWidth, origImageWidth, 0),
-            top: scaleCoordinate(node.ycords, imgHeight, origImageHeight, 0),
+            left: scaleCoordinate(
+              node.xcords,
+              imgWidth,
+              origImageWidth,
+              0,
+              dragOffset.x,
+              scale,
+            ),
+            top: scaleCoordinate(
+              node.ycords,
+              imgHeight,
+              origImageHeight,
+              0,
+              dragOffset.y,
+              scale,
+            ),
             width:
               node.nodeId === hoveredNode
                 ? "10px"
@@ -69,7 +87,7 @@ export function Nodes({
                     ? "blue"
                     : "black",
             borderRadius: "50%",
-            transform: "translate(-50%, -50%)",
+            transform: `translate(-50%, -50%) scale(${scale})`,
             cursor: "pointer",
           }}
           onMouseEnter={() => setHoveredNode(node.nodeId)}

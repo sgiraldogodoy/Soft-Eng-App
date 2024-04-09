@@ -47,87 +47,90 @@ export default function RequestSummary() {
     : undefined;
 
   return (
-    <div className="w-full h-screen flex flex-col gap-20 justify-center items-center overflow-y-scroll p-4">
-      <div className="w-full flex flex-col justify-evenly gap-4 max-h-screen overflow-y-scroll">
-        <div className="overflow-scroll">
+    <div className="w-full flex flex-col gap-4 flex-1 max-h-full">
+      <Card className="flex flex-col flex-1 overflow-auto bg-white/90 backdrop-blur-md drop-shadow-md shadow-inner">
+        <CardHeader>
+          <CardTitle>Open Requests</CardTitle>
+        </CardHeader>
+        <CardContent className="overflow-y-scroll max-h-full">
           <RequestTable
             data={servicesQuery.data}
             selectionState={rowSelectionState}
             setSelectionState={setRowSelectionState}
           />
-        </div>
-        {selectedRow && (
-          <Card className="p-4">
-            <CardHeader>
-              <CardTitle>Details</CardTitle>
-              <CardDescription>
-                {selectedRow.flowerName} requested by {selectedRow.loginName}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-1.5">
-                <Label htmlFor="message-2" className="font-bold">
-                  Request Notes
-                </Label>
-                <p>{selectedRow.commentOnFlower}</p>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <div className="flex items-center justify-stretch w-full self-center gap-4">
-                <Button
-                  variant="destructive"
-                  className="w-full"
-                  onClick={() => {
-                    toast.promise(
-                      serviceDeleteMutation.mutateAsync(
-                        {
-                          id: selectedRow.id,
-                        },
-                        {
-                          onSuccess: () => {
-                            utils.service.getAllFlowerRequests.invalidate();
-                          },
-                        },
-                      ),
+        </CardContent>
+      </Card>
+      {selectedRow && (
+        <Card className="p-4 bg-white/90 backdrop-blur-md drop-shadow-md shadow-inner">
+          <CardHeader>
+            <CardTitle>Details</CardTitle>
+            <CardDescription>
+              {selectedRow.flowerName} requested by {selectedRow.loginName}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-1.5">
+              <Label htmlFor="message-2" className="font-bold">
+                Request Notes
+              </Label>
+              <p>{selectedRow.commentOnFlower}</p>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <div className="flex items-center justify-stretch w-full self-center gap-4">
+              <Button
+                variant="destructive"
+                className="w-full"
+                onClick={() => {
+                  toast.promise(
+                    serviceDeleteMutation.mutateAsync(
                       {
-                        success: "Deleted request!",
-                        error: "Error deleting request.",
-                        loading: "Deleting request...",
+                        id: selectedRow.id,
                       },
-                    );
-                  }}
-                >
-                  Delete
-                </Button>
-                <Button
-                  className="w-full bg-theme-blue "
-                  onClick={() => {
-                    toast.promise(
-                      serviceDeliverMutation.mutateAsync(
-                        {
-                          id: selectedRow.id,
-                        },
-                        {
-                          onSuccess: () => {
-                            utils.service.getAllFlowerRequests.invalidate();
-                          },
-                        },
-                      ),
                       {
-                        success: "Marked request as delivered!",
-                        error: "Error updating request.",
-                        loading: "Updating request...",
+                        onSuccess: () => {
+                          utils.service.getAllFlowerRequests.invalidate();
+                        },
                       },
-                    );
-                  }}
-                >
-                  Mark as Delivered
-                </Button>
-              </div>
-            </CardFooter>
-          </Card>
-        )}
-      </div>
+                    ),
+                    {
+                      success: "Deleted request!",
+                      error: "Error deleting request.",
+                      loading: "Deleting request...",
+                    },
+                  );
+                }}
+              >
+                Delete
+              </Button>
+              <Button
+                className="w-full"
+                onClick={() => {
+                  toast.promise(
+                    serviceDeliverMutation.mutateAsync(
+                      {
+                        id: selectedRow.id,
+                      },
+                      {
+                        onSuccess: () => {
+                          utils.service.getAllFlowerRequests.invalidate();
+                        },
+                      },
+                    ),
+                    {
+                      success: "Marked request as delivered!",
+                      error: "Error updating request.",
+                      loading: "Updating request...",
+                    },
+                  );
+                }}
+              >
+                Mark as Delivered
+              </Button>
+            </div>
+          </CardFooter>
+        </Card>
+      )}
     </div>
   );
 }

@@ -74,6 +74,8 @@ export default function MapForNodeEditing({
         nodes={nodes}
         floor={floor}
         filter={true}
+        dragOffset={{ x: 0, y: 0 }}
+        scale={1}
       />
       <Edges
         imgWidth={imgWidth}

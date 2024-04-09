@@ -37,8 +37,8 @@ export function Edges({ nodes, edges, imgWidth, imgHeight, floor }: LineProps) {
         return "";
       }
       // Construct the path string directly from edge coordinates
-      return `M${scaleCoordinate(startNode.xcords, imgHeight, origImageHeight, 0)},${scaleCoordinate(startNode.ycords, imgWidth, origImageWidth, 0)} 
-        L${scaleCoordinate(endNode.xcords, imgHeight, origImageHeight, 0)},${scaleCoordinate(endNode.ycords, imgWidth, origImageWidth, 0)}`;
+      return `M${scaleCoordinate(startNode.xcords, imgHeight, origImageHeight, 0, 0, 1)},${scaleCoordinate(startNode.ycords, imgWidth, origImageWidth, 0, 0, 1)} 
+        L${scaleCoordinate(endNode.xcords, imgHeight, origImageHeight, 0, 0, 1)},${scaleCoordinate(endNode.ycords, imgWidth, origImageWidth, 0, 0, 1)}`;
     })
     .join(" ");
 
