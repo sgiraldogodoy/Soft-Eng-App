@@ -139,17 +139,17 @@ export default function InputForm({ variant }: Props) {
 
   return (
     <>
-      <Card className="bg-white/80 shadow-inner shadow-md backdrop-blur-md">
+      <Card className="bg-white/90 shadow-inner backdrop-blur-md flex-1 flex flex-col">
         <CardHeader>
           <CardTitle className="capitalize">
             {FORMTYPE_RECORD[variant].longName}
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full flex flex-col justify-between items-stretch gap-2"
+              className="w-full flex flex-col justify-between items-stretch gap-3"
             >
               <FormField
                 control={form.control}
@@ -172,7 +172,7 @@ export default function InputForm({ variant }: Props) {
                   control={form.control}
                   name="location"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col justify-between flex-1">
+                    <FormItem className="flex flex-col h-full justify-between flex-1">
                       <FormLabel>Location</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
@@ -271,7 +271,7 @@ export default function InputForm({ variant }: Props) {
                     <FormLabel>Notes</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Tell us a little bit about yourself"
+                        placeholder="Any other information?"
                         className="resize-none"
                         {...field}
                       />

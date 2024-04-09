@@ -9,9 +9,16 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 export const SecurityRequestSchema = z.object({
   type: z.literal("security-request"),
-  securityType: z.string(),
   time: z.string(),
   threatLevel: z.string(),
 });
@@ -22,38 +29,50 @@ const SecurityRequest = () => {
       <FormField
         name="securityType"
         render={({ field }) => (
-          <FormItem className="flex-1">
-            <FormLabel>End Time</FormLabel>
+          <FormItem className="">
+            <FormLabel>Time</FormLabel>
             <FormControl>
-              <Input type="date" {...field} />
+              <Input type="time" {...field} />
             </FormControl>
-            <FormDescription>What is the security type?</FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        name="time"
-        render={({ field }) => (
-          <FormItem className="flex-1">
-            <FormLabel>Start Time</FormLabel>
-            <FormControl>
-              <Input type="date" {...field} />
-            </FormControl>
-            <FormDescription>What is the time of the request?</FormDescription>
+            <FormDescription>What time is the request made?</FormDescription>
             <FormMessage />
           </FormItem>
         )}
       />
       <FormField
         name="threatLevel"
-        render={({ field }) => (
-          <FormItem className="flex-1">
-            <FormLabel>Start Time</FormLabel>
+        render={() => (
+          <FormItem className="">
+            <FormLabel>Threat Level</FormLabel>
             <FormControl>
-              <Input type="date" {...field} />
+              <Select>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Low" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Low">Low</SelectItem>
+                  <SelectItem value="Medium">Medium</SelectItem>
+                  <SelectItem value="High">High</SelectItem>
+                  <SelectItem value="Midnight">Midnight</SelectItem>
+                </SelectContent>
+              </Select>
             </FormControl>
             <FormDescription>What is the threat level?</FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        name="securityType"
+        render={({ field }) => (
+          <FormItem className="">
+            <FormLabel>Date</FormLabel>
+            <FormControl>
+              <Input type="Date" {...field} />
+            </FormControl>
+            <FormDescription>
+              What date does the request need to be made?
+            </FormDescription>
             <FormMessage />
           </FormItem>
         )}
