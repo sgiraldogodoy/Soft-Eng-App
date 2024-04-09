@@ -35,9 +35,9 @@ export default function ServiceRequestPage() {
               <TabsTrigger className="flex-1" value="av-request">
                 Audio/Visual Request
               </TabsTrigger>
-               <TabsTrigger className="flex-1" value="gift-request">
-              Gift Request
-            </TabsTrigger>
+              <TabsTrigger className="flex-1" value="gift-request">
+                Gift Request
+              </TabsTrigger>
             </TabsList>
           </Tabs>
           <ServiceRequestForm variant={variant} />
