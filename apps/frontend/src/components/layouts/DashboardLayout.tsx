@@ -39,10 +39,10 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
         {/* <ArrowRightIcon size={30} className="mt-auto" /> */}
       </div>
       <div className="flex flex-col max-h-screen h-full flex-1">
-        <div className="flex px-[17px] py-[22px] border-b border-slate-300 items-center gap-2">
+        <div className="flex px-[17px] py-[18px] border-b border-slate-300 items-center gap-2">
           <svg
-            width="29"
-            height="41"
+            width="21"
+            height="30"
             viewBox="0 0 29 41"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -77,10 +77,10 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
               fill="#8260F6"
             />
           </svg>
-          <p className="text-[#8260F6] text-2xl font-semibold">
+          <p className="text-[#8260F6] text-xl font-semibold">
             Brigham and Women&apos;s Hospital
           </p>
-          <p className="ml-auto text-xl">
+          <p className="ml-auto text-lg">
             Welcome,{" "}
             <span className="font-semibold">{session.user?.email}</span>
           </p>

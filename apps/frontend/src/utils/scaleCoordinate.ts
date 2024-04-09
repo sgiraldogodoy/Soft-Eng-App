@@ -4,14 +4,24 @@
  * @param curSize current size of the image
  * @param origSize original size of image
  * @param offset image offset
+ * @param dragOffset image drag offset
+ * @param scale image scale
  */
 const scaleCoordinate = (
   coordinate: number,
   curSize: number,
   origSize: number,
   offset: number,
+  dragOffset: number,
+  scale: number,
 ) => {
-  return coordinate * (curSize / origSize) + offset;
+  return (
+    ((coordinate * curSize) / origSize) * scale +
+    offset +
+    dragOffset * scale -
+    (curSize * scale) / 2 +
+    curSize / 2
+  );
 };
 
 export { scaleCoordinate };
