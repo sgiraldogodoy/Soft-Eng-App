@@ -21,13 +21,14 @@ export const SecurityRequestSchema = z.object({
   type: z.literal("security-request"),
   time: z.string(),
   threatLevel: z.string(),
+  date: z.string(),
 });
 
 const SecurityRequest = () => {
   return (
     <div className="flex gap-2 items-center flex-1">
       <FormField
-        name="securityType"
+        name="time"
         render={({ field }) => (
           <FormItem className="">
             <FormLabel>Time</FormLabel>
@@ -41,11 +42,11 @@ const SecurityRequest = () => {
       />
       <FormField
         name="threatLevel"
-        render={() => (
+        render={({ field }) => (
           <FormItem className="">
             <FormLabel>Threat Level</FormLabel>
             <FormControl>
-              <Select>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Low" />
                 </SelectTrigger>
@@ -63,7 +64,7 @@ const SecurityRequest = () => {
         )}
       />
       <FormField
-        name="securityType"
+        name="date"
         render={({ field }) => (
           <FormItem className="">
             <FormLabel>Date</FormLabel>
