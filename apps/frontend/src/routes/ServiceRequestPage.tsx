@@ -26,6 +26,9 @@ export default function ServiceRequestPage() {
             <TabsTrigger className="flex-1" value="room-request">
               Room Request
             </TabsTrigger>
+            <TabsTrigger className="flex-1" value="security-request">
+              Security Request
+            </TabsTrigger>
           </TabsList>
         </Tabs>
         <ServiceRequestForm variant={variant} />
