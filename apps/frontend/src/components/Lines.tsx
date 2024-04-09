@@ -10,10 +10,13 @@ interface LineProps {
   nodes: Node[];
   imgWidth: number;
   imgHeight: number;
+  floor: string;
 }
 
-export function Lines({ nodes, path, imgWidth, imgHeight }: LineProps) {
+export function Lines({ nodes, path, imgWidth, imgHeight, floor }: LineProps) {
   if (!path || path.length < 2) return null; // At least two for path
+
+  path = path.filter((node) => node.floor === floor);
 
   // Calculate total length of the path to dynamically animate the path
   let totalLength = 0;

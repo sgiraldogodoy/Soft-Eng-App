@@ -7,8 +7,8 @@ interface MapProps {
   onNodeClick?: (clickedNode: string) => void;
   nodes: Node[] | undefined; // Change prop type
   path: Node[] | undefined;
-  startNode: string;
-  goalNode: string;
+  startNode?: string;
+  goalNode?: string;
   imgURL: string;
   floor: string;
 }
@@ -62,12 +62,13 @@ export default function Map({
   }
 
   return (
-    <div className="relative">
+    <div className="relative h-full overflow-hidden">
       <img
         ref={image}
         src={imgURL}
         alt="${imgURL} image"
         onLoad={handleResize}
+        className="inset-0 w-full h-full overflow-hidden"
       />
       <Nodes
         imgWidth={imgWidth}
@@ -84,6 +85,7 @@ export default function Map({
           imgHeight={imgHeight}
           nodes={nodes}
           path={path}
+          floor={floor}
         />
       )}
     </div>

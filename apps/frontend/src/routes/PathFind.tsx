@@ -17,7 +17,7 @@ export default function PathFind() {
   const { isAuthenticated } = useAuth0();
   const imgURL = "/00_thelowerlevel1.png";
   const floor = "L1";
-  const whichAlg = isChecked ? "A*" : "BFS";
+  const whichAlg = isChecked ? "BFS" : "A*";
 
   // Node query
   const nodesQuery = trpc.db.getAllNodes.useQuery();

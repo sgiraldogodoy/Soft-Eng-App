@@ -7,6 +7,7 @@ import RequestSummary from "../components/services/RequestSummary";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import ServiceRequestForm from "@/components/services/ServiceRequestForm";
 import FloorTabs from "./MapEdit";
+import NewPathFind from "@/routes/NewPathFind.tsx";
 
 export function AppRouter() {
   const { isAuthenticated } = useAuth0();
@@ -32,6 +33,9 @@ export function AppRouter() {
           </Route>
           <Route path="/mapediting">
             <FloorTabs />
+          </Route>
+          <Route path="/newpathfind">
+            <NewPathFind />
           </Route>
         </DashboardLayout>
       </Switch>
