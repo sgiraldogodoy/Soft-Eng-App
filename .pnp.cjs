@@ -2337,6 +2337,28 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@radix-ui/react-icons", [\
+      ["npm:1.3.0", {\
+        "packageLocation": "./.yarn/cache/@radix-ui-react-icons-npm-1.3.0-2aeeb348f1-6990c28d48.zip/node_modules/@radix-ui/react-icons/",\
+        "packageDependencies": [\
+          ["@radix-ui/react-icons", "npm:1.3.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.3.0", {\
+        "packageLocation": "./.yarn/__virtual__/@radix-ui-react-icons-virtual-4b4958911d/0/cache/@radix-ui-react-icons-npm-1.3.0-2aeeb348f1-6990c28d48.zip/node_modules/@radix-ui/react-icons/",\
+        "packageDependencies": [\
+          ["@radix-ui/react-icons", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.3.0"],\
+          ["@types/react", "npm:18.2.48"],\
+          ["react", "npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@radix-ui/react-id", [\
       ["npm:1.0.0", {\
         "packageLocation": "./.yarn/cache/@radix-ui-react-id-npm-1.0.0-7738d0781e-ba323cedd6.zip/node_modules/@radix-ui/react-id/",\
@@ -7836,6 +7858,7 @@ const RAW_RUNTIME_STATE =
           ["@radix-ui/react-accordion", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.1.2"],\
           ["@radix-ui/react-dialog", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.0.5"],\
           ["@radix-ui/react-dropdown-menu", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.0.6"],\
+          ["@radix-ui/react-icons", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.3.0"],\
           ["@radix-ui/react-label", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.0.2"],\
           ["@radix-ui/react-navigation-menu", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.1.4"],\
           ["@radix-ui/react-popover", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.0.7"],\

@@ -5,8 +5,10 @@ import { ArrowRight, Check, X } from "lucide-react";
 
 export const columns: ColumnDef<FlowerRequest>[] = [
   {
+    id: "id",
     accessorKey: "id",
     header: "ID",
+    enableSorting: true,
   },
   {
     accessorKey: "nodeId",
