@@ -51,6 +51,7 @@ import {
 } from "../ui/command";
 import { PopoverContent } from "../ui/popover";
 import { CheckIcon } from "lucide-react";
+import { useEffect } from "react";
 
 // Add your type-specific form schema to this array.
 const FormSchema = z.discriminatedUnion("type", [
@@ -71,7 +72,7 @@ type SpecialSchemas = z.infer<typeof options extends (infer T)[] ? T : never>;
 export type FormComponent<T> = ({
   form,
 }: {
-  form: UseFormReturn<T extends infer U extends SpecialSchemas ? U : never>;
+  form?: UseFormReturn<T extends infer U extends SpecialSchemas ? U : never>;
 }) => JSX.Element;
 
 // Add your components and long names to this record. It should map the type id to the title name and form component that the form will display.
@@ -106,11 +107,7 @@ export default function InputForm({ variant }: Props) {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      recipient: "",
-      location: "",
-      type: variant,
-    },
+    shouldUnregister: true,
   });
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
@@ -120,8 +117,20 @@ export default function InputForm({ variant }: Props) {
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("attempting");
     console.log(data);
-    toast("Success");
+    toast(
+      <div>
+        <p className="font-semibold">Success! (Data not stored yet!)</p>
+        <pre>
+          <code>{JSON.stringify(data, null, 4)}</code>
+        </pre>
+      </div>,
+    );
   }
+
+  useEffect(() => {
+    form.setValue("type", variant);
+  }, [variant, form]);
+
   return (
     <>
       <Card className="bg-white/80 shadow-inner shadow-md backdrop-blur-md">
@@ -216,7 +225,7 @@ export default function InputForm({ variant }: Props) {
                       <FormMessage />
                     </FormItem>
                   )}
-                />{" "}
+                />
                 <FormField
                   control={form.control}
                   name="priority"
@@ -269,6 +278,7 @@ export default function InputForm({ variant }: Props) {
                   </FormItem>
                 )}
               />
+              <input type="hidden" {...form.register("type")} />
               <Button type="submit">Submit</Button>
             </form>
           </Form>

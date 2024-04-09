@@ -29,6 +29,9 @@ export default function ServiceRequestPage() {
             <TabsTrigger className="flex-1" value="security-request">
               Security Request
             </TabsTrigger>
+            <TabsTrigger className="flex-1" value="av-request">
+              Audio/Visual Request
+            </TabsTrigger>
           </TabsList>
         </Tabs>
         <ServiceRequestForm variant={variant} />
