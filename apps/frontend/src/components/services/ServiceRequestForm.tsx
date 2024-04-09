@@ -30,11 +30,14 @@ import {
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { trpc } from "@/utils/trpc";
 import RoomRequestFields, { RoomRequestSchema } from "./RoomRequestFields";
+import AVRequestFields, { AVRequestSchema } from "./AVRequestFields";
+
 import { BaseFormSchema } from "./formSchema";
 
 // Add your type-specific form schema to this array.
 const FormSchema = z.discriminatedUnion("type", [
   BaseFormSchema.merge(RoomRequestSchema),
+  BaseFormSchema.merge(AVRequestSchema),
 ]);
 
 type FormSchemaType = z.infer<typeof FormSchema>;
@@ -53,6 +56,10 @@ const FORMTYPE_RECORD: Record<
   }
 > = {
   "room-request": { longName: "Request a Room", formFields: RoomRequestFields },
+  "av-request": {
+    longName: "Request AV Equipment",
+    formFields: AVRequestFields,
+  },
 };
 
 interface Props {
