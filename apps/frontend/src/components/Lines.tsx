@@ -10,9 +10,18 @@ interface LineProps {
   nodes: Node[];
   imgWidth: number;
   imgHeight: number;
+  dragOffset: { x: number; y: number };
+  scale: number;
 }
 
-export function Lines({ nodes, path, imgWidth, imgHeight }: LineProps) {
+export function Lines({
+  nodes,
+  path,
+  imgWidth,
+  imgHeight,
+  dragOffset,
+  scale,
+}: LineProps) {
   if (!path || path.length < 2) return null; // At least two for path
 
   // Calculate total length of the path to dynamically animate the path
@@ -38,11 +47,15 @@ export function Lines({ nodes, path, imgWidth, imgHeight }: LineProps) {
           imgWidth,
           origImageWidth,
           0,
+          dragOffset.x,
+          scale,
         )} ${scaleCoordinate(
           currentNode.ycords,
           imgHeight,
           origImageHeight,
           0,
+          dragOffset.y,
+          scale,
         )}`;
       }
       return "";
@@ -60,15 +73,15 @@ export function Lines({ nodes, path, imgWidth, imgHeight }: LineProps) {
         d={pathString}
         style={{
           stroke: "red",
-          strokeWidth: 2,
+          strokeWidth: 2 * scale,
           fill: "none",
-          strokeDasharray: "5,5",
+          strokeDasharray: 5 * scale,
         }}
       >
         <animate
           attributeName="stroke-dashoffset"
           from="0"
-          to={-totalLength}
+          to={-totalLength * scale}
           dur={`${totalLength / 18}s`} // Speed
           repeatCount="indefinite"
         />
