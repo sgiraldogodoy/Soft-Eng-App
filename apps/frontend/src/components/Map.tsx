@@ -26,7 +26,7 @@ export default function Map({
   const [imgHeight, setImageHeight] = useState(0); //set image height
   const image = useRef<HTMLImageElement>(null);
 
-  const [scale, setScale] = useState(1);
+  const [scale, setScale] = useState(1.2);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const [startDragOffset, setStartDragOffset] = useState({ x: 0, y: 0 });
@@ -51,12 +51,14 @@ export default function Map({
       resizeObserver.observe(image.current);
     }
 
+    // Zooms the map on mouse scroll
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
       const scaleAdjustment = e.deltaY > 0 ? 0.95 : 1.05;
       const nextScale = Math.max(1, Math.min(scale * scaleAdjustment, 10));
       setScale(nextScale);
 
+      // keeps the map focussed when zooming
       const limitX: number =
         ((imgWidth * nextScale) / 2 - imgWidth / 2) / nextScale;
       const limitY: number =
@@ -73,6 +75,8 @@ export default function Map({
     };
 
     //const panScaleAdjustment = (1 / scale); Trying to make pan slower at high zoom; doesn't work rn
+
+    // initializes panning when mouse is held down
     const handleMouseDown = (e: MouseEvent) => {
       if (e.button === 0) {
         setDragging(true);
@@ -86,11 +90,13 @@ export default function Map({
       }
     };
 
+    // pans map when mouse is dragged while mouse button down
     const handleMouseMove = (e: MouseEvent) => {
       if (!dragging) return;
       const dx = e.clientX - startDragOffset.x;
       const dy = e.clientY - startDragOffset.y;
 
+      // prevents the map from being panned off screen
       const limitX: number = ((imgWidth * scale) / 2 - imgWidth / 2) / scale;
       const limitY: number = ((imgHeight * scale) / 2 - imgHeight / 2) / scale;
 
@@ -104,14 +110,15 @@ export default function Map({
       setOffset(newOffset);
     };
 
+    // ends panning when mouse button released
     const handleMouseUp = () => {
       if (dragging) {
         setDragging(false);
       }
     };
 
+    // assign handlers to manipulate map
     const container = containerRef.current;
-
     container?.addEventListener("wheel", handleWheel);
     container?.addEventListener("mousedown", handleMouseDown);
     document.addEventListener("mousemove", handleMouseMove);
@@ -134,13 +141,6 @@ export default function Map({
     scale,
     imgHeight,
   ]);
-
-  // useEffect(() => {
-  //   window.addEventListener("resize", handleResize);
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, [handleResize]);
 
   if (!nodes) {
     return <p>No nodes found</p>;
