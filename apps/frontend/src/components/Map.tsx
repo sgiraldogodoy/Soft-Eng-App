@@ -74,17 +74,19 @@ export default function Map({
       setOffset(newOffset);
     };
 
-    //const panScaleAdjustment = (1 / scale); Trying to make pan slower at high zoom; doesn't work rn
+    const updateStartDragOffset = (e: MouseEvent) => {
+      const newOffset = {
+        x: e.clientX - offset.x * scale,
+        y: e.clientY - offset.y * scale,
+      };
+      setStartDragOffset(newOffset);
+    };
 
     // initializes panning when mouse is held down
     const handleMouseDown = (e: MouseEvent) => {
       if (e.button === 0) {
         setDragging(true);
-        const newOffset = {
-          x: e.clientX - offset.x,
-          y: e.clientY - offset.y,
-        };
-        setStartDragOffset(newOffset);
+        updateStartDragOffset(e);
 
         e.preventDefault();
       }
@@ -93,10 +95,10 @@ export default function Map({
     // pans map when mouse is dragged while mouse button down
     const handleMouseMove = (e: MouseEvent) => {
       if (!dragging) return;
-      const dx = e.clientX - startDragOffset.x;
-      const dy = e.clientY - startDragOffset.y;
+      const dx = (e.clientX - startDragOffset.x) / scale;
+      const dy = (e.clientY - startDragOffset.y) / scale;
 
-      // prevents the map from being panned off screen
+      // prevents the map from being panned off-screen
       const limitX: number = ((imgWidth * scale) / 2 - imgWidth / 2) / scale;
       const limitY: number = ((imgHeight * scale) / 2 - imgHeight / 2) / scale;
 
@@ -108,6 +110,9 @@ export default function Map({
         y: adjustedY,
       };
       setOffset(newOffset);
+      if (adjustedX != dx || adjustedY != dy) {
+        updateStartDragOffset(e);
+      }
     };
 
     // ends panning when mouse button released
