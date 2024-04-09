@@ -71,9 +71,6 @@ export default function Map({
 
         e.preventDefault();
       }
-      if (e.button === 2) {
-        setScale(scale + 1);
-      }
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -81,32 +78,15 @@ export default function Map({
       const dx = e.clientX - startDragOffset.x;
       const dy = e.clientY - startDragOffset.y;
 
-      // Trying to limit panning off map; doesn't work
-      // const visibleWidth = imgWidth * scale;
-      // const visibleHeight = imgHeight * scale;
-      //
-      // console.log(visibleWidth, visibleHeight);
-      // console.log(imgWidth, imgHeight);
-      // console.log("\n");
-      //
-      // const minX = Math.min(0, imgWidth - visibleWidth);
-      // const minY = Math.min(0, imgHeight - visibleHeight);
-      //
-      // const adjustedX = Math.max(minX, offset.x + dx);
-      // const adjustedY = Math.max(minY, offset.y + dy);
+      const limitX: number = ((imgWidth * scale) / 2 - imgWidth / 2) / scale;
+      const limitY: number = ((imgHeight * scale) / 2 - imgHeight / 2) / scale;
 
-      // Separate Attempt
-      // const limitX: number = (imgWidth * scale / 2) - (imgWidth/2);
-      // const limitY: number = (imgHeight * scale / 2) - (imgHeight/2);
-      // const newX: number = Math.min(Math.max(e.clientX - startDragOffset.x,-limitX),limitX);
-      // const newY: number = Math.min(Math.max(e.clientY - startDragOffset.y,-limitY),limitY);
-      // console.log(imgWidth, imgWidth * scale, imgHeight, imgHeight * scale);
-      // console.log(limitX, newX, limitY, newY);
-      // console.log("\n");
+      const adjustedX: number = Math.min(Math.max(dx, -limitX), limitX);
+      const adjustedY: number = Math.min(Math.max(dy, -limitY), limitY);
 
       const newOffset = {
-        x: dx,
-        y: dy,
+        x: adjustedX,
+        y: adjustedY,
       };
       setOffset(newOffset);
     };
