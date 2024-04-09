@@ -103,7 +103,7 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="flex-1 overflow-y-scroll">{children}</div>
+        <div className="flex-1 overflow-y-scroll relative">{children}</div>
       </div>
     </div>
   );
