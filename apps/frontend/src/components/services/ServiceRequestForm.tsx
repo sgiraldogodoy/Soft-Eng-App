@@ -37,6 +37,9 @@ import FlowerRequestFields, {
   FlowerRequestSchema,
 } from "./FlowerRequestFields";
 import { BaseFormSchema } from "./formSchema";
+import SecurityRequestFields, {
+  SecurityRequestSchema,
+} from "@/components/services/SecurityRequestFields.tsx";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
 import {
@@ -54,6 +57,7 @@ const FormSchema = z.discriminatedUnion("type", [
   BaseFormSchema.merge(RoomRequestSchema),
   BaseFormSchema.merge(AVRequestSchema),
   BaseFormSchema.merge(FlowerRequestSchema),
+  BaseFormSchema.merge(SecurityRequestSchema),
 ]);
 
 type FormSchemaType = z.infer<typeof FormSchema>;
@@ -86,6 +90,10 @@ const FORMTYPE_RECORD: Record<
   "flower-request": {
     longName: "Request Flowers",
     formFields: FlowerRequestFields,
+  },
+  "security-request": {
+    longName: "Request Security",
+    formFields: SecurityRequestFields,
   },
 };
 
