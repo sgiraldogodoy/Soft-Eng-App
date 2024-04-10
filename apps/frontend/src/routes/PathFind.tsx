@@ -96,22 +96,24 @@ export default function PathFind() {
       </div>
 
       <div className="absolute flex gap-5 bottom-6 left-1/2 transform -translate-x-1/2">
-        <div className="flex backdrop-blur-[4px] bg-white/80 gap-5 px-[30px] py-[23px] rounded-[100px] shadow-inner drop-shadow-md">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Settings2 className="cursor-pointer" />
-            </PopoverTrigger>
-            <PopoverContent className="w-80" sideOffset={32}>
-              <PathfindSettings
-                onAlgorithmSelect={setAlgorithm}
-                algorithm={algorithm}
-                Rooms={nodesQuery.data}
-                onStartNodeSelect={(e) => setStartNode(e)}
-                startNode={startNode}
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
+        {isAuthenticated && (
+          <div className="flex backdrop-blur-[4px] bg-white/80 gap-5 px-[30px] py-[23px] rounded-[100px] shadow-inner drop-shadow-md">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Settings2 className="cursor-pointer" />
+              </PopoverTrigger>
+              <PopoverContent className="w-80" sideOffset={32}>
+                <PathfindSettings
+                  onAlgorithmSelect={setAlgorithm}
+                  algorithm={algorithm}
+                  Rooms={nodesQuery.data}
+                  onStartNodeSelect={(e) => setStartNode(e)}
+                  startNode={startNode}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+        )}
       </div>
       <div className="absolute flex items-center gap-[35px] text-xl font-bold bottom-12 right-32">
         <div className="flex flex-col gap-[15px]">

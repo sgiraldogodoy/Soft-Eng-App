@@ -22,7 +22,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Node } from "database";
-// import PathFindRoomSelection from "@/components/PickRoomForPathFind.tsx";
 
 type PathfindSettingsProps = {
   Rooms: Node[] | undefined;
