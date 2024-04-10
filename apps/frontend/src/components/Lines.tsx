@@ -149,6 +149,7 @@ export function Lines({
       </svg>
       {elevatorPoints.map((point, index) => {
         if (point.floor !== floor) return null; // Skip if not on active floor
+        if (point.nodeId === path[path.length - 1].nodeId) return null; // Skip if last point
         // Scale the coordinates
         const scaledX = scaleCoordinate(
           point.xcords,
