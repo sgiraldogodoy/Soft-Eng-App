@@ -94,12 +94,9 @@ export async function parseCSVEdge(csv: string, prisma: PrismaClient) {
       i++;
       continue;
     }
-    const [startNodeId, endNodeId] = line.split(",");
+    const [edgeId, startNodeId, endNodeId] = line.split(",");
     try {
-      const edgeId = await validateEdgeId(
-        `${startNodeId}-${endNodeId}`,
-        prisma,
-      );
+      await validateEdgeId(edgeId, prisma);
 
       edges.push({ edgeId, startNodeId, endNodeId });
 

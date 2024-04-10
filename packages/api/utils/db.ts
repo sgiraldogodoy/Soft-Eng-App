@@ -43,7 +43,7 @@ export async function addNodeDatabase(
   });
   if (node) {
     console.log(`Node with ID ${nodes.nodeId} already exists`);
-    return { message: "node already exists" };
+    throw new Error("Node already exists");
   }
   //add the node to the database
   await prisma.node.create({
@@ -64,7 +64,7 @@ export async function addEdgeDatabase(
   });
   if (edgeExists) {
     console.log(`Edge with ID ${edge.edgeId} already exists`);
-    return { message: "edge already exists" };
+    throw new Error("Edge already exists");
   }
   //add the edge to the database
   await prisma.edge.create({
@@ -77,6 +77,16 @@ export async function addFlowerDatabase(
   flower: Prisma.FlowerRequestCreateManyInput,
   prisma: PrismaClient,
 ) {
+  //check if the edge already exists
+  const flowerExist = await prisma.flowerRequest.findUnique({
+    where: {
+      id: flower.id,
+    },
+  });
+  if (flowerExist) {
+    console.log(`Flower with ID ${flower.id} already exists`);
+    throw new Error("Flower already exists");
+  }
   //add the flower to the database
   await prisma.flowerRequest.create({
     data: flower,
