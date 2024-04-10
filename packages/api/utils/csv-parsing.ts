@@ -100,7 +100,7 @@ export async function parseCSVEdge(csv: string, prisma: PrismaClient) {
 
       edges.push({ edgeId, startNodeId, endNodeId });
 
-      const reverseId = `${endNodeId}-${startNodeId}`;
+      const reverseId = `${endNodeId}_${startNodeId}`;
       edges.push({
         edgeId: reverseId,
         startNodeId: endNodeId,
