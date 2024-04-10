@@ -123,7 +123,7 @@ export const AutoComplete = ({
       </div>
       <div className="relative mt-1">
         {isOpen ? (
-          <div className="absolute top-0 z-10 w-full rounded-2xl bg-stone-50">
+          <div className="absolute top-0 z-10 w-full rounded-2xl bg-stone-50 shadow-inner drop-shadow-md">
             <CommandList className="">
               {isLoading ? (
                 <CommandPrimitive.Loading>

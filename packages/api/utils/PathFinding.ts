@@ -2,7 +2,7 @@ import PriorityQueue from "priorityqueuejs";
 import type { Node } from "database";
 import type { PrismaClient } from "database";
 
-const arbHeuristic: number = 10000;
+const arbHeuristic: number = 5;
 
 export interface PathFinding {
   run(root: string, goal: string, db: PrismaClient): Promise<Node[]>;
@@ -127,9 +127,11 @@ export class aStar implements PathFinding {
           const newPriority =
             cost +
             pyth +
+            this.floorChange(currNode, neighbor) +
             this.pythDist(neighbor, goalNode) +
-            this.floorDist(neighbor, goalNode) +
-            this.manHatt(neighbor, goalNode);
+            this.floorDist(neighbor, goalNode);
+          // this.manHatt(neighbor, goalNode);
+          console.log(newPriority);
           priorityQueue.enq({
             ...neighbor,
             path: [...path, neighbor],
@@ -153,6 +155,14 @@ export class aStar implements PathFinding {
       Math.pow(currNode.xcords - goal.xcords, 2) +
         Math.pow(currNode.ycords - goal.ycords, 2),
     );
+  }
+
+  private floorChange(currNode: Node, neighbor: Node): number {
+    if (neighbor.nodeType === "ELEV" && currNode.floor !== neighbor.floor)
+      return 3000;
+    else if (neighbor.nodeType === "STAI" && currNode.floor !== neighbor.floor)
+      return 6000;
+    else return 0;
   }
 
   /**

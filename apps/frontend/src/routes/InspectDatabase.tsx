@@ -30,6 +30,7 @@ export function InspectDatabase() {
           </div>
           <TabsContent value="nodes">
             <NodesTable />
+
             <Button
               onClick={() => {
                 const base64String = downloadNodes.data ?? "";
@@ -42,7 +43,7 @@ export function InspectDatabase() {
 
                 anchor.click();
               }}
-              className="bg-theme-yellow absolute top-[16px] right-[100px] text-theme-dark bg-gradient-to-r from-yellow-300 to-yellow-400 hover:bg-gradient-to-l shadow-lg shadow-theme-yellow/30"
+              className="absolute top-[16px] right-[104px]"
             >
               Download
             </Button>
@@ -61,7 +62,7 @@ export function InspectDatabase() {
 
                 anchor.click();
               }}
-              className="bg-theme-yellow absolute top-[16px] right-[100px] text-theme-dark bg-gradient-to-r from-yellow-300 to-yellow-400 hover:bg-gradient-to-l shadow-lg shadow-theme-yellow/30"
+              className="absolute top-[16px] right-[104px]"
             >
               Download
             </Button>
@@ -71,7 +72,7 @@ export function InspectDatabase() {
           onClick={() => {
             uploadButton.current?.click();
           }}
-          className="bg-theme-yellow absolute top-[16px] right-4 text-theme-dark bg-gradient-to-r from-yellow-300 to-yellow-400 hover:bg-gradient-to-l shadow-lg shadow-theme-yellow/30"
+          className="absolute top-[16px] right-4"
         >
           Upload
         </Button>

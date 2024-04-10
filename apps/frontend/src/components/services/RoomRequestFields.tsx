@@ -17,34 +17,39 @@ export const RoomRequestSchema = z.object({
 
 const RoomRequest = () => {
   return (
-    <div className="flex gap-2 items-center flex-1">
-      <FormField
-        name="startTime"
-        render={({ field }) => (
-          <FormItem className="flex-1">
-            <FormLabel>Start Time</FormLabel>
-            <FormControl>
-              <Input type="date" {...field} />
-            </FormControl>
-            <FormDescription>What time should it start?</FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        name="endTime"
-        render={({ field }) => (
-          <FormItem className="flex-1">
-            <FormLabel>End Time</FormLabel>
-            <FormControl>
-              <Input type="date" {...field} />
-            </FormControl>
-            <FormDescription>What time should it end?</FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-    </div>
+    <>
+      <div className="flex gap-2 items-center flex-1">
+        <FormField
+          name="startTime"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel>Start Time</FormLabel>
+              <FormControl>
+                <Input type="date" {...field} />
+              </FormControl>
+              <FormDescription>What time should it start?</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="endTime"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel>End Time</FormLabel>
+              <FormControl>
+                <Input type="date" {...field} />
+              </FormControl>
+              <FormDescription>What time should it end?</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div>
+        <p className="text-xs"> created by Ace Beattie & Micheal Lin</p>
+      </div>
+    </>
   );
 };
 

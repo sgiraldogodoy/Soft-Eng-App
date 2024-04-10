@@ -25,43 +25,48 @@ export const AVRequestSchema = z.object({
 
 const AVRequest = () => {
   return (
-    <div className="flex gap-2 items-center flex-1">
-      <FormField
-        name="avTypes"
-        render={({ field }) => (
-          <FormItem className="flex-1">
-            <FormLabel>AV Types</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+    <>
+      <div className="flex gap-2 items-center flex-1">
+        <FormField
+          name="avTypes"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel>AV Types</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select the Equipment Types" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="Audio">Audio</SelectItem>
+                  <SelectItem value="Video">Video</SelectItem>
+                  <SelectItem value="Both">Both</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormDescription>What type of equipment?</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="deliveryTime"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel>Delivery Time</FormLabel>
               <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select the Equipment Types" />
-                </SelectTrigger>
+                <Input type="date" {...field} />
               </FormControl>
-              <SelectContent>
-                <SelectItem value="Audio">Audio</SelectItem>
-                <SelectItem value="Video">Video</SelectItem>
-                <SelectItem value="Both">Both</SelectItem>
-              </SelectContent>
-            </Select>
-            <FormDescription>What type of equipment?</FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        name="deliveryTime"
-        render={({ field }) => (
-          <FormItem className="flex-1">
-            <FormLabel>Delivery Time</FormLabel>
-            <FormControl>
-              <Input type="date" {...field} />
-            </FormControl>
-            <FormDescription>When does it need to be set up?</FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-    </div>
+              <FormDescription>When does it need to be set up?</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div>
+        <p className="text-xs"> created by Justin Yip & Parker Glispin</p>
+      </div>
+    </>
   );
 };
 

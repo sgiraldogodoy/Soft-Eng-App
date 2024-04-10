@@ -2,6 +2,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { Nodes } from "./Nodes.tsx";
 import { Node } from "database";
 import { Lines } from "./Lines.tsx";
+import { useAuth0 } from "@auth0/auth0-react";
+import clsx from "clsx";
 
 interface MapProps {
   onNodeClick?: (clickedNode: string) => void;
@@ -25,7 +27,7 @@ export default function Map({
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height
   const image = useRef<HTMLImageElement>(null);
-
+  const { isAuthenticated } = useAuth0();
   const [scale, setScale] = useState(1.2);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
@@ -157,7 +159,7 @@ export default function Map({
 
   return (
     <div
-      className="relative"
+      className="relative h-full"
       ref={containerRef}
       style={{
         position: "relative",
@@ -177,7 +179,10 @@ export default function Map({
           handleResize();
           resetManip();
         }}
-        className="inset-0 w-full h-full overflow-hidden"
+        className={clsx("inset-0 w-full overflow-hidden", {
+          "h-full": isAuthenticated,
+          "max-h-screen overflow-auto": !isAuthenticated,
+        })}
       />
       <Nodes
         imgWidth={imgWidth}

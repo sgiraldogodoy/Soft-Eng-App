@@ -54,11 +54,11 @@ export default function PathfindSettings({
     return <p>No rooms found</p>;
   }
   const filteredNodes = Rooms.filter((node) => node.nodeType !== "HALL");
-  const frameworksUnSorted = filteredNodes.map((node) => ({
+  const unsortedNodes = filteredNodes.map((node) => ({
     label: node.longName.trim(),
     value: node.nodeId,
   }));
-  const frameworks = frameworksUnSorted.sort((a, b) =>
+  const frameworks = unsortedNodes.sort((a, b) =>
     a.label.localeCompare(b.label),
   );
 
@@ -86,7 +86,7 @@ export default function PathfindSettings({
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className="w-[200px] justify-between"
+              className="justify-between w-full"
             >
               <div
                 style={{
@@ -104,7 +104,7 @@ export default function PathfindSettings({
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-[200px] p-0 max-h-96 overflow-y-auto ">
+          <PopoverContent className="w-full p-0 max-h-96 overflow-y-auto">
             <Command>
               <CommandInput placeholder="Select Location" />
               <CommandEmpty>No location found.</CommandEmpty>
@@ -112,7 +112,7 @@ export default function PathfindSettings({
                 {frameworks.map((framework) => (
                   <CommandItem
                     key={framework.value}
-                    value={framework.value}
+                    value={framework.label}
                     onSelect={() => {
                       setValue(framework.value);
                       setOpen(false);
