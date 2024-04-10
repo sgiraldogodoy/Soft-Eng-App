@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Node } from "database";
 import { scaleCoordinate } from "../utils/scaleCoordinate";
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, Flag } from "lucide-react";
 
 const origImageWidth = 5000;
 const origImageHeight = 3400;
@@ -17,12 +17,12 @@ interface LineProps {
 }
 
 const floorColors = [
-  "#8260f6",
-  "#8260f6",
-  "#8260f6",
-  "#8260f6",
-  "#8260f6",
-  "#8260f6",
+  "#7E22CE",
+  "#7E22CE",
+  "#7E22CE",
+  "#7E22CE",
+  "#7E22CE",
+  "#7E22CE",
 ];
 
 // Function to get the color based on floor index can change later if we want all set to purples
@@ -80,7 +80,7 @@ export function Lines({
     const [currentNode, nextNode] = transition;
     const nextFloorIndex = nextNode.floor; // set floor index to current node floor
     // Check if current floor is the active floor
-    if (nextFloorIndex === floor) {
+    if (nextFloorIndex === floor && currentNode.floor === floor) {
       return `M ${scaleCoordinate(
         currentNode.xcords,
         imgWidth,
@@ -168,23 +168,76 @@ export function Lines({
         );
 
         return (
-          <svg
-            key={index}
-            width={20 * scale} // Adjust size as needed
-            height={20 * scale}
-            style={{
-              position: "absolute",
-              top: scaledY - 22 * scale, // Adjust position to center the point
-              left: scaledX - 9.8 * scale,
-            }}
-            className="animate-bounce animation-ping"
-          >
-            {/* Circle representing elevator point */}
-            <ArrowDown size={20 * scale} />
-            {/*<Circle r="10" fill="green" className="animate-ping"/>*/}
-          </svg>
+          <div>
+            <svg
+              key={index}
+              width={20 * scale} // Adjust size as needed
+              height={20 * scale}
+              style={{
+                color: "#7E22CE",
+                position: "absolute",
+                top: scaledY - 22 * scale, // Adjust position to center the point
+                left: scaledX - 9.8 * scale,
+              }}
+              className="animate-bounce"
+            >
+              <ArrowDown size={20 * scale} />
+              {/*<Circle r="10" fill="green" className="animate-ping"/>*/}
+            </svg>
+            <svg
+              width={20 * scale} // Adjust size as needed
+              height={20 * scale}
+              style={{
+                color: "#7E22CE",
+                position: "absolute",
+                top: scaledY - 10 * scale, // Adjust position to center the point
+                left: scaledX - 10 * scale,
+              }}
+              className="animate-ping"
+            >
+              <circle
+                cx={10 * scale}
+                cy={10 * scale}
+                r={4 * scale}
+                fill="#7E22CE"
+              />
+            </svg>
+          </div>
         );
       })}
+      {path.length > 0 && path[path.length - 1].floor === floor && (
+        <svg
+          width={20 * scale}
+          height={20 * scale}
+          style={{
+            color: "#FF0000",
+            position: "absolute",
+            top:
+              scaleCoordinate(
+                path[path.length - 1].ycords,
+                imgHeight,
+                origImageHeight,
+                0,
+                dragOffset.y,
+                scale,
+              ) -
+              22 * scale,
+            left:
+              scaleCoordinate(
+                path[path.length - 1].xcords,
+                imgWidth,
+                origImageWidth,
+                0,
+                dragOffset.x,
+                scale,
+              ) -
+              3.5 * scale,
+          }}
+          className="animate-bounce"
+        >
+          <Flag size={20 * scale} />
+        </svg>
+      )}
     </>
   );
 }
