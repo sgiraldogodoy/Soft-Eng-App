@@ -1,30 +1,25 @@
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-
 import RequestTable from "@/components/services/RequestTable";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useState } from "react";
 import type { RowSelectionState } from "@tanstack/react-table";
 import { trpc } from "@/utils/trpc";
-import { toast } from "sonner";
+import { BaseFormSchema } from "./formSchema";
+import { z } from "zod";
 
-export default function RequestSummary() {
+interface RequestSummaryProps {
+  requests: z.infer<typeof BaseFormSchema>[];
+}
+
+export default function RequestSummary({ requests }: RequestSummaryProps) {
   const [rowSelectionState, setRowSelectionState] = useState<RowSelectionState>(
     {},
   );
 
-  const utils = trpc.useUtils();
+  // const utils = trpc.useUtils();
 
   const servicesQuery = trpc.service.getAllFlowerRequests.useQuery();
-  const serviceDeleteMutation = trpc.service.deleteFlowerRequest.useMutation();
-  const serviceDeliverMutation = trpc.service.deliver.useMutation();
+  // const serviceDeleteMutation = trpc.service.deleteFlowerRequest.useMutation();
+  // const serviceDeliverMutation = trpc.service.deliver.useMutation();
 
   if (servicesQuery.isLoading) {
     return <p>Loading...</p>;
@@ -40,11 +35,11 @@ export default function RequestSummary() {
 
   console.log(rowSelectionState);
 
-  const rowId = Object.keys(rowSelectionState)[0];
+  // const rowId = Object.keys(rowSelectionState)[0];
 
-  const selectedRow = rowId
-    ? servicesQuery.data.at(parseInt(rowId))
-    : undefined;
+  // const selectedRow = rowId
+  //   ? servicesQuery.data.at(parseInt(rowId))
+  //   : undefined;
 
   return (
     <div className="w-full flex flex-col gap-4 flex-1 max-h-full">
@@ -54,13 +49,13 @@ export default function RequestSummary() {
         </CardHeader>
         <CardContent className="overflow-y-scroll max-h-full">
           <RequestTable
-            data={servicesQuery.data}
+            data={requests}
             selectionState={rowSelectionState}
             setSelectionState={setRowSelectionState}
           />
         </CardContent>
       </Card>
-      {selectedRow && (
+      {/* selectedRow && (
         <Card className="p-4 bg-white/90 backdrop-blur-md drop-shadow-md shadow-inner">
           <CardHeader>
             <CardTitle>Details</CardTitle>
@@ -130,7 +125,7 @@ export default function RequestSummary() {
             </div>
           </CardFooter>
         </Card>
-      )}
+      )}*/}
     </div>
   );
 }

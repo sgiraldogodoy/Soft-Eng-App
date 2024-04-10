@@ -52,7 +52,8 @@ import {
 } from "../ui/command";
 import { PopoverContent } from "../ui/popover";
 import { CheckIcon } from "lucide-react";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { RequestsContext } from "@/routes/ServiceRequestPage";
 
 // Add your type-specific form schema to this array.
 const FormSchema = z.discriminatedUnion("type", [
@@ -116,6 +117,8 @@ export default function InputForm({ variant }: Props) {
     shouldUnregister: true,
   });
 
+  const { requests, setRequests } = useContext(RequestsContext);
+
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
   >;
@@ -123,6 +126,9 @@ export default function InputForm({ variant }: Props) {
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("attempting");
     console.log(data);
+
+    setRequests([...requests, data]);
+
     toast(
       <div>
         <p className="font-semibold">Success! (Data not stored yet!)</p>
@@ -139,7 +145,7 @@ export default function InputForm({ variant }: Props) {
 
   return (
     <>
-      <Card className="bg-white/90 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+      <Card className="bg-white/90 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col overflow-auto">
         <CardHeader>
           <CardTitle className="capitalize">
             {FORMTYPE_RECORD[variant].longName}
