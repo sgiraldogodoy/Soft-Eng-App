@@ -1,19 +1,17 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import type { FlowerRequest } from "database";
 import { ReceiptText } from "lucide-react";
+import { BaseFormSchema } from "./formSchema";
+import { z } from "zod";
 
-export const columns: ColumnDef<FlowerRequest>[] = [
+export const columns: ColumnDef<z.infer<typeof BaseFormSchema>>[] = [
   {
-    id: "id",
-    accessorKey: "id",
-    header: "ID",
-    enableSorting: true,
-    size: 30,
+    accessorKey: "type",
+    header: "Type",
   },
   {
-    accessorKey: "flowerName",
-    header: "Flower Name",
+    accessorKey: "location",
+    header: "Location",
   },
   {
     id: "select",
