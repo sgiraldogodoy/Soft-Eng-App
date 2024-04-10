@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { trpc } from "../utils/trpc.ts";
 import { skipToken } from "@tanstack/react-query";
 import Map from "../components/Map.tsx";
-import { Settings2, Plus, Layers, Minus } from "lucide-react";
+import { Settings2 } from "lucide-react";
 
 import { PFAutoComplete } from "@/components/pfAutoComplete.tsx";
 import FloorSelection from "@/components/FloorSelection.tsx";
@@ -75,13 +75,12 @@ export default function PathFind() {
         />
       </div>
       <div className="absolute flex gap-5 bottom-6 left-1/2 transform -translate-x-1/2">
-        <div className="flex bbackdrop-blur-[4px] bg-white/80 gap-5 px-[30px] py-[23px] rounded-[100px]">
-          <Layers />
+        <div className="flex backdrop-blur-[4px] bg-white/80 gap-5 px-[30px] py-[23px] rounded-[100px] shadow-inner drop-shadow-md">
           <Popover>
             <PopoverTrigger asChild>
               <Settings2 className="cursor-pointer" />
             </PopoverTrigger>
-            <PopoverContent className="w-80">
+            <PopoverContent className="w-80" sideOffset={32}>
               <PathfindSettings
                 onAlgorithmSelect={setAlgorithm}
                 algorithm={algorithm}
@@ -91,10 +90,6 @@ export default function PathFind() {
               />
             </PopoverContent>
           </Popover>
-        </div>
-        <div className="flex backdrop-blur-[4px] bg-white/80 gap-5 px-[30px] py-[23px] rounded-[100px]">
-          <Plus className="cursor-pointer" />
-          <Minus className="cursor-pointer" />
         </div>
       </div>
       <div className="absolute flex items-center gap-[35px] text-xl font-bold bottom-12 right-32">
