@@ -3,6 +3,8 @@ import { trpc } from "../utils/trpc.ts";
 import { skipToken } from "@tanstack/react-query";
 import Map from "../components/Map.tsx";
 import { Settings2 } from "lucide-react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { ArrowLeft } from "lucide-react";
 
 import { PFAutoComplete } from "@/components/pfAutoComplete.tsx";
 import FloorSelection from "@/components/FloorSelection.tsx";
@@ -12,6 +14,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import PathfindSettings from "@/components/PathfindSettings.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { Link } from "wouter";
 
 export default function PathFind() {
   const [startNode, setStartNode] = useState("BINFO00202");
@@ -19,6 +23,7 @@ export default function PathFind() {
   const [imgUrl, setImgUrl] = useState("/02_thesecondfloor.png");
   const [floor, setFloor] = useState("2");
   const [algorithm, setAlgorithm] = useState("A*");
+  const { isAuthenticated } = useAuth0();
   const nodesQuery = trpc.db.getAllNodes.useQuery();
 
   if (nodesQuery.isError) {
@@ -67,6 +72,21 @@ export default function PathFind() {
         floor={floor}
       />
 
+      {!isAuthenticated && (
+        <div className="absolute top-0 right-0 mt-4 mr-4">
+          <Button
+            asChild
+            size="icon"
+            className="backdrop-blur-[4px] bg-white/90 shadow-inner drop-shadow-md"
+            variant="ghost"
+          >
+            <Link to="/">
+              <ArrowLeft color="#000000" />
+            </Link>
+          </Button>
+        </div>
+      )}
+
       <div className="absolute backdrop-blur-[4px] bg-white/90 top-12 left-1/2 transform -translate-x-1/2 rounded-[100px] shadow-inner drop-shadow-md">
         <PFAutoComplete
           Rooms={nodesQuery.data}
@@ -74,23 +94,26 @@ export default function PathFind() {
           selectedNode={goalNode}
         />
       </div>
+
       <div className="absolute flex gap-5 bottom-6 left-1/2 transform -translate-x-1/2">
-        <div className="flex backdrop-blur-[4px] bg-white/80 gap-5 px-[30px] py-[23px] rounded-[100px] shadow-inner drop-shadow-md">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Settings2 className="cursor-pointer" />
-            </PopoverTrigger>
-            <PopoverContent className="w-80" sideOffset={32}>
-              <PathfindSettings
-                onAlgorithmSelect={setAlgorithm}
-                algorithm={algorithm}
-                Rooms={nodesQuery.data}
-                onStartNodeSelect={(e) => setStartNode(e)}
-                startNode={startNode}
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
+        {isAuthenticated && (
+          <div className="flex backdrop-blur-[4px] bg-white/80 gap-5 px-[30px] py-[23px] rounded-[100px] shadow-inner drop-shadow-md">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Settings2 className="cursor-pointer" />
+              </PopoverTrigger>
+              <PopoverContent className="w-80" sideOffset={32}>
+                <PathfindSettings
+                  onAlgorithmSelect={setAlgorithm}
+                  algorithm={algorithm}
+                  Rooms={nodesQuery.data}
+                  onStartNodeSelect={(e) => setStartNode(e)}
+                  startNode={startNode}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+        )}
       </div>
       <div className="absolute flex items-center gap-[35px] text-xl font-bold bottom-12 right-32">
         <div className="flex flex-col gap-[15px]">
