@@ -32,10 +32,10 @@ export function validateNodeBuilding(building: string) {
 }
 
 export function validateNodeFloor(floorString: string) {
-  const types = ["L2", "L1", "01", "02", "03"];
+  /*const types = ["L2", "L1", "01", "02", "03"];
   if (!types.includes(floorString)) {
     throw new Error("Invalid floor number. Please enter a valid floor number.");
-  }
+  }*/
 
   return floorString;
 }

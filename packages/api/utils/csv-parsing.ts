@@ -1,6 +1,6 @@
 import { Prisma, PrismaClient } from "database";
 import {
-  validateNodeType,
+  /*validateNodeType,
   validateNodeBuilding,
   validateNodeElevatorLetter,
   validateNodeFloor,
@@ -8,15 +8,17 @@ import {
   validateNodeRoomNumber,
   validateNodeShortName,
   validateNodeXcords,
-  validateNodeYcords,
+  validateNodeYcords,*/
   validateEdgeId,
 } from "./validators.ts";
+/*import readline from "readline";
+import fs from "fs";*/
 
 type Node = Prisma.NodeCreateManyInput;
 type Edge = Prisma.EdgeCreateManyInput;
 
 export async function parseCSVNode(csv: string) {
-  const nodes: Node[] = [];
+  /*const nodes: Node[] = [];
 
   const lines = csv.split(/\r?\n/);
   // Parse nodes CSV
@@ -41,7 +43,7 @@ export async function parseCSVNode(csv: string) {
     const number = nodeIdCSV.slice(5, 8);
 
     try {
-      const nodeType = validateNodeType(nodeTypeCSV);
+      /!*const nodeType = validateNodeType(nodeTypeCSV);
       const building = validateNodeBuilding(buildingCSV);
       const floor = validateNodeFloor(floorCSV);
       if (nodeType === "ELEV") {
@@ -61,7 +63,7 @@ export async function parseCSVNode(csv: string) {
       const xcords = validateNodeXcords(xcordsStringCSV);
       const ycords = validateNodeYcords(ycordsStringCSV);
       const longName = validateNodeLongName(longNameCSV);
-      const shortName = validateNodeShortName(shortNameCSV);
+      const shortName = validateNodeShortName(shortNameCSV);*!/
       nodes.push({
         nodeId,
         xcords,
@@ -79,6 +81,54 @@ export async function parseCSVNode(csv: string) {
   }
 
   // Save to database
+  return nodes;*/
+
+  const nodes: Node[] = [];
+
+  // Parse nodes CSV
+  const nodeStream = csv.split(/\r?\n/);
+
+  let i = 0;
+  for await (const line of nodeStream) {
+    if (i == 0) {
+      i++;
+      continue;
+    }
+    const [
+      nodeId,
+      xcordsString,
+      ycordsString,
+      floor,
+      building,
+      nodeType,
+      longName,
+      shortName,
+    ] = line.split(",");
+    const xcords = Number(xcordsString);
+    const ycords = Number(ycordsString);
+    if (
+      !nodeId ||
+      !xcords ||
+      !ycords ||
+      !floor ||
+      !building ||
+      !nodeType ||
+      !longName ||
+      !shortName
+    ) {
+      continue;
+    }
+    nodes.push({
+      nodeId,
+      xcords,
+      ycords,
+      building,
+      floor,
+      nodeType,
+      longName,
+      shortName,
+    });
+  }
   return nodes;
 }
 
