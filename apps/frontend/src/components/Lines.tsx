@@ -174,7 +174,7 @@ export function Lines({
             height="20"
             style={{
               position: "absolute",
-              top: scaledY - 22, // Adjust position to center the point
+              top: scaledY - 17 - 5 * scale, // Adjust position to center the point
               left: scaledX - 12,
             }}
             className="animate-bounce animation-ping"
