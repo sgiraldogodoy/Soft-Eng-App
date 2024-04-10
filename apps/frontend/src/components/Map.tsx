@@ -151,7 +151,7 @@ export default function Map({
 
   return (
     <div
-      className="relative"
+      className="relative h-full"
       ref={containerRef}
       style={{
         position: "relative",
