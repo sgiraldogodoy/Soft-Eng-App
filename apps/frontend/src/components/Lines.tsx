@@ -78,9 +78,9 @@ export function Lines({
   // Construct the path string
   const pathStrings = transitions.map((transition) => {
     const [currentNode, nextNode] = transition;
-    const currentFloorIndex = currentNode.floor; // set floor index to current node floor
+    const nextFloorIndex = nextNode.floor; // set floor index to current node floor
     // Check if current floor is the active floor
-    if (currentFloorIndex === floor) {
+    if (nextFloorIndex === floor) {
       return `M ${scaleCoordinate(
         currentNode.xcords,
         imgWidth,
