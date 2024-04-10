@@ -284,7 +284,10 @@ export default function InputForm({ variant }: Props) {
                   </FormItem>
                 )}
               />
-              <p className="text-xs"> created by Daniel Reynolds</p>
+              <p className="text-xs">
+                {" "}
+                created by Daniel Reynolds & Matthew Franco
+              </p>
               <input type="hidden" {...form.register("type")} />
               <Button type="submit">Submit</Button>
             </form>

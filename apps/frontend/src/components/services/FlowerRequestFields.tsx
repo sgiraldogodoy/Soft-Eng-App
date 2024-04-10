@@ -53,7 +53,7 @@ const FlowerRequest = () => {
         />
       </div>
       <div>
-        <p className="text-xs"> created by Daniel Reynolds</p>
+        <p className="text-xs"> created by Daniel Reynolds & Matthew Franco</p>
       </div>
     </>
   );

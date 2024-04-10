@@ -99,7 +99,6 @@ const GiftRequest = () => {
       </div>
       <div>
         <p className="text-xs">
-          {" "}
           created by Santiago Giraldo Godoy & Keenan Porter
         </p>
       </div>

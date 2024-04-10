@@ -64,7 +64,7 @@ const AVRequest = () => {
         />
       </div>
       <div>
-        <p className="text-xs"> created by Justin Yip</p>
+        <p className="text-xs"> created by Justin Yip & Parker Glispin</p>
       </div>
     </>
   );
