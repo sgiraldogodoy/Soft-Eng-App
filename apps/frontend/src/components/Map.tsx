@@ -184,6 +184,10 @@ export default function Map({
           "max-h-screen overflow-auto": !isAuthenticated,
         })}
       />
+      <div className="absolute text-black font-bold text-2xl top-[20px] left-[20px]">
+        <p> Level {floor}</p>
+      </div>
+
       <Nodes
         imgWidth={imgWidth}
         imgHeight={imgHeight}

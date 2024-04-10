@@ -101,7 +101,7 @@ export function Nodes({
         <div
           style={{
             position: "absolute",
-            top: 10,
+            top: 70,
             left: 10,
             backgroundColor: "white",
             padding: "5px",
