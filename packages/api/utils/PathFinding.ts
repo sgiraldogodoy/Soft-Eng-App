@@ -126,7 +126,8 @@ export class aStar implements PathFinding {
           const pyth = this.pythDist(currNode, neighbor);
           const newPriority =
             cost +
-            pyth +
+            // pyth +
+            this.floorChange(neighbor) +
             this.pythDist(neighbor, goalNode) +
             this.floorDist(neighbor, goalNode) +
             this.manHatt(neighbor, goalNode);
@@ -153,6 +154,12 @@ export class aStar implements PathFinding {
       Math.pow(currNode.xcords - goal.xcords, 2) +
         Math.pow(currNode.ycords - goal.ycords, 2),
     );
+  }
+
+  private floorChange(neighbor: Node): number {
+    if (neighbor.nodeType === "ELEV") return 50;
+    else if (neighbor.nodeType === "STAI") return 100;
+    return 0;
   }
 
   /**
