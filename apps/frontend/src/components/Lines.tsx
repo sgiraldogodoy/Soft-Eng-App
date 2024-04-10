@@ -170,17 +170,17 @@ export function Lines({
         return (
           <svg
             key={index}
-            width="20" // Adjust size as needed
-            height="20"
+            width={20 * scale} // Adjust size as needed
+            height={20 * scale}
             style={{
               position: "absolute",
-              top: scaledY - 17 - 5 * scale, // Adjust position to center the point
-              left: scaledX - 12,
+              top: scaledY - 22 * scale, // Adjust position to center the point
+              left: scaledX - 9.8 * scale,
             }}
             className="animate-bounce animation-ping"
           >
             {/* Circle representing elevator point */}
-            <ArrowDown />
+            <ArrowDown size={20 * scale} />
             {/*<Circle r="10" fill="green" className="animate-ping"/>*/}
           </svg>
         );
