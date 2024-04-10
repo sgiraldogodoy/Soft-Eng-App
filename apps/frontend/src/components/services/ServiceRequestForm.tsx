@@ -137,6 +137,8 @@ export default function InputForm({ variant }: Props) {
         </pre>
       </div>,
     );
+
+    form.reset();
   }
 
   useEffect(() => {
@@ -295,7 +297,20 @@ export default function InputForm({ variant }: Props) {
                 created by Daniel Reynolds & Matthew Franco
               </p>
               <input type="hidden" {...form.register("type")} />
-              <Button type="submit">Submit</Button>
+              <div className="flex gap-2">
+                <Button
+                  className="flex-1"
+                  variant="secondary"
+                  onClick={() => {
+                    form.reset();
+                  }}
+                >
+                  Reset
+                </Button>
+                <Button className="flex-1 " type="submit">
+                  Submit
+                </Button>
+              </div>
             </form>
           </Form>
         </CardContent>
