@@ -1,6 +1,6 @@
-import { Prisma, PrismaClient } from "database";
-import {
-  /*validateNodeType,
+import { Prisma } from "database";
+/*import {
+  /!*validateNodeType,
   validateNodeBuilding,
   validateNodeElevatorLetter,
   validateNodeFloor,
@@ -8,9 +8,9 @@ import {
   validateNodeRoomNumber,
   validateNodeShortName,
   validateNodeXcords,
-  validateNodeYcords,*/
-  validateEdgeId,
-} from "./validators.ts";
+  validateNodeYcords,
+  validateEdgeId,*!/
+} from "./validators.ts";*/
 /*import readline from "readline";
 import fs from "fs";*/
 
@@ -132,7 +132,7 @@ export async function parseCSVNode(csv: string) {
   return nodes;
 }
 
-export async function parseCSVEdge(csv: string, prisma: PrismaClient) {
+export async function parseCSVEdge(csv: string) {
   const edges: Edge[] = [];
 
   // Parse edges CSV
@@ -144,9 +144,14 @@ export async function parseCSVEdge(csv: string, prisma: PrismaClient) {
       i++;
       continue;
     }
-    const [edgeId, startNodeId, endNodeId] = line.split(",");
+    if (line.split(",").some((x) => !x)) {
+      continue;
+    }
+    const [, startNodeId, endNodeId] = line.split(",");
     try {
-      await validateEdgeId(edgeId, prisma);
+      //await validateEdgeId(edgeId, prisma);
+
+      const edgeId = `${startNodeId}_${endNodeId}`;
 
       edges.push({ edgeId, startNodeId, endNodeId });
 

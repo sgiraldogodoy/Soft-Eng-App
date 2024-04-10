@@ -105,8 +105,8 @@ export async function validateEdgeId(edgeId: string, prisma: PrismaClient) {
   if (edgeId === "") {
     throw new Error(`Empty edge ID ${edgeId}. Please enter a valid edge ID.`);
   }
-  const startNode = edgeId.split("_")[0];
-  const endNode = edgeId.split("_")[1];
+  const startNode = edgeId.trim().split("_")[0];
+  const endNode = edgeId.trim().split("_")[1];
   if (startNode === endNode) {
     throw new Error(
       `Invalid edge ${edgeId}. Start node and end node cannot be the same.`,
