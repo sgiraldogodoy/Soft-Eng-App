@@ -32,10 +32,10 @@ export function validateNodeBuilding(building: string) {
 }
 
 export function validateNodeFloor(floorString: string) {
-  const types = ["L2", "L1", "01", "02", "03"];
+  /*const types = ["L2", "L1", "01", "02", "03"];
   if (!types.includes(floorString)) {
     throw new Error("Invalid floor number. Please enter a valid floor number.");
-  }
+  }*/
 
   return floorString;
 }
@@ -105,8 +105,8 @@ export async function validateEdgeId(edgeId: string, prisma: PrismaClient) {
   if (edgeId === "") {
     throw new Error(`Empty edge ID ${edgeId}. Please enter a valid edge ID.`);
   }
-  const startNode = edgeId.split("-")[0];
-  const endNode = edgeId.split("-")[1];
+  const startNode = edgeId.split("_")[0];
+  const endNode = edgeId.split("_")[1];
   if (startNode === endNode) {
     throw new Error(
       `Invalid edge ${edgeId}. Start node and end node cannot be the same.`,

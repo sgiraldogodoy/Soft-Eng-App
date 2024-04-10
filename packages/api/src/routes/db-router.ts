@@ -131,8 +131,8 @@ export const dbRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       // create an edge
-      const edgeId = `${input.startNodeId}-${input.endNodeId}`;
-      const reverseEdgeId = `${input.endNodeId}-${input.startNodeId}`;
+      const edgeId = `${input.startNodeId}_${input.endNodeId}`;
+      const reverseEdgeId = `${input.endNodeId}_${input.startNodeId}`;
       await addEdgeDatabase(
         {
           startNodeId: input.startNodeId,
@@ -164,8 +164,8 @@ export const dbRouter = router({
     .mutation(async ({ input, ctx }) => {
       // create many edges
       for (const edge of input) {
-        const edgeId = `${edge.startNodeId}-${edge.endNodeId}`;
-        const reverseEdgeId = `${edge.endNodeId}-${edge.startNodeId}`;
+        const edgeId = `${edge.startNodeId}_${edge.endNodeId}`;
+        const reverseEdgeId = `${edge.endNodeId}_${edge.startNodeId}`;
         await addEdgeDatabase(
           {
             startNodeId: edge.startNodeId,
