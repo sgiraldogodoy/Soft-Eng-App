@@ -27,7 +27,7 @@ const floorColors = [
 
 // Function to get the color based on floor index can change later if we want all set to purples
 const getFloorColor = (floorIndex: string) => {
-  let num = 0;
+  let num;
   switch (floorIndex) {
     case "L2":
       num = 0;
@@ -180,7 +180,7 @@ export function Lines({
           scale,
         );
 
-        let floorString = null;
+        let floorString;
         if (index % 2 === 0) {
           floorString = `${elevatorPoints[index + 1].floor}`;
         } else floorString = `${elevatorPoints[index - 1].floor}`;
