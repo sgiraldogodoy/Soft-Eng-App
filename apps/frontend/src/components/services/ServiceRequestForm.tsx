@@ -150,7 +150,9 @@ export default function InputForm({ variant }: Props) {
       );
     }
 
-    setRequests([...requests, data]);
+    const dataWithStatus = { ...data, status: "Unassigned" };
+
+    setRequests([...requests, dataWithStatus]);
 
     toast(
       <div>

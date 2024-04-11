@@ -46,4 +46,5 @@ model FlowerRequest {
   delivered       Boolean
   priority        String   @default("")
   recipient       String   @default("")
+  status          String   @default("Unassigned")
 }

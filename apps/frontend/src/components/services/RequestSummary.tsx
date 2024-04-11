@@ -1,13 +1,33 @@
 import RequestTable from "@/components/services/RequestTable";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 import { useState } from "react";
 import type { RowSelectionState } from "@tanstack/react-table";
 import { trpc } from "@/utils/trpc";
 import { BaseFormSchema } from "./formSchema";
 import { z } from "zod";
+import { Button } from "../ui/button";
+import { Label } from "../ui/label";
+import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface RequestSummaryProps {
-  requests: (z.infer<typeof BaseFormSchema> & { type: string })[];
+  requests: (z.infer<typeof BaseFormSchema> & {
+    type: string;
+    status: string;
+  })[];
 }
 
 export default function RequestSummary({ requests }: RequestSummaryProps) {
@@ -15,19 +35,23 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
     {},
   );
 
-  // const utils = trpc.useUtils();
+  const utils = trpc.useUtils();
 
   const servicesQuery = trpc.service.getAllFlowerRequests.useQuery();
-  // const serviceDeleteMutation = trpc.service.deleteFlowerRequest.useMutation();
+  const serviceDeleteMutation = trpc.service.deleteFlowerRequest.useMutation();
   // const serviceDeliverMutation = trpc.service.deliver.useMutation();
+
+  const updateStatus = trpc.service.updateStatus.useMutation();
 
   const dbRequests:
     | {
+        id: string;
         recipient: string;
         location: string;
         priority: "Low" | "Medium" | "High" | "Emergency";
         notes?: string | undefined;
         type: string;
+        status: string;
       }[]
     | undefined = servicesQuery.data?.map((d) => {
     return {
@@ -36,6 +60,8 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
       priority: d.priority as "Low" | "Medium" | "High" | "Emergency",
       notes: d.commentOnFlower,
       type: "flower-request",
+      status: d.status,
+      id: d.id,
     };
   });
 
@@ -55,11 +81,11 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
 
   console.log(rowSelectionState);
 
-  // const rowId = Object.keys(rowSelectionState)[0];
+  const rowId = Object.keys(rowSelectionState)[0];
 
-  // const selectedRow = rowId
-  //   ? servicesQuery.data.at(parseInt(rowId))
-  //   : undefined;
+  const selectedRow = rowId
+    ? servicesQuery.data.at(parseInt(rowId))
+    : undefined;
 
   return (
     <div className="w-full flex flex-col gap-4 flex-1 max-h-full">
@@ -75,7 +101,7 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
           />
         </CardContent>
       </Card>
-      {/* selectedRow && (
+      {selectedRow && (
         <Card className="p-4 bg-white/90 backdrop-blur-md drop-shadow-md shadow-inner">
           <CardHeader>
             <CardTitle>Details</CardTitle>
@@ -118,7 +144,7 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
               >
                 Delete
               </Button>
-              <Button
+              {/*<Button
                 className="w-full"
                 onClick={() => {
                   toast.promise(
@@ -141,11 +167,45 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
                 }}
               >
                 Mark as Delivered
-              </Button>
+              </Button>*/}
+              <Select
+                value={selectedRow.status}
+                onValueChange={(newVal) => {
+                  // mutate change
+                  toast.promise(
+                    updateStatus.mutateAsync(
+                      {
+                        id: selectedRow.id,
+                        newStatus: newVal,
+                      },
+                      {
+                        onSuccess() {
+                          utils.service.getAllFlowerRequests.invalidate();
+                        },
+                      },
+                    ),
+                    {
+                      success: "Changed status to " + newVal,
+                      loading: "Updating status...",
+                      error: "Error updating status.",
+                    },
+                  );
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Theme" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Unassigned">Unassigned</SelectItem>
+                  <SelectItem value="Assigned">Assigned</SelectItem>
+                  <SelectItem value="In Progress">In Progress</SelectItem>
+                  <SelectItem value="Closed">Closed</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </CardFooter>
         </Card>
-      )}*/}
+      )}
     </div>
   );
 }

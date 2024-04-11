@@ -8,7 +8,7 @@ export default function RequestTable(
   props: Omit<
     React.ComponentProps<
       typeof DataTable<
-        z.infer<typeof BaseFormSchema> & { type: string },
+        z.infer<typeof BaseFormSchema> & { type: string; status: string },
         unknown
       >
     > & {

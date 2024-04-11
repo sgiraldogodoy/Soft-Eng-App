@@ -83,4 +83,16 @@ export const serviceRequestRouter = router({
         message: "Flower request updated.",
       };
     }),
+  updateStatus: publicProcedure
+    .input(z.object({ id: z.string(), newStatus: z.string() }))
+    .mutation(({ input, ctx }) => {
+      return ctx.db.flowerRequest.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          status: input.newStatus,
+        },
+      });
+    }),
 });

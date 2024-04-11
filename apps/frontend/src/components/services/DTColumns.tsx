@@ -5,7 +5,7 @@ import { BaseFormSchema } from "./formSchema";
 import { z } from "zod";
 
 export const columns: ColumnDef<
-  z.infer<typeof BaseFormSchema> & { type: string }
+  z.infer<typeof BaseFormSchema> & { type: string; status: string }
 >[] = [
   {
     accessorKey: "type",
@@ -14,6 +14,10 @@ export const columns: ColumnDef<
   {
     accessorKey: "recipient",
     header: "Recipient",
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
   },
   {
     accessorKey: "location",
