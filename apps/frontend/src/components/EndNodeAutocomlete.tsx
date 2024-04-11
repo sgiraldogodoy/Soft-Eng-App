@@ -8,7 +8,7 @@ interface FrameworkProps {
   selectedNode: string;
 }
 
-export function PFAutoComplete({
+export function EndNodeAutocomlete({
   Rooms,
   onChange,
   selectedNode,
