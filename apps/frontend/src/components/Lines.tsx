@@ -28,11 +28,23 @@ const floorColors = [
 // Function to get the color based on floor index can change later if we want all set to purples
 const getFloorColor = (floorIndex: string) => {
   let num = 0;
-  if (floorIndex === "L2") num = 0;
-  else if (floorIndex === "L1") num = 1;
-  else if (floorIndex === "1") num = 2;
-  else if (floorIndex === "2") num = 3;
-  else num = 4;
+  switch (floorIndex) {
+    case "L2":
+      num = 0;
+      break;
+    case "L1":
+      num = 1;
+      break;
+    case "1":
+      num = 2;
+      break;
+    case "2":
+      num = 3;
+      break;
+    default:
+      num = 4;
+      break;
+  }
   return floorColors[num];
 };
 
