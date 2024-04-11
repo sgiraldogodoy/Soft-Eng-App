@@ -139,6 +139,8 @@ export default function InputForm({ variant }: Props) {
           flowerName: data.flowerchoice,
           totalPayment: 0,
           commentOnFlower: data.notes ?? "",
+          recipient: data.recipient,
+          priority: data.priority,
         }),
         {
           success: "Successfully saved to the database.",

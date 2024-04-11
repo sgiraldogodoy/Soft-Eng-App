@@ -9,8 +9,10 @@ import { createContext, useState } from "react";
 import { z } from "zod";
 
 type RequestsContextType = {
-  requests: Array<z.infer<typeof BaseFormSchema>>;
-  setRequests: React.Dispatch<Array<z.infer<typeof BaseFormSchema>>>;
+  requests: Array<z.infer<typeof BaseFormSchema> & { type: string }>;
+  setRequests: React.Dispatch<
+    Array<z.infer<typeof BaseFormSchema> & { type: string }>
+  >;
 };
 
 export const RequestsContext = createContext<RequestsContextType>({
@@ -23,7 +25,7 @@ export const RequestsContext = createContext<RequestsContextType>({
 export default function ServiceRequestPage() {
   const [variant, setVariant] = useState<FormTypes>("flower-request");
   const [requests, setRequests] = useState<
-    Array<z.infer<typeof BaseFormSchema>>
+    Array<z.infer<typeof BaseFormSchema> & { type: string }>
   >([]);
 
   return (

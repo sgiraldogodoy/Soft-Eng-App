@@ -15,6 +15,8 @@ export const serviceRequestRouter = router({
         commentOnFlower: z.string(),
         totalPayment: z.number(),
         delivered: z.boolean(),
+        recipient: z.string().optional(),
+        priority: z.string().optional(),
       }),
     )
     .mutation(async ({ input, ctx }) => {

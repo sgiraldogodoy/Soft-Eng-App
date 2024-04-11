@@ -4,10 +4,16 @@ import { ReceiptText } from "lucide-react";
 import { BaseFormSchema } from "./formSchema";
 import { z } from "zod";
 
-export const columns: ColumnDef<z.infer<typeof BaseFormSchema>>[] = [
+export const columns: ColumnDef<
+  z.infer<typeof BaseFormSchema> & { type: string }
+>[] = [
   {
     accessorKey: "type",
     header: "Type",
+  },
+  {
+    accessorKey: "recipient",
+    header: "Recipient",
   },
   {
     accessorKey: "location",

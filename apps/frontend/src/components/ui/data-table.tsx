@@ -41,7 +41,7 @@ export function DataTable<TData, TValue>({
       sorting: [
         {
           id: "id",
-          desc: false,
+          desc: true,
         },
       ],
     },

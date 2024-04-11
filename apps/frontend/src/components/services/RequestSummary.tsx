@@ -7,7 +7,7 @@ import { BaseFormSchema } from "./formSchema";
 import { z } from "zod";
 
 interface RequestSummaryProps {
-  requests: z.infer<typeof BaseFormSchema>[];
+  requests: (z.infer<typeof BaseFormSchema> & { type: string })[];
 }
 
 export default function RequestSummary({ requests }: RequestSummaryProps) {
@@ -20,6 +20,26 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
   const servicesQuery = trpc.service.getAllFlowerRequests.useQuery();
   // const serviceDeleteMutation = trpc.service.deleteFlowerRequest.useMutation();
   // const serviceDeliverMutation = trpc.service.deliver.useMutation();
+
+  const dbRequests:
+    | {
+        recipient: string;
+        location: string;
+        priority: "Low" | "Medium" | "High" | "Emergency";
+        notes?: string | undefined;
+        type: string;
+      }[]
+    | undefined = servicesQuery.data?.map((d) => {
+    return {
+      recipient: d.recipient,
+      location: d.nodeId ?? "",
+      priority: d.priority as "Low" | "Medium" | "High" | "Emergency",
+      notes: d.commentOnFlower,
+      type: "flower-request",
+    };
+  });
+
+  const addedRequests = [...requests, ...(dbRequests ?? [])];
 
   if (servicesQuery.isLoading) {
     return <p>Loading...</p>;
@@ -49,7 +69,7 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
         </CardHeader>
         <CardContent className="overflow-y-scroll max-h-full">
           <RequestTable
-            data={requests}
+            data={addedRequests}
             selectionState={rowSelectionState}
             setSelectionState={setRowSelectionState}
           />

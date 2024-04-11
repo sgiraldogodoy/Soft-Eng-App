@@ -44,4 +44,6 @@ model FlowerRequest {
   commentOnFlower String
   totalPayment    Float
   delivered       Boolean
+  priority        String   @default("")
+  recipient       String   @default("")
 }
