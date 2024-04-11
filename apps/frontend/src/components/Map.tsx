@@ -39,12 +39,6 @@ export default function Map({
     setImageHeight(image.current!.getBoundingClientRect().height / scale);
   }, [image, scale]);
 
-  const resetManip = useCallback(() => {
-    setScale(1.2);
-    setOffset({ x: 0, y: 0 });
-    setStartDragOffset({ x: 0, y: 0 });
-  }, []);
-
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       // Handle resize for each entry because array yeah!
@@ -175,10 +169,7 @@ export default function Map({
         style={{
           transform: `scale(${scale}) translate(${offset.x}px, ${offset.y}px)`,
         }}
-        onLoad={() => {
-          handleResize();
-          resetManip();
-        }}
+        onLoad={handleResize}
         className={clsx("inset-0 w-full overflow-hidden", {
           "h-full": isAuthenticated,
           "max-h-screen overflow-auto": !isAuthenticated,
