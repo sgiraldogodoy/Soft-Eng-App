@@ -7946,6 +7946,7 @@ const RAW_RUNTIME_STATE =
           ["sass", "npm:1.70.0"],\
           ["serve", "npm:14.2.1"],\
           ["shadcn-ui", "npm:0.8.0"],\
+          ["simplex-noise", "npm:4.0.1"],\
           ["sonner", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.4.41"],\
           ["sort-by", "npm:1.2.0"],\
           ["superjson", "npm:1.13.3"],\
@@ -12003,6 +12004,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["simple-update-notifier", "npm:2.0.0"],\
           ["semver", "npm:7.5.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["simplex-noise", [\
+      ["npm:4.0.1", {\
+        "packageLocation": "./.yarn/cache/simplex-noise-npm-4.0.1-e1ad818044-1ef5675bfb.zip/node_modules/simplex-noise/",\
+        "packageDependencies": [\
+          ["simplex-noise", "npm:4.0.1"]\
         ],\
         "linkType": "HARD"\
       }]\

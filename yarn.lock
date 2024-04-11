@@ -6384,6 +6384,7 @@ __metadata:
     sass: "npm:^1.62.1"
     serve: "npm:^14.2.0"
     shadcn-ui: "npm:^0.8.0"
+    simplex-noise: "npm:^4.0.1"
     sonner: "npm:^1.4.41"
     sort-by: "npm:^1.2.0"
     superjson: "npm:1.13.3"
@@ -9908,6 +9909,13 @@ __metadata:
   dependencies:
     semver: "npm:^7.5.3"
   checksum: 40bd4f96aa89aedbf717ae9f4ab8fca70e8f7511e8b766feb15471cca3f6fe4fe673743309b08b4ba8abfe0965c9cd927e1de46550a757b819b70fc7430cc85d
+  languageName: node
+  linkType: hard
+
+"simplex-noise@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "simplex-noise@npm:4.0.1"
+  checksum: 1ef5675bfbdd99e6c32610d29a892bf5094cb93b542ba71423c8ef898c2367b633eb041a70e3c838f37649f5ce56d0d2ec40afe72c0dd360b0107baf87985271
   languageName: node
   linkType: hard
 
