@@ -64,29 +64,35 @@ export function Nodes({
             ),
             width:
               node.nodeId === hoveredNode
-                ? "10px"
+                ? "8px"
                 : node.nodeId === goalNode
-                  ? "10px"
+                  ? "8px"
                   : node.nodeId === startNode
-                    ? "10px"
-                    : "7px",
+                    ? "8px"
+                    : "5px",
             height:
               node.nodeId === hoveredNode
-                ? "10px"
+                ? "8px"
                 : node.nodeId === goalNode
-                  ? "10px"
+                  ? "8px"
                   : node.nodeId === startNode
-                    ? "10px"
-                    : "7px",
+                    ? "8px"
+                    : "5px",
             backgroundColor:
+              node.nodeId === goalNode
+                ? "red"
+                : node.nodeId === startNode
+                  ? "#003A96"
+                  : "white",
+            boxShadow:
               node.nodeId === hoveredNode
-                ? "cyan"
+                ? "0 0 0 2px cyan" // Ring effect with cyan color when hovered
                 : node.nodeId === goalNode
-                  ? "red"
+                  ? "0 0 0 2px red" // red when goal node
                   : node.nodeId === startNode
-                    ? "blue"
-                    : "black",
-            borderRadius: "50%",
+                    ? "0 0 0 2px #003A96" // blue when start
+                    : "0 0 0 2px black", // Default black ring
+            borderRadius: "100%",
             transform: `translate(-50%, -50%) scale(${scale})`,
             cursor: "pointer",
           }}
