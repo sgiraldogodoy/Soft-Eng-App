@@ -65,34 +65,34 @@ export const dbRouter = router({
     return ctx.db.edge.findMany();
   }),
   getNode: publicProcedure
-    .input(z.object({ nodeId: z.string() }))
+    .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       // get a node
       return ctx.db.node.findUnique({
         where: {
-          nodeId: input.nodeId,
+          id: input.id,
         },
       });
     }),
   getEdge: publicProcedure
-    .input(z.object({ edgeId: z.string() }))
+    .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       // get an edge
       return ctx.db.edge.findUnique({
         where: {
-          edgeId: input.edgeId,
+          id: input.id,
         },
       });
     }),
   createNode: publicProcedure
     .input(
       z.object({
-        nodeId: z.string(),
-        xcords: z.number(),
-        ycords: z.number(),
+        id: z.string(),
+        x: z.number(),
+        y: z.number(),
         building: z.string(),
         floor: z.string(),
-        nodeType: z.string(),
+        type: z.string(),
         longName: z.string(),
         shortName: z.string(),
       }),
@@ -106,12 +106,12 @@ export const dbRouter = router({
     .input(
       z.array(
         z.object({
-          nodeId: z.string(),
-          xcords: z.number(),
-          ycords: z.number(),
+          id: z.string(),
+          x: z.number(),
+          y: z.number(),
           building: z.string(),
           floor: z.string(),
-          nodeType: z.string(),
+          type: z.string(),
           longName: z.string(),
           shortName: z.string(),
         }),
@@ -137,7 +137,7 @@ export const dbRouter = router({
         {
           startNodeId: input.startNodeId,
           endNodeId: input.endNodeId,
-          edgeId: edgeId,
+          id: edgeId,
         },
         ctx.db,
       );
@@ -145,7 +145,7 @@ export const dbRouter = router({
         {
           startNodeId: input.endNodeId,
           endNodeId: input.startNodeId,
-          edgeId: reverseEdgeId,
+          id: reverseEdgeId,
         },
         ctx.db,
       );
@@ -170,7 +170,7 @@ export const dbRouter = router({
           {
             startNodeId: edge.startNodeId,
             endNodeId: edge.endNodeId,
-            edgeId: edgeId,
+            id: edgeId,
           },
           ctx.db,
         );
@@ -178,7 +178,7 @@ export const dbRouter = router({
           {
             startNodeId: edge.endNodeId,
             endNodeId: edge.startNodeId,
-            edgeId: reverseEdgeId,
+            id: reverseEdgeId,
           },
           ctx.db,
         );

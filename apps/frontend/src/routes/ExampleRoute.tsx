@@ -5,14 +5,9 @@ export default function ExampleRoute() {
   const mutation = trpc.service.createFlowerRequest.useMutation();
 
   const flowerRequest = {
-    id: "5",
-    nodeId: "CCONF001L1",
-    flowerName: "Rose",
-    requestDate: new Date(),
-    loginName: "sgiraldogodoy",
-    commentOnFlower: "Beautiful flower",
-    totalPayment: 100,
-    delivered: false,
+    serviceId: "CCONF001L1",
+    flower: "Rose",
+    recipientName: "John Doe",
   };
 
   const handleCreateFlowerRequest = () => {

@@ -2,30 +2,18 @@ import { publicProcedure } from "../trpc";
 import { router } from "../trpc";
 import { z } from "zod";
 import { addFlowerDatabase } from "../../utils/db.ts";
-import { validateNode } from "../../utils/validators.ts";
-
 export const serviceRequestRouter = router({
   //Flower Request Service
   createFlowerRequest: publicProcedure
     .input(
       z.object({
         id: z.string().optional(),
-        nodeId: z.string(),
-        flowerName: z.string(),
-        requestDate: z.date().optional(),
-        loginName: z.string(),
-        commentOnFlower: z.string(),
-        totalPayment: z.number(),
-        delivered: z.boolean(),
+        serviceId: z.string(),
+        flower: z.string(),
+        recipientName: z.string(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const node = await validateNode(input.nodeId, ctx.db);
-      if (!node) {
-        throw new Error(
-          "Node does not exist. Please create a node with that Id first.",
-        );
-      }
       return await addFlowerDatabase(input, ctx.db);
     }),
   getFlowerRequest: publicProcedure
@@ -37,7 +25,7 @@ export const serviceRequestRouter = router({
     .query(async ({ input, ctx }) => {
       // get a flower request
 
-      return ctx.db.flowerRequest.findUnique({
+      return ctx.db.flower.findUnique({
         where: {
           id: input.id,
         },
@@ -45,7 +33,7 @@ export const serviceRequestRouter = router({
     }),
   getAllFlowerRequests: publicProcedure.query(async ({ ctx }) => {
     // get all flower requests
-    return ctx.db.flowerRequest.findMany();
+    return ctx.db.flower.findMany();
   }),
   deleteFlowerRequest: publicProcedure
     .input(
@@ -55,30 +43,12 @@ export const serviceRequestRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       // delete a flower request
-      await ctx.db.flowerRequest.delete({
+      await ctx.db.flower.delete({
         where: {
           id: input.id,
         },
       });
 
       return { message: "Flower request deleted" };
-    }),
-  deliver: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .mutation(async ({ input, ctx }) => {
-      const res = await ctx.db.flowerRequest.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          delivered: true,
-        },
-      });
-
-      console.log(res);
-
-      return {
-        message: "Flower request updated.",
-      };
     }),
 });

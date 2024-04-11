@@ -27,12 +27,9 @@ export default function FlowerRequest() {
 
     await toast.promise(
       flowerMutation.mutateAsync({
-        nodeId: flowerState.roomNumber,
-        commentOnFlower: flowerState.message,
-        totalPayment: 10,
-        delivered: false,
-        flowerName: flowerState.flowerChoice,
-        loginName: "placeholder",
+        serviceId: "CCONF001L1",
+        flower: flowerState.flowerChoice,
+        recipientName: "placeholder",
       }),
       {
         success: "Flower request submitted!",

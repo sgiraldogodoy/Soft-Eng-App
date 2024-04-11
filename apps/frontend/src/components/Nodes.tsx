@@ -32,11 +32,11 @@ export function Nodes({
 }: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null); //set hovered node
   const hoveredNodeString = nodes.find(
-    (node) => node.nodeId === hoveredNode,
+    (node) => node.id === hoveredNode,
   )?.longName;
   let filteredNodes = nodes.filter((node) => node.floor === floor);
   if (!filter)
-    filteredNodes = filteredNodes.filter((node) => node.nodeType !== "HALL");
+    filteredNodes = filteredNodes.filter((node) => node.type !== "HALL");
 
   return (
     <div>
@@ -47,7 +47,7 @@ export function Nodes({
           style={{
             position: "absolute",
             left: scaleCoordinate(
-              node.xcords,
+              node.x,
               imgWidth,
               origImageWidth,
               0,
@@ -55,7 +55,7 @@ export function Nodes({
               scale,
             ),
             top: scaleCoordinate(
-              node.ycords,
+              node.y,
               imgHeight,
               origImageHeight,
               0,
@@ -63,37 +63,37 @@ export function Nodes({
               scale,
             ),
             width:
-              node.nodeId === hoveredNode
+              node.id === hoveredNode
                 ? "10px"
-                : node.nodeId === goalNode
+                : node.id === goalNode
                   ? "10px"
-                  : node.nodeId === startNode
+                  : node.id === startNode
                     ? "10px"
                     : "7px",
             height:
-              node.nodeId === hoveredNode
+              node.id === hoveredNode
                 ? "10px"
-                : node.nodeId === goalNode
+                : node.id === goalNode
                   ? "10px"
-                  : node.nodeId === startNode
+                  : node.id === startNode
                     ? "10px"
                     : "7px",
             backgroundColor:
-              node.nodeId === hoveredNode
+              node.id === hoveredNode
                 ? "cyan"
-                : node.nodeId === goalNode
+                : node.id === goalNode
                   ? "red"
-                  : node.nodeId === startNode
+                  : node.id === startNode
                     ? "blue"
                     : "black",
             borderRadius: "50%",
             transform: `translate(-50%, -50%) scale(${scale})`,
             cursor: "pointer",
           }}
-          onMouseEnter={() => setHoveredNode(node.nodeId)}
+          onMouseEnter={() => setHoveredNode(node.id)}
           onMouseLeave={() => setHoveredNode(null)}
           onClick={() => {
-            if (onNodeClick) onNodeClick(node.nodeId);
+            if (onNodeClick) onNodeClick(node.id);
           }}
         />
       ))}

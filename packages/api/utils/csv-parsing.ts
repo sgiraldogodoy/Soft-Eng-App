@@ -94,37 +94,29 @@ export async function parseCSVNode(csv: string) {
       i++;
       continue;
     }
-    const [
-      nodeId,
-      xcordsString,
-      ycordsString,
-      floor,
-      building,
-      nodeType,
-      longName,
-      shortName,
-    ] = line.split(",");
-    const xcords = Number(xcordsString);
-    const ycords = Number(ycordsString);
+    const [id, xString, yString, floor, building, type, longName, shortName] =
+      line.split(",");
+    const x = Number(xString);
+    const y = Number(yString);
     if (
-      !nodeId ||
-      !xcords ||
-      !ycords ||
+      !id ||
+      !x ||
+      !y ||
       !floor ||
       !building ||
-      !nodeType ||
+      !type ||
       !longName ||
       !shortName
     ) {
       continue;
     }
     nodes.push({
-      nodeId,
-      xcords,
-      ycords,
+      id,
+      x,
+      y,
       building,
       floor,
-      nodeType,
+      type,
       longName,
       shortName,
     });
@@ -149,15 +141,13 @@ export async function parseCSVEdge(csv: string) {
     }
     const [, startNodeId, endNodeId] = line.split(",");
     try {
-      //await validateEdgeId(edgeId, prisma);
+      const id = `${startNodeId}_${endNodeId}`;
 
-      const edgeId = `${startNodeId}_${endNodeId}`;
-
-      edges.push({ edgeId, startNodeId, endNodeId });
+      edges.push({ id, startNodeId, endNodeId });
 
       const reverseId = `${endNodeId}_${startNodeId}`;
       edges.push({
-        edgeId: reverseId,
+        id: reverseId,
         startNodeId: endNodeId,
         endNodeId: startNodeId,
       });

@@ -44,10 +44,10 @@ export function PathFindRoomSelection({
   if (!Rooms) {
     return <p>No rooms found</p>;
   }
-  const filteredNodes = Rooms.filter((node) => node.nodeType !== "HALL");
+  const filteredNodes = Rooms.filter((node) => node.type !== "HALL");
   const frameworksUnSorted = filteredNodes.map((node) => ({
     label: node.longName.trim(),
-    value: node.nodeId,
+    value: node.id,
   }));
   const frameworks = frameworksUnSorted.sort((a, b) =>
     a.label.localeCompare(b.label),

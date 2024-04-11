@@ -195,7 +195,7 @@ export default function InputForm({ variant }: Props) {
                             >
                               {field.value
                                 ? nodesQuery.data?.find(
-                                    (node) => node.nodeId === field.value,
+                                    (node) => node.id === field.value,
                                   )?.longName
                                 : "Select location"}
                               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -212,17 +212,17 @@ export default function InputForm({ variant }: Props) {
                             <CommandGroup>
                               {nodesQuery.data?.map((location) => (
                                 <CommandItem
-                                  value={location.nodeId}
-                                  key={location.nodeId}
+                                  value={location.id}
+                                  key={location.id}
                                   onSelect={() => {
-                                    form.setValue("location", location.nodeId);
+                                    form.setValue("location", location.id);
                                   }}
                                 >
                                   {location.longName}
                                   <CheckIcon
                                     className={cn(
                                       "ml-auto h-4 w-4",
-                                      location.nodeId === field.value
+                                      location.id === field.value
                                         ? "opacity-100"
                                         : "opacity-0",
                                     )}
