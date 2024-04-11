@@ -1,8 +1,6 @@
 import { publicProcedure } from "../trpc";
 import { router } from "../trpc";
 import { z } from "zod";
-import { addFlowerDatabase } from "../../utils/db.ts";
-import { validateNode } from "../../utils/validators.ts";
 
 export const serviceRequestRouter = router({
   //Flower Request Service
@@ -20,13 +18,15 @@ export const serviceRequestRouter = router({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const node = await validateNode(input.nodeId, ctx.db);
-      if (!node) {
-        throw new Error(
-          "Node does not exist. Please create a node with that Id first.",
-        );
-      }
-      return await addFlowerDatabase(input, ctx.db);
+      // if (!node) {
+      //   throw new Error(
+      //     "Node does not exist. Please create a node with that Id first.",
+      //   );
+      // }
+      // return await addFlowerDatabase(input, ctx.db);
+      return ctx.db.flowerRequest.create({
+        data: input,
+      });
     }),
   getFlowerRequest: publicProcedure
     .input(
