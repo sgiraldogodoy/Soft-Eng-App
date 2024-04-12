@@ -39,6 +39,12 @@ export default function Map({
     setImageHeight(image.current!.getBoundingClientRect().height / scale);
   }, [image, scale]);
 
+  const nodeDown = useCallback(() => {
+    if (dragging) {
+      setDragging(false);
+    }
+  }, [dragging]);
+
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       // Handle resize for each entry because array yeah!
@@ -183,6 +189,7 @@ export default function Map({
         imgWidth={imgWidth}
         imgHeight={imgHeight}
         onNodeClick={onNodeClick}
+        onNodeDown={nodeDown}
         nodes={nodes}
         startNode={startNode}
         goalNode={goalNode}

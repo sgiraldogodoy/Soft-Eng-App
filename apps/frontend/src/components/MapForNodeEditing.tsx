@@ -33,6 +33,12 @@ export default function MapForNodeEditing({
     setImageHeight(image.current!.getBoundingClientRect().height / scale);
   }, [scale]);
 
+  const nodeDown = useCallback(() => {
+    if (dragging) {
+      setDragging(false);
+    }
+  }, [dragging]);
+
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       // Handle resize for each entry because array yeah!
@@ -177,6 +183,7 @@ export default function MapForNodeEditing({
         className={className}
       />
       <Nodes
+        onNodeDown={nodeDown}
         imgWidth={imgWidth}
         imgHeight={imgHeight}
         nodes={nodes}
