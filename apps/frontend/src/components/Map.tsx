@@ -39,11 +39,11 @@ export default function Map({
     setImageHeight(image.current!.getBoundingClientRect().height / scale);
   }, [image, scale]);
 
-  const resetManip = useCallback(() => {
-    setScale(1.2);
-    setOffset({ x: 0, y: 0 });
-    setStartDragOffset({ x: 0, y: 0 });
-  }, []);
+  const nodeDown = useCallback(() => {
+    if (dragging) {
+      setDragging(false);
+    }
+  }, [dragging]);
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
@@ -175,10 +175,7 @@ export default function Map({
         style={{
           transform: `scale(${scale}) translate(${offset.x}px, ${offset.y}px)`,
         }}
-        onLoad={() => {
-          handleResize();
-          resetManip();
-        }}
+        onLoad={handleResize}
         className={clsx("inset-0 w-full overflow-hidden", {
           "h-full": isAuthenticated,
           "max-h-screen overflow-auto": !isAuthenticated,
@@ -192,6 +189,7 @@ export default function Map({
         imgWidth={imgWidth}
         imgHeight={imgHeight}
         onNodeClick={onNodeClick}
+        onNodeDown={nodeDown}
         nodes={nodes}
         startNode={startNode}
         goalNode={goalNode}
