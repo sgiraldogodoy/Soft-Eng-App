@@ -45,7 +45,7 @@ export const av = z.object({
 
 const baseService = z.object({
   nodeId: z.string(),
-  priority: z.string(),
+  priority: z.enum(["LOW", "MEDIUM", "HIGH", "EMERGENCY"]),
   login: z.string(),
   status: z.string(),
   type: z.enum(["AV", "SECURITY", "ROOM", "GIFT", "FLOWER"]),

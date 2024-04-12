@@ -50,7 +50,7 @@ async function main() {
 
   // Parse edges CSV
   const edgeStream = readline.createInterface({
-    input: fs.createReadStream("prisma/modedges.csv"),
+    input: fs.createReadStream("prisma/edges.csv"),
     terminal: false,
   });
 
@@ -60,12 +60,9 @@ async function main() {
       i++;
       continue;
     }
-    const [startNodeId, endNodeId] = line.split(",");
-    const id = `${startNodeId}-${endNodeId}`;
-    edges.push({ id, startNodeId, endNodeId });
-    const reverseId = `${endNodeId}-${startNodeId}`;
+    const [, startNodeId, endNodeId] = line.split(",");
+    edges.push({ startNodeId, endNodeId });
     edges.push({
-      id: reverseId,
       startNodeId: endNodeId,
       endNodeId: startNodeId,
     });
@@ -78,8 +75,16 @@ async function main() {
     await prisma.flower.create({
       data: {
         flower: "Pretty Flower",
-        id: i.toString(),
-        serviceId: "CDEPT003L1",
+        service: {
+          create: {
+            nodeId: "ACONF00102",
+            type: "FLOWER",
+            login: "Ace",
+            priority: "High",
+            status: "Active",
+            note: "Note",
+          },
+        },
         recipientName: "Flower",
       },
     });

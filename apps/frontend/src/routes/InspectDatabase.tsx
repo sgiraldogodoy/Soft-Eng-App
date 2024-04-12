@@ -98,7 +98,7 @@ export function InspectDatabase() {
                   },
                   {
                     onSuccess() {
-                      utils.db.getAllNodes.invalidate();
+                      utils.node.getAll.invalidate();
                     },
                   },
                 ),

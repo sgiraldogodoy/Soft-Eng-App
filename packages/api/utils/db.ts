@@ -56,16 +56,6 @@ export async function addEdgeDatabase(
   edge: Prisma.EdgeCreateManyInput,
   prisma: PrismaClient,
 ) {
-  //check if the edge already exists
-  const edgeExists = await prisma.edge.findUnique({
-    where: {
-      id: edge.id,
-    },
-  });
-  if (edgeExists) {
-    console.log(`Edge with ID ${edge.id} already exists`);
-    throw new Error("Edge already exists");
-  }
   //add the edge to the database
   await prisma.edge.create({
     data: edge,

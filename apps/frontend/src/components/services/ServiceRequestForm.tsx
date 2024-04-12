@@ -110,7 +110,7 @@ interface Props {
 }
 
 export default function InputForm({ variant }: Props) {
-  const nodesQuery = trpc.db.getAllNodes.useQuery();
+  const nodesQuery = trpc.node.getAll.useQuery();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),

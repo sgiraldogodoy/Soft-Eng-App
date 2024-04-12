@@ -2,12 +2,7 @@ import { publicProcedure } from "../trpc";
 import { router } from "../trpc";
 import { z } from "zod";
 import { parseCSVEdge } from "../../utils/csv-parsing.ts";
-import {
-  addEdgeDatabase,
-  addNodeDatabase,
-  createEdges,
-  createNodes,
-} from "../../utils/db.ts";
+import { addEdgeDatabase, createEdges } from "../../utils/db.ts";
 import { exportEdgesToDb } from "../../utils/create-csv.ts";
 
 export const dbRouter = router({
@@ -33,71 +28,22 @@ export const dbRouter = router({
 
     return b64str;
   }),
-  getAllNodes: publicProcedure.query(async ({ ctx }) => {
-    // get all nodes
-    return ctx.db.node.findMany();
-  }),
   getAllEdges: publicProcedure.query(async ({ ctx }) => {
     // get all edges
     return ctx.db.edge.findMany();
   }),
-  getNode: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ input, ctx }) => {
-      // get a node
-      return ctx.db.node.findUnique({
-        where: {
-          id: input.id,
-        },
-      });
-    }),
   getEdge: publicProcedure
-    .input(z.object({ id: z.string() }))
+    .input(z.object({ startNodeId: z.string(), endNodeId: z.string() }))
     .query(async ({ input, ctx }) => {
       // get an edge
-      return ctx.db.edge.findUnique({
+      return await ctx.db.edge.findUnique({
         where: {
-          id: input.id,
+          edgeId: {
+            startNodeId: input.startNodeId,
+            endNodeId: input.endNodeId,
+          },
         },
       });
-    }),
-  createNode: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        x: z.number(),
-        y: z.number(),
-        building: z.string(),
-        floor: z.string(),
-        type: z.string(),
-        longName: z.string(),
-        shortName: z.string(),
-      }),
-    )
-    .mutation(async ({ input, ctx }) => {
-      // create a node
-      await addNodeDatabase(input, ctx.db);
-      return { message: "Node added" };
-    }),
-  createManyNodes: publicProcedure
-    .input(
-      z.array(
-        z.object({
-          id: z.string(),
-          x: z.number(),
-          y: z.number(),
-          building: z.string(),
-          floor: z.string(),
-          type: z.string(),
-          longName: z.string(),
-          shortName: z.string(),
-        }),
-      ),
-    )
-    .mutation(async ({ input, ctx }) => {
-      // create many nodes
-      await createNodes(input, ctx.db);
-      return { message: "Nodes added" };
     }),
   createEdge: publicProcedure
     .input(
@@ -108,13 +54,11 @@ export const dbRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       // create an edge
-      const edgeId = `${input.startNodeId}_${input.endNodeId}`;
-      const reverseEdgeId = `${input.endNodeId}_${input.startNodeId}`;
+
       await addEdgeDatabase(
         {
           startNodeId: input.startNodeId,
           endNodeId: input.endNodeId,
-          id: edgeId,
         },
         ctx.db,
       );
@@ -122,7 +66,6 @@ export const dbRouter = router({
         {
           startNodeId: input.endNodeId,
           endNodeId: input.startNodeId,
-          id: reverseEdgeId,
         },
         ctx.db,
       );
@@ -141,13 +84,10 @@ export const dbRouter = router({
     .mutation(async ({ input, ctx }) => {
       // create many edges
       for (const edge of input) {
-        const edgeId = `${edge.startNodeId}_${edge.endNodeId}`;
-        const reverseEdgeId = `${edge.endNodeId}_${edge.startNodeId}`;
         await addEdgeDatabase(
           {
             startNodeId: edge.startNodeId,
             endNodeId: edge.endNodeId,
-            id: edgeId,
           },
           ctx.db,
         );
@@ -155,7 +95,6 @@ export const dbRouter = router({
           {
             startNodeId: edge.endNodeId,
             endNodeId: edge.startNodeId,
-            id: reverseEdgeId,
           },
           ctx.db,
         );

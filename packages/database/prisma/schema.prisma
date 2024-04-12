@@ -23,32 +23,33 @@ model Node {
   shortName String
   outgoing  Edge[]    @relation(name: "NodeOutgoingEdge")
   incoming  Edge[]    @relation(name: "NodeIncomingEdge")
-  service   Service[] @relation(name: "ServiceRequest")
+  service   Service[] @relation(name: "ServiceToNode")
 }
 
 model Edge {
-  id          String @id
   startNodeId String
   endNodeId   String
   startNode   Node   @relation(name: "NodeOutgoingEdge", fields: [startNodeId], references: [id], onDelete: Cascade)
   endNode     Node   @relation(name: "NodeIncomingEdge", fields: [endNodeId], references: [id], onDelete: Cascade)
+
+  @@id(name: "edgeId", [startNodeId, endNodeId])
 }
 
 model Service {
   id       String      @id @default(uuid())
   nodeId   String
-  node     Node        @relation(name: "ServiceRequest", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  node     Node        @relation(name: "ServiceToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   priority String
   date     DateTime    @default(now())
   login    String
   status   String
   type     ServiceType
   note     String
-  flower   Flower?     @relation(name: "Flower")
-  gift     Gift?       @relation(name: "Gift")
-  room     Room?       @relation(name: "Room")
-  security Security?   @relation(name: "Security")
-  av       AV?         @relation(name: "AV")
+  flower   Flower?     @relation(name: "FlowerToService")
+  gift     Gift?       @relation(name: "GiftToService")
+  room     Room?       @relation(name: "RoomToService")
+  security Security?   @relation(name: "SecurityToService")
+  av       AV?         @relation(name: "AVToService")
 }
 
 enum ServiceType {
@@ -62,7 +63,7 @@ enum ServiceType {
 model Flower {
   id            String  @id @default(uuid())
   serviceId     String  @unique
-  service       Service @relation(name: "Flower", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  service       Service @relation(name: "FlowerToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   flower        String
   recipientName String
 }
@@ -70,7 +71,7 @@ model Flower {
 model Gift {
   id            String  @id @default(uuid())
   serviceId     String  @unique
-  service       Service @relation(name: "Gift", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  service       Service @relation(name: "GiftToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   type          String
   recipientName String
   wrapping      Boolean
@@ -80,7 +81,7 @@ model Gift {
 model Room {
   id        String   @id @default(uuid())
   serviceId String   @unique
-  service   Service  @relation(name: "Room", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  service   Service  @relation(name: "RoomToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   checkIn   DateTime
   checkOut  DateTime
 }
@@ -88,7 +89,7 @@ model Room {
 model Security {
   id        String   @id @default(uuid())
   serviceId String   @unique
-  service   Service  @relation(name: "Security", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  service   Service  @relation(name: "SecurityToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   dateTime  DateTime
   threat    String
 }
@@ -96,7 +97,7 @@ model Security {
 model AV {
   id        String   @id @default(uuid())
   serviceId String   @unique
-  service   Service  @relation(name: "AV", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  service   Service  @relation(name: "AVToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   dateTime  DateTime
   type      String
 }

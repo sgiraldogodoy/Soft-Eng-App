@@ -10,7 +10,7 @@ import {
 import { trpc } from "@/utils/trpc";
 
 export function NodesTable() {
-  const { data, isLoading, isError } = trpc.db.getAllNodes.useQuery();
+  const { data, isLoading, isError } = trpc.node.getAll.useQuery();
 
   if (isLoading) {
     return <p>Loading...</p>;
