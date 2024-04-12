@@ -7,6 +7,7 @@ const origImageHeight = 3400;
 
 interface NodesProps {
   onNodeClick?: (nodeID: string) => void;
+  onNodeDown?: () => void;
   nodes: Node[];
   imgWidth: number;
   imgHeight: number;
@@ -20,6 +21,7 @@ interface NodesProps {
 
 export function Nodes({
   onNodeClick,
+  onNodeDown,
   nodes,
   imgWidth,
   imgHeight,
@@ -98,6 +100,9 @@ export function Nodes({
           }}
           onMouseEnter={() => setHoveredNode(node.nodeId)}
           onMouseLeave={() => setHoveredNode(null)}
+          onMouseDown={() => {
+            if (onNodeDown) onNodeDown();
+          }}
           onClick={() => {
             if (onNodeClick) onNodeClick(node.nodeId);
           }}
