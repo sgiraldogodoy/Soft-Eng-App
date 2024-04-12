@@ -35,20 +35,28 @@ model Edge {
 }
 
 model Service {
-  id       String    @id @default(uuid())
+  id       String      @id @default(uuid())
   nodeId   String
-  node     Node      @relation(name: "ServiceRequest", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  node     Node        @relation(name: "ServiceRequest", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   priority String
-  date     DateTime  @default(now())
+  date     DateTime    @default(now())
   login    String
   status   String
-  type     String
+  type     ServiceType
   note     String
-  flower   Flower?   @relation(name: "Flower")
-  gift     Gift?     @relation(name: "Gift")
-  room     Room?     @relation(name: "Room")
-  security Security? @relation(name: "Security")
-  av       AV?       @relation(name: "AV")
+  flower   Flower?     @relation(name: "Flower")
+  gift     Gift?       @relation(name: "Gift")
+  room     Room?       @relation(name: "Room")
+  security Security?   @relation(name: "Security")
+  av       AV?         @relation(name: "AV")
+}
+
+enum ServiceType {
+  FLOWER
+  GIFT
+  ROOM
+  SECURITY
+  AV
 }
 
 model Flower {

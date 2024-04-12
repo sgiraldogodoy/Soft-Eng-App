@@ -10,12 +10,12 @@ import { toast } from "sonner";
 export function InspectDatabase() {
   const uploadButton = useRef<HTMLInputElement>(null);
 
-  const downloadNodes = trpc.db.csvExportNodes.useQuery();
+  const downloadNodes = trpc.node.csvExport.useQuery();
   const downloadEdges = trpc.db.csvExportEdges.useQuery();
 
   const utils = trpc.useUtils();
 
-  const nodeMutation = trpc.db.csvUploadNodes.useMutation();
+  const nodeMutation = trpc.node.csvUpload.useMutation();
   const edgeMutation = trpc.db.csvUploadEdges.useMutation();
 
   return (
