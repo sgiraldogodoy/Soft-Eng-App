@@ -107,14 +107,16 @@ export function Nodes({
         <div
           style={{
             position: "absolute",
-            top: 70,
+            top: 10,
             left: 10,
             backgroundColor: "white",
             padding: "5px",
             borderRadius: "5px",
           }}
         >
-          Hovered ID: {hoveredNodeString}
+          Node Name: {hoveredNodeString}
+          <br></br>
+          Node ID: {hoveredNode}
         </div>
       )}
     </div>

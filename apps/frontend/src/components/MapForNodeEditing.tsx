@@ -68,6 +68,13 @@ export default function MapForNodeEditing({
         onLoad={handleResize}
         className={className}
       />
+      <Edges
+        imgWidth={imgWidth}
+        imgHeight={imgHeight}
+        nodes={nodes}
+        edges={edges}
+        floor={floor}
+      />
       <Nodes
         imgWidth={imgWidth}
         imgHeight={imgHeight}
@@ -76,13 +83,6 @@ export default function MapForNodeEditing({
         filter={true}
         dragOffset={{ x: 0, y: 0 }}
         scale={1}
-      />
-      <Edges
-        imgWidth={imgWidth}
-        imgHeight={imgHeight}
-        nodes={nodes}
-        edges={edges}
-        floor={floor}
       />
     </div>
   );
