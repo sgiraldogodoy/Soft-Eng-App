@@ -140,14 +140,7 @@ export default function PathFind() {
           </div>
         )}
       </div>
-      <div className="absolute flex items-center gap-[35px] text-xl font-bold bottom-12 right-32">
-        <div className="flex flex-col gap-[15px]">
-          <h2>3</h2>
-          <h2>2</h2>
-          <h2>1</h2>
-          <h2>L1</h2>
-          <h2>L2</h2>
-        </div>
+      <div className="absolute flex items-center gap-[2px] text-xl font-bold bottom-10 right-8">
         <FloorSelection onFloorClick={handleFloorClick} />
       </div>
     </div>
