@@ -54,6 +54,7 @@ import { PopoverContent } from "../ui/popover";
 import { CheckIcon } from "lucide-react";
 import { useContext, useEffect } from "react";
 import { RequestsContext } from "@/routes/ServiceRequestPage";
+import { useAuth0 } from "@auth0/auth0-react";
 
 // Add your type-specific form schema to this array.
 const FormSchema = z.discriminatedUnion("type", [
@@ -118,6 +119,8 @@ export default function InputForm({ variant }: Props) {
   });
 
   const { requests, setRequests } = useContext(RequestsContext);
+  const session = useAuth0();
+  const createFlowerRequest = trpc.service.createFlowerRequest.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
@@ -127,7 +130,28 @@ export default function InputForm({ variant }: Props) {
     console.log("attempting");
     console.log(data);
 
-    setRequests([...requests, data]);
+    if (data.type === "flower-request") {
+      toast.promise(
+        createFlowerRequest.mutateAsync({
+          nodeId: data.location,
+          login: session.user?.email ?? "No login found.",
+          flower: data.flowerchoice,
+          note: data.notes ?? "",
+          recipientName: data.recipient,
+          priority: "Low",
+          status: "Unassigned",
+        }),
+        {
+          success: "Successfully saved to the database.",
+          loading: "Saving flower request to the database.",
+          error: "Error saving to database.",
+        },
+      );
+    }
+
+    const dataWithStatus = { ...data, status: "Unassigned" };
+
+    setRequests([...requests, dataWithStatus]);
 
     toast(
       <div>

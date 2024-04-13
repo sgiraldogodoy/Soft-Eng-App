@@ -8,22 +8,26 @@ interface Props {
   link: string;
   name: string;
   icon: LucideIcon;
+  color: string;
 }
 
-export function ButtonLink({ link, name, icon: Icon }: Props) {
+export function ButtonLink({ link, name, color, icon: Icon }: Props) {
   const [match] = useRoute(link);
 
   return (
     <Tooltip>
       <TooltipTrigger>
         <Button
-          className={clsx(match && "bg-slate-100 text-slate-900")}
+          className={clsx(
+            "bg-transparent hover:bg-[#BDBFC1]",
+            match && "text-slate-900 bg-[#BDBFC1]",
+          )}
           asChild
           variant="ghost"
           size="icon"
         >
           <Link to={link}>
-            <Icon size={28} />
+            <Icon size={28} color={color} />
           </Link>
         </Button>
       </TooltipTrigger>

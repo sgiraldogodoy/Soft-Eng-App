@@ -57,7 +57,7 @@ export default function PathfindSettings({
     label: node.longName.trim(),
     value: node.id,
   }));
-  const frameworks = unsortedNodes.sort((a, b) =>
+  const sortedNodes = unsortedNodes.sort((a, b) =>
     a.label.localeCompare(b.label),
   );
 
@@ -96,8 +96,7 @@ export default function PathfindSettings({
                 }}
               >
                 {value
-                  ? frameworks.find((framework) => framework.value === value)
-                      ?.label
+                  ? sortedNodes.find((node) => node.value === value)?.label
                   : "Select Location"}
               </div>
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -108,23 +107,23 @@ export default function PathfindSettings({
               <CommandInput placeholder="Select Location" />
               <CommandEmpty>No location found.</CommandEmpty>
               <CommandGroup>
-                {frameworks.map((framework) => (
+                {sortedNodes.map((node) => (
                   <CommandItem
-                    key={framework.value}
-                    value={framework.label}
+                    key={node.value}
+                    value={node.label}
                     onSelect={() => {
-                      setValue(framework.value);
+                      setValue(node.value);
                       setOpen(false);
-                      onStartNodeSelect(framework.value);
+                      onStartNodeSelect(node.value);
                     }}
                   >
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4 flex-shrink-0",
-                        value === framework.value ? "opacity-100" : "opacity-0",
+                        value === node.value ? "opacity-100" : "opacity-0",
                       )}
                     />
-                    {framework.label}
+                    {node.label}
                   </CommandItem>
                 ))}
               </CommandGroup>

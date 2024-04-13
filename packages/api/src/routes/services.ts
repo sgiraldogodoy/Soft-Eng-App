@@ -1,20 +1,22 @@
 import { publicProcedure } from "../trpc";
 import { router } from "../trpc";
 import { z } from "zod";
-import { addFlowerDatabase } from "../../utils/db.ts";
+import { baseService, flower } from "common";
+import { transformCreateServiceInput } from "../../utils/serviceInputTransformer.ts";
 export const serviceRequestRouter = router({
   //Flower Request Service
   createFlowerRequest: publicProcedure
     .input(
-      z.object({
-        id: z.string().optional(),
-        serviceId: z.string(),
-        flower: z.string(),
-        recipientName: z.string(),
-      }),
+      baseService
+        .merge(flower)
+        .extend({ type: z.literal("FLOWER").default("FLOWER") })
+        .transform(transformCreateServiceInput),
     )
     .mutation(async ({ input, ctx }) => {
-      return await addFlowerDatabase(input, ctx.db);
+      console.log(input);
+      return await ctx.db.flower.create({
+        data: input,
+      });
     }),
   getFlowerRequest: publicProcedure
     .input(
@@ -33,7 +35,11 @@ export const serviceRequestRouter = router({
     }),
   getAllFlowerRequests: publicProcedure.query(async ({ ctx }) => {
     // get all flower requests
-    return ctx.db.flower.findMany();
+    return ctx.db.flower.findMany({
+      include: {
+        service: true,
+      },
+    });
   }),
   deleteFlowerRequest: publicProcedure
     .input(

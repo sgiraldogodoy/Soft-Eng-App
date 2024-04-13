@@ -10,7 +10,7 @@ export const node = z.object({
   longName: z.string(),
   shortName: z.string(),
 });
-/*
+
 export const edge = z.object({
   startNodeId: z.string(),
   endNodeId: z.string(),
@@ -43,20 +43,19 @@ export const av = z.object({
   type: z.string(),
 });
 
-const baseService = z.object({
+export const baseService = z.object({
   nodeId: z.string(),
-  priority: z.enum(["LOW", "MEDIUM", "HIGH", "EMERGENCY"]),
+  priority: z.enum(["Low", "Medium", "High", "Emergency"]),
   login: z.string(),
   status: z.string(),
   type: z.enum(["AV", "SECURITY", "ROOM", "GIFT", "FLOWER"]),
   note: z.string(),
 });
 
-const service = z.discriminatedUnion("type", [
-  baseService.extend({ data: av }),
-  baseService.extend({ data: security }),
-  baseService.extend({ data: room }),
-  baseService.extend({ data: gift }),
-  baseService.extend({ data: flower }),
+export const service = z.discriminatedUnion("type", [
+  baseService.merge(av).extend({ type: z.literal("AV") }),
+  baseService.merge(security).extend({ type: z.literal("SECURITY") }),
+  baseService.merge(room).extend({ type: z.literal("ROOM") }),
+  baseService.merge(gift).extend({ type: z.literal("GIFT") }),
+  baseService.merge(flower).extend({ type: z.literal("FLOWER") }),
 ]);
-*/

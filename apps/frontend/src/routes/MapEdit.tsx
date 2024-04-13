@@ -32,11 +32,6 @@ export default function FloorTabs() {
               className="object-cover h-full"
               edges={edgeQuery.data}
             />
-            {/*<img*/}
-            {/*  src="/03_thethirdfloor.png"*/}
-            {/*  alt="Lower level 1 image"*/}
-            {/*  className="object-cover h-full"*/}
-            {/*/>*/}
           </div>
         </AccordionContent>
       </AccordionItem>
