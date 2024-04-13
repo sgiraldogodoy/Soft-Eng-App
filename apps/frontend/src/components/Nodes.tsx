@@ -4,6 +4,7 @@ import {
   scaleCoordinate,
   reverseScaleCoordinate,
 } from "../utils/scaleCoordinate.ts";
+import { trpc } from "@/utils/trpc.ts";
 
 const origImageWidth = 5000;
 const origImageHeight = 3400;
@@ -42,45 +43,69 @@ export function Nodes({
     null,
   );
 
+  const utils = trpc.useUtils();
+  const nodeUpdate = trpc.node.updateOne.useMutation();
+
   const handleDragStart = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (!editable) return; // check if on map edit
-    if (onNodeDown) onNodeDown(); //turn off map panning
+    if (onNodeDown) onNodeDown(); // turn off map panning
     const target = e.currentTarget;
     target.style.position = "absolute";
     const offsetX = e.clientX - parseFloat(target.style.left || "0");
     const offsetY = e.clientY - parseFloat(target.style.top || "0");
+    let newX = 0;
+    let newY = 0;
 
     const handleDrag = (e: MouseEvent) => {
       target.style.left = e.clientX - offsetX + "px";
       target.style.top = e.clientY - offsetY + "px";
-      console.log(
-        reverseScaleCoordinate(
-          e.clientX - offsetX,
-          imgWidth,
-          origImageWidth,
-          0,
-          dragOffset.x,
-          scale,
-        ),
-        reverseScaleCoordinate(
-          e.clientY - offsetY,
-          imgHeight,
-          origImageHeight,
-          0,
-          dragOffset.y,
-          scale,
-        ),
+      newX = reverseScaleCoordinate(
+        e.clientX - offsetX,
+        imgWidth,
+        origImageWidth,
+        0,
+        dragOffset.x,
+        scale,
       );
-      console.log(e.clientX - offsetX, e.clientY - offsetY);
+      newY = reverseScaleCoordinate(
+        e.clientY - offsetY,
+        imgHeight,
+        origImageHeight,
+        0,
+        dragOffset.y,
+        scale,
+      );
+      handleDragMove(newX, newY);
     };
 
     const handleDragEnd = () => {
       document.removeEventListener("mousemove", handleDrag);
       document.removeEventListener("mouseup", handleDragEnd);
+      handleDragFinish(newX, newY);
     };
 
     document.addEventListener("mousemove", handleDrag);
     document.addEventListener("mouseup", handleDragEnd);
+  };
+
+  const handleDragMove = (newX: number, newY: number) => {
+    utils.node.getAll.setData(undefined, (oldData) => {
+      if (oldData) {
+        return oldData.map((node) => {
+          if (node.id === hoveredNode) return { ...node, x: newX, y: newY };
+          return node;
+        });
+      } else return [];
+    });
+  };
+
+  const handleDragFinish = (newX: number, newY: number) => {
+    if (!hoveredNode) return;
+    // console.log(newX, newY);
+    nodeUpdate.mutate({
+      id: hoveredNode,
+      data: { x: Math.floor(newX), y: Math.floor(newY) },
+    });
   };
 
   let filteredNodes = nodes.filter((node) => node.floor === floor);
