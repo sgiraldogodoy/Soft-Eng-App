@@ -24,4 +24,21 @@ const scaleCoordinate = (
   );
 };
 
-export { scaleCoordinate };
+const reverseScaleCoordinate = (
+  reversecoordinate: number,
+  curSize: number,
+  origSize: number,
+  offset: number,
+  dragOffset: number,
+  scale: number,
+) => {
+  return (
+    (((reversecoordinate + (curSize * scale) / 2 - curSize / 2 - offset) /
+      scale) *
+      origSize) /
+      curSize -
+    dragOffset
+  );
+};
+
+export { scaleCoordinate, reverseScaleCoordinate };
