@@ -184,7 +184,7 @@ export default function Map({
           "max-h-screen overflow-auto": !isAuthenticated,
         })}
       />
-      <div className="absolute text-black font-bold text-2xl bottom-[20px] right-[20px]">
+      <div className="absolute text-black font-bold text-2xl bottom-[20px] right-20">
         <p> Level {floor}</p>
       </div>
 
