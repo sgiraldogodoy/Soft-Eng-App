@@ -4,8 +4,8 @@ import { z } from "zod";
 
 export const transformCreateServiceInput = <T extends z.infer<typeof service>>(
   i: T,
-) => {
-  const { nodeId, priority, status, note, login, type, ...rest } = i;
+): T["data"] & { service: { create: Prisma.ServiceCreateInput } } => {
+  const { nodeId, priority, status, note, type, login, data } = i;
 
   return {
     service: {
@@ -22,6 +22,6 @@ export const transformCreateServiceInput = <T extends z.infer<typeof service>>(
         login,
       },
     },
-    ...rest,
-  } satisfies { service: { create: Prisma.ServiceCreateInput } };
+    ...data,
+  };
 };
