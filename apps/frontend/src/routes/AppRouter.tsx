@@ -15,6 +15,7 @@ export function AppRouter() {
         <Route path="/" component={HomePage} />
         <DashboardLayout>
           <Route path="/pathfind">
+            {!isAuthenticated && <Redirect to="/" />}
             <PathFind />
           </Route>
           <Route path="/database">
@@ -22,11 +23,13 @@ export function AppRouter() {
             {!isAuthenticated && <Redirect to="/" />}
           </Route>
           <Route path="/services">
+            {!isAuthenticated && <Redirect to="/" />}
             <div className="w-full h-full flex items-center justify-center">
               <ServiceRequestPage />
             </div>
           </Route>
           <Route path="/mapediting">
+            {!isAuthenticated && <Redirect to="/" />}
             <FloorTabs />
           </Route>
         </DashboardLayout>
