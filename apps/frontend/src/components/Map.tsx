@@ -47,13 +47,13 @@ export default function Map({
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
-      // Handle resize for each entry because array yeah!
       entries.forEach((entry) => {
         if (entry.target === image.current) {
           handleResize(); // Call handleResize for the image element
         }
       });
     });
+    window.addEventListener("resize", handleResize);
 
     if (image.current) {
       resizeObserver.observe(image.current);
@@ -143,14 +143,15 @@ export default function Map({
       document.removeEventListener("mouseup", handleMouseUp);
     };
   }, [
-    handleResize,
     dragging,
-    startDragOffset,
+    handleResize,
+    imgHeight,
+    imgWidth,
     offset.x,
     offset.y,
-    imgWidth,
     scale,
-    imgHeight,
+    startDragOffset.x,
+    startDragOffset.y,
   ]);
 
   if (!nodes) {

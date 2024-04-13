@@ -115,38 +115,9 @@ export default function FloorTabs() {
               className="object-cover h-full"
               edges={edgeQuery.data}
             />
-            {/*<img*/}
-            {/*  src="/00_thelowerlevel2.png"*/}
-            {/*  alt="Lower level 1 Image"*/}
-            {/*  className="object-cover h-full"*/}
-            {/*/>*/}
           </div>
         </AccordionContent>
       </AccordionItem>
     </Mapaccordion>
   );
 }
-
-// <ul className="bg-gray-800 text-white flex">
-//     {[1, 2, 3, 4, 5].map((floor) => (
-//         <li key={floor} className="p-4 cursor-pointer" onClick={() => handleTabClick(floor)}>
-//             Floor {floor}
-//         </li>
-//     ))}
-// </ul>
-// <div className="flex-grow overflow-y-auto">
-//     {[1, 2, 3, 4, 5].map((floor) => (
-//         <div
-//             key={floor}
-//             className={`p-4 ${selectedFloor === floor ? 'block' : 'hidden'}`}
-//         >
-//             <h2>Floor {floor}</h2>
-//             <p>This is the content for Floor {floor}.</p>
-//         </div>
-//     ))}
-// </div>
-// const [selectedFloor, setSelectedFloor] = useState<number | null>(null);
-//
-// const handleTabClick = (floor: number) => {
-//     setSelectedFloor(floor);
-// };

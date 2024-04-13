@@ -12,7 +12,7 @@ interface MapProps {
 }
 
 export default function MapForNodeEditing({
-  nodes, // Access nodes directly from props
+  nodes,
   imgURL,
   floor,
   className,
@@ -21,7 +21,6 @@ export default function MapForNodeEditing({
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height
   const image = useRef<HTMLImageElement>(null);
-
   const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
@@ -41,7 +40,6 @@ export default function MapForNodeEditing({
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
-      // Handle resize for each entry because array yeah!
       entries.forEach((entry) => {
         if (entry.target === image.current) {
           handleResize(); // Call handleResize for the image element
@@ -150,19 +148,21 @@ export default function MapForNodeEditing({
     startDragOffset.y,
   ]);
 
-  // useEffect(() => {
-  //   window.addEventListener("resize", handleResize);
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, [handleResize]);
-
   if (!nodes || !edges) {
     return <p>No nodes found</p>;
   }
 
   return (
-    <div className="relative">
+    <div
+      className="relative h-full"
+      ref={containerRef}
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        cursor: dragging ? "grabbing" : "grab",
+        userSelect: "none",
+      }}
+    >
       <img
         ref={image}
         src={imgURL}
@@ -191,6 +191,7 @@ export default function MapForNodeEditing({
         filter={true}
         dragOffset={offset}
         scale={scale}
+        editable={true}
       />
     </div>
   );
