@@ -34,11 +34,11 @@ export function Nodes({
 }: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null); //set hovered node
   const hoveredNodeString = nodes.find(
-    (node) => node.nodeId === hoveredNode,
+    (node) => node.id === hoveredNode,
   )?.longName;
   let filteredNodes = nodes.filter((node) => node.floor === floor);
   if (!filter)
-    filteredNodes = filteredNodes.filter((node) => node.nodeType !== "HALL");
+    filteredNodes = filteredNodes.filter((node) => node.type !== "HALL");
 
   return (
     <div>
@@ -49,7 +49,7 @@ export function Nodes({
           style={{
             position: "absolute",
             left: scaleCoordinate(
-              node.xcords,
+              node.x,
               imgWidth,
               origImageWidth,
               0,
@@ -57,7 +57,7 @@ export function Nodes({
               scale,
             ),
             top: scaleCoordinate(
-              node.ycords,
+              node.y,
               imgHeight,
               origImageHeight,
               0,
@@ -65,46 +65,46 @@ export function Nodes({
               scale,
             ),
             width:
-              node.nodeId === hoveredNode
+              node.id === hoveredNode
                 ? "8px"
-                : node.nodeId === goalNode
+                : node.id === goalNode
                   ? "8px"
-                  : node.nodeId === startNode
+                  : node.id === startNode
                     ? "8px"
                     : "5px",
             height:
-              node.nodeId === hoveredNode
+              node.id === hoveredNode
                 ? "8px"
-                : node.nodeId === goalNode
+                : node.id === goalNode
                   ? "8px"
-                  : node.nodeId === startNode
+                  : node.id === startNode
                     ? "8px"
                     : "5px",
             backgroundColor:
-              node.nodeId === goalNode
+              node.id === goalNode
                 ? "red"
-                : node.nodeId === startNode
+                : node.id === startNode
                   ? "#003A96"
                   : "white",
             boxShadow:
-              node.nodeId === hoveredNode
+              node.id === hoveredNode
                 ? "0 0 0 2px cyan" // Ring effect with cyan color when hovered
-                : node.nodeId === goalNode
+                : node.id === goalNode
                   ? "0 0 0 2px red" // red when goal node
-                  : node.nodeId === startNode
+                  : node.id === startNode
                     ? "0 0 0 2px #003A96" // blue when start
                     : "0 0 0 2px black", // Default black ring
             borderRadius: "100%",
             transform: `translate(-50%, -50%) scale(${scale})`,
             cursor: "pointer",
           }}
-          onMouseEnter={() => setHoveredNode(node.nodeId)}
+          onMouseEnter={() => setHoveredNode(node.id)}
           onMouseLeave={() => setHoveredNode(null)}
           onMouseDown={() => {
             if (onNodeDown) onNodeDown();
           }}
           onClick={() => {
-            if (onNodeClick) onNodeClick(node.nodeId);
+            if (onNodeClick) onNodeClick(node.id);
           }}
         />
       ))}

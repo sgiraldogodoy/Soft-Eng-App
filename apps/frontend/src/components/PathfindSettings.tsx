@@ -52,10 +52,10 @@ export default function PathfindSettings({
   if (!Rooms) {
     return <p>No rooms found</p>;
   }
-  const filteredNodes = Rooms.filter((node) => node.nodeType !== "HALL");
+  const filteredNodes = Rooms.filter((node) => node.type !== "HALL");
   const unsortedNodes = filteredNodes.map((node) => ({
     label: node.longName.trim(),
-    value: node.nodeId,
+    value: node.id,
   }));
   const sortedNodes = unsortedNodes.sort((a, b) =>
     a.label.localeCompare(b.label),

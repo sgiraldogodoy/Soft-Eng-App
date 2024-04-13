@@ -41,7 +41,7 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
   const serviceDeleteMutation = trpc.service.deleteFlowerRequest.useMutation();
   // const serviceDeliverMutation = trpc.service.deliver.useMutation();
 
-  const updateStatus = trpc.service.updateStatus.useMutation();
+  // const updateStatus = trpc.service.updateStatus.useMutation();
 
   const dbRequests:
     | {
@@ -55,12 +55,12 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
       }[]
     | undefined = servicesQuery.data?.map((d) => {
     return {
-      recipient: d.recipient,
-      location: d.nodeId ?? "",
-      priority: d.priority as "Low" | "Medium" | "High" | "Emergency",
-      notes: d.commentOnFlower,
+      recipient: d.recipientName,
+      location: d.service.nodeId ?? "",
+      priority: d.service.priority as "Low" | "Medium" | "High" | "Emergency",
+      notes: d.service.note,
       type: "flower-request",
-      status: d.status,
+      status: d.service.status,
       id: d.id,
     };
   });
@@ -106,7 +106,7 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
           <CardHeader>
             <CardTitle>Details</CardTitle>
             <CardDescription>
-              {selectedRow.flowerName} requested by {selectedRow.loginName}
+              {selectedRow.flower} requested by {selectedRow.service.login}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -114,7 +114,7 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
               <Label htmlFor="message-2" className="font-bold">
                 Request Notes
               </Label>
-              <p>{selectedRow.commentOnFlower}</p>
+              <p>{selectedRow.service.note}</p>
             </div>
           </CardContent>
           <CardFooter>
@@ -169,27 +169,28 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
                 Mark as Delivered
               </Button>*/}
               <Select
-                value={selectedRow.status}
-                onValueChange={(newVal) => {
+                value={selectedRow.service.status}
+                onValueChange={() => {
+                  return true;
                   // mutate change
-                  toast.promise(
-                    updateStatus.mutateAsync(
-                      {
-                        id: selectedRow.id,
-                        newStatus: newVal,
-                      },
-                      {
-                        onSuccess() {
-                          utils.service.getAllFlowerRequests.invalidate();
-                        },
-                      },
-                    ),
-                    {
-                      success: "Changed status to " + newVal,
-                      loading: "Updating status...",
-                      error: "Error updating status.",
-                    },
-                  );
+                  // toast.promise(
+                  //   updateStatus.mutateAsync(
+                  //     {
+                  //       id: selectedRow.id,
+                  //       newStatus: newVal,
+                  //     },
+                  //     {
+                  //       onSuccess() {
+                  //         utils.service.getAllFlowerRequests.invalidate();
+                  //       },
+                  //     },
+                  //   ),
+                  //   {
+                  //     success: "Changed status to " + newVal,
+                  //     loading: "Updating status...",
+                  //     error: "Error updating status.",
+                  //   },
+                  // );
                 }}
               >
                 <SelectTrigger className="w-full">

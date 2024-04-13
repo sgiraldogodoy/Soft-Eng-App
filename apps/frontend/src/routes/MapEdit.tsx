@@ -8,7 +8,7 @@ import { trpc } from "@/utils/trpc.ts";
 import MapForNodeEditing from "@/components/MapForNodeEditing.tsx";
 
 export default function FloorTabs() {
-  const nodesQuery = trpc.db.getAllNodes.useQuery();
+  const nodesQuery = trpc.node.getAll.useQuery();
   const edgeQuery = trpc.db.getAllEdges.useQuery();
 
   return (

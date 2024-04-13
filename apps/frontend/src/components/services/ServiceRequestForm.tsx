@@ -111,7 +111,7 @@ interface Props {
 }
 
 export default function InputForm({ variant }: Props) {
-  const nodesQuery = trpc.db.getAllNodes.useQuery();
+  const nodesQuery = trpc.node.getAll.useQuery();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -134,13 +134,12 @@ export default function InputForm({ variant }: Props) {
       toast.promise(
         createFlowerRequest.mutateAsync({
           nodeId: data.location,
-          delivered: false,
-          loginName: session.user?.email ?? "No login found.",
-          flowerName: data.flowerchoice,
-          totalPayment: 0,
-          commentOnFlower: data.notes ?? "",
-          recipient: data.recipient,
-          priority: data.priority,
+          login: session.user?.email ?? "No login found.",
+          flower: data.flowerchoice,
+          note: data.notes ?? "",
+          recipientName: data.recipient,
+          priority: "Low",
+          status: "Unassigned",
         }),
         {
           success: "Successfully saved to the database.",
@@ -220,7 +219,7 @@ export default function InputForm({ variant }: Props) {
                             >
                               {field.value
                                 ? nodesQuery.data?.find(
-                                    (node) => node.nodeId === field.value,
+                                    (node) => node.id === field.value,
                                   )?.longName
                                 : "Select location"}
                               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -237,17 +236,17 @@ export default function InputForm({ variant }: Props) {
                             <CommandGroup>
                               {nodesQuery.data?.map((location) => (
                                 <CommandItem
-                                  value={location.nodeId}
-                                  key={location.nodeId}
+                                  value={location.id}
+                                  key={location.id}
                                   onSelect={() => {
-                                    form.setValue("location", location.nodeId);
+                                    form.setValue("location", location.id);
                                   }}
                                 >
                                   {location.longName}
                                   <CheckIcon
                                     className={cn(
                                       "ml-auto h-4 w-4",
-                                      location.nodeId === field.value
+                                      location.id === field.value
                                         ? "opacity-100"
                                         : "opacity-0",
                                     )}

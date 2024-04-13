@@ -26,7 +26,7 @@ export function Edges({
 }: LineProps) {
   if (!edges || edges.length < 2) return null; // At least two for path
   const filteredNode = nodes.filter((node) => node.floor === floor);
-  const filteredNodeNodeId = filteredNode.map((node) => node.nodeId);
+  const filteredNodeNodeId = filteredNode.map((node) => node.id);
   const filteredEdges = edges.filter(
     (edge) =>
       filteredNodeNodeId.includes(edge.startNodeId) &&
@@ -37,18 +37,16 @@ export function Edges({
   const path = filteredEdges
     .map((edge) => {
       const startNode = filteredNode.find(
-        (node) => node.nodeId === edge.startNodeId,
+        (node) => node.id === edge.startNodeId,
       );
-      const endNode = filteredNode.find(
-        (node) => node.nodeId === edge.endNodeId,
-      );
+      const endNode = filteredNode.find((node) => node.id === edge.endNodeId);
 
       if (!startNode || !endNode) {
         return "";
       }
       // Construct the path string directly from edge coordinates
-      return `M${scaleCoordinate(startNode.xcords, imgWidth, origImageWidth, 0, dragOffset.x, scale)},${scaleCoordinate(startNode.ycords, imgHeight, origImageHeight, 0, dragOffset.y, scale)} 
-        L${scaleCoordinate(endNode.xcords, imgWidth, origImageWidth, 0, dragOffset.x, scale)},${scaleCoordinate(endNode.ycords, imgHeight, origImageHeight, 0, dragOffset.y, scale)}`;
+      return `M${scaleCoordinate(startNode.x, imgWidth, origImageWidth, 0, dragOffset.x, scale)},${scaleCoordinate(startNode.y, imgHeight, origImageHeight, 0, dragOffset.y, scale)} 
+        L${scaleCoordinate(endNode.x, imgWidth, origImageWidth, 0, dragOffset.x, scale)},${scaleCoordinate(endNode.y, imgHeight, origImageHeight, 0, dragOffset.y, scale)}`;
     })
     .join(" ");
 

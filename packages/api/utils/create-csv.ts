@@ -9,7 +9,7 @@ export async function exportNodesToDb(db: PrismaClient): Promise<string> {
   output += "nodeId,xcords,ycords,building,nodeType,longName,shortName\n";
 
   data.forEach((d) => {
-    output += `${d.nodeId},${d.xcords},${d.ycords},${d.floor},${d.building},${d.nodeType},${d.longName},${d.shortName}\n`;
+    output += `${d.id},${d.x},${d.y},${d.floor},${d.building},${d.type},${d.longName},${d.shortName}\n`;
   });
 
   return output;

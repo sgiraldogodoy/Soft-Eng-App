@@ -35,7 +35,7 @@ export class breadthFirstSearch implements PathFinding {
       (acc, node) => {
         return {
           ...acc,
-          [node.nodeId]: node,
+          [node.id]: node,
         };
       },
       {},
@@ -49,15 +49,15 @@ export class breadthFirstSearch implements PathFinding {
     queue.push({ currNode: startNode, path: [startNode] });
     while (queue.length > 0) {
       const { currNode, path } = queue.shift()!;
-      if (currNode.nodeId == goalNode.nodeId) {
+      if (currNode.id == goalNode.id) {
         return path;
       }
 
       for (const outgoingEdge of currNode.outgoing) {
-        const neighbor = nodeRecord[outgoingEdge.endNode.nodeId];
+        const neighbor = nodeRecord[outgoingEdge.endNode.id];
 
-        if (!visited.includes(neighbor.nodeId)) {
-          visited.push(neighbor.nodeId);
+        if (!visited.includes(neighbor.id)) {
+          visited.push(neighbor.id);
           queue.push({ currNode: neighbor, path: [...path, neighbor] });
         }
       }
@@ -94,7 +94,7 @@ export class aStar implements PathFinding {
       (acc, node) => {
         return {
           ...acc,
-          [node.nodeId]: node,
+          [node.id]: node,
         };
       },
       {},
@@ -109,20 +109,20 @@ export class aStar implements PathFinding {
       cost: 0,
       priority: 0,
     });
-    visited.push(startNode.nodeId);
+    visited.push(startNode.id);
     while (!priorityQueue.isEmpty()) {
       const currNode = priorityQueue.deq(); //grab highest priority (lowest Dist)
       const path = currNode.path;
       const cost = currNode.cost;
-      if (currNode.nodeId === goalNode.nodeId) {
+      if (currNode.id === goalNode.id) {
         //console.log(cost);
         return path;
       }
 
       for (const outgoingEdge of currNode.outgoing) {
-        const neighbor = nodeRecord[outgoingEdge.endNode.nodeId];
-        if (!visited.includes(neighbor.nodeId)) {
-          visited.push(neighbor.nodeId);
+        const neighbor = nodeRecord[outgoingEdge.endNode.id];
+        if (!visited.includes(neighbor.id)) {
+          visited.push(neighbor.id);
           const pyth = this.pythDist(currNode, neighbor);
           const newPriority =
             cost +
@@ -152,15 +152,14 @@ export class aStar implements PathFinding {
    */
   private pythDist(currNode: Node, goal: Node): number {
     return Math.sqrt(
-      Math.pow(currNode.xcords - goal.xcords, 2) +
-        Math.pow(currNode.ycords - goal.ycords, 2),
+      Math.pow(currNode.x - goal.x, 2) + Math.pow(currNode.y - goal.y, 2),
     );
   }
 
   private floorChange(currNode: Node, neighbor: Node): number {
-    if (neighbor.nodeType === "ELEV" && currNode.floor !== neighbor.floor)
+    if (neighbor.type === "ELEV" && currNode.floor !== neighbor.floor)
       return 3000;
-    else if (neighbor.nodeType === "STAI" && currNode.floor !== neighbor.floor)
+    else if (neighbor.type === "STAI" && currNode.floor !== neighbor.floor)
       return 6000;
     else return 0;
   }
@@ -191,10 +190,7 @@ export class aStar implements PathFinding {
    * @param goal end node
    */
   private manHatt(currNode: Node, goal: Node): number {
-    return (
-      Math.abs(currNode.xcords - goal.xcords) +
-      Math.abs(currNode.ycords - goal.ycords)
-    );
+    return Math.abs(currNode.x - goal.x) + Math.abs(currNode.y - goal.y);
   }
 }
 
@@ -225,7 +221,7 @@ export class depthFirstSearch implements PathFinding {
       (acc, node) => {
         return {
           ...acc,
-          [node.nodeId]: node,
+          [node.id]: node,
         };
       },
       {},
@@ -239,15 +235,15 @@ export class depthFirstSearch implements PathFinding {
     queue.push({ currNode: startNode, path: [startNode] });
     while (queue.length > 0) {
       const { currNode, path } = queue.pop()!;
-      if (currNode.nodeId == goalNode.nodeId) {
+      if (currNode.id == goalNode.id) {
         return path;
       }
 
       for (const outgoingEdge of currNode.outgoing) {
-        const neighbor = nodeRecord[outgoingEdge.endNode.nodeId];
+        const neighbor = nodeRecord[outgoingEdge.endNode.id];
 
-        if (!visited.includes(neighbor.nodeId)) {
-          visited.push(neighbor.nodeId);
+        if (!visited.includes(neighbor.id)) {
+          visited.push(neighbor.id);
           queue.push({ currNode: neighbor, path: [...path, neighbor] });
         }
       }
