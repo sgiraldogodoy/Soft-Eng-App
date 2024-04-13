@@ -1,123 +1,42 @@
-import {
-  Mapaccordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/mapaccordion.tsx";
 import { trpc } from "@/utils/trpc.ts";
-import MapForNodeEditing from "@/components/MapForNodeEditing.tsx";
+import Map from "@/components/Map.tsx";
+import FloorSelection from "@/components/FloorSelection.tsx";
+import { useCallback, useState } from "react";
 
 export default function FloorTabs() {
+  const [imgUrl, setImgUrl] = useState("/02_thesecondfloor.png");
+  const [floor, setFloor] = useState("2");
+
+  const handleFloorClick = useCallback(
+    (clickedFloor: string, clickedForURL: string) => {
+      setImgUrl(clickedForURL);
+      setFloor(clickedFloor);
+    },
+    [setImgUrl, setFloor],
+  );
   const nodesQuery = trpc.db.getAllNodes.useQuery();
   const edgeQuery = trpc.db.getAllEdges.useQuery();
 
   return (
-    <Mapaccordion
-      type="single"
-      collapsible
-      className="w-full flex flex-col h-full"
-      defaultValue="firstfloor"
-    >
-      <AccordionItem
-        value="thirdfloor"
-        className="[&[data-state=open]]:h-full flex flex-col"
-      >
-        <AccordionTrigger>Third Floor</AccordionTrigger>
-        <AccordionContent className="relative h-full">
-          <div className="absolute top-0 bottom-0 w-full flex justify-center">
-            <MapForNodeEditing
-              nodes={nodesQuery.data} // Pass node data as a prop
-              imgURL="/03_thethirdfloor.png"
-              floor="3"
-              className="object-cover h-full"
-              edges={edgeQuery.data}
-            />
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem
-        value="secondfloor"
-        className="[&[data-state=open]]:h-full flex flex-col"
-      >
-        <AccordionTrigger>Second Floor</AccordionTrigger>
-        <AccordionContent className="relative h-full">
-          <div className="absolute top-0 bottom-0 w-full flex justify-center">
-            <MapForNodeEditing
-              nodes={nodesQuery.data} // Pass node data as a prop
-              imgURL="/02_thesecondfloor.png"
-              floor="2"
-              className="object-cover h-full"
-              edges={edgeQuery.data}
-            />
-            {/*<img*/}
-            {/*  src="/02_thesecondfloor.png"*/}
-            {/*  alt="Lower level 1 image"*/}
-            {/*  className="object-cover h-full"*/}
-            {/*/>*/}
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem
-        value="firstfloor"
-        className="[&[data-state=open]]:h-full flex flex-col"
-      >
-        <AccordionTrigger>First Floor</AccordionTrigger>
-        <AccordionContent className="relative h-full">
-          <div className="absolute top-0 bottom-0 w-full flex justify-center">
-            <MapForNodeEditing
-              nodes={nodesQuery.data} // Pass node data as a prop
-              imgURL="/01_thefirstfloor.png"
-              floor="1"
-              className="object-cover h-full"
-              edges={edgeQuery.data}
-            />
-            {/*<img*/}
-            {/*  src="/01_thefirstfloor.png"*/}
-            {/*  alt="Lower level 1 image"*/}
-            {/*  className="object-cover h-full"*/}
-            {/*/>*/}
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem
-        value="lowerlevelone"
-        className="[&[data-state=open]]:h-full flex flex-col"
-      >
-        <AccordionTrigger>Lower Level One</AccordionTrigger>
-        <AccordionContent className="relative h-full">
-          <div className="absolute top-0 bottom-0 w-full flex justify-center">
-            <MapForNodeEditing
-              nodes={nodesQuery.data} // Pass node data as a prop
-              imgURL="/00_thelowerlevel1.png"
-              floor="L1"
-              className="object-cover h-full"
-              edges={edgeQuery.data}
-            />
-            {/*<img*/}
-            {/*  src="/00_thelowerlevel1.png"*/}
-            {/*  alt="Lower level 1 Image"*/}
-            {/*  className="object-cover h-full"*/}
-            {/*/>*/}
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem
-        value="lowerleveltwo"
-        className="[&[data-state=open]]:h-full flex flex-col"
-      >
-        <AccordionTrigger>Lower Level Two</AccordionTrigger>
-        <AccordionContent className="relative h-full">
-          <div className="absolute top-0 bottom-0 w-full flex justify-center">
-            <MapForNodeEditing
-              nodes={nodesQuery.data} // Pass node data as a prop
-              imgURL="/00_thelowerlevel2.png"
-              floor="L2"
-              className="object-cover h-full"
-              edges={edgeQuery.data}
-            />
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-    </Mapaccordion>
+    <div className="relative h-full">
+      <Map
+        nodes={nodesQuery.data} // Pass node data as a prop
+        imgURL={imgUrl}
+        floor={floor}
+        filter={true}
+        editable={true}
+        edges={edgeQuery.data}
+      />
+      <div className="absolute flex items-center gap-[35px] text-xl font-bold bottom-12 right-32">
+        <div className="flex flex-col gap-[15px]">
+          <h2>3</h2>
+          <h2>2</h2>
+          <h2>1</h2>
+          <h2>L1</h2>
+          <h2>L2</h2>
+        </div>
+        <FloorSelection onFloorClick={handleFloorClick} />
+      </div>
+    </div>
   );
 }

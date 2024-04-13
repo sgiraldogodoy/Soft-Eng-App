@@ -1,18 +1,22 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Nodes } from "./Nodes.tsx";
-import { Node } from "database";
+import { Node, Edge } from "database";
 import { Lines } from "./Lines.tsx";
+import { Edges } from "../components/Edges.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import clsx from "clsx";
 
 interface MapProps {
   onNodeClick?: (clickedNode: string) => void;
   nodes: Node[] | undefined; // Change prop type
-  path: Node[] | undefined;
+  path?: Node[] | undefined;
+  edges?: Edge[] | undefined;
   startNode?: string;
   goalNode?: string;
   imgURL: string;
   floor: string;
+  editable?: boolean;
+  filter?: boolean;
 }
 
 export default function Map({
@@ -23,6 +27,9 @@ export default function Map({
   goalNode,
   imgURL,
   floor,
+  edges,
+  editable,
+  filter,
 }: MapProps) {
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height
@@ -137,6 +144,7 @@ export default function Map({
 
     return () => {
       resizeObserver.disconnect();
+      window.removeEventListener("resize", handleResize);
       container?.removeEventListener("wheel", handleWheel);
       container?.removeEventListener("mousedown", handleMouseDown);
       document.removeEventListener("mousemove", handleMouseMove);
@@ -185,7 +193,17 @@ export default function Map({
       <div className="absolute text-black font-bold text-2xl bottom-[20px] right-[20px]">
         <p> Level {floor}</p>
       </div>
-
+      {edges && (
+        <Edges
+          imgWidth={imgWidth}
+          imgHeight={imgHeight}
+          nodes={nodes}
+          edges={edges}
+          floor={floor}
+          dragOffset={offset}
+          scale={scale}
+        />
+      )}
       <Nodes
         imgWidth={imgWidth}
         imgHeight={imgHeight}
@@ -197,6 +215,8 @@ export default function Map({
         floor={floor}
         dragOffset={offset}
         scale={scale}
+        editable={editable}
+        filter={filter}
       />
       {path && (
         <Lines
