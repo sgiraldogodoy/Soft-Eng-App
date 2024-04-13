@@ -15,7 +15,6 @@ export function AppRouter() {
         <Route path="/" component={HomePage} />
         <DashboardLayout>
           <Route path="/pathfind">
-            {!isAuthenticated && <Redirect to="/" />}
             <PathFind />
           </Route>
           <Route path="/database">
