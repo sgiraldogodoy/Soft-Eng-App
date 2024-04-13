@@ -53,9 +53,9 @@ export const baseService = z.object({
 });
 
 export const service = z.discriminatedUnion("type", [
-  baseService.merge(av).extend({ type: z.literal("AV") }),
-  baseService.merge(security).extend({ type: z.literal("SECURITY") }),
-  baseService.merge(room).extend({ type: z.literal("ROOM") }),
-  baseService.merge(gift).extend({ type: z.literal("GIFT") }),
-  baseService.merge(flower).extend({ type: z.literal("FLOWER") }),
+  baseService.extend({ data: av, type: z.literal("AV") }),
+  baseService.extend({ data: security, type: z.literal("SECURITY") }),
+  baseService.extend({ data: room, type: z.literal("ROOM") }),
+  baseService.extend({ data: gift, type: z.literal("GIFT") }),
+  baseService.extend({ data: flower, type: z.literal("FLOWER") }),
 ]);

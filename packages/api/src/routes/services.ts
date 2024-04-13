@@ -8,7 +8,7 @@ export const serviceRequestRouter = router({
   createFlowerRequest: publicProcedure
     .input(
       baseService
-        .merge(flower)
+        .extend({ data: flower })
         .extend({ type: z.literal("FLOWER").default("FLOWER") })
         .transform(transformCreateServiceInput),
     )
