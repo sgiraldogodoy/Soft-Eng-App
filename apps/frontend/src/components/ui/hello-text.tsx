@@ -21,6 +21,7 @@ const HelloMultipleLanguages = () => {
     "Γεια σας", // Greek
     "Hei", // Finnish
     "Cześć", // Polish
+    "104 101 108 108 111", // Ascii
   ];
   const [currentGreeting, setCurrentGreeting] = useState(0);
 
