@@ -7,7 +7,10 @@ import { BaseFormSchema } from "./formSchema";
 export default function RequestTable(
   props: Omit<
     React.ComponentProps<
-      typeof DataTable<z.infer<typeof BaseFormSchema>, unknown>
+      typeof DataTable<
+        z.infer<typeof BaseFormSchema> & { type: string; status: string },
+        unknown
+      >
     > & {
       selectionState: RowSelectionState;
       setSelectionState: OnChangeFn<RowSelectionState>;

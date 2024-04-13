@@ -11,12 +11,22 @@ interface LineProps {
   imgWidth: number;
   imgHeight: number;
   floor: string;
+  dragOffset: { x: number; y: number };
+  scale: number;
 }
 
-export function Edges({ nodes, edges, imgWidth, imgHeight, floor }: LineProps) {
+export function Edges({
+  nodes,
+  edges,
+  imgWidth,
+  imgHeight,
+  floor,
+  dragOffset,
+  scale,
+}: LineProps) {
   if (!edges || edges.length < 2) return null; // At least two for path
   const filteredNode = nodes.filter((node) => node.floor === floor);
-  const filteredNodeNodeId = filteredNode.map((node) => node.nodeId);
+  const filteredNodeNodeId = filteredNode.map((node) => node.id);
   const filteredEdges = edges.filter(
     (edge) =>
       filteredNodeNodeId.includes(edge.startNodeId) &&
@@ -27,18 +37,16 @@ export function Edges({ nodes, edges, imgWidth, imgHeight, floor }: LineProps) {
   const path = filteredEdges
     .map((edge) => {
       const startNode = filteredNode.find(
-        (node) => node.nodeId === edge.startNodeId,
+        (node) => node.id === edge.startNodeId,
       );
-      const endNode = filteredNode.find(
-        (node) => node.nodeId === edge.endNodeId,
-      );
+      const endNode = filteredNode.find((node) => node.id === edge.endNodeId);
 
       if (!startNode || !endNode) {
         return "";
       }
       // Construct the path string directly from edge coordinates
-      return `M${scaleCoordinate(startNode.xcords, imgHeight, origImageHeight, 0, 0, 1)},${scaleCoordinate(startNode.ycords, imgWidth, origImageWidth, 0, 0, 1)} 
-        L${scaleCoordinate(endNode.xcords, imgHeight, origImageHeight, 0, 0, 1)},${scaleCoordinate(endNode.ycords, imgWidth, origImageWidth, 0, 0, 1)}`;
+      return `M${scaleCoordinate(startNode.x, imgWidth, origImageWidth, 0, dragOffset.x, scale)},${scaleCoordinate(startNode.y, imgHeight, origImageHeight, 0, dragOffset.y, scale)} 
+        L${scaleCoordinate(endNode.x, imgWidth, origImageWidth, 0, dragOffset.x, scale)},${scaleCoordinate(endNode.y, imgHeight, origImageHeight, 0, dragOffset.y, scale)}`;
     })
     .join(" ");
 
@@ -52,7 +60,7 @@ export function Edges({ nodes, edges, imgWidth, imgHeight, floor }: LineProps) {
         d={path}
         style={{
           stroke: "red",
-          strokeWidth: 2,
+          strokeWidth: 2 * scale,
           fill: "none",
         }}
       ></path>

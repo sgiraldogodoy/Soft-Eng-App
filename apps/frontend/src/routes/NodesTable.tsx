@@ -10,7 +10,7 @@ import {
 import { trpc } from "@/utils/trpc";
 
 export function NodesTable() {
-  const { data, isLoading, isError } = trpc.db.getAllNodes.useQuery();
+  const { data, isLoading, isError } = trpc.node.getAll.useQuery();
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -38,12 +38,12 @@ export function NodesTable() {
       <TableBody>
         {data?.map((n) => (
           <TableRow>
-            <TableCell>{n.nodeId}</TableCell>
-            <TableCell>{n.xcords}</TableCell>
-            <TableCell>{n.ycords}</TableCell>
+            <TableCell>{n.id}</TableCell>
+            <TableCell>{n.x}</TableCell>
+            <TableCell>{n.y}</TableCell>
             <TableCell>{n.building}</TableCell>
             <TableCell>{n.floor}</TableCell>
-            <TableCell>{n.nodeType}</TableCell>
+            <TableCell>{n.type}</TableCell>
             <TableCell>{n.longName}</TableCell>
             <TableCell>{n.shortName}</TableCell>
           </TableRow>

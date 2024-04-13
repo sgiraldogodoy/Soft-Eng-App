@@ -13,35 +13,91 @@ datasource db {
 }
 
 model Node {
-  nodeId        String          @id
-  xcords        Float
-  ycords        Float
-  building      String
-  floor         String
-  nodeType      String
-  longName      String
-  shortName     String
-  outgoing      Edge[]          @relation(name: "NodeOutgoingEdge")
-  incoming      Edge[]          @relation(name: "NodeIncomingEdge")
-  flowerRequest FlowerRequest[] @relation(name: "FlowerRequest")
+  id        String    @id
+  x         Int
+  y         Int
+  building  String
+  floor     String
+  type      String
+  longName  String
+  shortName String
+  outgoing  Edge[]    @relation(name: "NodeOutgoingEdge")
+  incoming  Edge[]    @relation(name: "NodeIncomingEdge")
+  service   Service[] @relation(name: "ServiceToNode")
 }
 
 model Edge {
-  edgeId      String @id
   startNodeId String
   endNodeId   String
-  startNode   Node   @relation(name: "NodeOutgoingEdge", fields: [startNodeId], references: [nodeId], onDelete: Cascade)
-  endNode     Node   @relation(name: "NodeIncomingEdge", fields: [endNodeId], references: [nodeId], onDelete: Cascade)
+  startNode   Node   @relation(name: "NodeOutgoingEdge", fields: [startNodeId], references: [id], onDelete: Cascade)
+  endNode     Node   @relation(name: "NodeIncomingEdge", fields: [endNodeId], references: [id], onDelete: Cascade)
+
+  @@id(name: "edgeId", [startNodeId, endNodeId])
 }
 
-model FlowerRequest {
-  id              String   @id @default(uuid())
-  nodeId          String?
-  node            Node?    @relation(name: "FlowerRequest", fields: [nodeId], references: [nodeId], onUpdate: Cascade, onDelete: SetNull)
-  flowerName      String
-  requestDate     DateTime @default(now())
-  loginName       String
-  commentOnFlower String
-  totalPayment    Float
-  delivered       Boolean
+model Service {
+  id       String      @id @default(uuid())
+  nodeId   String
+  node     Node        @relation(name: "ServiceToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  priority String
+  date     DateTime    @default(now())
+  login    String
+  status   String
+  type     ServiceType
+  note     String
+  flower   Flower?     @relation(name: "FlowerToService")
+  gift     Gift?       @relation(name: "GiftToService")
+  room     Room?       @relation(name: "RoomToService")
+  security Security?   @relation(name: "SecurityToService")
+  av       AV?         @relation(name: "AVToService")
+}
+
+enum ServiceType {
+  FLOWER
+  GIFT
+  ROOM
+  SECURITY
+  AV
+}
+
+model Flower {
+  id            String  @id @default(uuid())
+  serviceId     String  @unique
+  service       Service @relation(name: "FlowerToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  flower        String
+  recipientName String
+}
+
+model Gift {
+  id            String  @id @default(uuid())
+  serviceId     String  @unique
+  service       Service @relation(name: "GiftToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  type          String
+  recipientName String
+  wrapping      Boolean
+  message       String
+}
+
+model Room {
+  id        String   @id @default(uuid())
+  serviceId String   @unique
+  service   Service  @relation(name: "RoomToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  checkIn   DateTime
+  checkOut  DateTime
+}
+
+model Security {
+  id        String   @id @default(uuid())
+  serviceId String   @unique
+  service   Service  @relation(name: "SecurityToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  dateTime  DateTime
+  threat    String
+}
+
+model AV {
+  id        String   @id @default(uuid())
+  serviceId String   @unique
+  service   Service  @relation(name: "AVToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  dateTime  DateTime
+  type      String
 }

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Node } from "database";
 import { scaleCoordinate } from "../utils/scaleCoordinate";
-import { ArrowDown, Flag } from "lucide-react";
+import { ArrowDown, MapPin } from "lucide-react";
 
 const origImageWidth = 5000;
 const origImageHeight = 3400;
@@ -17,22 +17,34 @@ interface LineProps {
 }
 
 const floorColors = [
-  "#7E22CE",
-  "#7E22CE",
-  "#7E22CE",
-  "#7E22CE",
-  "#7E22CE",
-  "#7E22CE",
+  "#003A96",
+  "#003A96",
+  "#003A96",
+  "#003A96",
+  "#003A96",
+  "#003A96",
 ];
 
 // Function to get the color based on floor index can change later if we want all set to purples
 const getFloorColor = (floorIndex: string) => {
-  let num = 0;
-  if (floorIndex === "L2") num = 0;
-  else if (floorIndex === "L1") num = 1;
-  else if (floorIndex === "1") num = 2;
-  else if (floorIndex === "2") num = 3;
-  else num = 4;
+  let num;
+  switch (floorIndex) {
+    case "L2":
+      num = 0;
+      break;
+    case "L1":
+      num = 1;
+      break;
+    case "1":
+      num = 2;
+      break;
+    case "2":
+      num = 3;
+      break;
+    default:
+      num = 4;
+      break;
+  }
   return floorColors[num];
 };
 
@@ -65,12 +77,12 @@ export function Lines({
   // Calculate total length of the path to dynamically animate the path
   let totalLength = 0;
   for (let i = 1; i < path.length; i++) {
-    const currentNode = nodes.find((n) => n.nodeId === path[i].nodeId);
-    const prevNode = nodes.find((n) => n.nodeId === path[i - 1].nodeId);
+    const currentNode = nodes.find((n) => n.id === path[i].id);
+    const prevNode = nodes.find((n) => n.id === path[i - 1].id);
     if (currentNode && prevNode) {
       totalLength += Math.sqrt(
-        Math.pow(currentNode.xcords - prevNode.xcords, 2) +
-          Math.pow(currentNode.ycords - prevNode.ycords, 2),
+        Math.pow(currentNode.x - prevNode.x, 2) +
+          Math.pow(currentNode.y - prevNode.y, 2),
       );
     }
   }
@@ -82,28 +94,28 @@ export function Lines({
     // Check if current floor is the active floor
     if (nextFloorIndex === floor && currentNode.floor === floor) {
       return `M ${scaleCoordinate(
-        currentNode.xcords,
+        currentNode.x,
         imgWidth,
         origImageWidth,
         0,
         dragOffset.x,
         scale,
       )} ${scaleCoordinate(
-        currentNode.ycords,
+        currentNode.y,
         imgHeight,
         origImageHeight,
         0,
         dragOffset.y,
         scale,
       )} L ${scaleCoordinate(
-        nextNode.xcords,
+        nextNode.x,
         imgWidth,
         origImageWidth,
         0,
         dragOffset.x,
         scale,
       )} ${scaleCoordinate(
-        nextNode.ycords,
+        nextNode.y,
         imgHeight,
         origImageHeight,
         0,
@@ -149,10 +161,10 @@ export function Lines({
       </svg>
       {elevatorPoints.map((point, index) => {
         if (point.floor !== floor) return null; // Skip if not on active floor
-        if (point.nodeId === path[path.length - 1].nodeId) return null; // Skip if last point
+        if (point.id === path[path.length - 1].id) return null; // Skip if last point
         // Scale the coordinates
         const scaledX = scaleCoordinate(
-          point.xcords,
+          point.x,
           imgWidth,
           origImageWidth,
           0,
@@ -160,13 +172,18 @@ export function Lines({
           scale,
         );
         const scaledY = scaleCoordinate(
-          point.ycords,
+          point.y,
           imgHeight,
           origImageHeight,
           0,
           dragOffset.y,
           scale,
         );
+
+        let floorString;
+        if (index % 2 === 0) {
+          floorString = `${elevatorPoints[index + 1].floor}`;
+        } else floorString = `${elevatorPoints[index - 1].floor}`;
 
         return (
           <div>
@@ -175,33 +192,42 @@ export function Lines({
               width={20 * scale} // Adjust size as needed
               height={20 * scale}
               style={{
-                color: "#7E22CE",
+                color: "#003A96",
                 position: "absolute",
-                top: scaledY - 22 * scale, // Adjust position to center the point
+                top: scaledY - 20 * scale, // Adjust position to center the point
                 left: scaledX - 9.8 * scale,
               }}
               className="animate-bounce"
             >
               <ArrowDown size={20 * scale} />
-              {/*<Circle r="10" fill="green" className="animate-ping"/>*/}
             </svg>
             <svg
               width={20 * scale} // Adjust size as needed
               height={20 * scale}
               style={{
-                color: "#7E22CE",
+                color: "#003A96",
                 position: "absolute",
                 top: scaledY - 10 * scale, // Adjust position to center the point
                 left: scaledX - 10 * scale,
               }}
-              className="animate-ping"
+              className=""
             >
               <circle
                 cx={10 * scale}
                 cy={10 * scale}
-                r={4 * scale}
-                fill="#7E22CE"
+                r={3 * scale}
+                fill="#003A96"
               />
+              <text
+                x={10 * scale}
+                y={10 * scale}
+                textAnchor="middle"
+                fill="white"
+                dy=".3em"
+                fontSize={5 * scale} // Adjust font size based on scale
+              >
+                {floorString}
+              </text>
             </svg>
           </div>
         );
@@ -211,11 +237,12 @@ export function Lines({
           width={20 * scale}
           height={20 * scale}
           style={{
-            color: "#FF0000",
+            color: "red",
+
             position: "absolute",
             top:
               scaleCoordinate(
-                path[path.length - 1].ycords,
+                path[path.length - 1].y,
                 imgHeight,
                 origImageHeight,
                 0,
@@ -225,18 +252,18 @@ export function Lines({
               22 * scale,
             left:
               scaleCoordinate(
-                path[path.length - 1].xcords,
+                path[path.length - 1].x,
                 imgWidth,
                 origImageWidth,
                 0,
                 dragOffset.x,
                 scale,
               ) -
-              3.5 * scale,
+              10 * scale,
           }}
           className="animate-bounce"
         >
-          <Flag size={20 * scale} />
+          <MapPin size={20 * scale} />
         </svg>
       )}
     </>

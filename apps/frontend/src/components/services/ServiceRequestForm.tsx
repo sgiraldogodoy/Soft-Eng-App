@@ -54,6 +54,7 @@ import { PopoverContent } from "../ui/popover";
 import { CheckIcon } from "lucide-react";
 import { useContext, useEffect } from "react";
 import { RequestsContext } from "@/routes/ServiceRequestPage";
+import { useAuth0 } from "@auth0/auth0-react";
 
 // Add your type-specific form schema to this array.
 const FormSchema = z.discriminatedUnion("type", [
@@ -110,7 +111,7 @@ interface Props {
 }
 
 export default function InputForm({ variant }: Props) {
-  const nodesQuery = trpc.db.getAllNodes.useQuery();
+  const nodesQuery = trpc.node.getAll.useQuery();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -118,6 +119,8 @@ export default function InputForm({ variant }: Props) {
   });
 
   const { requests, setRequests } = useContext(RequestsContext);
+  const session = useAuth0();
+  const createFlowerRequest = trpc.service.createFlowerRequest.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
@@ -127,7 +130,28 @@ export default function InputForm({ variant }: Props) {
     console.log("attempting");
     console.log(data);
 
-    setRequests([...requests, data]);
+    if (data.type === "flower-request") {
+      toast.promise(
+        createFlowerRequest.mutateAsync({
+          nodeId: data.location,
+          login: session.user?.email ?? "No login found.",
+          flower: data.flowerchoice,
+          note: data.notes ?? "",
+          recipientName: data.recipient,
+          priority: "Low",
+          status: "Unassigned",
+        }),
+        {
+          success: "Successfully saved to the database.",
+          loading: "Saving flower request to the database.",
+          error: "Error saving to database.",
+        },
+      );
+    }
+
+    const dataWithStatus = { ...data, status: "Unassigned" };
+
+    setRequests([...requests, dataWithStatus]);
 
     toast(
       <div>
@@ -195,7 +219,7 @@ export default function InputForm({ variant }: Props) {
                             >
                               {field.value
                                 ? nodesQuery.data?.find(
-                                    (node) => node.nodeId === field.value,
+                                    (node) => node.id === field.value,
                                   )?.longName
                                 : "Select location"}
                               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -212,17 +236,17 @@ export default function InputForm({ variant }: Props) {
                             <CommandGroup>
                               {nodesQuery.data?.map((location) => (
                                 <CommandItem
-                                  value={location.nodeId}
-                                  key={location.nodeId}
+                                  value={location.id}
+                                  key={location.id}
                                   onSelect={() => {
-                                    form.setValue("location", location.nodeId);
+                                    form.setValue("location", location.id);
                                   }}
                                 >
                                   {location.longName}
                                   <CheckIcon
                                     className={cn(
                                       "ml-auto h-4 w-4",
-                                      location.nodeId === field.value
+                                      location.id === field.value
                                         ? "opacity-100"
                                         : "opacity-0",
                                     )}

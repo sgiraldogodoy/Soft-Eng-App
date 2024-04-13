@@ -8,7 +8,7 @@ interface FrameworkProps {
   selectedNode: string;
 }
 
-export function PFAutoComplete({
+export function EndNodeAutocomlete({
   Rooms,
   onChange,
   selectedNode,
@@ -19,13 +19,13 @@ export function PFAutoComplete({
     return <p>No rooms found</p>;
   }
 
-  const longName = Rooms.find((node) => node.nodeId === selectedNode)?.longName;
+  const longName = Rooms.find((node) => node.id === selectedNode)?.longName;
 
-  const removedHall = Rooms.filter((node) => !(node.nodeType === "HALL"));
+  const removedHall = Rooms.filter((node) => !(node.type === "HALL"));
 
   const unsortedRooms = removedHall.map((node) => ({
     label: node.longName.trim(),
-    value: node.nodeId,
+    value: node.id,
   }));
   const rooms = unsortedRooms.sort((a, b) => a.label.localeCompare(b.label));
 

@@ -5,8 +5,7 @@ import Map from "../components/Map.tsx";
 import { Settings2 } from "lucide-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { ArrowLeft } from "lucide-react";
-
-import { PFAutoComplete } from "@/components/pfAutoComplete.tsx";
+import { EndNodeAutocomlete } from "@/components/EndNodeAutocomlete.tsx";
 import FloorSelection from "@/components/FloorSelection.tsx";
 import {
   Popover,
@@ -17,6 +16,15 @@ import PathfindSettings from "@/components/PathfindSettings.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Link } from "wouter";
 
+type Floor = "L1" | "L2" | "1" | "2" | "3";
+const FLOOR_URLS: Record<Floor, string> = {
+  L2: "/00_thelowerlevel2.png",
+  L1: "/00_thelowerlevel1.png",
+  "1": "/01_thefirstfloor.png",
+  "2": "/02_thesecondfloor.png",
+  "3": "/03_thethirdfloor.png",
+};
+
 export default function PathFind() {
   const [startNode, setStartNode] = useState("BINFO00202");
   const [goalNode, setGoalNode] = useState("");
@@ -24,7 +32,7 @@ export default function PathFind() {
   const [floor, setFloor] = useState("2");
   const [algorithm, setAlgorithm] = useState("A*");
   const { isAuthenticated } = useAuth0();
-  const nodesQuery = trpc.db.getAllNodes.useQuery();
+  const nodesQuery = trpc.node.getAll.useQuery();
 
   if (nodesQuery.isError) {
     console.log("Error in nodesQuery");
@@ -33,7 +41,7 @@ export default function PathFind() {
     console.log("Nodes are loading");
   }
 
-  const pathQuery = trpc.pathfinder.findPath;
+  const pathQuery = trpc.node.findPath;
   const path = pathQuery.useQuery(
     startNode && goalNode
       ? { startNodeId: startNode, endNodeId: goalNode, algorithm: algorithm }
@@ -58,6 +66,23 @@ export default function PathFind() {
       setFloor(clickedFloor);
     },
     [setImgUrl, setFloor],
+  );
+
+  const handleStartNode = useCallback(
+    (startNode: string) => {
+      setStartNode(startNode);
+      const nodesData = nodesQuery?.data;
+      if (nodesData) {
+        const startNodeFloor = nodesData.find(
+          (node) => node.id === startNode,
+        )?.floor;
+        if (startNodeFloor) {
+          setFloor(startNodeFloor);
+          setImgUrl(FLOOR_URLS[startNodeFloor as Floor]);
+        }
+      }
+    },
+    [setStartNode, setFloor, setImgUrl, nodesQuery],
   );
 
   return (
@@ -88,7 +113,7 @@ export default function PathFind() {
       )}
 
       <div className="absolute backdrop-blur-[4px] bg-white/90 top-12 left-1/2 transform -translate-x-1/2 rounded-[100px] shadow-inner drop-shadow-md">
-        <PFAutoComplete
+        <EndNodeAutocomlete
           Rooms={nodesQuery.data}
           onChange={(e) => setGoalNode(e)}
           selectedNode={goalNode}
@@ -107,7 +132,7 @@ export default function PathFind() {
                   onAlgorithmSelect={setAlgorithm}
                   algorithm={algorithm}
                   Rooms={nodesQuery.data}
-                  onStartNodeSelect={(e) => setStartNode(e)}
+                  onStartNodeSelect={(e) => handleStartNode(e)}
                   startNode={startNode}
                 />
               </PopoverContent>
@@ -115,14 +140,7 @@ export default function PathFind() {
           </div>
         )}
       </div>
-      <div className="absolute flex items-center gap-[35px] text-xl font-bold bottom-12 right-32">
-        <div className="flex flex-col gap-[15px]">
-          <h2>3</h2>
-          <h2>2</h2>
-          <h2>1</h2>
-          <h2>L1</h2>
-          <h2>L2</h2>
-        </div>
+      <div className="absolute flex items-center gap-[2px] text-xl font-bold bottom-10 right-8">
         <FloorSelection onFloorClick={handleFloorClick} />
       </div>
     </div>
