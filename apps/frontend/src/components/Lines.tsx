@@ -77,12 +77,12 @@ export function Lines({
   // Calculate total length of the path to dynamically animate the path
   let totalLength = 0;
   for (let i = 1; i < path.length; i++) {
-    const currentNode = nodes.find((n) => n.nodeId === path[i].nodeId);
-    const prevNode = nodes.find((n) => n.nodeId === path[i - 1].nodeId);
+    const currentNode = nodes.find((n) => n.id === path[i].id);
+    const prevNode = nodes.find((n) => n.id === path[i - 1].id);
     if (currentNode && prevNode) {
       totalLength += Math.sqrt(
-        Math.pow(currentNode.xcords - prevNode.xcords, 2) +
-          Math.pow(currentNode.ycords - prevNode.ycords, 2),
+        Math.pow(currentNode.x - prevNode.x, 2) +
+          Math.pow(currentNode.y - prevNode.y, 2),
       );
     }
   }
@@ -94,28 +94,28 @@ export function Lines({
     // Check if current floor is the active floor
     if (nextFloorIndex === floor && currentNode.floor === floor) {
       return `M ${scaleCoordinate(
-        currentNode.xcords,
+        currentNode.x,
         imgWidth,
         origImageWidth,
         0,
         dragOffset.x,
         scale,
       )} ${scaleCoordinate(
-        currentNode.ycords,
+        currentNode.y,
         imgHeight,
         origImageHeight,
         0,
         dragOffset.y,
         scale,
       )} L ${scaleCoordinate(
-        nextNode.xcords,
+        nextNode.x,
         imgWidth,
         origImageWidth,
         0,
         dragOffset.x,
         scale,
       )} ${scaleCoordinate(
-        nextNode.ycords,
+        nextNode.y,
         imgHeight,
         origImageHeight,
         0,
@@ -161,10 +161,10 @@ export function Lines({
       </svg>
       {elevatorPoints.map((point, index) => {
         if (point.floor !== floor) return null; // Skip if not on active floor
-        if (point.nodeId === path[path.length - 1].nodeId) return null; // Skip if last point
+        if (point.id === path[path.length - 1].id) return null; // Skip if last point
         // Scale the coordinates
         const scaledX = scaleCoordinate(
-          point.xcords,
+          point.x,
           imgWidth,
           origImageWidth,
           0,
@@ -172,7 +172,7 @@ export function Lines({
           scale,
         );
         const scaledY = scaleCoordinate(
-          point.ycords,
+          point.y,
           imgHeight,
           origImageHeight,
           0,
@@ -242,7 +242,7 @@ export function Lines({
             position: "absolute",
             top:
               scaleCoordinate(
-                path[path.length - 1].ycords,
+                path[path.length - 1].y,
                 imgHeight,
                 origImageHeight,
                 0,
@@ -252,7 +252,7 @@ export function Lines({
               22 * scale,
             left:
               scaleCoordinate(
-                path[path.length - 1].xcords,
+                path[path.length - 1].x,
                 imgWidth,
                 origImageWidth,
                 0,

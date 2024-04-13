@@ -3,6 +3,8 @@
   "name": "common",
   "version": "1.0.0",
   "module": "true",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "devDependencies": {
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",
@@ -15,5 +17,8 @@
   "scripts": {
     "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint",
     "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint"
+  },
+  "dependencies": {
+    "zod": "^3.22.4"
   }
 }

@@ -1,6 +1,5 @@
 import { PrismaClient, Node, Edge } from "../.prisma/client";
 import readline from "readline";
-import { faker } from "@faker-js/faker";
 import fs from "fs";
 
 const prisma = new PrismaClient();
@@ -21,24 +20,24 @@ async function main() {
       continue;
     }
     const [
-      nodeId,
+      id,
       xcordsString,
       ycordsString,
       floor,
       building,
-      nodeType,
+      type,
       longName,
       shortName,
     ] = line.split(",");
-    const xcords = Number(xcordsString);
-    const ycords = Number(ycordsString);
+    const x = Number(xcordsString);
+    const y = Number(ycordsString);
     nodes.push({
-      nodeId,
-      xcords,
-      ycords,
+      id,
+      x,
+      y,
       building,
       floor,
-      nodeType,
+      type,
       longName,
       shortName,
     });
@@ -51,7 +50,7 @@ async function main() {
 
   // Parse edges CSV
   const edgeStream = readline.createInterface({
-    input: fs.createReadStream("prisma/modedges.csv"),
+    input: fs.createReadStream("prisma/edges.csv"),
     terminal: false,
   });
 
@@ -61,12 +60,9 @@ async function main() {
       i++;
       continue;
     }
-    const [startNodeId, endNodeId] = line.split(",");
-    const edgeId = `${startNodeId}-${endNodeId}`;
-    edges.push({ edgeId, startNodeId, endNodeId });
-    const reverseId = `${endNodeId}-${startNodeId}`;
+    const [, startNodeId, endNodeId] = line.split(",");
+    edges.push({ startNodeId, endNodeId });
     edges.push({
-      edgeId: reverseId,
       startNodeId: endNodeId,
       endNodeId: startNodeId,
     });
@@ -74,17 +70,22 @@ async function main() {
 
   await prisma.edge.createMany({ data: edges, skipDuplicates: true });
 
-  await prisma.flowerRequest.deleteMany();
+  await prisma.flower.deleteMany();
   for (let i = 0; i < 50; i++) {
-    await prisma.flowerRequest.create({
+    await prisma.flower.create({
       data: {
-        flowerName: "Pretty Flower",
-        id: i.toString(),
-        delivered: faker.datatype.boolean(),
-        nodeId: "CDEPT003L1",
-        loginName: faker.internet.userName(),
-        totalPayment: faker.number.int(),
-        commentOnFlower: faker.lorem.paragraph(),
+        flower: "Pretty Flower",
+        service: {
+          create: {
+            nodeId: "ACONF00102",
+            type: "FLOWER",
+            login: "Ace",
+            priority: "High",
+            status: "Active",
+            note: "Note",
+          },
+        },
+        recipientName: "Flower",
       },
     });
   }

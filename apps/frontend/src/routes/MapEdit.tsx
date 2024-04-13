@@ -14,7 +14,7 @@ export default function FloorTabs() {
     },
     [setImgUrl, setFloor],
   );
-  const nodesQuery = trpc.db.getAllNodes.useQuery();
+  const nodesQuery = trpc.node.getAll.useQuery();
   const edgeQuery = trpc.db.getAllEdges.useQuery();
 
   return (

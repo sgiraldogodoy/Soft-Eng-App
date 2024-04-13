@@ -32,7 +32,7 @@ export default function PathFind() {
   const [floor, setFloor] = useState("2");
   const [algorithm, setAlgorithm] = useState("A*");
   const { isAuthenticated } = useAuth0();
-  const nodesQuery = trpc.db.getAllNodes.useQuery();
+  const nodesQuery = trpc.node.getAll.useQuery();
 
   if (nodesQuery.isError) {
     console.log("Error in nodesQuery");
@@ -41,7 +41,7 @@ export default function PathFind() {
     console.log("Nodes are loading");
   }
 
-  const pathQuery = trpc.pathfinder.findPath;
+  const pathQuery = trpc.node.findPath;
   const path = pathQuery.useQuery(
     startNode && goalNode
       ? { startNodeId: startNode, endNodeId: goalNode, algorithm: algorithm }
@@ -74,7 +74,7 @@ export default function PathFind() {
       const nodesData = nodesQuery?.data;
       if (nodesData) {
         const startNodeFloor = nodesData.find(
-          (node) => node.nodeId === startNode,
+          (node) => node.id === startNode,
         )?.floor;
         if (startNodeFloor) {
           setFloor(startNodeFloor);
