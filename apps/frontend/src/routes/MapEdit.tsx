@@ -15,7 +15,7 @@ export default function FloorTabs() {
     [setImgUrl, setFloor],
   );
   const nodesQuery = trpc.node.getAll.useQuery();
-  const edgeQuery = trpc.db.getAllEdges.useQuery();
+  const edgeQuery = trpc.edge.getAll.useQuery();
 
   return (
     <div className="relative h-full">
