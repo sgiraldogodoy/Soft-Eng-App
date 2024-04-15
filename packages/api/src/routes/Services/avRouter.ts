@@ -3,8 +3,8 @@ import { router } from "../../trpc";
 import { z } from "zod";
 import { baseService, av } from "common";
 import { transformCreateServiceInput } from "../../../utils/serviceInputTransformer.ts";
+
 export const avRequestRouter = router({
-  //AV Request Service
   createOne: publicProcedure
     .input(
       baseService
@@ -17,21 +17,15 @@ export const avRequestRouter = router({
         data: input,
       });
     }),
+
   deleteOne: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-      }),
-    )
+    .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {
-      // delete a av request
       await ctx.db.aV.delete({
         where: {
           id: input.id,
         },
       });
-
-      return { message: "AV request deleted" };
     }),
   deleteMany: publicProcedure
     .input(z.object({ ids: z.array(z.string()) }))
@@ -44,32 +38,11 @@ export const avRequestRouter = router({
         },
       });
     }),
+
   deleteAll: publicProcedure.mutation(async ({ ctx }) => {
     return ctx.db.aV.deleteMany();
   }),
-  getOne: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-      }),
-    )
-    .query(async ({ input, ctx }) => {
-      // get an av request
 
-      return ctx.db.aV.findUnique({
-        where: {
-          id: input.id,
-        },
-      });
-    }),
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    // get all av requests
-    return ctx.db.aV.findMany({
-      include: {
-        service: true,
-      },
-    });
-  }),
   updateOne: publicProcedure
     .input(
       z.object({
@@ -97,6 +70,7 @@ export const avRequestRouter = router({
         },
       });
     }),
+
   updateMany: publicProcedure
     .input(
       z.object({
@@ -115,6 +89,20 @@ export const avRequestRouter = router({
           },
         },
         data: input.data,
+      });
+    }),
+
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    return ctx.db.aV.findMany();
+  }),
+
+  getOne: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input, ctx }) => {
+      return ctx.db.aV.findUnique({
+        where: {
+          id: input.id,
+        },
       });
     }),
 });
