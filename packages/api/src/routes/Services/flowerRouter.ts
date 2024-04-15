@@ -1,11 +1,11 @@
-import { publicProcedure } from "../../trpc";
+import { protectedProcedure, publicProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
 import { baseService, flower } from "common";
 import { transformCreateServiceInput } from "../../../utils/serviceInputTransformer.ts";
 
 export const FlowerRouter = router({
-  createOne: publicProcedure
+  createOne: protectedProcedure
     .input(
       baseService
         .extend({
@@ -21,7 +21,7 @@ export const FlowerRouter = router({
       });
     }),
 
-  deleteOne: publicProcedure
+  deleteOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {
       console.log(input);
@@ -32,7 +32,7 @@ export const FlowerRouter = router({
       });
     }),
 
-  deleteMany: publicProcedure
+  deleteMany: protectedProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input, ctx }) => {
       console.log(input);
@@ -45,7 +45,7 @@ export const FlowerRouter = router({
       });
     }),
 
-  deleteAll: publicProcedure.mutation(async ({ ctx }) => {
+  deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
     console.log("Deleted all flower request!");
     return ctx.db.flower.deleteMany();
   }),
@@ -57,14 +57,21 @@ export const FlowerRouter = router({
         where: {
           id: input.id,
         },
+        include: {
+          service: true,
+        },
       });
     }),
 
-  getAll: publicProcedure.mutation(async ({ ctx }) => {
-    return ctx.db.flower.findMany();
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    return ctx.db.flower.findMany({
+      include: {
+        service: true,
+      },
+    });
   }),
 
-  updateOne: publicProcedure
+  updateOne: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -92,7 +99,7 @@ export const FlowerRouter = router({
       });
     }),
 
-  updateMany: publicProcedure
+  updateMany: protectedProcedure
     .input(
       z.object({
         ids: z.array(z.string()),

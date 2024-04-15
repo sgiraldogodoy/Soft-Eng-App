@@ -37,8 +37,8 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
 
   const utils = trpc.useUtils();
 
-  const servicesQuery = trpc.service.getAllFlowerRequests.useQuery();
-  const serviceDeleteMutation = trpc.service.deleteFlowerRequest.useMutation();
+  const servicesQuery = trpc.flower.getAll.useQuery();
+  const serviceDeleteMutation = trpc.flower.deleteOne.useMutation();
   // const serviceDeliverMutation = trpc.service.deliver.useMutation();
 
   // const updateStatus = trpc.service.updateStatus.useMutation();
@@ -130,7 +130,7 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
                       },
                       {
                         onSuccess: () => {
-                          utils.service.getAllFlowerRequests.invalidate();
+                          utils.flower.getAll.invalidate();
                         },
                       },
                     ),

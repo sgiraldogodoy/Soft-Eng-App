@@ -1,4 +1,4 @@
-import { publicProcedure } from "../../trpc";
+import { protectedProcedure, publicProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
 import { transformCreateServiceInput } from "../../../utils/serviceInputTransformer.ts";
@@ -6,7 +6,7 @@ import { baseService, security } from "common";
 
 export const SecurityRouter = router({
   //Security Request Service
-  createOne: publicProcedure
+  createOne: protectedProcedure
     .input(
       baseService
         .extend({ data: security })
@@ -32,6 +32,9 @@ export const SecurityRouter = router({
         where: {
           id: input.id,
         },
+        include: {
+          service: true,
+        },
       });
     }),
   getAll: publicProcedure.query(async ({ ctx }) => {
@@ -42,7 +45,7 @@ export const SecurityRouter = router({
       },
     });
   }),
-  deleteOne: publicProcedure
+  deleteOne: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -59,13 +62,13 @@ export const SecurityRouter = router({
       return { message: "Security request deleted" };
     }),
 
-  deleteAll: publicProcedure.mutation(async ({ ctx }) => {
+  deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
     // delete all security requests
     await ctx.db.security.deleteMany({});
 
     return { message: "All security requests deleted" };
   }),
-  deleteMany: publicProcedure
+  deleteMany: protectedProcedure
     .input(
       z.object({
         ids: z.array(z.string()),
@@ -84,7 +87,7 @@ export const SecurityRouter = router({
       return { message: "Security requests deleted" };
     }),
 
-  updateOne: publicProcedure
+  updateOne: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -111,7 +114,7 @@ export const SecurityRouter = router({
       });
     }),
 
-  updateMany: publicProcedure
+  updateMany: protectedProcedure
     .input(
       z.object({
         ids: z.array(z.string()),
