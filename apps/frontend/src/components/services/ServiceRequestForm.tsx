@@ -110,6 +110,7 @@ export default function InputForm({ variant }: Props) {
   const session = useAuth0();
   const utils = trpc.useUtils();
   const createFlowerRequest = trpc.flower.createOne.useMutation();
+  const createSecurityRequest = trpc.security.createOne.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
@@ -133,6 +134,26 @@ export default function InputForm({ variant }: Props) {
           {
             success: "Successfully saved to the database.",
             loading: "Saving flower request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "SECURITY":
+        toast.promise(
+          createSecurityRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.security.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving security request to the database.",
             error: "Error saving to database.",
           },
         );
