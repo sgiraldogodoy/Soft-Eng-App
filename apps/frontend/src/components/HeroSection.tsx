@@ -1,8 +1,8 @@
 export default function HeroSection() {
   return (
     <>
-      <div className="flex gap-6 justify-center items-center">
-        <img src="new_logo.svg" alt="BWH Logo" className="h-[70px] w-[70px]" />
+      <div className="flex gap-3 justify-center items-center">
+        <img src="new_logo.svg" alt="BWH Logo" className="h-[80px] w-[70px]" />
         <h1 className="text-left font-inter text-3xl font-bold">
           Welcome to <br />{" "}
           <span className="text-theme-black font-bold">
