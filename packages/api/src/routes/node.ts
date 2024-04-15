@@ -59,12 +59,15 @@ export const Node = router({
         myPathFinding.setFindPathAlg(new depthFirstSearch());
       } else if (input.algorithm === "BFS") {
         myPathFinding.setFindPathAlg(new breadthFirstSearch());
+      } else if (input.algorithm === "DIJ") {
+        myPathFinding.setFindPathAlg(new aStar());
       } else myPathFinding.setFindPathAlg(new aStar());
 
       return await myPathFinding.run(
         input.startNodeId,
         input.endNodeId,
         ctx.db,
+        input.algorithm === "DIJ",
       );
     }),
   createOne: publicProcedure
