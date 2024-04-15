@@ -162,15 +162,6 @@ export default function InputForm({ variant }: Props) {
         toast.error("An error occured.");
     }
 
-    toast(
-      <div>
-        <p className="font-semibold">Success! (Data not stored yet!)</p>
-        <pre>
-          <code>{JSON.stringify(data, null, 4)}</code>
-        </pre>
-      </div>,
-    );
-
     form.reset();
   }
 
