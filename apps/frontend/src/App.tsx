@@ -1,13 +1,20 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import superjson from "superjson";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { trpc } from "./utils/trpc";
 import { AppRouter } from "./routes/AppRouter.tsx";
 import { Toaster } from "./components/ui/sonner.tsx";
-import { Auth0Provider } from "@auth0/auth0-react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function App() {
+  const session = useAuth0();
+  session.getAccessTokenWithPopup;
+
+  const token = useMemo(async () => {
+    return await session.getAccessTokenSilently();
+  }, [session]);
+
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     trpc.createClient({
@@ -15,6 +22,11 @@ export default function App() {
         httpBatchLink({
           url: "/api/trpc",
           transformer: superjson,
+          async headers() {
+            return {
+              authorization: await token,
+            };
+          },
         }),
       ],
     }),
@@ -24,15 +36,7 @@ export default function App() {
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <Toaster />
-        <Auth0Provider
-          domain="dev-x61j30sgxmn7t3u3.us.auth0.com"
-          clientId="a07mB0uQsSJDFjtRqBX7nNAzbDkWmUY5"
-          authorizationParams={{
-            redirect_uri: window.location.origin,
-          }}
-        >
-          <AppRouter />
-        </Auth0Provider>
+        <AppRouter />
       </QueryClientProvider>
     </trpc.Provider>
   );

@@ -74,6 +74,7 @@ export const Node = router({
         data: input.data,
       });
     }),
+
   createMany: publicProcedure
     .input(z.object({ data: z.array(node) }))
     .mutation(async ({ input, ctx }) => {
@@ -127,6 +128,7 @@ export const Node = router({
         data: input.data,
       });
     }),
+
   updateMany: publicProcedure
     .input(z.object({ ids: z.array(z.string()), data: node.partial() }))
     .mutation(async ({ input, ctx }) => {
