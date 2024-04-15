@@ -1,16 +1,12 @@
+import { RouterOutput } from "@/utils/trpc";
 import { columns } from "./DTColumns";
 import { DataTable } from "@/components/ui/data-table";
 import type { OnChangeFn, RowSelectionState } from "@tanstack/react-table";
-import { z } from "zod";
-import { BaseFormSchema } from "./formSchema";
 
 export default function RequestTable(
   props: Omit<
     React.ComponentProps<
-      typeof DataTable<
-        z.infer<typeof BaseFormSchema> & { type: string; status: string },
-        unknown
-      >
+      typeof DataTable<RouterOutput["service"]["getAll"][0], unknown>
     > & {
       selectionState: RowSelectionState;
       setSelectionState: OnChangeFn<RowSelectionState>;

@@ -10,8 +10,6 @@ import {
 import { useState } from "react";
 import type { RowSelectionState } from "@tanstack/react-table";
 import { trpc } from "@/utils/trpc";
-import { BaseFormSchema } from "./formSchema";
-import { z } from "zod";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { toast } from "sonner";
@@ -24,14 +22,7 @@ import {
 } from "../ui/select";
 import { motion } from "framer-motion";
 
-interface RequestSummaryProps {
-  requests: (z.infer<typeof BaseFormSchema> & {
-    type: string;
-    status: string;
-  })[];
-}
-
-export default function RequestSummary({ requests }: RequestSummaryProps) {
+export default function RequestSummary() {
   const [rowSelectionState, setRowSelectionState] = useState<RowSelectionState>(
     {},
   );
@@ -44,7 +35,7 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
 
   // const updateStatus = trpc.service.updateStatus.useMutation();
 
-  const addedRequests = [...requests];
+  const allRequests = servicesQuery.data;
 
   if (servicesQuery.isLoading) {
     return <p>Loading...</p>;
@@ -73,13 +64,13 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
       transition={{ duration: 1, type: "easeOut" }}
       className="w-full flex flex-col gap-4 flex-1 max-h-full"
     >
-      <Card className="flex flex-col flex-1 overflow-auto bg-white/80 backdrop-blur-md drop-shadow-md shadow-inner">
+      <Card className="flex flex-col flex-1 overflow-auto bg-white/90 backdrop-blur-md drop-shadow-md shadow-inner">
         <CardHeader>
           <CardTitle>Open Requests</CardTitle>
         </CardHeader>
         <CardContent className="overflow-y-scroll max-h-full">
           <RequestTable
-            data={addedRequests}
+            data={allRequests ?? []}
             selectionState={rowSelectionState}
             setSelectionState={setRowSelectionState}
           />
