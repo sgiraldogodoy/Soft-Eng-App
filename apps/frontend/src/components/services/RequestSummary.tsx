@@ -90,9 +90,9 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
+      initial={{ x: -50, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ duration: 1, type: "easeOut" }}
       className="w-full flex flex-col gap-4 flex-1 max-h-full"
     >
       <Card className="flex flex-col flex-1 overflow-auto bg-white/80 backdrop-blur-md drop-shadow-md shadow-inner">

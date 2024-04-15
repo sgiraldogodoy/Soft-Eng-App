@@ -63,10 +63,10 @@ export default function ServiceRequestPage() {
               </Tabs>
               <motion.div
                 key={variant}
-                initial={{ x: 1000 }}
-                animate={{ x: 0 }}
-                transition={{ duration: 1.2, type: "easeOut" }}
-                className="pointer-events-auto overflow-auto"
+                initial={{ x: 50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 1, type: "easeOut" }}
+                className="pointer-events-auto overflow-auto flex-1"
               >
                 <ServiceRequestForm variant={variant} />
               </motion.div>
