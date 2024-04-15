@@ -10,7 +10,7 @@ import {
 import { trpc } from "@/utils/trpc";
 
 export function EdgesTable() {
-  const { data, isLoading, isError } = trpc.db.getAllEdges.useQuery();
+  const { data, isLoading, isError } = trpc.edge.getAll.useQuery();
 
   if (isError) {
     return <p>Error!</p>;
