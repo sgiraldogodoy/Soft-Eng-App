@@ -5,6 +5,7 @@
   "module": "true",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
+  "browser": "./src/index.ts",
   "devDependencies": {
     "eslint": "latest",
     "eslint-config-custom": "workspace:*",

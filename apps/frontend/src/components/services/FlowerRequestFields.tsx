@@ -1,4 +1,3 @@
-import { z } from "zod";
 import {
   FormControl,
   FormDescription,
@@ -14,18 +13,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select.tsx";
-
-export const FlowerRequestSchema = z.object({
-  type: z.literal("flower-request"),
-  flowerchoice: z.string(),
-});
+import { Input } from "../ui/input";
 
 const FlowerRequest = () => {
   return (
     <>
       <div className="flex gap-2 items-center flex-1">
         <FormField
-          name="flowerchoice"
+          name="data.flower"
           render={({ field }) => (
             <FormItem className="flex-1">
               <FormLabel>Choose a flower.</FormLabel>
@@ -47,6 +42,19 @@ const FlowerRequest = () => {
                 </SelectContent>
               </Select>
               <FormDescription>Which flowers would you like?</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="data.recipientName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Recipient</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormDescription>Who should receive the service.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
