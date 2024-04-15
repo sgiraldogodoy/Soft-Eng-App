@@ -7,6 +7,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { createContext, useState } from "react";
 import { z } from "zod";
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation.tsx";
+import { motion } from "framer-motion";
 
 type RequestsContextType = {
   requests: Array<
@@ -42,7 +43,7 @@ export default function ServiceRequestPage() {
                 }}
                 className="w-full flex items-center justify-center bg-transparent"
               >
-                <TabsList className="w-full bg-white/60 backdrop-blur-md shadow-inner rounded shadow-md">
+                <TabsList className="w-full bg-white/80 backdrop-blur-md shadow-inner rounded shadow-md">
                   <TabsTrigger className="flex-1" value="flower-request">
                     Flower Request
                   </TabsTrigger>
@@ -60,7 +61,15 @@ export default function ServiceRequestPage() {
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
-              <ServiceRequestForm variant={variant} />
+              <motion.div
+                key={variant}
+                initial={{ x: 1000 }}
+                animate={{ x: 0 }}
+                transition={{ duration: 1.2, type: "easeOut" }}
+                className="pointer-events-auto overflow-auto"
+              >
+                <ServiceRequestForm variant={variant} />
+              </motion.div>
             </div>
           </div>
         </BackgroundGradientAnimation>

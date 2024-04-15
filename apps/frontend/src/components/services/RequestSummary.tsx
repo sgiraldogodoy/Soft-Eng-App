@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { motion } from "framer-motion";
 
 interface RequestSummaryProps {
   requests: (z.infer<typeof BaseFormSchema> & {
@@ -88,8 +89,13 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
     : undefined;
 
   return (
-    <div className="w-full flex flex-col gap-4 flex-1 max-h-full">
-      <Card className="flex flex-col flex-1 overflow-auto bg-white/40 backdrop-blur-md drop-shadow-md shadow-inner">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+      className="w-full flex flex-col gap-4 flex-1 max-h-full"
+    >
+      <Card className="flex flex-col flex-1 overflow-auto bg-white/80 backdrop-blur-md drop-shadow-md shadow-inner">
         <CardHeader>
           <CardTitle>Open Requests</CardTitle>
         </CardHeader>
@@ -207,6 +213,6 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
           </CardFooter>
         </Card>
       )}
-    </div>
+    </motion.div>
   );
 }
