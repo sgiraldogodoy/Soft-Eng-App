@@ -1,4 +1,3 @@
-import { serviceRequestRouter } from "./routes/services.ts";
 import { avRequestRouter } from "./routes/Services/avRouter.ts";
 import { router } from "./trpc";
 import { Node } from "./routes/node.ts";
@@ -8,7 +7,6 @@ import { FlowerRouter } from "./routes/Services/flowerRouter.ts";
 import { GiftRouter } from "./routes/Services/giftRouter.ts";
 
 export const appRouter = router({
-  service: serviceRequestRouter,
   security: SecurityRouter,
   av: avRequestRouter,
   gift: GiftRouter,

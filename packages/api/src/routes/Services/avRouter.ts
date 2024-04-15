@@ -1,11 +1,11 @@
-import { publicProcedure } from "../../trpc";
+import { publicProcedure, protectedProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
 import { baseService, av } from "common";
 import { transformCreateServiceInput } from "../../../utils/serviceInputTransformer.ts";
 
 export const avRequestRouter = router({
-  createOne: publicProcedure
+  createOne: protectedProcedure
     .input(
       baseService
         .extend({ data: av, type: z.literal("AV").default("AV") })
@@ -18,7 +18,7 @@ export const avRequestRouter = router({
       });
     }),
 
-  deleteOne: publicProcedure
+  deleteOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {
       await ctx.db.aV.delete({
@@ -27,7 +27,7 @@ export const avRequestRouter = router({
         },
       });
     }),
-  deleteMany: publicProcedure
+  deleteMany: protectedProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input, ctx }) => {
       return ctx.db.aV.deleteMany({
@@ -39,11 +39,11 @@ export const avRequestRouter = router({
       });
     }),
 
-  deleteAll: publicProcedure.mutation(async ({ ctx }) => {
+  deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
     return ctx.db.aV.deleteMany();
   }),
 
-  updateOne: publicProcedure
+  updateOne: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -71,7 +71,7 @@ export const avRequestRouter = router({
       });
     }),
 
-  updateMany: publicProcedure
+  updateMany: protectedProcedure
     .input(
       z.object({
         ids: z.array(z.string()),
@@ -93,7 +93,11 @@ export const avRequestRouter = router({
     }),
 
   getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.aV.findMany();
+    return ctx.db.aV.findMany({
+      include: {
+        service: true,
+      },
+    });
   }),
 
   getOne: publicProcedure
@@ -102,6 +106,9 @@ export const avRequestRouter = router({
       return ctx.db.aV.findUnique({
         where: {
           id: input.id,
+        },
+        include: {
+          service: true,
         },
       });
     }),
