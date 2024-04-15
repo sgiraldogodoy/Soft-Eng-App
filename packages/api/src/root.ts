@@ -5,8 +5,10 @@ import { Edge } from "./routes/edge.ts";
 import { SecurityRouter } from "./routes/Services/securityRouter.ts";
 import { FlowerRouter } from "./routes/Services/flowerRouter.ts";
 import { GiftRouter } from "./routes/Services/giftRouter.ts";
+import { serviceRouter } from "./routes/serviceRouter.ts";
 
 export const appRouter = router({
+  service: serviceRouter,
   security: SecurityRouter,
   av: avRequestRouter,
   gift: GiftRouter,
