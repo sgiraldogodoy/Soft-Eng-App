@@ -326,7 +326,7 @@ export default function InputForm({ variant }: Props) {
               <div className="flex gap-2">
                 <Button
                   className="flex-1"
-                  variant="secondary"
+                  variant="outline"
                   onClick={() => {
                     form.reset();
                   }}
