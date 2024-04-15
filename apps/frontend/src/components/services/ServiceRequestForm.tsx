@@ -111,6 +111,7 @@ export default function InputForm({ variant }: Props) {
   const utils = trpc.useUtils();
   const createFlowerRequest = trpc.flower.createOne.useMutation();
   const createSecurityRequest = trpc.security.createOne.useMutation();
+  const createGiftRequest = trpc.gift.createOne.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
@@ -158,21 +159,32 @@ export default function InputForm({ variant }: Props) {
           },
         );
         break;
+     case "GIFT":
+       toast.promise(
+          createGiftRequest.mutateAsync(  
+             {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+               utils.gift.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving gift request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
       default:
         toast.error("An error occured.");
     }
 
-    toast(
-      <div>
-        <p className="font-semibold">Success! (Data not stored yet!)</p>
-        <pre>
-          <code>{JSON.stringify(data, null, 4)}</code>
-        </pre>
-      </div>,
-    );
-
     form.reset();
-  }
+  }        
 
   useEffect(() => {
     console.log("SETTING TYPE: " + variant);

@@ -73,6 +73,7 @@ export default function PathfindSettings({
             <SelectItem value="A*">A*</SelectItem>
             <SelectItem value="BFS">Breadth First Search</SelectItem>
             <SelectItem value="DFS">Depth First Search</SelectItem>
+            <SelectItem value="DIJ">Dijkstra's Algorithm</SelectItem>
           </SelectContent>
         </Select>
       </div>

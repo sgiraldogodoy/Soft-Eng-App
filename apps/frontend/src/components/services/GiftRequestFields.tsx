@@ -1,4 +1,3 @@
-import { z } from "zod";
 import {
   FormControl,
   FormDescription,
@@ -17,21 +16,28 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Textarea } from "@/components/ui/textarea.tsx";
-
-export const GiftRequestSchema = z.object({
-  type: z.literal("gift-request"),
-  giftType: z.string(),
-  giftWrap: z.boolean(),
-  giftMessage: z.string(),
-});
+import { Input } from "../ui/input";
 
 const GiftRequest = () => {
   return (
     <>
-      <div>
+      <div className="flex flex-col gap-2">
+        <FormField
+          name="data.recipientName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Recipient</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormDescription>Who should receive the service.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="flex gap-2 items-center flex-1">
           <FormField
-            name="giftType"
+            name="data.type"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Gift Type</FormLabel>
@@ -58,7 +64,7 @@ const GiftRequest = () => {
             )}
           />
           <FormField
-            name="giftWrap"
+            name="data.wrapping"
             defaultValue={false}
             render={({ field }) => (
               <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-2">
@@ -75,7 +81,7 @@ const GiftRequest = () => {
           />
         </div>
         <FormField
-          name="giftMessage"
+          name="data.message"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Message</FormLabel>
