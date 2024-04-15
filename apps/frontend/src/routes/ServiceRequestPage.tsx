@@ -25,7 +25,7 @@ export const RequestsContext = createContext<RequestsContextType>({
 });
 
 export default function ServiceRequestPage() {
-  const [variant, setVariant] = useState<FormTypes>("flower-request");
+  const [variant, setVariant] = useState<FormTypes>("FLOWER");
   const [requests, setRequests] = useState<RequestsContextType["requests"]>([]);
 
   return (
@@ -43,19 +43,19 @@ export default function ServiceRequestPage() {
               className="w-full flex items-center justify-center bg-transparent"
             >
               <TabsList className="w-full bg-white/80 backdrop-blur-md shadow-inner rounded shadow-md">
-                <TabsTrigger className="flex-1" value="flower-request">
+                <TabsTrigger className="flex-1" value="FLOWER">
                   Flower Request
                 </TabsTrigger>
-                <TabsTrigger className="flex-1" value="room-request">
+                <TabsTrigger className="flex-1" value="ROOM">
                   Room Request
                 </TabsTrigger>
-                <TabsTrigger className="flex-1" value="security-request">
+                <TabsTrigger className="flex-1" value="SECURITY">
                   Security Request
                 </TabsTrigger>
-                <TabsTrigger className="flex-1" value="av-request">
+                <TabsTrigger className="flex-1" value="AV">
                   Audio/Visual Request
                 </TabsTrigger>
-                <TabsTrigger className="flex-1" value="gift-request">
+                <TabsTrigger className="flex-1" value="GIFT">
                   Gift Request
                 </TabsTrigger>
               </TabsList>

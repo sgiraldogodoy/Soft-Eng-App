@@ -1,4 +1,3 @@
-import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UseFormReturn, useForm } from "react-hook-form";
 import { CaretSortIcon } from "@radix-ui/react-icons";
@@ -30,17 +29,12 @@ import {
 } from "@/components/ui/card.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { trpc } from "@/utils/trpc";
-import RoomRequestFields, { RoomRequestSchema } from "./RoomRequestFields";
-import AVRequestFields, { AVRequestSchema } from "./AVRequestFields";
+import RoomRequestFields from "./RoomRequestFields";
+import AVRequestFields from "./AVRequestFields";
 
-import FlowerRequestFields, {
-  FlowerRequestSchema,
-} from "./FlowerRequestFields";
-import { BaseFormSchema } from "./formSchema";
-import SecurityRequestFields, {
-  SecurityRequestSchema,
-} from "@/components/services/SecurityRequestFields.tsx";
-import GiftRequestFields, { GiftRequestSchema } from "./GiftRequestFields";
+import FlowerRequestFields from "./FlowerRequestFields";
+import SecurityRequestFields from "@/components/services/SecurityRequestFields.tsx";
+import GiftRequestFields from "./GiftRequestFields";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
 import {
@@ -52,18 +46,12 @@ import {
 } from "../ui/command";
 import { PopoverContent } from "../ui/popover";
 import { CheckIcon } from "lucide-react";
-import { useContext, useEffect } from "react";
-import { RequestsContext } from "@/routes/ServiceRequestPage";
+import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { formService } from "common";
 
 // Add your type-specific form schema to this array.
-const FormSchema = z.discriminatedUnion("type", [
-  BaseFormSchema.merge(RoomRequestSchema),
-  BaseFormSchema.merge(AVRequestSchema),
-  BaseFormSchema.merge(FlowerRequestSchema),
-  BaseFormSchema.merge(SecurityRequestSchema),
-  BaseFormSchema.merge(GiftRequestSchema),
-]);
+const FormSchema = formService;
 
 type FormSchemaType = z.infer<typeof FormSchema>;
 
@@ -87,20 +75,20 @@ const FORMTYPE_RECORD: Record<
     formFields: FormComponent<unknown>;
   }
 > = {
-  "room-request": { longName: "Request a Room", formFields: RoomRequestFields },
-  "av-request": {
+  ROOM: { longName: "Request a Room", formFields: RoomRequestFields },
+  AV: {
     longName: "Request AV Equipment",
     formFields: AVRequestFields,
   },
-  "flower-request": {
+  FLOWER: {
     longName: "Request Flowers",
     formFields: FlowerRequestFields,
   },
-  "security-request": {
+  SECURITY: {
     longName: "Request Security",
     formFields: SecurityRequestFields,
   },
-  "gift-request": {
+  GIFT: {
     longName: "Request Gift",
     formFields: GiftRequestFields,
   },
@@ -118,8 +106,9 @@ export default function InputForm({ variant }: Props) {
     shouldUnregister: true,
   });
 
-  const { requests, setRequests } = useContext(RequestsContext);
+  // const { requests, setRequests } = useContext(RequestsContext);
   const session = useAuth0();
+  const utils = trpc.useUtils();
   const createFlowerRequest = trpc.service.createFlowerRequest.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
@@ -127,33 +116,30 @@ export default function InputForm({ variant }: Props) {
   >;
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("attempting");
-    console.log(data);
-
-    if (data.type === "flower-request") {
-      toast.promise(
-        createFlowerRequest.mutateAsync({
-          nodeId: data.location,
-          login: session.user?.email ?? "No login found.",
-          data: {
-            flower: data.flowerchoice,
-            recipientName: data.recipient,
+    switch (data.type) {
+      case "FLOWER":
+        toast.promise(
+          createFlowerRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAllFlowerRequests.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving flower request to the database.",
+            error: "Error saving to database.",
           },
-          note: data.notes ?? "",
-          priority: "Low",
-          status: "Unassigned",
-        }),
-        {
-          success: "Successfully saved to the database.",
-          loading: "Saving flower request to the database.",
-          error: "Error saving to database.",
-        },
-      );
+        );
+        break;
+      default:
+        toast.error("An error occured.");
     }
-
-    const dataWithStatus = { ...data, status: "Unassigned" };
-
-    setRequests([...requests, dataWithStatus]);
 
     toast(
       <div>
@@ -168,6 +154,7 @@ export default function InputForm({ variant }: Props) {
   }
 
   useEffect(() => {
+    console.log("SETTING TYPE: " + variant);
     form.setValue("type", variant);
   }, [variant, form]);
 
@@ -185,26 +172,10 @@ export default function InputForm({ variant }: Props) {
               onSubmit={form.handleSubmit(onSubmit)}
               className="w-full flex flex-col justify-between items-stretch gap-3"
             >
-              <FormField
-                control={form.control}
-                name="recipient"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Recipient</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Who should receive the service.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <div className="flex flex-row gap-2 items-stretch">
                 <FormField
                   control={form.control}
-                  name="location"
+                  name="nodeId"
                   render={({ field }) => (
                     <FormItem className="flex flex-col h-full justify-between flex-1">
                       <FormLabel>Location</FormLabel>
@@ -241,7 +212,7 @@ export default function InputForm({ variant }: Props) {
                                   value={location.id}
                                   key={location.id}
                                   onSelect={() => {
-                                    form.setValue("location", location.id);
+                                    form.setValue("nodeId", location.id);
                                   }}
                                 >
                                   {location.longName}
@@ -282,10 +253,10 @@ export default function InputForm({ variant }: Props) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="Low">Low</SelectItem>
-                          <SelectItem value="Medium">Medium</SelectItem>
-                          <SelectItem value="High">High</SelectItem>
-                          <SelectItem value="Emergency">Emergency</SelectItem>
+                          <SelectItem value="LOW">Low</SelectItem>
+                          <SelectItem value="MEDIUM">Medium</SelectItem>
+                          <SelectItem value="HIGH">High</SelectItem>
+                          <SelectItem value="EMERGENCY">Emergency</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormDescription>
@@ -296,10 +267,39 @@ export default function InputForm({ variant }: Props) {
                   )}
                 />
               </div>
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col flex-1">
+                    <FormLabel>Status</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a Status for the Request" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="ASSIGNED">Assigned</SelectItem>
+                        <SelectItem value="UNASSIGNED">Unassigned</SelectItem>
+                        <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
+                        <SelectItem value="COMPLETED">Completed</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      This is the urgency of the request.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               {<ActiveFormFields form={form} />}
               <FormField
                 control={form.control}
-                name="notes"
+                name="note"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Notes</FormLabel>
