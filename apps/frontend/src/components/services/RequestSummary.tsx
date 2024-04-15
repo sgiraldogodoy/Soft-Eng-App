@@ -38,35 +38,13 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
 
   const utils = trpc.useUtils();
 
-  const servicesQuery = trpc.service.getAllFlowerRequests.useQuery();
-  const serviceDeleteMutation = trpc.service.deleteFlowerRequest.useMutation();
+  const servicesQuery = trpc.service.getAll.useQuery();
+  const serviceDeleteMutation = trpc.service.deleteOne.useMutation();
   // const serviceDeliverMutation = trpc.service.deliver.useMutation();
 
   // const updateStatus = trpc.service.updateStatus.useMutation();
 
-  const dbRequests:
-    | {
-        id: string;
-        recipient: string;
-        location: string;
-        priority: "Low" | "Medium" | "High" | "Emergency";
-        notes?: string | undefined;
-        type: string;
-        status: string;
-      }[]
-    | undefined = servicesQuery.data?.map((d) => {
-    return {
-      recipient: d.recipientName,
-      location: d.service.nodeId ?? "",
-      priority: d.service.priority as "Low" | "Medium" | "High" | "Emergency",
-      notes: d.service.note,
-      type: "flower-request",
-      status: d.service.status,
-      id: d.id,
-    };
-  });
-
-  const addedRequests = [...requests, ...(dbRequests ?? [])];
+  const addedRequests = [...requests];
 
   if (servicesQuery.isLoading) {
     return <p>Loading...</p>;
@@ -112,7 +90,7 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
           <CardHeader>
             <CardTitle>Details</CardTitle>
             <CardDescription>
-              {selectedRow.flower} requested by {selectedRow.service.login}
+              {selectedRow.type} requested by {selectedRow.login}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -120,7 +98,7 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
               <Label htmlFor="message-2" className="font-bold">
                 Request Notes
               </Label>
-              <p>{selectedRow.service.note}</p>
+              <p>{selectedRow.note}</p>
             </div>
           </CardContent>
           <CardFooter>
@@ -136,7 +114,7 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
                       },
                       {
                         onSuccess: () => {
-                          utils.service.getAllFlowerRequests.invalidate();
+                          utils.service.getAll.invalidate();
                         },
                       },
                     ),
@@ -175,7 +153,7 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
                 Mark as Delivered
               </Button>*/}
               <Select
-                value={selectedRow.service.status}
+                value={selectedRow.status}
                 onValueChange={() => {
                   return true;
                   // mutate change
