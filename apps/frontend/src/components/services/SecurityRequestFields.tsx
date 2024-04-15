@@ -27,22 +27,22 @@ export const SecurityRequestSchema = z.object({
 const SecurityRequest = () => {
   return (
     <>
-      <div className="flex gap-2 items-center flex-1">
+      <div className="flex flex-row gap-2 items-center flex-1">
+        {/*<FormField*/}
+        {/*  name="data.dateTime"*/}
+        {/*  render={({ field }) => (*/}
+        {/*    <FormItem className="">*/}
+        {/*      <FormLabel>Time</FormLabel>*/}
+        {/*      <FormControl>*/}
+        {/*        <Input type="time" {...field} />*/}
+        {/*      </FormControl>*/}
+        {/*      <FormDescription>What time is the request made?</FormDescription>*/}
+        {/*      <FormMessage />*/}
+        {/*    </FormItem>*/}
+        {/*  )}*/}
+        {/*/>*/}
         <FormField
-          name="time"
-          render={({ field }) => (
-            <FormItem className="">
-              <FormLabel>Time</FormLabel>
-              <FormControl>
-                <Input type="time" {...field} />
-              </FormControl>
-              <FormDescription>What time is the request made?</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="threatLevel"
+          name="data.threat"
           render={({ field }) => (
             <FormItem className="">
               <FormLabel>Threat Level</FormLabel>
@@ -51,7 +51,7 @@ const SecurityRequest = () => {
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-[300px]">
                     <SelectValue placeholder="Low" />
                   </SelectTrigger>
                   <SelectContent>
@@ -68,7 +68,7 @@ const SecurityRequest = () => {
           )}
         />
         <FormField
-          name="date"
+          name="data.dateTime"
           render={({ field }) => (
             <FormItem className="">
               <FormLabel>Date</FormLabel>

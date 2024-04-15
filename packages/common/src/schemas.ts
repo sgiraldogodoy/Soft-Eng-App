@@ -34,7 +34,7 @@ export const room = z.object({
 });
 
 export const security = z.object({
-  dateTime: z.date(),
+  dateTime: z.coerce.date(),
   threat: z.string(),
 });
 
