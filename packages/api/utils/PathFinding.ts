@@ -5,7 +5,12 @@ import type { PrismaClient } from "database";
 const arbHeuristic: number = 5;
 
 export interface PathFinding {
-  run(root: string, goal: string, db: PrismaClient): Promise<Node[]>;
+  run(
+    root: string,
+    goal: string,
+    db: PrismaClient,
+    dij?: boolean,
+  ): Promise<Node[]>;
 }
 
 export class breadthFirstSearch implements PathFinding {
@@ -74,7 +79,12 @@ export class breadthFirstSearch implements PathFinding {
  * @param db the database
  */
 export class aStar implements PathFinding {
-  async run(root: string, goal: string, db: PrismaClient): Promise<Node[]> {
+  async run(
+    root: string,
+    goal: string,
+    db: PrismaClient,
+    dij?: boolean,
+  ): Promise<Node[]> {
     const visited: string[] = [];
     const nodeArray = await db.node.findMany({
       include: {
@@ -124,14 +134,18 @@ export class aStar implements PathFinding {
         if (!visited.includes(neighbor.id)) {
           visited.push(neighbor.id);
           const pyth = this.pythDist(currNode, neighbor);
-          const newPriority =
-            cost +
-            pyth +
-            this.floorChange(currNode, neighbor) +
-            this.pythDist(neighbor, goalNode) +
-            this.floorDist(neighbor, goalNode);
-          // this.manHatt(neighbor, goalNode);
-          console.log(newPriority);
+          let newPriority = 0;
+          if (dij) {
+            newPriority = cost + pyth;
+          } else {
+            newPriority =
+              cost +
+              pyth +
+              this.floorChange(currNode, neighbor) +
+              this.pythDist(neighbor, goalNode) +
+              this.floorDist(neighbor, goalNode);
+            // this.manHatt(neighbor, goalNode);
+          }
           priorityQueue.enq({
             ...neighbor,
             path: [...path, neighbor],
@@ -200,6 +214,7 @@ export class depthFirstSearch implements PathFinding {
    * @param root the start node
    * @param goal the end node
    * @param db the database
+   * @param dij boolean to determine if the path should be calculated using Dijkstra's algorithm
    * @returns the path between the two nodes
    */
   async run(root: string, goal: string, db: PrismaClient): Promise<Node[]> {
@@ -273,9 +288,18 @@ export class Context {
     return "";
   }
 
-  async run(root: string, goal: string, db: PrismaClient): Promise<Node[]> {
+  async run(
+    root: string,
+    goal: string,
+    db: PrismaClient,
+    dij?: boolean,
+  ): Promise<Node[]> {
     if (this.pathFindingAlg) {
-      return this.pathFindingAlg.run(root, goal, db);
+      if (dij) {
+        return this.pathFindingAlg.run(root, goal, db, dij);
+      } else {
+        return this.pathFindingAlg.run(root, goal, db);
+      }
     }
     return [];
   }
