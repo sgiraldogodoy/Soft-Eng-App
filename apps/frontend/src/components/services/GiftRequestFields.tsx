@@ -69,11 +69,7 @@ const GiftRequest = () => {
                   />
                 </FormControl>
                 <FormLabel>Gift Wrapped</FormLabel>
-                <div className="space-y-1 leading-none">
-                  <FormDescription>
-                    Would you like the gift to be wrapped on delivery?
-                  </FormDescription>
-                </div>
+                <div className="space-y-1 leading-none"></div>
               </FormItem>
             )}
           />
