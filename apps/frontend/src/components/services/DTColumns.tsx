@@ -1,19 +1,12 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { ReceiptText } from "lucide-react";
-import { BaseFormSchema } from "./formSchema";
-import { z } from "zod";
+import { RouterOutput } from "@/utils/trpc";
 
-export const columns: ColumnDef<
-  z.infer<typeof BaseFormSchema> & { type: string; status: string }
->[] = [
+export const columns: ColumnDef<RouterOutput["service"]["getAll"][0]>[] = [
   {
     accessorKey: "type",
     header: "Type",
-  },
-  {
-    accessorKey: "recipient",
-    header: "Recipient",
   },
   {
     accessorKey: "status",
