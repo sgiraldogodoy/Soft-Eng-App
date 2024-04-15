@@ -89,7 +89,7 @@ export default function RequestSummary({ requests }: RequestSummaryProps) {
 
   return (
     <div className="w-full flex flex-col gap-4 flex-1 max-h-full">
-      <Card className="flex flex-col flex-1 overflow-auto bg-white/90 backdrop-blur-md drop-shadow-md shadow-inner">
+      <Card className="flex flex-col flex-1 overflow-auto bg-white/40 backdrop-blur-md drop-shadow-md shadow-inner">
         <CardHeader>
           <CardTitle>Open Requests</CardTitle>
         </CardHeader>

@@ -7,6 +7,7 @@ const HelloMultipleLanguages = () => {
     "Hola", // Spanish
     "Bonjour", // French
     "Ciao", // Italian
+    "Kamusta", // Filipino
     "Hallo", // German
     "Olá", // Portuguese
     "Привет", // Russian
