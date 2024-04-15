@@ -135,9 +135,11 @@ export default function InputForm({ variant }: Props) {
         createFlowerRequest.mutateAsync({
           nodeId: data.location,
           login: session.user?.email ?? "No login found.",
-          flower: data.flowerchoice,
+          data: {
+            flower: data.flowerchoice,
+            recipientName: data.recipient,
+          },
           note: data.notes ?? "",
-          recipientName: data.recipient,
           priority: "Low",
           status: "Unassigned",
         }),
