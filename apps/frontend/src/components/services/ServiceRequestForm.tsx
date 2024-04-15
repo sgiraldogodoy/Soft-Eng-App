@@ -120,7 +120,7 @@ export default function InputForm({ variant }: Props) {
 
   const { requests, setRequests } = useContext(RequestsContext);
   const session = useAuth0();
-  const createFlowerRequest = trpc.flower.createOne.useMutation();
+  const createFlowerRequest = trpc.service.createFlowerRequest.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
