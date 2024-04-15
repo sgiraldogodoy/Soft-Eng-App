@@ -83,4 +83,52 @@ export const SecurityRouter = router({
 
       return { message: "Security requests deleted" };
     }),
+
+  updateOne: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        data: baseService.partial().extend({
+          data: security.partial(),
+          type: z.literal("SECURITY").default("SECURITY"),
+        }),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { data, ...rest } = input;
+      return ctx.db.security.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          ...data,
+          service: {
+            update: {
+              ...rest,
+            },
+          },
+        },
+      });
+    }),
+
+  updateMany: publicProcedure
+    .input(
+      z.object({
+        ids: z.array(z.string()),
+        data: baseService.partial().extend({
+          data: security.partial(),
+          type: z.literal("SECURITY").default("SECURITY"),
+        }),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      return ctx.db.security.updateMany({
+        where: {
+          id: {
+            in: input.ids,
+          },
+        },
+        data: input.data,
+      });
+    }),
 });
