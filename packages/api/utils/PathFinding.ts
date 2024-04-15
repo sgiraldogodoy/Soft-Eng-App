@@ -135,7 +135,7 @@ export class aStar implements PathFinding {
           visited.push(neighbor.id);
           const pyth = this.pythDist(currNode, neighbor);
           let newPriority = 0;
-          if (dij === true) {
+          if (dij) {
             newPriority = cost + pyth;
           } else {
             newPriority =
