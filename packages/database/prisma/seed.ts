@@ -81,7 +81,7 @@ async function main() {
             type: "FLOWER",
             login: "Ace",
             priority: "High",
-            status: "Active",
+            status: "UNASSIGNED",
             note: "Note",
           },
         },
