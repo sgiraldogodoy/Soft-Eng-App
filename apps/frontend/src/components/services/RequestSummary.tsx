@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { RowSelectionState } from "@tanstack/react-table";
 import { trpc } from "@/utils/trpc";
 import { Button } from "../ui/button";
@@ -21,6 +21,8 @@ import {
   SelectValue,
 } from "../ui/select";
 import { motion } from "framer-motion";
+import { type baseService } from "common";
+import type { z } from "zod";
 
 export default function RequestSummary() {
   const [rowSelectionState, setRowSelectionState] = useState<RowSelectionState>(
@@ -33,9 +35,22 @@ export default function RequestSummary() {
   const serviceDeleteMutation = trpc.service.deleteOne.useMutation();
   // const serviceDeliverMutation = trpc.service.deliver.useMutation();
 
-  // const updateStatus = trpc.service.updateStatus.useMutation();
+  const updateStatus = trpc.service.updateOne.useMutation();
 
   const allRequests = servicesQuery.data;
+
+  const selectedRowId = useMemo(
+    () => Object.keys(rowSelectionState)[0],
+    [rowSelectionState],
+  );
+
+  const selectedRow = useMemo(
+    () =>
+      servicesQuery.data && selectedRowId
+        ? servicesQuery.data.find((r) => r.id === selectedRowId)
+        : undefined,
+    [selectedRowId, servicesQuery],
+  );
 
   if (servicesQuery.isLoading) {
     return <p>Loading...</p>;
@@ -50,12 +65,6 @@ export default function RequestSummary() {
   }
 
   console.log(rowSelectionState);
-
-  const rowId = Object.keys(rowSelectionState)[0];
-
-  const selectedRow = rowId
-    ? servicesQuery.data.at(parseInt(rowId))
-    : undefined;
 
   return (
     <motion.div
@@ -145,37 +154,39 @@ export default function RequestSummary() {
               </Button>*/}
               <Select
                 value={selectedRow.status}
-                onValueChange={() => {
-                  return true;
-                  // mutate change
-                  // toast.promise(
-                  //   updateStatus.mutateAsync(
-                  //     {
-                  //       id: selectedRow.id,
-                  //       newStatus: newVal,
-                  //     },
-                  //     {
-                  //       onSuccess() {
-                  //         utils.service.getAllFlowerRequests.invalidate();
-                  //       },
-                  //     },
-                  //   ),
-                  //   {
-                  //     success: "Changed status to " + newVal,
-                  //     loading: "Updating status...",
-                  //     error: "Error updating status.",
-                  //   },
-                  // );
+                onValueChange={(newVal) => {
+                  toast.promise(
+                    updateStatus.mutateAsync(
+                      {
+                        id: selectedRow.id,
+                        data: {
+                          status: newVal as z.infer<
+                            typeof baseService
+                          >["status"],
+                        },
+                      },
+                      {
+                        onSuccess() {
+                          utils.service.getAll.invalidate();
+                        },
+                      },
+                    ),
+                    {
+                      success: "Changed status to " + newVal,
+                      loading: "Updating status...",
+                      error: "Error updating status.",
+                    },
+                  );
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Theme" />
+                  <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Unassigned">Unassigned</SelectItem>
-                  <SelectItem value="Assigned">Assigned</SelectItem>
-                  <SelectItem value="In Progress">In Progress</SelectItem>
-                  <SelectItem value="Closed">Closed</SelectItem>
+                  <SelectItem value="UNASSIGNED">Unassigned</SelectItem>
+                  <SelectItem value="ASSIGNED">Assigned</SelectItem>
+                  <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
+                  <SelectItem value="COMPLETED">Completed</SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -24,7 +24,7 @@ interface DataTableProps<TData, TValue> {
   setSelectionState: OnChangeFn<RowSelectionState>;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends { id: string }, TValue>({
   columns,
   data,
   selectionState,
@@ -37,6 +37,9 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange: setSelectionState,
     enableMultiRowSelection: false,
+    getRowId: (row) => {
+      return row.id;
+    },
     initialState: {
       sorting: [
         {

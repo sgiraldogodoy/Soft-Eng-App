@@ -5,6 +5,9 @@ import { RouterOutput } from "@/utils/trpc";
 
 export const columns: ColumnDef<RouterOutput["service"]["getAll"][0]>[] = [
   {
+    accessorKey: "id",
+  },
+  {
     accessorKey: "type",
     header: "Type",
   },
