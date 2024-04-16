@@ -195,7 +195,7 @@ export default function InputForm({ variant }: Props) {
           ),
           {
             success: "Successfully saved to the database.",
-            loading: "Saving gift request to the database.",
+            loading: "Saving av request to the database.",
             error: "Error saving to database.",
           },
         );
