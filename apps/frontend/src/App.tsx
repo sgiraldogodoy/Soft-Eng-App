@@ -12,7 +12,11 @@ export default function App() {
   session.getAccessTokenWithPopup;
 
   const token = useMemo(async () => {
-    return await session.getAccessTokenSilently();
+    try {
+      return await session.getAccessTokenSilently();
+    } catch {
+      return "";
+    }
   }, [session]);
 
   const [queryClient] = useState(() => new QueryClient());
