@@ -1,4 +1,4 @@
-import { publicProcedure } from "../trpc";
+import { protectedProcedure, publicProcedure } from "../trpc";
 import { router } from "../trpc";
 import { z } from "zod";
 import { parseCSVNode } from "../../utils/csv-parsing.ts";
@@ -16,7 +16,7 @@ const myPathFinding: Context = new Context();
 myPathFinding.setPathFindingAlg = new aStar();
 
 export const Node = router({
-  csvUpload: publicProcedure
+  csvUpload: protectedProcedure
     .input(z.object({ buffer: z.string() }))
     .mutation(async ({ input, ctx }) => {
       try {
@@ -39,7 +39,7 @@ export const Node = router({
         });
       }
     }),
-  csvExport: publicProcedure.query(async ({ ctx }) => {
+  csvExport: protectedProcedure.query(async ({ ctx }) => {
     // get all nodes
     const nodeStr = await exportNodesToDb(ctx.db);
     const b64str = Buffer.from(nodeStr, "utf8").toString("base64");
@@ -70,7 +70,7 @@ export const Node = router({
         input.algorithm === "DIJ",
       );
     }),
-  createOne: publicProcedure
+  createOne: protectedProcedure
     .input(z.object({ data: node }))
     .mutation(async ({ input, ctx }) => {
       ctx.db.node.create({
@@ -78,7 +78,7 @@ export const Node = router({
       });
     }),
 
-  createMany: publicProcedure
+  createMany: protectedProcedure
     .input(z.object({ data: z.array(node) }))
     .mutation(async ({ input, ctx }) => {
       ctx.db.node.createMany({
@@ -98,7 +98,7 @@ export const Node = router({
         },
       });
     }),
-  deleteOne: publicProcedure
+  deleteOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {
       return ctx.db.node.delete({
@@ -107,7 +107,7 @@ export const Node = router({
         },
       });
     }),
-  deleteMany: publicProcedure
+  deleteMany: protectedProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input, ctx }) => {
       return ctx.db.node.deleteMany({
@@ -118,10 +118,10 @@ export const Node = router({
         },
       });
     }),
-  deleteAll: publicProcedure.mutation(async ({ ctx }) => {
+  deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
     return ctx.db.node.deleteMany();
   }),
-  updateOne: publicProcedure
+  updateOne: protectedProcedure
     .input(z.object({ id: z.string(), data: node.partial() }))
     .mutation(async ({ input, ctx }) => {
       return ctx.db.node.update({
@@ -132,7 +132,7 @@ export const Node = router({
       });
     }),
 
-  updateMany: publicProcedure
+  updateMany: protectedProcedure
     .input(z.object({ ids: z.array(z.string()), data: node.partial() }))
     .mutation(async ({ input, ctx }) => {
       return ctx.db.node.updateMany({
