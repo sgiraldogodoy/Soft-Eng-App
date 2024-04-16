@@ -112,6 +112,7 @@ export default function InputForm({ variant }: Props) {
   const createFlowerRequest = trpc.flower.createOne.useMutation();
   const createSecurityRequest = trpc.security.createOne.useMutation();
   const createGiftRequest = trpc.gift.createOne.useMutation();
+  const createAVRequest = trpc.av.createOne.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
@@ -159,16 +160,36 @@ export default function InputForm({ variant }: Props) {
           },
         );
         break;
-     case "GIFT":
-       toast.promise(
-          createGiftRequest.mutateAsync(  
-             {
+      case "GIFT":
+        toast.promise(
+          createGiftRequest.mutateAsync(
+            {
               login: session.user?.email ?? "",
               ...data,
             },
             {
               onSuccess: () => {
-               utils.gift.getAll.invalidate();
+                utils.gift.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving gift request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "AV":
+        toast.promise(
+          createAVRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.av.getAll.invalidate();
               },
             },
           ),
@@ -184,7 +205,7 @@ export default function InputForm({ variant }: Props) {
     }
 
     form.reset();
-  }        
+  }
 
   useEffect(() => {
     console.log("SETTING TYPE: " + variant);
