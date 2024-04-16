@@ -60,6 +60,9 @@ export default {
         md: `calc(var(--radius) - 2px)`,
         sm: "calc(var(--radius) - 4px)",
       },
+      cursor: {
+        eraser: "url(../../public/eraser.svg), auto",
+      },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
         inter: ["Inter", "sans-serif"],

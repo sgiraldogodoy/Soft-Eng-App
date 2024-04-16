@@ -22,6 +22,7 @@ interface NodesProps {
   dragOffset: { x: number; y: number };
   scale: number;
   editable?: boolean;
+  typeEdit?: string;
 }
 
 export function Nodes({
@@ -37,6 +38,7 @@ export function Nodes({
   dragOffset,
   scale,
   editable,
+  typeEdit,
 }: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [hoveredNodeString, setHoveredNodeString] = useState<string | null>(
@@ -45,10 +47,43 @@ export function Nodes({
 
   const utils = trpc.useUtils();
   const nodeUpdate = trpc.node.updateOne.useMutation();
+  const deleteNode = trpc.node.deleteOne.useMutation();
+  // const createNode = trpc.node.createOne.useMutation();
+
+  // const handleCreate = () => {
+  //
+  // }
+
+  const handleDelete = () => {
+    if (hoveredNode) {
+      // const deleteNode = nodes.find((node) => node.id === hoveredNode);
+      // if (deleteNode) {
+      deleteNode.mutate(
+        {
+          id: hoveredNode,
+        },
+        {
+          onSuccess: () => {
+            utils.node.getAll.invalidate();
+          },
+        },
+      );
+      // }
+    }
+  };
 
   const handleDragStart = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (onNodeDown) onNodeDown(); // turn off map panning
     if (!editable) return; // check if on map edit
+    switch (typeEdit) {
+      case "Move":
+        break;
+      case "Eraser":
+        handleDelete();
+        return;
+      default:
+        return;
+    }
     const target = e.currentTarget;
     target.style.position = "absolute";
     const offsetX = e.clientX - parseFloat(target.style.left || "0");
@@ -167,7 +202,13 @@ export function Nodes({
                     : "0 0 0 2px black",
             borderRadius: "100%",
             transform: `translate(-50%, -50%) scale(${scale})`,
-            cursor: editable ? "move" : "default",
+            cursor: editable
+              ? typeEdit === "Move"
+                ? "move"
+                : typeEdit === "Eraser"
+                  ? 'url("/eraser.svg"), auto'
+                  : "default"
+              : "default",
           }}
           onMouseEnter={() => {
             setHoveredNode(node.id);
