@@ -28,7 +28,7 @@ const AVRequest = () => {
     <>
       <div className="flex gap-2 items-center flex-1">
         <FormField
-          name="avTypes"
+          name="data.type"
           render={({ field }) => (
             <FormItem className="flex-1">
               <FormLabel>AV Types</FormLabel>
@@ -50,7 +50,7 @@ const AVRequest = () => {
           )}
         />
         <FormField
-          name="deliveryTime"
+          name="data.dateTime"
           render={({ field }) => (
             <FormItem className="flex-1">
               <FormLabel>Delivery Time</FormLabel>
