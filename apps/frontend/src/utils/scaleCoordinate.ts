@@ -33,11 +33,12 @@ const reverseScaleCoordinate = (
   scale: number,
 ) => {
   return (
-    (((reversecoordinate + (curSize * scale) / 2 - curSize / 2 - offset) /
-      scale) *
-      origSize) /
-      curSize -
-    dragOffset
+    (reversecoordinate -
+      offset -
+      dragOffset * scale +
+      (curSize * scale) / 2 -
+      curSize / 2) /
+    ((curSize / origSize) * scale)
   );
 };
 

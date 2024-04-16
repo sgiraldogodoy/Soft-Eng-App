@@ -47,8 +47,8 @@ export function Nodes({
   const nodeUpdate = trpc.node.updateOne.useMutation();
 
   const handleDragStart = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (!editable) return; // check if on map edit
     if (onNodeDown) onNodeDown(); // turn off map panning
+    if (!editable) return; // check if on map edit
     const target = e.currentTarget;
     target.style.position = "absolute";
     const offsetX = e.clientX - parseFloat(target.style.left || "0");
@@ -180,7 +180,6 @@ export function Nodes({
           onMouseDown={handleDragStart}
           onClick={() => {
             if (onNodeClick) onNodeClick(node.id);
-            if (onNodeDown) onNodeDown();
           }}
         />
       ))}
