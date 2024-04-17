@@ -2,12 +2,11 @@
 import MapButton from "@/components/MapButton.tsx";*/
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link, Redirect } from "wouter";
-/*import {WavyBackground} from "@/components/ui/wavy-background.tsx";
-import HelloMultipleLanguages from "@/components/ui/hello-text.tsx";*/
 import { LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import HelloMultipleLanguages from "@/components/ui/hello-text.tsx";
 import { useEffect, useState } from "react";
+import WeatherWidget from "@/components/WeatherWidget.tsx";
 
 export default function HomePage() {
   const session = useAuth0();
@@ -108,6 +107,7 @@ export default function HomePage() {
           </div>
         </Link>
       </Button>
+      <WeatherWidget />
     </div>
   );
 }
