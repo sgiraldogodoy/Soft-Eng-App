@@ -99,7 +99,15 @@ interface Props {
 }
 
 export default function InputForm({ variant }: Props) {
-  const nodesQuery = trpc.node.getAll.useQuery();
+  const unfilteredQuery = trpc.node.getAll.useQuery();
+  const unsortedQuery = unfilteredQuery.data
+    ? unfilteredQuery.data?.filter((node) => !(node.type === "HALL"))
+    : [];
+  const nodesQuery = unsortedQuery.sort(function (a, b) {
+    const nodeA = a.longName.toUpperCase();
+    const nodeB = b.longName.toUpperCase();
+    return nodeA < nodeB ? -1 : nodeA > nodeB ? 1 : 0;
+  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -245,7 +253,7 @@ export default function InputForm({ variant }: Props) {
                               )}
                             >
                               {field.value
-                                ? nodesQuery.data?.find(
+                                ? nodesQuery.find(
                                     (node) => node.id === field.value,
                                   )?.longName
                                 : "Select location"}
@@ -253,7 +261,7 @@ export default function InputForm({ variant }: Props) {
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[200px] max-h-[200px] overflow-scroll p-0">
+                        <PopoverContent className="w-[310px] max-h-[200px] overflow-scroll p-0">
                           <Command>
                             <CommandInput
                               placeholder="Search locations..."
@@ -261,7 +269,7 @@ export default function InputForm({ variant }: Props) {
                             />
                             <CommandEmpty>No location found.</CommandEmpty>
                             <CommandGroup>
-                              {nodesQuery.data?.map((location) => (
+                              {nodesQuery.map((location) => (
                                 <CommandItem
                                   value={location.id}
                                   key={location.id}
