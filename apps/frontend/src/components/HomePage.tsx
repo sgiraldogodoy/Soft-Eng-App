@@ -5,6 +5,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Redirect } from "wouter";
 import { WavyBackground } from "@/components/ui/wavy-background.tsx";
 import HelloMultipleLanguages from "@/components/ui/hello-text.tsx";
+import Laser from "@/components/Laser.tsx";
 
 export default function HomePage() {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -27,6 +28,9 @@ export default function HomePage() {
         </div>
         <AdminDashLink />
       </WavyBackground>
+      <div>
+        <Laser />
+      </div>
     </div>
   );
 }

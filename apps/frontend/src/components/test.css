@@ -1,0 +1,13 @@
+.rect {
+  animation: followpath 50000ms infinite linear;
+  background: cyan;
+}
+
+@keyframes followpath {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}
