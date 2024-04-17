@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/popover";
 import PathfindSettings from "@/components/PathfindSettings.tsx";
 import { Button } from "@/components/ui/button.tsx";
+
 import { Link } from "wouter";
 
 type Floor = "L1" | "L2" | "1" | "2" | "3";

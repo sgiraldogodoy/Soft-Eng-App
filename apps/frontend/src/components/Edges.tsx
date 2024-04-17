@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Node, Edge } from "database";
 import { scaleCoordinate } from "../utils/scaleCoordinate";
+import { trpc } from "@/utils/trpc";
 
 const origImageWidth = 5000;
 const origImageHeight = 3400;
@@ -13,18 +14,49 @@ interface LineProps {
   floor: string;
   dragOffset: { x: number; y: number };
   scale: number;
+  typeEdit?: string;
+  editable?: boolean;
+  onNodeDown?: () => void;
 }
 
 export function Edges({
   nodes,
   edges,
+  onNodeDown,
   imgWidth,
   imgHeight,
   floor,
   dragOffset,
   scale,
+  editable,
+  typeEdit,
 }: LineProps) {
   const [hoveredEdgeID, setHoveredEdge] = useState<string | null>(null); //set hovered node
+  const [hoveredStartNode, setHoveredStartNode] = useState<string | null>(null);
+  const [hoveredEndNode, setHoveredEndNode] = useState<string | null>(null);
+
+  const utils = trpc.useUtils();
+  const deleteEdge = trpc.edge.deleteOne.useMutation();
+  const handleEdge = () => {
+    if (onNodeDown) onNodeDown();
+    if (!editable) return;
+    if (typeEdit !== "Eraser") return;
+    if (hoveredEdgeID) {
+      if (hoveredStartNode && hoveredEndNode) {
+        deleteEdge.mutate(
+          {
+            startNodeId: hoveredStartNode,
+            endNodeId: hoveredEndNode,
+          },
+          {
+            onSuccess: () => {
+              utils.edge.getAll.invalidate();
+            },
+          },
+        );
+      }
+    }
+  };
 
   if (!edges || edges.length < 2) return null; // At least two for path
   const filteredNode = nodes.filter((node) => node.floor === floor);
@@ -87,16 +119,22 @@ export function Edges({
                 dragOffset.y,
                 scale,
               )}
-              onMouseEnter={() =>
-                setHoveredEdge(`${edge.startNodeId}-${edge.endNodeId}`)
-              }
+              onMouseEnter={() => {
+                setHoveredEdge(`${edge.startNodeId}-${edge.endNodeId}`);
+                setHoveredStartNode(edge.startNodeId);
+                setHoveredEndNode(edge.endNodeId);
+              }}
+              onClick={handleEdge}
               onMouseLeave={() => setHoveredEdge(null)}
               style={{
                 position: "absolute",
                 stroke: "red",
                 strokeWidth: 2 * scale,
                 fill: "blue",
-                cursor: "pointer",
+                cursor:
+                  typeEdit === "Eraser"
+                    ? "url('/eraser.svg') 12 24, auto"
+                    : "pointer",
               }}
             />
           );
@@ -111,7 +149,9 @@ export function Edges({
             backgroundColor: "white",
             padding: "5px",
             borderRadius: "5px",
+            cursor: 'url("/eraser.svg"), auto',
           }}
+          key={`edge-${hoveredEdgeID}`}
         >
           Edge ID: {hoveredEdgeID}
         </div>

@@ -17,6 +17,7 @@ interface MapProps {
   floor: string;
   editable?: boolean;
   filter?: boolean;
+  typeEdit?: string;
 }
 
 export default function Map({
@@ -30,6 +31,7 @@ export default function Map({
   edges,
   editable,
   filter,
+  typeEdit,
 }: MapProps) {
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height
@@ -202,6 +204,9 @@ export default function Map({
           floor={floor}
           dragOffset={offset}
           scale={scale}
+          editable={editable}
+          typeEdit={typeEdit}
+          onNodeDown={nodeDown}
         />
       )}
       <Nodes
@@ -217,6 +222,7 @@ export default function Map({
         scale={scale}
         editable={editable}
         filter={filter}
+        typeEdit={typeEdit}
       />
       {path && (
         <Lines
