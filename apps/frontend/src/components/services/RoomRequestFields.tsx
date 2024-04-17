@@ -1,4 +1,3 @@
-import { z } from "zod";
 import {
   FormControl,
   FormDescription,
@@ -9,23 +8,17 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 
-export const RoomRequestSchema = z.object({
-  type: z.literal("room-request"),
-  startTime: z.string(),
-  endTime: z.string(),
-});
-
 const RoomRequest = () => {
   return (
     <>
       <div className="flex gap-2 items-center flex-1">
         <FormField
-          name="startTime"
+          name="data.checkIn"
           render={({ field }) => (
             <FormItem className="flex-1">
               <FormLabel>Start Time</FormLabel>
               <FormControl>
-                <Input type="date" {...field} />
+                <Input type="datetime-local" {...field} />
               </FormControl>
               <FormDescription>What time should it start?</FormDescription>
               <FormMessage />
@@ -33,12 +26,12 @@ const RoomRequest = () => {
           )}
         />
         <FormField
-          name="endTime"
+          name="data.checkOut"
           render={({ field }) => (
             <FormItem className="flex-1">
               <FormLabel>End Time</FormLabel>
               <FormControl>
-                <Input type="date" {...field} />
+                <Input type="datetime-local" {...field} />
               </FormControl>
               <FormDescription>What time should it end?</FormDescription>
               <FormMessage />

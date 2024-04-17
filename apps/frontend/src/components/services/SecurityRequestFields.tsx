@@ -1,4 +1,3 @@
-import { z } from "zod";
 import {
   FormControl,
   FormDescription,
@@ -17,30 +16,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export const SecurityRequestSchema = z.object({
-  type: z.literal("security-request"),
-  time: z.string(),
-  threatLevel: z.string(),
-  date: z.string(),
-});
-
 const SecurityRequest = () => {
   return (
     <>
       <div className="flex flex-row gap-2 items-center flex-1">
-        {/*<FormField*/}
-        {/*  name="data.dateTime"*/}
-        {/*  render={({ field }) => (*/}
-        {/*    <FormItem className="">*/}
-        {/*      <FormLabel>Time</FormLabel>*/}
-        {/*      <FormControl>*/}
-        {/*        <Input type="time" {...field} />*/}
-        {/*      </FormControl>*/}
-        {/*      <FormDescription>What time is the request made?</FormDescription>*/}
-        {/*      <FormMessage />*/}
-        {/*    </FormItem>*/}
-        {/*  )}*/}
-        {/*/>*/}
         <FormField
           name="data.threat"
           render={({ field }) => (
@@ -73,7 +52,7 @@ const SecurityRequest = () => {
             <FormItem className="">
               <FormLabel>Date</FormLabel>
               <FormControl>
-                <Input type="Date" {...field} />
+                <Input type="datetime-local" {...field} />
               </FormControl>
               <FormDescription>
                 What date does the request need to be made?

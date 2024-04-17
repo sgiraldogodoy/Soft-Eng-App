@@ -29,8 +29,8 @@ export const gift = z.object({
 });
 
 export const room = z.object({
-  checkIn: z.date(),
-  checkOut: z.date(),
+  checkIn: z.coerce.date(),
+  checkOut: z.coerce.date(),
 });
 
 export const security = z.object({
