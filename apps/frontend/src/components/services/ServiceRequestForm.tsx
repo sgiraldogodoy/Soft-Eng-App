@@ -159,16 +159,16 @@ export default function InputForm({ variant }: Props) {
           },
         );
         break;
-     case "GIFT":
-       toast.promise(
-          createGiftRequest.mutateAsync(  
-             {
+      case "GIFT":
+        toast.promise(
+          createGiftRequest.mutateAsync(
+            {
               login: session.user?.email ?? "",
               ...data,
             },
             {
               onSuccess: () => {
-               utils.gift.getAll.invalidate();
+                utils.gift.getAll.invalidate();
               },
             },
           ),
@@ -184,7 +184,7 @@ export default function InputForm({ variant }: Props) {
     }
 
     form.reset();
-  }        
+  }
 
   useEffect(() => {
     console.log("SETTING TYPE: " + variant);

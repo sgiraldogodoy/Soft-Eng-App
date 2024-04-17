@@ -1,21 +1,47 @@
 /*import HeroSection from "@/components/HeroSection.tsx";
 import MapButton from "@/components/MapButton.tsx";*/
 import { useAuth0 } from "@auth0/auth0-react";
-import { Redirect } from "wouter";
+import { Link, Redirect } from "wouter";
 /*import {WavyBackground} from "@/components/ui/wavy-background.tsx";
 import HelloMultipleLanguages from "@/components/ui/hello-text.tsx";*/
 import { LogIn } from "lucide-react";
+import { Button } from "@/components/ui/button.tsx";
 import HelloMultipleLanguages from "@/components/ui/hello-text.tsx";
+import { useEffect, useState } from "react";
 
 export default function HomePage() {
   const session = useAuth0();
+
+  const [dateTime, setDateTime] = useState(new Date());
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setDateTime(new Date());
+    }, 1000); // Update time every second
+
+    return () => clearInterval(intervalId); // Clean up the interval on component unmount
+  }, []); // Empty dependency array ensures this effect runs only once on component mount
+
+  // Format the date and time as desired
+  const formattedDate = dateTime.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  const formattedTime = dateTime.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  });
 
   if (session.isLoading) {
     return <div></div>;
   }
 
   return (
-    <div>
+    <div className="h-screen min-w-screen flex flex-col">
       {session.isAuthenticated && <Redirect to="/pathfind" />}
       <div className="flex px-[17px] py-[18px] border-b border-gray-300 bg-gray-200/50 items-center justify-between gap-2">
         <div className="flex gap-2">
@@ -69,9 +95,19 @@ export default function HomePage() {
           <LogIn />
         </div>
       </div>
-      <div className="text-center text-[#005DE2] ">
-        <HelloMultipleLanguages />
-      </div>
+      <Button asChild>
+        <Link href="/pathfind" asChild>
+          <div className="flex-1 flex flex-col gap-3 items-center justify-center cursor-pointer">
+            <h2 className="text-black text-[32px]">
+              {formattedDate} | {formattedTime}
+            </h2>
+            <HelloMultipleLanguages />
+            <p className="text-black text-[32px]">
+              Click anywhere to get directions
+            </p>
+          </div>
+        </Link>
+      </Button>
     </div>
   );
 }
