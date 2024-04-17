@@ -22,127 +22,126 @@ export function InspectDatabase() {
 
   return (
     <>
-      <BackgroundGradientAnimation className="overflow-hidden">
-        <div className="w-full h-screen relative">
-          <Card className="m-10 relative">
-            <Tabs defaultValue="nodes">
-              <div className="w-full flex items-center justify-center p-4">
-                <TabsList>
-                  <TabsTrigger value="nodes">Nodes</TabsTrigger>
-                  <TabsTrigger value="edges">Edges</TabsTrigger>
-                </TabsList>
-              </div>
-              <TabsContent value="nodes">
-                <NodesTable />
+      <BackgroundGradientAnimation />
+      <div className="relative h-full max-h-full p-6">
+        <Card className="relative max-h-full overflow-auto">
+          <Tabs defaultValue="nodes">
+            <div className="w-full flex items-center justify-center p-4">
+              <TabsList>
+                <TabsTrigger value="nodes">Nodes</TabsTrigger>
+                <TabsTrigger value="edges">Edges</TabsTrigger>
+              </TabsList>
+            </div>
+            <TabsContent value="nodes">
+              <NodesTable />
 
-                <Button
-                  onClick={() => {
-                    const base64String = downloadNodes.data ?? "";
-                    const decodedString = atob(base64String);
-                    const blob = new Blob([decodedString], {
-                      type: "text/csv",
-                    });
-                    const anchor = document.createElement("a");
-                    anchor.href = window.URL.createObjectURL(blob);
-                    anchor.download = "nodes-csv-file.csv";
-                    document.body.appendChild(anchor);
+              <Button
+                onClick={() => {
+                  const base64String = downloadNodes.data ?? "";
+                  const decodedString = atob(base64String);
+                  const blob = new Blob([decodedString], {
+                    type: "text/csv",
+                  });
+                  const anchor = document.createElement("a");
+                  anchor.href = window.URL.createObjectURL(blob);
+                  anchor.download = "nodes-csv-file.csv";
+                  document.body.appendChild(anchor);
 
-                    anchor.click();
-                  }}
-                  className="absolute top-[16px] right-[104px]"
-                >
-                  Download
-                </Button>
-              </TabsContent>
-              <TabsContent value="edges">
-                <EdgesTable />
-                <Button
-                  onClick={() => {
-                    const base64String = downloadEdges.data ?? "";
-                    const decodedString = atob(base64String);
-                    const blob = new Blob([decodedString], {
-                      type: "text/csv",
-                    });
-                    const anchor = document.createElement("a");
-                    anchor.href = window.URL.createObjectURL(blob);
-                    anchor.download = "edges-csv-file.csv";
-                    document.body.appendChild(anchor);
+                  anchor.click();
+                }}
+                className="absolute top-[16px] right-[104px]"
+              >
+                Download
+              </Button>
+            </TabsContent>
+            <TabsContent value="edges">
+              <EdgesTable />
+              <Button
+                onClick={() => {
+                  const base64String = downloadEdges.data ?? "";
+                  const decodedString = atob(base64String);
+                  const blob = new Blob([decodedString], {
+                    type: "text/csv",
+                  });
+                  const anchor = document.createElement("a");
+                  anchor.href = window.URL.createObjectURL(blob);
+                  anchor.download = "edges-csv-file.csv";
+                  document.body.appendChild(anchor);
 
-                    anchor.click();
-                  }}
-                  className="absolute top-[16px] right-[104px]"
-                >
-                  Download
-                </Button>
-              </TabsContent>
-            </Tabs>
-            <Button
-              onClick={() => {
-                uploadButton.current?.click();
-              }}
-              className="absolute top-[16px] right-4"
-            >
-              Upload
-            </Button>
+                  anchor.click();
+                }}
+                className="absolute top-[16px] right-[104px]"
+              >
+                Download
+              </Button>
+            </TabsContent>
+          </Tabs>
+          <Button
+            onClick={() => {
+              uploadButton.current?.click();
+            }}
+            className="absolute top-[16px] right-4"
+          >
+            Upload
+          </Button>
 
-            <input
-              ref={uploadButton}
-              onChange={async (e) => {
-                const files = e.target.files;
+          <input
+            ref={uploadButton}
+            onChange={async (e) => {
+              const files = e.target.files;
 
-                console.log("changed");
+              console.log("changed");
 
-                if (!files || files.length == 0) return;
+              if (!files || files.length == 0) return;
 
-                const text = await files[0].text();
-                const base64: string = (await getBase64(files[0])) as string;
-                console.log(base64);
+              const text = await files[0].text();
+              const base64: string = (await getBase64(files[0])) as string;
+              console.log(base64);
 
-                if (text.toLowerCase().includes("floor")) {
-                  toast.promise(
-                    nodeMutation.mutateAsync(
-                      {
-                        buffer: base64,
-                      },
-                      {
-                        onSuccess() {
-                          utils.node.getAll.invalidate();
-                        },
-                      },
-                    ),
+              if (text.toLowerCase().includes("floor")) {
+                toast.promise(
+                  nodeMutation.mutateAsync(
                     {
-                      loading: "Adding nodes...",
-                      success: "Done!",
-                      error: "An error occured.",
+                      buffer: base64,
                     },
-                  );
-                } else {
-                  toast.promise(
-                    edgeMutation.mutateAsync(
-                      {
-                        buffer: base64,
-                      },
-                      {
-                        onSuccess() {
-                          utils.edge.getAll.invalidate();
-                        },
-                      },
-                    ),
                     {
-                      loading: "Adding nodes...",
-                      success: "Done!",
-                      error: "An error occured.",
+                      onSuccess() {
+                        utils.node.getAll.invalidate();
+                      },
                     },
-                  );
-                }
-              }}
-              type="file"
-              multiple={false}
-              hidden
-            />
-          </Card>
-        </div>
-      </BackgroundGradientAnimation>
+                  ),
+                  {
+                    loading: "Adding nodes...",
+                    success: "Done!",
+                    error: "An error occured.",
+                  },
+                );
+              } else {
+                toast.promise(
+                  edgeMutation.mutateAsync(
+                    {
+                      buffer: base64,
+                    },
+                    {
+                      onSuccess() {
+                        utils.edge.getAll.invalidate();
+                      },
+                    },
+                  ),
+                  {
+                    loading: "Adding nodes...",
+                    success: "Done!",
+                    error: "An error occured.",
+                  },
+                );
+              }
+            }}
+            type="file"
+            multiple={false}
+            hidden
+          />
+        </Card>
+      </div>
     </>
   );
 }

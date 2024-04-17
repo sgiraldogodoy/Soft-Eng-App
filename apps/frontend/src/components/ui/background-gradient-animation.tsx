@@ -12,7 +12,6 @@ export const BackgroundGradientAnimation = ({
   pointerColor = "140, 100, 255",
   size = "80%",
   blendingValue = "hard-light",
-  children,
   className,
   interactive = true,
   containerClassName,
@@ -27,7 +26,6 @@ export const BackgroundGradientAnimation = ({
   pointerColor?: string;
   size?: string;
   blendingValue?: string;
-  children?: React.ReactNode;
   className?: string;
   interactive?: boolean;
   containerClassName?: string;
@@ -88,7 +86,7 @@ export const BackgroundGradientAnimation = ({
   return (
     <div
       className={cn(
-        "h-full w-full relative overflow-hidden top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]",
+        "h-full max-h-full w-full overflow-hidden absolute top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]",
         containerClassName,
       )}
     >
@@ -110,7 +108,6 @@ export const BackgroundGradientAnimation = ({
           </filter>
         </defs>
       </svg>
-      <div className={cn("", className)}>{children}</div>
       <div
         className={cn(
           "gradients-container h-full w-full blur-lg",
