@@ -140,7 +140,7 @@ export default function InputForm({ variant }: Props) {
             },
             {
               onSuccess: () => {
-                utils.flower.getAll.invalidate();
+                utils.service.getAll.invalidate();
               },
             },
           ),
@@ -160,7 +160,7 @@ export default function InputForm({ variant }: Props) {
             },
             {
               onSuccess: () => {
-                utils.security.getAll.invalidate();
+                utils.service.getAll.invalidate();
               },
             },
           ),
@@ -180,7 +180,7 @@ export default function InputForm({ variant }: Props) {
             },
             {
               onSuccess: () => {
-                utils.gift.getAll.invalidate();
+                utils.service.getAll.invalidate();
               },
             },
           ),
@@ -200,7 +200,7 @@ export default function InputForm({ variant }: Props) {
             },
             {
               onSuccess: () => {
-                utils.av.getAll.invalidate();
+                utils.service.getAll.invalidate();
               },
             },
           ),
@@ -220,7 +220,7 @@ export default function InputForm({ variant }: Props) {
             },
             {
               onSuccess: () => {
-                utils.room.getAll.invalidate();
+                utils.service.getAll.invalidate();
               },
             },
           ),

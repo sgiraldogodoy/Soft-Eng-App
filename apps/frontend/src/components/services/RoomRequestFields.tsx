@@ -40,7 +40,7 @@ const RoomRequest = () => {
         />
       </div>
       <div>
-        <p className="text-xs"> created by Ace Beattie & Micheal Lin</p>
+        <p className="text-xs"> created by Ace Beattie & Michael Lin</p>
       </div>
     </>
   );
