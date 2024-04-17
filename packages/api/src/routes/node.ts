@@ -73,7 +73,7 @@ export const Node = router({
   createOne: publicProcedure
     .input(z.object({ data: node }))
     .mutation(async ({ input, ctx }) => {
-      ctx.db.node.create({
+      await ctx.db.node.create({
         data: input.data,
       });
     }),
