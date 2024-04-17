@@ -334,7 +334,7 @@ export default function InputForm({ variant }: Props) {
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a Priority for the Request" />
+                            <SelectValue placeholder="Select a priority" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>

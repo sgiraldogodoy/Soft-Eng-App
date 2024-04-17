@@ -39,7 +39,7 @@ export const security = z.object({
 });
 
 export const av = z.object({
-  dateTime: z.date(),
+  dateTime: z.coerce.date(),
   type: z.string(),
 });
 

@@ -31,7 +31,7 @@ const SecurityRequest = () => {
                   defaultValue={field.value}
                 >
                   <SelectTrigger className="w-[300px]">
-                    <SelectValue placeholder="Low" />
+                    <SelectValue placeholder="Select a threat level" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Low">Low</SelectItem>

@@ -55,7 +55,7 @@ const AVRequest = () => {
             <FormItem className="flex-1">
               <FormLabel>Delivery Time</FormLabel>
               <FormControl>
-                <Input type="date" {...field} />
+                <Input type="datetime-local" {...field} />
               </FormControl>
               <FormDescription>When does it need to be set up?</FormDescription>
               <FormMessage />

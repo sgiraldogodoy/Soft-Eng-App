@@ -13,8 +13,8 @@ export const columns: ColumnDef<RouterOutput["service"]["getAll"][0]>[] = [
       DateTime.fromJSDate(row.date).toLocaleString(DateTime.DATETIME_SHORT),
   },
   {
-    accessorKey: "type",
     header: "Type",
+    accessorFn: (row) => row.type.toUpperCase(),
   },
   {
     accessorKey: "nodeId",

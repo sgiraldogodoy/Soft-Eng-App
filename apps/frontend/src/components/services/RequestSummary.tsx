@@ -22,7 +22,7 @@ import {
 } from "../ui/select";
 import { motion } from "framer-motion";
 import { type baseService } from "common";
-import type { z } from "zod";
+import { z } from "zod";
 
 export default function RequestSummary() {
   const [rowSelectionState, setRowSelectionState] = useState<RowSelectionState>(
@@ -98,11 +98,14 @@ export default function RequestSummary() {
               ([key, value]) => {
                 if (key === "id" || key === "serviceId") return;
 
+                const newVal = z.coerce.string().safeParse(value);
+                if (!newVal.success) return;
+
                 return (
                   <div className="flex items-center justify-between gap-2">
                     <p className="capitalize">{key}</p>
                     <hr className="flex-1 border-slate-400 border-dotted" />
-                    <p className="capitalize">{value}</p>
+                    <p className="capitalize">{newVal.data}</p>
                   </div>
                 );
               },
