@@ -8,7 +8,7 @@ export const GiftRouter = router({
   createOne: protectedProcedure
     .input(
       baseService
-        .extend({ data: gift, type: z.literal("GIFT").default("GIFT") })
+        .extend({ data: gift, type: z.literal("gift").default("gift") })
         .transform(transformCreateServiceInput),
     )
     .mutation(async ({ input, ctx }) => {
@@ -49,7 +49,7 @@ export const GiftRouter = router({
         id: z.string(),
         data: baseService.partial().extend({
           data: gift.partial(),
-          type: z.literal("GIFT").default("GIFT"),
+          type: z.literal("gift").default("gift"),
         }),
       }),
     )
@@ -77,7 +77,7 @@ export const GiftRouter = router({
         ids: z.array(z.string()),
         data: baseService.partial().extend({
           data: gift.partial(),
-          type: z.literal("GIFT").default("GIFT"),
+          type: z.literal("gift").default("gift"),
         }),
       }),
     )

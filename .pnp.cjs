@@ -4221,6 +4221,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/luxon", [\
+      ["npm:3.4.2", {\
+        "packageLocation": "./.yarn/cache/@types-luxon-npm-3.4.2-092583f006-fd89566e30.zip/node_modules/@types/luxon/",\
+        "packageDependencies": [\
+          ["@types/luxon", "npm:3.4.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/methods", [\
       ["npm:1.1.4", {\
         "packageLocation": "./.yarn/cache/@types-methods-npm-1.1.4-8565dc8af4-ad2a717848.zip/node_modules/@types/methods/",\
@@ -8149,6 +8158,7 @@ const RAW_RUNTIME_STATE =
           ["@trpc/client", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:11.0.0-next.327"],\
           ["@trpc/react-query", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:11.0.0-next.327"],\
           ["@trpc/server", "npm:11.0.0-next.327"],\
+          ["@types/luxon", "npm:3.4.2"],\
           ["@types/node", "npm:20.11.5"],\
           ["@types/prop-types", "npm:15.7.11"],\
           ["@types/react", "npm:18.2.48"],\
@@ -8173,6 +8183,7 @@ const RAW_RUNTIME_STATE =
           ["framer-motion", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:11.0.28"],\
           ["localforage", "npm:1.10.0"],\
           ["lucide-react", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.363.0"],\
+          ["luxon", "npm:3.4.4"],\
           ["match-sorter", "npm:6.3.3"],\
           ["next-themes", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.3.0"],\
           ["postcss", "npm:8.4.35"],\
@@ -9783,6 +9794,15 @@ const RAW_RUNTIME_STATE =
         "packagePeers": [\
           "@types/react",\
           "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["luxon", [\
+      ["npm:3.4.4", {\
+        "packageLocation": "./.yarn/cache/luxon-npm-3.4.4-c93f95dde8-c14164bc33.zip/node_modules/luxon/",\
+        "packageDependencies": [\
+          ["luxon", "npm:3.4.4"]\
         ],\
         "linkType": "HARD"\
       }]\

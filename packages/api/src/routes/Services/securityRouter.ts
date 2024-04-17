@@ -10,7 +10,7 @@ export const SecurityRouter = router({
     .input(
       baseService
         .extend({ data: security })
-        .extend({ type: z.literal("SECURITY").default("SECURITY") })
+        .extend({ type: z.literal("security").default("security") })
         .transform(transformCreateServiceInput),
     )
     .mutation(async ({ input, ctx }) => {
@@ -93,7 +93,7 @@ export const SecurityRouter = router({
         id: z.string(),
         data: baseService.partial().extend({
           data: security.partial(),
-          type: z.literal("SECURITY").default("SECURITY"),
+          type: z.literal("security").default("security"),
         }),
       }),
     )
@@ -120,7 +120,7 @@ export const SecurityRouter = router({
         ids: z.array(z.string()),
         data: baseService.partial().extend({
           data: security.partial(),
-          type: z.literal("SECURITY").default("SECURITY"),
+          type: z.literal("security").default("security"),
         }),
       }),
     )

@@ -10,7 +10,7 @@ export const FlowerRouter = router({
       baseService
         .extend({
           data: flower,
-          type: z.literal("FLOWER").default("FLOWER"),
+          type: z.literal("flower").default("flower"),
         })
         .transform(transformCreateServiceInput),
     )
@@ -77,7 +77,7 @@ export const FlowerRouter = router({
         id: z.string(),
         data: baseService.partial().extend({
           data: flower.partial(),
-          type: z.literal("FLOWER").default("FLOWER"),
+          type: z.literal("flower").default("flower"),
         }),
       }),
     )
@@ -105,7 +105,7 @@ export const FlowerRouter = router({
         ids: z.array(z.string()),
         data: baseService.partial().extend({
           data: flower.partial(),
-          type: z.literal("FLOWER").default("FLOWER"),
+          type: z.literal("flower").default("flower"),
         }),
       }),
     )

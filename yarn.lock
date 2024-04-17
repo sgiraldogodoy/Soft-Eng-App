@@ -3148,6 +3148,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/luxon@npm:^3":
+  version: 3.4.2
+  resolution: "@types/luxon@npm:3.4.2"
+  checksum: fd89566e3026559f2bc4ddcc1e70a2c16161905ed50be9473ec0cfbbbe919165041408c4f6e06c4bcf095445535052e2c099087c76b1b38e368127e618fc968d
+  languageName: node
+  linkType: hard
+
 "@types/methods@npm:^1.1.4":
   version: 1.1.4
   resolution: "@types/methods@npm:1.1.4"
@@ -6558,6 +6565,7 @@ __metadata:
     "@trpc/client": "npm:11.0.0-next.327"
     "@trpc/react-query": "npm:11.0.0-next.327"
     "@trpc/server": "npm:11.0.0-next.327"
+    "@types/luxon": "npm:^3"
     "@types/node": "npm:^20.2.5"
     "@types/prop-types": "npm:^15.7.5"
     "@types/react": "npm:^18.0.37"
@@ -6582,6 +6590,7 @@ __metadata:
     framer-motion: "npm:^11.0.28"
     localforage: "npm:^1.10.0"
     lucide-react: "npm:^0.363.0"
+    luxon: "npm:^3.4.4"
     match-sorter: "npm:^6.3.1"
     next-themes: "npm:^0.3.0"
     postcss: "npm:^8.4.35"
@@ -8009,6 +8018,13 @@ __metadata:
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0
   checksum: a007e37428c7f99d5c7431703bd6970ce50c62c4592b0a91badd746bdab8ac578f87a67b9d6193d0d36bf1451c432de91795cbdc535dbcb4943510a1752d1cba
+  languageName: node
+  linkType: hard
+
+"luxon@npm:^3.4.4":
+  version: 3.4.4
+  resolution: "luxon@npm:3.4.4"
+  checksum: c14164bc338987349075a08e63ea3ff902866735f7f5553a355b27be22667919765ff96fde4d3413d0e9a0edc4ff9e2e74ebcb8f86eae0ce8b14b27330d87d6e
   languageName: node
   linkType: hard
 

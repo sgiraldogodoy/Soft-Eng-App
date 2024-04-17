@@ -53,11 +53,11 @@ model Service {
 }
 
 enum ServiceType {
-  FLOWER
-  GIFT
-  ROOM
-  SECURITY
-  AV
+  flower
+  gift
+  room
+  security
+  av
 }
 
 model Flower {

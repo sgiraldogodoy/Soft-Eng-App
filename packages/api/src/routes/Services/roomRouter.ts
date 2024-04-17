@@ -10,7 +10,7 @@ export const RoomRouter = router({
     .input(
       baseService
         .extend({ data: room })
-        .extend({ type: z.literal("ROOM").default("ROOM") })
+        .extend({ type: z.literal("room").default("room") })
         .transform(transformCreateServiceInput),
     )
     .mutation(async ({ input, ctx }) => {
@@ -93,7 +93,7 @@ export const RoomRouter = router({
         id: z.string(),
         data: baseService.partial().extend({
           data: room.partial(),
-          type: z.literal("ROOM").default("ROOM"),
+          type: z.literal("room").default("room"),
         }),
       }),
     )
@@ -120,7 +120,7 @@ export const RoomRouter = router({
         ids: z.array(z.string()),
         data: baseService.partial().extend({
           data: room.partial(),
-          type: z.literal("ROOM").default("ROOM"),
+          type: z.literal("room").default("room"),
         }),
       }),
     )

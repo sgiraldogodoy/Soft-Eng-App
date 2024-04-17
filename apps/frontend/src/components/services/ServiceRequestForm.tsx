@@ -75,20 +75,20 @@ const FORMTYPE_RECORD: Record<
     formFields: FormComponent<unknown>;
   }
 > = {
-  ROOM: { longName: "Request a Room", formFields: RoomRequestFields },
-  AV: {
+  room: { longName: "Request a Room", formFields: RoomRequestFields },
+  av: {
     longName: "Request AV Equipment",
     formFields: AVRequestFields,
   },
-  FLOWER: {
+  flower: {
     longName: "Request Flowers",
     formFields: FlowerRequestFields,
   },
-  SECURITY: {
+  security: {
     longName: "Request Security",
     formFields: SecurityRequestFields,
   },
-  GIFT: {
+  gift: {
     longName: "Request Gift",
     formFields: GiftRequestFields,
   },
@@ -131,7 +131,7 @@ export default function InputForm({ variant }: Props) {
     data.nodeId = nodesQuery.find((n) => data.nodeId === n.longName)?.id ?? "";
 
     switch (data.type) {
-      case "FLOWER":
+      case "flower":
         toast.promise(
           createFlowerRequest.mutateAsync(
             {
@@ -151,7 +151,7 @@ export default function InputForm({ variant }: Props) {
           },
         );
         break;
-      case "SECURITY":
+      case "security":
         toast.promise(
           createSecurityRequest.mutateAsync(
             {
@@ -171,7 +171,7 @@ export default function InputForm({ variant }: Props) {
           },
         );
         break;
-      case "GIFT":
+      case "gift":
         toast.promise(
           createGiftRequest.mutateAsync(
             {
@@ -191,7 +191,7 @@ export default function InputForm({ variant }: Props) {
           },
         );
         break;
-      case "AV":
+      case "av":
         toast.promise(
           createAVRequest.mutateAsync(
             {
@@ -211,7 +211,7 @@ export default function InputForm({ variant }: Props) {
           },
         );
         break;
-      case "ROOM":
+      case "room":
         toast.promise(
           createRoomRequest.mutateAsync(
             {

@@ -78,7 +78,7 @@ async function main() {
         service: {
           create: {
             nodeId: "ACONF00102",
-            type: "FLOWER",
+            type: "flower",
             login: "Ace",
             priority: "High",
             status: "UNASSIGNED",

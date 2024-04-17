@@ -8,7 +8,7 @@ import { BackgroundGradientAnimation } from "@/components/ui/background-gradient
 import { motion } from "framer-motion";
 
 export default function ServiceRequestPage() {
-  const [variant, setVariant] = useState<FormTypes>("FLOWER");
+  const [variant, setVariant] = useState<FormTypes>("flower");
 
   return (
     <>
@@ -24,19 +24,19 @@ export default function ServiceRequestPage() {
             className="w-full flex items-center justify-center bg-transparent"
           >
             <TabsList className="w-full bg-white/90 backdrop-blur-md shadow-inner rounded shadow-md">
-              <TabsTrigger className="flex-1" value="FLOWER">
+              <TabsTrigger className="flex-1" value="flower">
                 Flower Request
               </TabsTrigger>
-              <TabsTrigger className="flex-1" value="ROOM">
+              <TabsTrigger className="flex-1" value="room">
                 Room Request
               </TabsTrigger>
-              <TabsTrigger className="flex-1" value="SECURITY">
+              <TabsTrigger className="flex-1" value="security">
                 Security Request
               </TabsTrigger>
-              <TabsTrigger className="flex-1" value="AV">
+              <TabsTrigger className="flex-1" value="av">
                 Audio/Visual Request
               </TabsTrigger>
-              <TabsTrigger className="flex-1" value="GIFT">
+              <TabsTrigger className="flex-1" value="gift">
                 Gift Request
               </TabsTrigger>
             </TabsList>

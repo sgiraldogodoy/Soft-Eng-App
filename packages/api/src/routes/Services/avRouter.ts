@@ -8,7 +8,7 @@ export const avRequestRouter = router({
   createOne: protectedProcedure
     .input(
       baseService
-        .extend({ data: av, type: z.literal("AV").default("AV") })
+        .extend({ data: av, type: z.literal("av").default("av") })
         .transform(transformCreateServiceInput),
     )
     .mutation(async ({ input, ctx }) => {
@@ -49,7 +49,7 @@ export const avRequestRouter = router({
         id: z.string(),
         data: baseService.partial().extend({
           data: av.partial(),
-          type: z.literal("AV").default("AV"),
+          type: z.literal("av").default("av"),
         }),
       }),
     )
@@ -77,7 +77,7 @@ export const avRequestRouter = router({
         ids: z.array(z.string()),
         data: baseService.partial().extend({
           data: av.partial(),
-          type: z.literal("AV").default("AV"),
+          type: z.literal("av").default("av"),
         }),
       }),
     )

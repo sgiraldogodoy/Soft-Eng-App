@@ -94,6 +94,20 @@ export default function RequestSummary() {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {Object.entries(selectedRow[selectedRow.type] ?? {}).map(
+              ([key, value]) => {
+                if (key === "id" || key === "serviceId") return;
+
+                return (
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="capitalize">{key}</p>
+                    <hr className="flex-1 border-slate-400 border-dotted" />
+                    <p className="capitalize">{value}</p>
+                  </div>
+                );
+              },
+            )}
+            <br />
             <div className="grid gap-1.5">
               <Label htmlFor="message-2" className="font-bold">
                 Request Notes
@@ -128,30 +142,6 @@ export default function RequestSummary() {
               >
                 Delete
               </Button>
-              {/*<Button
-                className="w-full"
-                onClick={() => {
-                  toast.promise(
-                    serviceDeliverMutation.mutateAsync(
-                      {
-                        id: selectedRow.id,
-                      },
-                      {
-                        onSuccess: () => {
-                          utils.service.getAllFlowerRequests.invalidate();
-                        },
-                      },
-                    ),
-                    {
-                      success: "Marked request as delivered!",
-                      error: "Error updating request.",
-                      loading: "Updating request...",
-                    },
-                  );
-                }}
-              >
-                Mark as Delivered
-              </Button>*/}
               <Select
                 value={selectedRow.status}
                 onValueChange={(newVal) => {

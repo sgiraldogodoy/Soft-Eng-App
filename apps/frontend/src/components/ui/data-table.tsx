@@ -43,7 +43,7 @@ export function DataTable<TData extends { id: string }, TValue>({
     initialState: {
       sorting: [
         {
-          id: "id",
+          id: "creationTime",
           desc: true,
         },
       ],
