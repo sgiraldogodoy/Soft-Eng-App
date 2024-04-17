@@ -113,6 +113,7 @@ export default function InputForm({ variant }: Props) {
   const createSecurityRequest = trpc.security.createOne.useMutation();
   const createGiftRequest = trpc.gift.createOne.useMutation();
   const createAVRequest = trpc.av.createOne.useMutation();
+  const createRoomRequest = trpc.room.createOne.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
@@ -196,6 +197,26 @@ export default function InputForm({ variant }: Props) {
           {
             success: "Successfully saved to the database.",
             loading: "Saving av request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "ROOM":
+        toast.promise(
+          createRoomRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.room.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving room request to the database.",
             error: "Error saving to database.",
           },
         );

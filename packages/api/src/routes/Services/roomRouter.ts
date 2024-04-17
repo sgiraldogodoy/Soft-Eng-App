@@ -4,7 +4,7 @@ import { z } from "zod";
 import { transformCreateServiceInput } from "../../../utils/serviceInputTransformer.ts";
 import { baseService, room } from "common";
 
-export const RooomRouter = router({
+export const RoomRouter = router({
   //Room Request Service
   createOne: protectedProcedure
     .input(
