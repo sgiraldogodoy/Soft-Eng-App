@@ -5,6 +5,8 @@ import {
   reverseScaleCoordinate,
 } from "../utils/scaleCoordinate.ts";
 import { trpc } from "@/utils/trpc.ts";
+import { useSelectNodes } from "@/components/createNode.tsx";
+// import { createNode } from "@/components/createNode.tsx";
 
 const origImageWidth = 5000;
 const origImageHeight = 3400;
@@ -48,11 +50,33 @@ export function Nodes({
   const utils = trpc.useUtils();
   const nodeUpdate = trpc.node.updateOne.useMutation();
   const deleteNode = trpc.node.deleteOne.useMutation();
+  const createEdge = trpc.edge.createOne.useMutation();
   // const createNode = trpc.node.createOne.useMutation();
 
-  // const handleCreate = () => {
+  const { firstNode, setNode, clearNodes } = useSelectNodes();
+
+  // const handleCreateNode = () => {
   //
   // }
+
+  const handleCreateEdge = () => {
+    if (!hoveredNode) return;
+    createEdge.mutate(
+      {
+        data: {
+          startNodeId: firstNode,
+          endNodeId: hoveredNode,
+        },
+      },
+      {
+        onSuccess: () => {
+          utils.edge.getAll.invalidate();
+        },
+      },
+    );
+    clearNodes();
+    return;
+  };
 
   const handleDelete = () => {
     if (hoveredNode) {
@@ -72,18 +96,32 @@ export function Nodes({
     }
   };
 
-  const handleDragStart = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleEditClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (onNodeDown) onNodeDown(); // turn off map panning
     if (!editable) return; // check if on map edit
+    if (hoveredNode) {
+      setNode(hoveredNode);
+    }
     switch (typeEdit) {
       case "Move":
-        break;
+        handleDragStart(e);
+        return;
       case "Eraser":
         handleDelete();
+        return;
+      case "aNode":
+        // handleCreateNode();
+        return;
+      case "aEdge":
+        if (firstNode && hoveredNode && firstNode !== hoveredNode)
+          handleCreateEdge();
         return;
       default:
         return;
     }
+  };
+
+  const handleDragStart = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const target = e.currentTarget;
     target.style.position = "absolute";
     const offsetX = e.clientX - parseFloat(target.style.left || "0");
@@ -206,7 +244,7 @@ export function Nodes({
               ? typeEdit === "Move"
                 ? "move"
                 : typeEdit === "Eraser"
-                  ? 'url("/eraser.svg"), auto'
+                  ? 'url("/eraser.svg") 12 12, auto'
                   : "default"
               : "default",
           }}
@@ -218,7 +256,7 @@ export function Nodes({
             setHoveredNode(null);
             setHoveredNodeString(null);
           }}
-          onMouseDown={handleDragStart}
+          onMouseDown={handleEditClick}
           onClick={() => {
             if (onNodeClick) onNodeClick(node.id);
           }}

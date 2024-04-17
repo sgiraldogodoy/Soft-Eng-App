@@ -54,17 +54,6 @@ export function Edges({
             },
           },
         );
-        deleteEdge.mutate(
-          {
-            startNodeId: hoveredEndNode,
-            endNodeId: hoveredStartNode,
-          },
-          {
-            onSuccess: () => {
-              utils.edge.getAll.invalidate();
-            },
-          },
-        );
       }
     }
   };
@@ -142,7 +131,10 @@ export function Edges({
                 stroke: "red",
                 strokeWidth: 2 * scale,
                 fill: "blue",
-                cursor: "pointer",
+                cursor:
+                  typeEdit === "Eraser"
+                    ? "url('/eraser.svg') 12 24, auto"
+                    : "pointer",
               }}
             />
           );
@@ -157,13 +149,7 @@ export function Edges({
             backgroundColor: "white",
             padding: "5px",
             borderRadius: "5px",
-            cursor: editable
-              ? typeEdit === "Move"
-                ? "move"
-                : typeEdit === "Eraser"
-                  ? 'url("/eraser.svg"), auto'
-                  : "default"
-              : "default",
+            cursor: 'url("/eraser.svg"), auto',
           }}
           key={`edge-${hoveredEdgeID}`}
         >

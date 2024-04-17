@@ -40,9 +40,40 @@ export const Edge = router({
   createOne: publicProcedure
     .input(z.object({ data: edge }))
     .mutation(async ({ input, ctx }) => {
-      ctx.db.edge.create({
-        data: input.data,
-      });
+      const data = [];
+      data.push(
+        await ctx.db.edge.create({
+          data: {
+            startNode: {
+              connect: {
+                id: input.data.startNodeId,
+              },
+            },
+            endNode: {
+              connect: {
+                id: input.data.endNodeId,
+              },
+            },
+          },
+        }),
+      );
+      data.push(
+        await ctx.db.edge.create({
+          data: {
+            startNode: {
+              connect: {
+                id: input.data.endNodeId,
+              },
+            },
+            endNode: {
+              connect: {
+                id: input.data.startNodeId,
+              },
+            },
+          },
+        }),
+      );
+      return data;
     }),
   createMany: publicProcedure
     .input(z.object({ data: z.array(edge) }))
@@ -70,14 +101,28 @@ export const Edge = router({
   deleteOne: publicProcedure
     .input(z.object({ startNodeId: z.string(), endNodeId: z.string() }))
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.edge.delete({
-        where: {
-          edgeId: {
-            startNodeId: input.startNodeId,
-            endNodeId: input.endNodeId,
+      const data = [];
+      data.push(
+        await ctx.db.edge.delete({
+          where: {
+            edgeId: {
+              startNodeId: input.startNodeId,
+              endNodeId: input.endNodeId,
+            },
           },
-        },
-      });
+        }),
+      );
+      data.push(
+        await ctx.db.edge.delete({
+          where: {
+            edgeId: {
+              startNodeId: input.endNodeId,
+              endNodeId: input.startNodeId,
+            },
+          },
+        }),
+      );
+      return data;
     }),
   deleteMany: publicProcedure
     .input(
