@@ -6,6 +6,7 @@ import { SecurityRouter } from "./routes/Services/securityRouter.ts";
 import { FlowerRouter } from "./routes/Services/flowerRouter.ts";
 import { GiftRouter } from "./routes/Services/giftRouter.ts";
 import { serviceRouter } from "./routes/serviceRouter.ts";
+import { RoomRouter } from "./routes/Services/roomRouter.ts";
 
 export const appRouter = router({
   service: serviceRouter,
@@ -13,6 +14,7 @@ export const appRouter = router({
   av: avRequestRouter,
   gift: GiftRouter,
   flower: FlowerRouter,
+  room: RoomRouter,
   node: Node,
   edge: Edge,
 });

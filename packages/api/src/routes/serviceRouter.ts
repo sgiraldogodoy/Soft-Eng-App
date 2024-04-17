@@ -1,3 +1,4 @@
+import { baseService } from "common";
 import { publicProcedure, protectedProcedure } from "../trpc";
 import { router } from "../trpc";
 import { z } from "zod";
@@ -56,4 +57,15 @@ export const serviceRouter = router({
       },
     });
   }),
+
+  updateOne: protectedProcedure
+    .input(z.object({ id: z.string(), data: baseService.partial() }))
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.service.update({
+        where: {
+          id: input.id,
+        },
+        data: input.data,
+      });
+    }),
 });

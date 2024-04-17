@@ -99,7 +99,15 @@ interface Props {
 }
 
 export default function InputForm({ variant }: Props) {
-  const nodesQuery = trpc.node.getAll.useQuery();
+  const unfilteredQuery = trpc.node.getAll.useQuery();
+  const unsortedQuery = unfilteredQuery.data
+    ? unfilteredQuery.data?.filter((node) => !(node.type === "HALL"))
+    : [];
+  const nodesQuery = unsortedQuery.sort(function (a, b) {
+    const nodeA = a.longName.toUpperCase();
+    const nodeB = b.longName.toUpperCase();
+    return nodeA < nodeB ? -1 : nodeA > nodeB ? 1 : 0;
+  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -112,12 +120,16 @@ export default function InputForm({ variant }: Props) {
   const createFlowerRequest = trpc.flower.createOne.useMutation();
   const createSecurityRequest = trpc.security.createOne.useMutation();
   const createGiftRequest = trpc.gift.createOne.useMutation();
+  const createAVRequest = trpc.av.createOne.useMutation();
+  const createRoomRequest = trpc.room.createOne.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
   >;
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    data.nodeId = nodesQuery.find((n) => data.nodeId === n.longName)?.id ?? "";
+
     switch (data.type) {
       case "FLOWER":
         toast.promise(
@@ -179,6 +191,46 @@ export default function InputForm({ variant }: Props) {
           },
         );
         break;
+      case "AV":
+        toast.promise(
+          createAVRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.av.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving av request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "ROOM":
+        toast.promise(
+          createRoomRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.room.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving room request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
       default:
         toast.error("An error occured.");
     }
@@ -224,15 +276,15 @@ export default function InputForm({ variant }: Props) {
                               )}
                             >
                               {field.value
-                                ? nodesQuery.data?.find(
-                                    (node) => node.id === field.value,
+                                ? nodesQuery.find(
+                                    (node) => node.longName === field.value,
                                   )?.longName
                                 : "Select location"}
                               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[200px] max-h-[200px] overflow-scroll p-0">
+                        <PopoverContent className="w-[310px] max-h-[200px] overflow-scroll p-0">
                           <Command>
                             <CommandInput
                               placeholder="Search locations..."
@@ -240,19 +292,19 @@ export default function InputForm({ variant }: Props) {
                             />
                             <CommandEmpty>No location found.</CommandEmpty>
                             <CommandGroup>
-                              {nodesQuery.data?.map((location) => (
+                              {nodesQuery.map((location) => (
                                 <CommandItem
-                                  value={location.id}
-                                  key={location.id}
+                                  value={location.longName}
+                                  key={location.longName}
                                   onSelect={() => {
-                                    form.setValue("nodeId", location.id);
+                                    form.setValue("nodeId", location.longName);
                                   }}
                                 >
                                   {location.longName}
                                   <CheckIcon
                                     className={cn(
                                       "ml-auto h-4 w-4",
-                                      location.id === field.value
+                                      location.longName === field.value
                                         ? "opacity-100"
                                         : "opacity-0",
                                     )}

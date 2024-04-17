@@ -1,4 +1,4 @@
-import { publicProcedure } from "../trpc";
+import { protectedProcedure, publicProcedure } from "../trpc";
 import { router } from "../trpc";
 import { z } from "zod";
 import { parseCSVEdge } from "../../utils/csv-parsing.ts";
@@ -7,7 +7,7 @@ import { edge } from "common";
 import { TRPCError } from "@trpc/server";
 
 export const Edge = router({
-  csvUpload: publicProcedure
+  csvUpload: protectedProcedure
     .input(z.object({ buffer: z.string() }))
     .mutation(async ({ input, ctx }) => {
       try {
@@ -30,21 +30,52 @@ export const Edge = router({
         });
       }
     }),
-  csvExport: publicProcedure.query(async ({ ctx }) => {
+  csvExport: protectedProcedure.query(async ({ ctx }) => {
     // get all nodes
     const edgeStr = await exportEdgesToDb(ctx.db);
     const b64str = Buffer.from(edgeStr, "utf8").toString("base64");
 
     return b64str;
   }),
-  createOne: publicProcedure
+  createOne: protectedProcedure
     .input(z.object({ data: edge }))
     .mutation(async ({ input, ctx }) => {
-      ctx.db.edge.create({
-        data: input.data,
-      });
+      const data = [];
+      data.push(
+        await ctx.db.edge.create({
+          data: {
+            startNode: {
+              connect: {
+                id: input.data.startNodeId,
+              },
+            },
+            endNode: {
+              connect: {
+                id: input.data.endNodeId,
+              },
+            },
+          },
+        }),
+      );
+      data.push(
+        await ctx.db.edge.create({
+          data: {
+            startNode: {
+              connect: {
+                id: input.data.endNodeId,
+              },
+            },
+            endNode: {
+              connect: {
+                id: input.data.startNodeId,
+              },
+            },
+          },
+        }),
+      );
+      return data;
     }),
-  createMany: publicProcedure
+  createMany: protectedProcedure
     .input(z.object({ data: z.array(edge) }))
     .mutation(async ({ input, ctx }) => {
       ctx.db.edge.createMany({
@@ -67,19 +98,33 @@ export const Edge = router({
         },
       });
     }),
-  deleteOne: publicProcedure
+  deleteOne: protectedProcedure
     .input(z.object({ startNodeId: z.string(), endNodeId: z.string() }))
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.edge.delete({
-        where: {
-          edgeId: {
-            startNodeId: input.startNodeId,
-            endNodeId: input.endNodeId,
+      const data = [];
+      data.push(
+        await ctx.db.edge.delete({
+          where: {
+            edgeId: {
+              startNodeId: input.startNodeId,
+              endNodeId: input.endNodeId,
+            },
           },
-        },
-      });
+        }),
+      );
+      data.push(
+        await ctx.db.edge.delete({
+          where: {
+            edgeId: {
+              startNodeId: input.endNodeId,
+              endNodeId: input.startNodeId,
+            },
+          },
+        }),
+      );
+      return data;
     }),
-  deleteMany: publicProcedure
+  deleteMany: protectedProcedure
     .input(
       z.object({
         startNodeIds: z.array(z.string()),
@@ -98,10 +143,10 @@ export const Edge = router({
         });
       }
     }),
-  deleteAll: publicProcedure.mutation(async ({ ctx }) => {
+  deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
     return ctx.db.edge.deleteMany();
   }),
-  updateOne: publicProcedure
+  updateOne: protectedProcedure
     .input(
       z.object({
         startNodeId: z.string(),
@@ -120,7 +165,7 @@ export const Edge = router({
         data: input.data,
       });
     }),
-  updateMany: publicProcedure
+  updateMany: protectedProcedure
     .input(
       z.object({
         startNodeIds: z.array(z.string()),
