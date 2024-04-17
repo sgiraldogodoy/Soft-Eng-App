@@ -127,6 +127,8 @@ export default function InputForm({ variant }: Props) {
   >;
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    data.nodeId = nodesQuery.find((n) => data.nodeId === n.longName)?.id ?? "";
+
     switch (data.type) {
       case "FLOWER":
         toast.promise(
@@ -254,7 +256,7 @@ export default function InputForm({ variant }: Props) {
                             >
                               {field.value
                                 ? nodesQuery.find(
-                                    (node) => node.id === field.value,
+                                    (node) => node.longName === field.value,
                                   )?.longName
                                 : "Select location"}
                               <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -271,17 +273,17 @@ export default function InputForm({ variant }: Props) {
                             <CommandGroup>
                               {nodesQuery.map((location) => (
                                 <CommandItem
-                                  value={location.id}
-                                  key={location.id}
+                                  value={location.longName}
+                                  key={location.longName}
                                   onSelect={() => {
-                                    form.setValue("nodeId", location.id);
+                                    form.setValue("nodeId", location.longName);
                                   }}
                                 >
                                   {location.longName}
                                   <CheckIcon
                                     className={cn(
                                       "ml-auto h-4 w-4",
-                                      location.id === field.value
+                                      location.longName === field.value
                                         ? "opacity-100"
                                         : "opacity-0",
                                     )}
