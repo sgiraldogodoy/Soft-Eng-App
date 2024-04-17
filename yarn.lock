@@ -6588,6 +6588,7 @@ __metadata:
     prettier: "npm:latest"
     prettier-config-custom: "workspace:*"
     react: "npm:^18.2.0"
+    react-datetime: "npm:^3.2.0"
     react-dom: "npm:^18.2.0"
     react-hook-form: "npm:^7.51.2"
     react-hot-toast: "npm:^2.4.1"
@@ -9342,7 +9343,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.5.7, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -9532,6 +9533,18 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 8cdcc44cb303e33898854f4ab59570c115ae48b1d500cefa3f84729aad022967e92f8077e42eea597f4e6423836c1bee5f07674243aac2cd321e36fa7b016c5a
+  languageName: node
+  linkType: hard
+
+"react-datetime@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "react-datetime@npm:3.2.0"
+  dependencies:
+    prop-types: "npm:^15.5.7"
+  peerDependencies:
+    moment: ^2.16.0
+    react: ^16.5.0 || ^17.0.0 || ^18.0.0
+  checksum: 0de3c462d50ee63070d354613674eddc79f70dffab56b18235ad6c42fc8af237d4c187a228cf9e244825a40c1787363669c066b2dc5da5cf6e8c7f9e9125a698
   languageName: node
   linkType: hard
 
