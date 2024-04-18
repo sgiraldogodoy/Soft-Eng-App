@@ -21,10 +21,18 @@ export default function WeatherWidget() {
     return <div>Error fetching data</div>;
   }
 
+  const iconCode = data.weather[0].icon;
+  const iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
+
   return (
     <div>
       <h1>Data:</h1>
       <pre>{JSON.stringify(data, null, 2)}</pre>
+      {data.main ? <h1>{Math.round(data.main.temp)} ºF</h1> : null}
+      {data.weather[0] ? <h1>{data.weather[0].description}</h1> : null}
+      {data.main ? <h1>H: {Math.round(data.main.temp_min)} ºF</h1> : null}
+      {data.main ? <h1>L: {Math.round(data.main.temp_max)} ºF</h1> : null}
+      <img alt="icon" src={iconUrl} />
     </div>
   );
 }
