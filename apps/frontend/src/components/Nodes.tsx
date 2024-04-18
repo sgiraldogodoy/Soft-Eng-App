@@ -6,7 +6,6 @@ import {
 } from "../utils/scaleCoordinate.ts";
 import { trpc } from "@/utils/trpc.ts";
 import { useSelectNodes } from "@/components/createNode.tsx";
-// import { createNode } from "@/components/createNode.tsx";
 
 const origImageWidth = 5000;
 const origImageHeight = 3400;
@@ -51,14 +50,9 @@ export function Nodes({
   const nodeUpdate = trpc.node.updateOne.useMutation();
   const deleteNode = trpc.node.deleteOne.useMutation();
   const createEdge = trpc.edge.createOne.useMutation();
-  // const createNode = trpc.node.createOne.useMutation();
 
   const { firstNode, setNode, clearNodes } = useSelectNodes();
-
-  // const handleCreateNode = () => {
-  //
-  // }
-
+  
   const handleCreateEdge = () => {
     if (!hoveredNode) return;
     createEdge.mutate(
@@ -80,8 +74,6 @@ export function Nodes({
 
   const handleDelete = () => {
     if (hoveredNode) {
-      // const deleteNode = nodes.find((node) => node.id === hoveredNode);
-      // if (deleteNode) {
       deleteNode.mutate(
         {
           id: hoveredNode,
@@ -92,7 +84,7 @@ export function Nodes({
           },
         },
       );
-      // }
+     
     }
   };
 
@@ -108,9 +100,6 @@ export function Nodes({
         return;
       case "Eraser":
         handleDelete();
-        return;
-      case "aNode":
-        // handleCreateNode();
         return;
       case "aEdge":
         if (firstNode && hoveredNode && firstNode !== hoveredNode)

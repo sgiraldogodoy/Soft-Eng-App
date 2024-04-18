@@ -133,7 +133,7 @@ export function Edges({
                 fill: "blue",
                 cursor:
                   typeEdit === "Eraser"
-                    ? "url('/eraser.svg') 12 24, auto"
+                    ? "url('/eraser.svg') 12 18, auto"
                     : "pointer",
               }}
             />
