@@ -24,6 +24,7 @@ model Node {
   outgoing  Edge[]    @relation(name: "NodeOutgoingEdge")
   incoming  Edge[]    @relation(name: "NodeIncomingEdge")
   service   Service[] @relation(name: "ServiceToNode")
+  patients  Patient[] @relation(name: "PatientToNode")
 }
 
 model Edge {
@@ -100,4 +101,18 @@ model AV {
   service   Service  @relation(name: "AVToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   dateTime  DateTime
   type      String
+}
+
+model Patient {
+  id          String   @id @default(uuid())
+  SSN         Int?     @unique
+  nodeId      String   @default("BINFO00202")
+  location    Node     @relation(name: "PatientToNode", fields: [nodeId], references: [id], onUpdate: SetDefault, onDelete: SetDefault)
+  doctor      String
+  date        DateTime @default(now())
+  firstName   String
+  middleName  String?
+  lastName    String
+  inTreatment Boolean  @default(true)
+  insurance   String?
 }
