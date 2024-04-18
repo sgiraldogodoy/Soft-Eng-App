@@ -9,6 +9,13 @@ import {
   DialogTitle,
   // DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Node } from "database";
@@ -17,12 +24,14 @@ interface newNodeDialogProps {
   open: boolean;
   x: number;
   y: number;
+  floor: string;
   onSubmit: (nodeData: Node) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export function NewNodeDialog({
   x,
   y,
+  floor,
   onSubmit,
   open,
   setDialogOpen,
@@ -31,14 +40,13 @@ export function NewNodeDialog({
     const id = (document.getElementById("id") as HTMLInputElement)?.value;
     const building = (document.getElementById("building") as HTMLInputElement)
       ?.value;
-    const floor = (document.getElementById("floor") as HTMLInputElement)?.value;
     const type = (document.getElementById("type") as HTMLInputElement)?.value;
     const longName = (document.getElementById("longname") as HTMLInputElement)
       ?.value;
     const shortName = (document.getElementById("shortname") as HTMLInputElement)
       ?.value;
 
-    if (!id || !building || !floor || !type || !longName || !shortName) {
+    if (!id || !building || !type || !longName || !shortName) {
       // If any required field is empty, return or handle the error
       return;
     }
@@ -64,6 +72,7 @@ export function NewNodeDialog({
           <DialogTitle>Create Node</DialogTitle>
           <DialogDescription>Edit Node Details</DialogDescription>
         </DialogHeader>
+        {/*Delete Node ID after merge main*/}
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="id" className="text-right">
@@ -75,19 +84,42 @@ export function NewNodeDialog({
             <Label htmlFor="building" className="text-right">
               Building
             </Label>
-            <Input id="building" defaultValue="" className="col-span-3" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="floor" className="text-right">
-              Floor
-            </Label>
-            <Input id="floor" defaultValue="" className="col-span-3" />
+            <Select>
+              {/*45 Francis, BTM, Tower, 15 Francis, Shapiro*/}
+              <SelectTrigger className="col-span-3">
+                <SelectValue placeholder="" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="45 Francis">45 Francis</SelectItem>
+                <SelectItem value="BTM">BTM</SelectItem>
+                <SelectItem value="Tower">Tower</SelectItem>
+                <SelectItem value="15 Francis">15 Francis</SelectItem>
+                <SelectItem value="Shapiro">Shapiro</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="type" className="text-right">
-              Type
+              Node Type
             </Label>
-            <Input id="type" defaultValue="" className="col-span-3" />
+            <Select>
+              <SelectTrigger className="col-span-3">
+                <SelectValue placeholder="" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="HALL">Hallway</SelectItem>
+                <SelectItem value="ELEV">Elevator</SelectItem>
+                <SelectItem value="CONF">Conference Room</SelectItem>
+                <SelectItem value="REST">Restroom</SelectItem>
+                <SelectItem value="STAI">Staircase</SelectItem>
+                <SelectItem value="DEPT">Departments</SelectItem>
+                <SelectItem value="LABS">Labs</SelectItem>
+                <SelectItem value="INFO">Information Desk</SelectItem>
+                <SelectItem value="EXIT">Exit/Entrance</SelectItem>
+                <SelectItem value="RETL">Shops & Food</SelectItem>
+                <SelectItem value="SERV">Non-Medical Services</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="longname" className="text-right">

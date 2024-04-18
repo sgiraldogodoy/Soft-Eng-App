@@ -216,7 +216,7 @@ export default function Map({
       offset.y,
       scale,
     );
-    console.log(newNodeX, newNodeY);
+    // console.log(newNodeX, newNodeY);
     setNewNodeX(Math.floor(newNodeX));
     setNewNodeY(Math.floor(newNodeY));
     setOpenDialog(true);
@@ -318,6 +318,7 @@ export default function Map({
             open={openDialog}
             x={newNodeX}
             y={newNodeY}
+            floor={floor}
             onSubmit={handleCreateNodeSubmit}
             setDialogOpen={setOpenDialog}
           />
