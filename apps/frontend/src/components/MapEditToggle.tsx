@@ -1,4 +1,12 @@
-import { Eraser, CirclePlus, MoveHorizontal, Move } from "lucide-react";
+import {
+  Eraser,
+  CirclePlus,
+  MoveHorizontal,
+  Move,
+  Hand,
+  SquareDashedMousePointer,
+  Settings,
+} from "lucide-react";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
@@ -12,11 +20,32 @@ export function MapEditTab({ onEditSelect }: MapEditTabProps) {
       variant="outlinefilled"
       size={"lg"}
       type="single"
-      defaultValue="Move"
+      defaultValue="Hand"
     >
       <ToggleGroupItem
+        value="Pan"
+        aria-label="Pan"
+        onClick={() => onEditSelect("PAN")}
+      >
+        <Hand className="h-4 w-4" />
+      </ToggleGroupItem>
+      <ToggleGroupItem
+        value="Sele"
+        aria-label="Sele"
+        onClick={() => onEditSelect("SELE")}
+      >
+        <SquareDashedMousePointer className="h-4 w-4" />
+      </ToggleGroupItem>
+      <ToggleGroupItem
+        value="Edit"
+        aria-label="Edit"
+        onClick={() => onEditSelect("EDIT")}
+      >
+        <Settings className="h-4 w-4" />
+      </ToggleGroupItem>
+      <ToggleGroupItem
         value="Eraser"
-        aria-label="Erase"
+        aria-label="Eraser"
         onClick={() => onEditSelect("Eraser")}
       >
         <Eraser className="h-4 w-4" />

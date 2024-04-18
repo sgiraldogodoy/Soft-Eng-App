@@ -52,7 +52,7 @@ export function Nodes({
   const createEdge = trpc.edge.createOne.useMutation();
 
   const { firstNode, setNode, clearNodes } = useSelectNodes();
-  
+
   const handleCreateEdge = () => {
     if (!hoveredNode) return;
     createEdge.mutate(
@@ -84,7 +84,6 @@ export function Nodes({
           },
         },
       );
-     
     }
   };
 
@@ -104,6 +103,8 @@ export function Nodes({
       case "aEdge":
         if (firstNode && hoveredNode && firstNode !== hoveredNode)
           handleCreateEdge();
+        return;
+      case "Edit":
         return;
       default:
         return;

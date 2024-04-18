@@ -251,7 +251,11 @@ export default function Map({
       style={{
         position: "relative",
         overflow: "hidden",
-        cursor: dragging ? "grabbing" : "grab",
+        cursor: dragging
+          ? "grabbing"
+          : typeEdit === "aNode"
+            ? 'url("/circle-plus.svg") 12 12, auto'
+            : "grab",
         userSelect: "none",
       }}
       onClick={handleEditClick}
