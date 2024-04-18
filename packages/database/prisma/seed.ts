@@ -1,11 +1,12 @@
-import { PrismaClient, Node, Edge } from "../.prisma/client";
+import { PrismaClient, Edge, Prisma } from "../.prisma/client";
 import readline from "readline";
 import fs from "fs";
+import NodeCreateManyInput = Prisma.NodeCreateManyInput;
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const nodes: Node[] = [];
+  const nodes: NodeCreateManyInput[] = [];
 
   // Parse nodes CSV
   const nodeStream = readline.createInterface({

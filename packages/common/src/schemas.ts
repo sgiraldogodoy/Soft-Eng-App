@@ -1,14 +1,30 @@
 import { z } from "zod";
 
 export const node = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   x: z.number(),
   y: z.number(),
   building: z.string(),
+  /*floor: z.enum(["1", "2", "3", "L1", "L2"]),
+  type: z.enum([
+    "HALL",
+    "ELEV",
+    "REST",
+    "STAI",
+    "DEPT",
+    "LABS",
+    "INFO",
+    "CONF",
+    "EXIT",
+    "RETL",
+    "SERV",
+  ]),*/
   floor: z.string(),
   type: z.string(),
   longName: z.string(),
   shortName: z.string(),
+  room: z.string().optional(),
+  available: z.boolean().optional(),
 });
 
 export const edge = z.object({

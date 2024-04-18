@@ -21,6 +21,7 @@ model Node {
   type      String
   longName  String
   shortName String
+  available Boolean   @default(true)
   outgoing  Edge[]    @relation(name: "NodeOutgoingEdge")
   incoming  Edge[]    @relation(name: "NodeIncomingEdge")
   service   Service[] @relation(name: "ServiceToNode")
