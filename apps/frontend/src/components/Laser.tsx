@@ -16,8 +16,19 @@ export default function Laser() {
   //const containerRef = useRef<HTMLDivElement>(null);
   const imgURL = "/02_thesecondfloor.png";
 
-  const nodesQuery = trpc.node.getAll.useQuery();
-  const nodes = nodesQuery?.data;
+  const nodesQuery = trpc.node.getAll.useQuery() || [];
+  const nodes = nodesQuery.data || [];
+  let filteredNodes = nodes.filter((node) => node.floor === "2");
+  filteredNodes = filteredNodes.filter((node) => node.type !== "HALL");
+  const length = filteredNodes ? filteredNodes.length : 0;
+
+  const startNode = filteredNodes[Math.floor(Math.random() * (length + 1))];
+  const endNode = filteredNodes[Math.floor(Math.random() * (length + 1))];
+
+  const startNodeId = startNode ? startNode.id : "BINFO00202";
+  const endNodeId = endNode ? endNode.id : "ACONF00102";
+
+  console.log(startNodeId, endNodeId);
 
   const handleResize = useCallback(() => {
     setImageWidth(image.current!.getBoundingClientRect().width / scale);
@@ -45,15 +56,11 @@ export default function Laser() {
 
   const pathQuery = trpc.node.findPath;
   const pathMake = pathQuery.useQuery({
-    startNodeId: "BINFO00202",
-    endNodeId: "ACONF00102",
+    startNodeId: startNodeId,
+    endNodeId: endNodeId,
     algorithm: "A*",
   });
-  const path = pathMake.data;
-
-  if (path == undefined) {
-    return null;
-  }
+  const path = pathMake.data || [];
 
   const transitions: Node[][] = path.reduce(
     (acc: Node[][], current, index, array) => {
@@ -111,7 +118,6 @@ export default function Laser() {
   });
 
   const finalPathString = "M" + pathStrings.join(" L");
-  console.log(finalPathString);
 
   return (
     <div
