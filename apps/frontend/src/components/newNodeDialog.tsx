@@ -60,6 +60,7 @@ export function NewNodeDialog({
       shortName,
       x,
       y,
+      available: true,
     };
 
     onSubmit(nodeData);
