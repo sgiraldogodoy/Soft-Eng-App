@@ -18,8 +18,15 @@ interface newNodeDialogProps {
   x: number;
   y: number;
   onSubmit: (nodeData: Node) => void;
+  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export function NewNodeDialog({ x, y, onSubmit, open }: newNodeDialogProps) {
+export function NewNodeDialog({
+  x,
+  y,
+  onSubmit,
+  open,
+  setDialogOpen,
+}: newNodeDialogProps) {
   const handleSubmit = () => {
     const id = (document.getElementById("id") as HTMLInputElement)?.value;
     const building = (document.getElementById("building") as HTMLInputElement)
@@ -51,7 +58,7 @@ export function NewNodeDialog({ x, y, onSubmit, open }: newNodeDialogProps) {
   };
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={setDialogOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create Node</DialogTitle>

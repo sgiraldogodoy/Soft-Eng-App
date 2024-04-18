@@ -6,7 +6,7 @@ import {
 } from "../utils/scaleCoordinate.ts";
 import { trpc } from "@/utils/trpc.ts";
 import { useSelectNodes } from "@/components/createNode.tsx";
-import { NewNodeDialog } from "@/components/newNodeDialog.tsx";
+// import { NewNodeDialog } from "@/components/newNodeDialog.tsx";
 // import { createNode } from "@/components/createNode.tsx";
 
 const origImageWidth = 5000;
@@ -47,58 +47,58 @@ export function Nodes({
   const [hoveredNodeString, setHoveredNodeString] = useState<string | null>(
     null,
   );
-  const [openDialog, setOpenDialog] = useState(false);
-  const [newNodeX, setNewNodeX] = useState(0);
-  const [newNodeY, setNewNodeY] = useState(0);
+  // const [openDialog, setOpenDialog] = useState(false);
+  // const [newNodeX, setNewNodeX] = useState(0);
+  // const [newNodeY, setNewNodeY] = useState(0);
 
   const utils = trpc.useUtils();
   const nodeUpdate = trpc.node.updateOne.useMutation();
   const deleteNode = trpc.node.deleteOne.useMutation();
   const createEdge = trpc.edge.createOne.useMutation();
-  const createNode = trpc.node.createOne.useMutation();
+  // const createNode = trpc.node.createOne.useMutation();
 
   const { firstNode, setNode, clearNodes } = useSelectNodes();
-  const handleCreateNodeSubmit = (data: Node) => {
-    createNode.mutate(
-      {
-        data,
-      },
-      {
-        onSuccess: () => {
-          utils.node.getAll.invalidate();
-        },
-      },
-    );
-    setOpenDialog(false);
-  };
-  const handleCreateNode = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => {
-    const target = e.currentTarget;
-    target.style.position = "absolute";
-    const offsetX = e.clientX - parseFloat(target.style.left || "0");
-    const offsetY = e.clientY - parseFloat(target.style.top || "0");
-    const newNodeX = reverseScaleCoordinate(
-      e.clientX - offsetX,
-      imgWidth,
-      origImageWidth,
-      0,
-      dragOffset.x,
-      scale,
-    );
-    const newNodeY = reverseScaleCoordinate(
-      e.clientY - offsetY,
-      imgHeight,
-      origImageHeight,
-      0,
-      dragOffset.y,
-      scale,
-    );
-
-    setNewNodeX(Math.floor(newNodeX));
-    setNewNodeY(Math.floor(newNodeY));
-    setOpenDialog(true);
-  };
+  // const handleCreateNodeSubmit = (data: Node) => {
+  //   createNode.mutate(
+  //     {
+  //       data,
+  //     },
+  //     {
+  //       onSuccess: () => {
+  //         utils.node.getAll.invalidate();
+  //       },
+  //     },
+  //   );
+  //   setOpenDialog(false);
+  // };
+  // const handleCreateNode = (
+  //   e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  // ) => {
+  //   const target = e.currentTarget;
+  //   target.style.position = "absolute";
+  //   const offsetX = e.clientX - parseFloat(target.style.left || "0");
+  //   const offsetY = e.clientY - parseFloat(target.style.top || "0");
+  //   const newNodeX = reverseScaleCoordinate(
+  //     e.clientX - offsetX,
+  //     imgWidth,
+  //     origImageWidth,
+  //     0,
+  //     dragOffset.x,
+  //     scale,
+  //   );
+  //   const newNodeY = reverseScaleCoordinate(
+  //     e.clientY - offsetY,
+  //     imgHeight,
+  //     origImageHeight,
+  //     0,
+  //     dragOffset.y,
+  //     scale,
+  //   );
+  //
+  //   setNewNodeX(Math.floor(newNodeX));
+  //   setNewNodeY(Math.floor(newNodeY));
+  //   setOpenDialog(true);
+  // };
 
   const handleCreateEdge = () => {
     if (!hoveredNode) return;
@@ -147,9 +147,6 @@ export function Nodes({
         return;
       case "Eraser":
         handleDelete();
-        return;
-      case "aNode":
-        handleCreateNode(e);
         return;
       case "aEdge":
         if (firstNode && hoveredNode && firstNode !== hoveredNode)
@@ -317,14 +314,14 @@ export function Nodes({
           Node ID: {hoveredNode}
         </div>
       )}
-      {openDialog && (
-        <NewNodeDialog
-          open={openDialog}
-          x={newNodeX}
-          y={newNodeY}
-          onSubmit={handleCreateNodeSubmit}
-        />
-      )}
+      {/*{openDialog && (*/}
+      {/*  <NewNodeDialog*/}
+      {/*    open={openDialog}*/}
+      {/*    x={newNodeX}*/}
+      {/*    y={newNodeY}*/}
+      {/*    onSubmit={handleCreateNodeSubmit}*/}
+      {/*  />*/}
+      {/*)}*/}
     </div>
   );
 }
