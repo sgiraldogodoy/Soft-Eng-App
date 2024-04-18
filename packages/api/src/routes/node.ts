@@ -73,19 +73,60 @@ export const Node = router({
   createOne: protectedProcedure
     .input(z.object({ data: node }))
     .mutation(async ({ input, ctx }) => {
+      let nodeId = "";
+      if (input.data.room) {
+        if (input.data.type === "ELEV") {
+          const pattern = /^[A-Z]*$/;
+          if (!pattern.test(input.data.room)) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "Elevators must be a Capital letter",
+            });
+          }
+          input.data.room = "00" + input.data.room;
+        } else {
+          const pattern = /^[0-9]*$/;
+          if (!pattern.test(input.data.room) && input.data.room.length <= 3) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "Rooms must be numbers",
+            });
+          }
+          const prefixAmount = 3 - input.data.room.length;
+          input.data.room = "0".repeat(prefixAmount) + input.data.room;
+        }
+        nodeId = "q" + input.data.type + input.data.room + input.data.floor;
+      } else if (input.data.id) {
+        nodeId = input.data.id;
+      } else {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Node must have a room number or an id",
+        });
+      }
+      const data = {
+        id: nodeId,
+        x: input.data.x,
+        y: input.data.y,
+        building: input.data.building,
+        floor: input.data.floor,
+        type: input.data.type,
+        longName: input.data.longName,
+        shortName: input.data.shortName,
+      };
       ctx.db.node.create({
-        data: input.data,
+        data: data,
       });
     }),
 
-  createMany: protectedProcedure
+  /*createMany: protectedProcedure
     .input(z.object({ data: z.array(node) }))
     .mutation(async ({ input, ctx }) => {
       ctx.db.node.createMany({
         data: input.data,
         skipDuplicates: true,
       });
-    }),
+    }),*/
   getAll: publicProcedure.query(async ({ ctx }) => {
     return ctx.db.node.findMany();
   }),
