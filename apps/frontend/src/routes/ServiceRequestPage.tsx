@@ -42,6 +42,9 @@ export default function ServiceRequestPage() {
               <TabsTrigger className="flex-1" value="maintenance">
                 Maintenance Request
               </TabsTrigger>
+              <TabsTrigger className="flex-1" value="transport">
+                Transport Request
+              </TabsTrigger>
             </TabsList>
           </Tabs>
           <motion.div

@@ -36,6 +36,7 @@ import FlowerRequestFields from "./FlowerRequestFields";
 import SecurityRequestFields from "@/components/services/SecurityRequestFields.tsx";
 import GiftRequestFields from "./GiftRequestFields";
 import MaintenanceRequestFields from "./MaintenanceRequestFields";
+import TransportRequestFields from "./TransportRequestFields";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
 import {
@@ -97,6 +98,10 @@ const FORMTYPE_RECORD: Record<
     longName: "Request Maintenance",
     formFields: MaintenanceRequestFields,
   },
+  transport: {
+    longName: "Request Transport",
+    formFields: TransportRequestFields,
+  },
 };
 
 interface Props {
@@ -128,6 +133,7 @@ export default function InputForm({ variant }: Props) {
   const createAVRequest = trpc.av.createOne.useMutation();
   const createRoomRequest = trpc.room.createOne.useMutation();
   const createMaintenanceRequest = trpc.maintenance.createOne.useMutation();
+  const createTransportRequest = trpc.transport.createOne.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
@@ -253,6 +259,26 @@ export default function InputForm({ variant }: Props) {
           {
             success: "Successfully saved to the database.",
             loading: "Saving maintenance request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "transport":
+        toast.promise(
+          createTransportRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving transport request to the database.",
             error: "Error saving to database.",
           },
         );
