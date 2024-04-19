@@ -77,6 +77,8 @@ const MaintenanceRequestFields = () => {
             </FormItem>
           )}
         />
+      </div>
+      <div className="flex gap-2 items-center flex-1">
         <FormField
           name="data.startDate"
           render={({ field }) => (

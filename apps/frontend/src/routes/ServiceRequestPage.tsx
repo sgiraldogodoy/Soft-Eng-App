@@ -39,6 +39,9 @@ export default function ServiceRequestPage() {
               <TabsTrigger className="flex-1" value="gift">
                 Gift Request
               </TabsTrigger>
+              <TabsTrigger className="flex-1" value="maintenance">
+                Maintenance Request
+              </TabsTrigger>
             </TabsList>
           </Tabs>
           <motion.div

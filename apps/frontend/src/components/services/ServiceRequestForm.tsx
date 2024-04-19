@@ -252,7 +252,7 @@ export default function InputForm({ variant }: Props) {
           ),
           {
             success: "Successfully saved to the database.",
-            loading: "Saving room request to the database.",
+            loading: "Saving maintenance request to the database.",
             error: "Error saving to database.",
           },
         );
