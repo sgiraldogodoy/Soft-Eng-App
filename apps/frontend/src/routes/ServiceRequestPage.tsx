@@ -51,6 +51,9 @@ export default function ServiceRequestPage() {
               <TabsTrigger className="flex-1" value="visit">
                 Visit Request
               </TabsTrigger>
+              <TabsTrigger className="flex-1" value="it">
+                IT Request
+              </TabsTrigger>
             </TabsList>
           </Tabs>
           <motion.div

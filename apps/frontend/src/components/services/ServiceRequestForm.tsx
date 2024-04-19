@@ -39,6 +39,7 @@ import MaintenanceRequestFields from "./MaintenanceRequestFields";
 import TransportRequestFields from "./TransportRequestFields";
 import SanitationRequestFields from "./SanitationRequestFields";
 import VisitRequestFields from "./VisitRequestFields";
+import ITRequestFields from "./ITRequestFields";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
 import {
@@ -112,6 +113,10 @@ const FORMTYPE_RECORD: Record<
     longName: "Request Visit",
     formFields: VisitRequestFields,
   },
+  it: {
+    longName: "Request IT",
+    formFields: ITRequestFields,
+  },
 };
 
 interface Props {
@@ -146,6 +151,7 @@ export default function InputForm({ variant }: Props) {
   const createTransportRequest = trpc.transport.createOne.useMutation();
   const createSanitationRequest = trpc.sanitation.createOne.useMutation();
   const createVisitRequest = trpc.visit.createOne.useMutation();
+  const createITRequest = trpc.it.createOne.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
@@ -331,6 +337,26 @@ export default function InputForm({ variant }: Props) {
           {
             success: "Successfully saved to the database.",
             loading: "Saving visit request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "it":
+        toast.promise(
+          createITRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving it request to the database.",
             error: "Error saving to database.",
           },
         );
