@@ -109,7 +109,7 @@ model Patient {
   nodeId      String   @default("BINFO00202")
   location    Node     @relation(name: "PatientToNode", fields: [nodeId], references: [id], onUpdate: SetDefault, onDelete: SetDefault)
   doctor      String
-  date        DateTime @default(now())
+  entryDate   DateTime @default(now())
   firstName   String
   middleName  String?
   lastName    String

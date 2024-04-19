@@ -11,6 +11,17 @@ export const node = z.object({
   shortName: z.string(),
 });
 
+export const patient = z.object({
+  SSN: z.number().optional(),
+  NodeID: z.string().optional(),
+  doctor: z.string(),
+  firstName: z.string(),
+  middleName: z.string().optional(),
+  lastName: z.string(),
+  inTreatment: z.boolean().optional(),
+  insurance: z.string().optional(),
+});
+
 export const edge = z.object({
   startNodeId: z.string(),
   endNodeId: z.string(),
