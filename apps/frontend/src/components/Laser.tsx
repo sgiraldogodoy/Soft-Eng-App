@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 interface LaserProps {
+  id: number;
   path: string;
   death: () => void;
   imgWidth: number;
@@ -9,18 +10,27 @@ interface LaserProps {
 }
 
 export default function Laser({
+  id,
   path,
   death,
   imgWidth,
   imgHeight,
 }: LaserProps) {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      death();
-    }, 3000);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-    return () => clearTimeout(timer);
+  const handleDeath = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+      death();
+    }
   }, [death]);
+
+  useEffect(() => {
+    timerRef.current = setTimeout(() => {
+      handleDeath();
+    }, 4000);
+  }, [handleDeath]);
 
   return (
     <div>
@@ -30,7 +40,7 @@ export default function Laser({
         style={{ position: "absolute", top: 0, left: 0 }}
         className="pointer-events-none"
       >
-        <g mask={"url(#laserMask)"}>
+        <g mask={`url(#laserMask-${id})`}>
           <path
             d={path}
             style={{
@@ -41,7 +51,7 @@ export default function Laser({
           />
         </g>
 
-        <mask id={"laserMask"}>
+        <mask id={`laserMask-${id}`}>
           <motion.path
             d={path}
             style={{

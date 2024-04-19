@@ -22,6 +22,7 @@ export default function LaserMap() {
   const [endNode, setEndNode] = useState<Node | null>(null);
 
   const [lasers, setLasers] = useState<Array<{ id: number; path: string }>>([]);
+  const [counter, setCounter] = useState(0);
 
   const path = trpc.node.findPath.useQuery(
     {
@@ -111,9 +112,10 @@ export default function LaserMap() {
       setEndNode(filteredNodes[Math.floor(Math.random() * (length + 1))]);
       if (startNode && endNode) {
         const newLaser = {
-          id: lasers.length,
+          id: counter,
           path: generatePath(nodes),
         };
+        setCounter(counter + 1);
         setLasers((lasers) => [...lasers, newLaser]);
       }
     }, 2000);
@@ -121,7 +123,7 @@ export default function LaserMap() {
     return () => {
       clearInterval(interval);
     };
-  }, [endNode, generatePath, lasers.length, nodesQuery.data, startNode]);
+  }, [lasers, counter, endNode, generatePath, nodesQuery.data, startNode]);
 
   const handleResize = useCallback(() => {
     setImageWidth(image.current!.getBoundingClientRect().width / scale);
@@ -147,9 +149,9 @@ export default function LaserMap() {
     };
   }, [handleResize, imgHeight, imgWidth]);
 
-  const removeLaser = (id: number) => {
+  const removeLaser = useCallback((id: number) => {
     setLasers((lasers) => lasers.filter((laser) => laser.id !== id));
-  };
+  }, []);
 
   return (
     <div
@@ -170,6 +172,7 @@ export default function LaserMap() {
       {lasers.map((laser) => (
         <Laser
           key={laser.id}
+          id={laser.id}
           path={laser.path}
           death={() => removeLaser(laser.id)}
           imgWidth={imgWidth}
