@@ -53,8 +53,14 @@ const Interpreter = () => {
                                     <SelectItem value="French">French</SelectItem>
                                     <SelectItem value="German">German</SelectItem>
                                     <SelectItem value="Spanish">Spanish</SelectItem>
-                                    <SelectItem value="Finnish">Finnish</SelectItem>
                                     <SelectItem value="Russian">Russian</SelectItem>
+                                    <SelectItem value="Ukrainian">Ukrainian</SelectItem>
+                                    <SelectItem value="Mandarin">Mandarin</SelectItem>
+                                    <SelectItem value="Haitain">Haitian</SelectItem>
+                                    <SelectItem value="Vietnamese">Vietnamese</SelectItem>
+                                    <SelectItem value="Hindi">Hindi</SelectItem>
+                                    <SelectItem value="Italian">Italian</SelectItem>
+                                    <SelectItem value="Portuguese">Portuguese</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormDescription>What language is Required?</FormDescription>

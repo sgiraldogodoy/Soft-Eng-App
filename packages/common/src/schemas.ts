@@ -40,7 +40,7 @@ export const security = z.object({
 
 export const interpreter = z.object({
     dateTime: z.coerce.date(),
-    language: z.enum(["French", "German", "Spanish", "Finnish", "Russian"]),
+    language: z.enum(["French", "German", "Spanish", "Russian", "Ukrainian", "Portuguese", "Cantonese", "Mandarin","Haitian","Vietnamese","Hindi","Italian"]),
 });
 
 export const av = z.object({
