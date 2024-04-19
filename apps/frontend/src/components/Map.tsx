@@ -43,20 +43,27 @@ export default function Map({
   const [imgHeight, setImageHeight] = useState(0); //set image height
   const image = useRef<HTMLImageElement>(null);
   const { isAuthenticated } = useAuth0();
-  const [scale, setScale] = useState(1.2);
+  const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const [startDragOffset, setStartDragOffset] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   const createNode = trpc.node.createOne.useMutation();
   const utils = trpc.useUtils();
+
   const handleResize = useCallback(() => {
     setImageWidth(image.current!.getBoundingClientRect().width / scale);
     setImageHeight(image.current!.getBoundingClientRect().height / scale);
   }, [image, scale]);
+
   const [openDialog, setOpenDialog] = useState(false);
   const [newNodeX, setNewNodeX] = useState(0);
   const [newNodeY, setNewNodeY] = useState(0);
+
+  function resetZoom() {
+    setScale(1);
+    setOffset({ x: 0, y: 0 });
+  }
 
   const nodeDown = useCallback(() => {
     if (dragging) {
@@ -263,7 +270,10 @@ export default function Map({
         style={{
           transform: `scale(${scale}) translate(${offset.x}px, ${offset.y}px)`,
         }}
-        onLoad={handleResize}
+        onLoad={() => {
+          handleResize();
+          resetZoom();
+        }}
         className={clsx("inset-0 w-full overflow-hidden", {
           "h-full": isAuthenticated,
           "max-h-screen overflow-auto": !isAuthenticated,
