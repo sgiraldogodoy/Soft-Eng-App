@@ -53,6 +53,7 @@ model Service {
   av          AV?          @relation(name: "AVToService")
   maintenance Maintenance? @relation(name: "MaintenanceToService")
   transport   Transport?   @relation(name: "TransportToService")
+  sanitation  Sanitation?  @relation(name: "SanitationToService")
 }
 
 enum ServiceType {
@@ -63,6 +64,7 @@ enum ServiceType {
   av
   maintenance
   transport
+  sanitation
 }
 
 model Flower {
@@ -123,6 +125,16 @@ model Transport {
   service   Service @relation(name: "TransportToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   type      String
   count     String
+}
+
+model Sanitation {
+  id        String    @id @default(uuid())
+  serviceId String    @unique
+  service   Service   @relation(name: "SanitationToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  type      String
+  quality   String
+  startDate DateTime  @default(now())
+  endDate   DateTime?
 }
 
 model Patient {

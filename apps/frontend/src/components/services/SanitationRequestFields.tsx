@@ -14,11 +14,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select.tsx";
+import { Input } from "@/components/ui/input.tsx";
 
 export const SanitationRequestSchema = z.object({
   type: z.literal("sanitation-request"),
   cleaningType: z.string(),
   quality: z.string(),
+  startTime: z.string(),
+  endTime: z.string(),
 });
 
 const SanitationRequestFields = () => {
@@ -26,7 +29,7 @@ const SanitationRequestFields = () => {
     <>
       <div className="flex gap-2 items-center flex-1">
         <FormField
-          name="data.quality"
+          name="data.type"
           render={({ field }) => (
             <FormItem className="flex-1">
               <FormLabel>Sanitation Type</FormLabel>
@@ -78,6 +81,34 @@ const SanitationRequestFields = () => {
               <FormDescription>
                 How thorough should the cleaning be?
               </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="flex gap-2 items-center flex-1">
+        <FormField
+          name="data.startDate"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel>Start Date</FormLabel>
+              <FormControl>
+                <Input type="datetime-local" {...field} />
+              </FormControl>
+              <FormDescription>When will maintenance start?</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="data.endDate"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel>End Date</FormLabel>
+              <FormControl>
+                <Input type="datetime-local" {...field} />
+              </FormControl>
+              <FormDescription>When will maintenance end?</FormDescription>
               <FormMessage />
             </FormItem>
           )}

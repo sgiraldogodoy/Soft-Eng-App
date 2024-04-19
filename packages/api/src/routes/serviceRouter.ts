@@ -44,6 +44,7 @@ export const serviceRouter = router({
           room: true,
           maintenance: true,
           transport: true,
+          sanitation: true,
         },
       });
     }),
@@ -58,6 +59,7 @@ export const serviceRouter = router({
         room: true,
         maintenance: true,
         transport: true,
+        sanitation: true,
       },
     });
   }),
