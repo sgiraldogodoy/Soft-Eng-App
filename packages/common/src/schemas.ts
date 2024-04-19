@@ -50,6 +50,11 @@ export const maintenance = z.object({
   endDate: z.coerce.date().optional(),
 });
 
+export const transport = z.object({
+  type: z.string(),
+  count: z.string(),
+});
+
 export const baseService = z.object({
   nodeId: z.string(),
   priority: z.enum(["LOW", "MEDIUM", "HIGH", "EMERGENCY"]),
@@ -57,7 +62,15 @@ export const baseService = z.object({
   status: z
     .enum(["ASSIGNED", "UNASSIGNED", "IN_PROGRESS", "COMPLETED"])
     .default("UNASSIGNED"),
-  type: z.enum(["av", "security", "room", "gift", "flower", "maintenance"]),
+  type: z.enum([
+    "av",
+    "security",
+    "room",
+    "gift",
+    "flower",
+    "maintenance",
+    "transport",
+  ]),
   note: z.string(),
 });
 
@@ -68,6 +81,7 @@ export const service = z.discriminatedUnion("type", [
   baseService.extend({ data: gift, type: z.literal("gift") }),
   baseService.extend({ data: flower, type: z.literal("flower") }),
   baseService.extend({ data: maintenance, type: z.literal("maintenance") }),
+  baseService.extend({ data: transport, type: z.literal("transport") }),
 ]);
 
 export const formService = z.discriminatedUnion("type", [
@@ -86,5 +100,8 @@ export const formService = z.discriminatedUnion("type", [
     .omit({ login: true }),
   baseService
     .extend({ data: maintenance, type: z.literal("maintenance") })
+    .omit({ login: true }),
+  baseService
+    .extend({ data: transport, type: z.literal("transport") })
     .omit({ login: true }),
 ]);
