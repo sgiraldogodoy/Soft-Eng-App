@@ -17,12 +17,6 @@ import {
     SelectValue,
 } from "@/components/ui/select.tsx";
 
-export const ITRequestSchema = z.object({
-    type: z.literal("Interpreter"),
-    issueType: z.string(),
-    errorCodes: z.string(),
-});
-
 const Interpreter = () => {
     return (
         <>

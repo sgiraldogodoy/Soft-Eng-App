@@ -18,5 +18,17 @@ export const InterpreterRouter = router({
                 data: input,
             });
         }),
+
+    deleteOne: protectedProcedure
+        .input(z.object({id: z.string() }))
+        .mutation(async ({input, ctx}) => {
+            await ctx.db.interpreter.delete({
+                where: {
+                    id: {
+                        in: input.id,
+                    },
+                },
+            });
+        }),
 });
 
