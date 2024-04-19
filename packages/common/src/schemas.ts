@@ -5,7 +5,7 @@ export const node = z.object({
   x: z.number(),
   y: z.number(),
   building: z.string(),
-  floor: z.enum(["1", "2", "3", "L1", "L2"]),
+  floor: z.string(),
   type: z.enum([
     "HALL",
     "ELEV",
@@ -21,8 +21,19 @@ export const node = z.object({
   ]),
   longName: z.string(),
   shortName: z.string(),
-  room: z.string().optional(),
+  elevatorLetter: z.string().optional(),
   available: z.boolean().optional(),
+});
+
+export const patient = z.object({
+  SSN: z.number().optional(),
+  NodeID: z.string().optional(),
+  doctor: z.string(),
+  firstName: z.string(),
+  middleName: z.string().optional(),
+  lastName: z.string(),
+  inTreatment: z.boolean().optional(),
+  insurance: z.string().optional(),
 });
 
 export const edge = z.object({

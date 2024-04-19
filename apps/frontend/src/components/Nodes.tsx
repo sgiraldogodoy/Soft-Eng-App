@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { Node } from "database";
+import { Node, Prisma } from "database";
 import {
   scaleCoordinate,
   reverseScaleCoordinate,
 } from "../utils/scaleCoordinate.ts";
 import { trpc } from "@/utils/trpc.ts";
-import { useSelectNodes } from "@/components/createNode.tsx";
-// import { createNode } from "@/components/createNode.tsx";
+import { useSelectNodes } from "@/utils/useSelectNodes.tsx";
+import { EditNodeDialog } from "@/components/EditNodeDialog.tsx";
+import NodeCreateInput = Prisma.NodeCreateInput;
 
 const origImageWidth = 5000;
 const origImageHeight = 3400;
@@ -46,18 +47,15 @@ export function Nodes({
   const [hoveredNodeString, setHoveredNodeString] = useState<string | null>(
     null,
   );
+  const [openDialog, setOpenDialog] = useState(false);
+  const [nodeToEdit, setNodeToEdit] = useState<Node | null>(null);
 
   const utils = trpc.useUtils();
   const nodeUpdate = trpc.node.updateOne.useMutation();
   const deleteNode = trpc.node.deleteOne.useMutation();
   const createEdge = trpc.edge.createOne.useMutation();
-  // const createNode = trpc.node.createOne.useMutation();
 
   const { firstNode, setNode, clearNodes } = useSelectNodes();
-
-  // const handleCreateNode = () => {
-  //
-  // }
 
   const handleCreateEdge = () => {
     if (!hoveredNode) return;
@@ -80,8 +78,6 @@ export function Nodes({
 
   const handleDelete = () => {
     if (hoveredNode) {
-      // const deleteNode = nodes.find((node) => node.id === hoveredNode);
-      // if (deleteNode) {
       deleteNode.mutate(
         {
           id: hoveredNode,
@@ -92,16 +88,73 @@ export function Nodes({
           },
         },
       );
-      // }
     }
   };
 
+  const handleEditNode = () => {
+    if (hoveredNode) {
+      const editNode = nodes.find((node) => node.id === hoveredNode);
+
+      if (editNode) {
+        setNodeToEdit(editNode);
+        setOpenDialog(true);
+      }
+    }
+  };
+
+  const handleEditNodeDelete = (nodeData: Node) => {
+    deleteNode.mutate(
+      {
+        id: nodeData.id,
+      },
+      {
+        onSuccess: () => {
+          utils.node.getAll.invalidate();
+        },
+      },
+    );
+    setOpenDialog(false);
+  };
+
+  const handleEditNodeSubmit = (nodeData: NodeCreateInput, oldID: string) => {
+    // console.log("Node Data: ", nodeData);
+    nodeUpdate.mutate({
+      id: oldID,
+      data: {
+        id: nodeData.id,
+        x: nodeData.x,
+        y: nodeData.y,
+        floor: nodeData.floor,
+        building: nodeData.building,
+        type: nodeData.type,
+        longName: nodeData.longName,
+        shortName: nodeData.shortName,
+      },
+    });
+    setOpenDialog(false);
+  };
+
+  const handleRightClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    e.preventDefault();
+    if (onNodeDown) onNodeDown();
+    if (!editable) return;
+    if (hoveredNode) {
+      setNode(hoveredNode);
+    }
+    handleEditNode();
+  };
+
   const handleEditClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault();
     if (onNodeDown) onNodeDown(); // turn off map panning
     if (!editable) return; // check if on map edit
     if (hoveredNode) {
       setNode(hoveredNode);
     }
+    if (e.button === 2) return;
+    // console.log("Type Edit: ", typeEdit);
     switch (typeEdit) {
       case "Move":
         handleDragStart(e);
@@ -109,12 +162,12 @@ export function Nodes({
       case "Eraser":
         handleDelete();
         return;
-      case "aNode":
-        // handleCreateNode();
-        return;
       case "aEdge":
         if (firstNode && hoveredNode && firstNode !== hoveredNode)
           handleCreateEdge();
+        return;
+      case "Edit":
+        handleEditNode();
         return;
       default:
         return;
@@ -256,6 +309,7 @@ export function Nodes({
             setHoveredNode(null);
             setHoveredNodeString(null);
           }}
+          onContextMenu={handleRightClick}
           onMouseDown={handleEditClick}
           onClick={() => {
             if (onNodeClick) onNodeClick(node.id);
@@ -276,6 +330,17 @@ export function Nodes({
           Node Name: {hoveredNodeString}
           <br />
           Node ID: {hoveredNode}
+        </div>
+      )}
+      {openDialog && nodeToEdit && (
+        <div>
+          <EditNodeDialog
+            open={openDialog}
+            node={nodeToEdit}
+            handleDelete={handleEditNodeDelete}
+            onSubmit={handleEditNodeSubmit}
+            setDialogOpen={setOpenDialog}
+          />
         </div>
       )}
     </div>

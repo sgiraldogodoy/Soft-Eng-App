@@ -1,10 +1,17 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Nodes } from "./Nodes.tsx";
-import { Node, Edge } from "database";
+import { Node, Edge, Prisma } from "database";
 import { Lines } from "./Lines.tsx";
 import { Edges } from "../components/Edges.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import clsx from "clsx";
+import { reverseScaleCoordinate } from "@/utils/scaleCoordinate.ts";
+import { trpc } from "@/utils/trpc.ts";
+import { NewNodeDialog } from "@/components/NewNodeDialog.tsx";
+import NodeCreateInput = Prisma.NodeCreateInput;
+
+const origImageWidth = 5000;
+const origImageHeight = 3400;
 
 interface MapProps {
   onNodeClick?: (clickedNode: string) => void;
@@ -37,16 +44,27 @@ export default function Map({
   const [imgHeight, setImageHeight] = useState(0); //set image height
   const image = useRef<HTMLImageElement>(null);
   const { isAuthenticated } = useAuth0();
-  const [scale, setScale] = useState(1.2);
+  const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const [startDragOffset, setStartDragOffset] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
+  const createNode = trpc.node.createOne.useMutation();
+  const utils = trpc.useUtils();
 
   const handleResize = useCallback(() => {
     setImageWidth(image.current!.getBoundingClientRect().width / scale);
     setImageHeight(image.current!.getBoundingClientRect().height / scale);
   }, [image, scale]);
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [newNodeX, setNewNodeX] = useState(0);
+  const [newNodeY, setNewNodeY] = useState(0);
+
+  function resetZoom() {
+    setScale(1);
+    setOffset({ x: 0, y: 0 });
+  }
 
   const nodeDown = useCallback(() => {
     if (dragging) {
@@ -162,7 +180,73 @@ export default function Map({
     scale,
     startDragOffset.x,
     startDragOffset.y,
+    typeEdit,
   ]);
+
+  const handleCreateNodeSubmit = (data: NodeCreateInput) => {
+    createNode.mutate(
+      {
+        data,
+      },
+      {
+        onSuccess: () => {
+          utils.node.getAll.invalidate();
+        },
+      },
+    );
+    setOpenDialog(false);
+  };
+  const handleCreateNode = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    const containerRect = containerRef.current?.getBoundingClientRect();
+    if (!containerRect) return;
+
+    const offsetX = e.clientX - containerRect.left; // Mouse X coordinate relative to container
+    const offsetY = e.clientY - containerRect.top; // Mouse Y coordinate relative to container
+
+    const imageRect = image.current?.getBoundingClientRect();
+    if (!imageRect) return;
+
+    const newNodeX = reverseScaleCoordinate(
+      offsetX,
+      containerRect.width,
+      origImageWidth,
+      0,
+      offset.x,
+      scale,
+    );
+    const newNodeY = reverseScaleCoordinate(
+      offsetY,
+      containerRect.height,
+      origImageHeight,
+      0,
+      offset.y,
+      scale,
+    );
+    // console.log(newNodeX, newNodeY);
+    setNewNodeX(Math.floor(newNodeX));
+    setNewNodeY(Math.floor(newNodeY));
+    setOpenDialog(true);
+  };
+
+  const handleEditClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (nodeDown) nodeDown(); // turn off map panning
+    if (!editable) return; // check if on map edit
+    switch (typeEdit) {
+      case "aNode":
+        handleCreateNode(e);
+        return;
+      default:
+        return;
+    }
+  };
+
+  const handleDialogClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    e.stopPropagation(); // Prevent click event propagation
+  };
 
   if (!nodes) {
     return <p>No nodes found</p>;
@@ -175,9 +259,14 @@ export default function Map({
       style={{
         position: "relative",
         overflow: "hidden",
-        cursor: dragging ? "grabbing" : "grab",
+        cursor: dragging
+          ? "grabbing"
+          : typeEdit === "aNode"
+            ? 'url("/circle-plus.svg") 12 12, auto'
+            : "grab",
         userSelect: "none",
       }}
+      onClick={handleEditClick}
     >
       <img
         ref={image}
@@ -186,7 +275,10 @@ export default function Map({
         style={{
           transform: `scale(${scale}) translate(${offset.x}px, ${offset.y}px)`,
         }}
-        onLoad={handleResize}
+        onLoad={() => {
+          handleResize();
+          resetZoom();
+        }}
         className={clsx("inset-0 w-full overflow-hidden", {
           "h-full": isAuthenticated,
           "max-h-screen overflow-auto": !isAuthenticated,
@@ -234,6 +326,18 @@ export default function Map({
           scale={scale}
           floor={floor}
         />
+      )}
+      {openDialog && (
+        <div onClick={handleDialogClick}>
+          <NewNodeDialog
+            open={openDialog}
+            x={newNodeX}
+            y={newNodeY}
+            floor={floor}
+            onSubmit={handleCreateNodeSubmit}
+            setDialogOpen={setOpenDialog}
+          />
+        </div>
       )}
     </div>
   );

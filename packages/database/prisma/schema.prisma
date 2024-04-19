@@ -18,13 +18,28 @@ model Node {
   y         Int
   building  String
   floor     String
-  type      String
+  type      NodeType
   longName  String
   shortName String
   available Boolean   @default(true)
   outgoing  Edge[]    @relation(name: "NodeOutgoingEdge")
   incoming  Edge[]    @relation(name: "NodeIncomingEdge")
   service   Service[] @relation(name: "ServiceToNode")
+  patients  Patient[] @relation(name: "PatientToNode")
+}
+
+enum NodeType {
+  HALL
+  ELEV
+  REST
+  STAI
+  DEPT
+  LABS
+  INFO
+  CONF
+  EXIT
+  RETL
+  SERV
 }
 
 model Edge {
@@ -101,4 +116,18 @@ model AV {
   service   Service  @relation(name: "AVToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   dateTime  DateTime
   type      String
+}
+
+model Patient {
+  id          String   @id @default(uuid())
+  SSN         Int?     @unique
+  nodeId      String   @default("BINFO00202")
+  location    Node     @relation(name: "PatientToNode", fields: [nodeId], references: [id], onUpdate: SetDefault, onDelete: SetDefault)
+  doctor      String
+  entryDate   DateTime @default(now())
+  firstName   String
+  middleName  String?
+  lastName    String
+  inTreatment Boolean  @default(true)
+  insurance   String?
 }
