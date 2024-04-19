@@ -45,6 +45,54 @@ export const InterpreterRouter = router({
         return ctx.db.interpreter.deleteMany();
     }),
 
+    updateOne: protectedProcedure
+        .input(
+            z.object({
+                id: z.string(),
+                data: baseService.partial().extend({
+                    data: interpreter.partial(),
+                    type: z.literal("interpreter").default("interpreter"),
+                }),
+            }),
+        )
+        .mutation(async ({input, ctx}) => {
+            const {data, ...rest} = input;
+
+            return ctx.db.interpreter.update({
+                where: {
+                    id: input.id
+                },
+                data: {
+                    ...data,
+                    service: {
+                        update: {
+                            ...rest,
+                        },
+                    },
+                },
+            });
+        }),
+    updateMany: protectedProcedure
+        .input(
+            z.object({
+                ids: z.string(),
+                data: baseService.partial().extend({
+                    data: interpreter.partial(),
+                    type: z.literal("interpreter").default("interpreter"),
+                }),
+            }),
+        )
+        .mutation(async({input, ctx}) => {
+            return ctx.db.interpreter.updateMany({
+                where: {
+                    id: {
+                      in: input.ids
+                    },
+                },
+                data: input.data
+            });
+        }),
+
 
 });
 
