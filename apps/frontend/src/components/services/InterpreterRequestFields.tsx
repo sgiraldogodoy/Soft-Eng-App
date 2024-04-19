@@ -35,6 +35,35 @@ const Interpreter = () => {
                     )}
                 />
             </div>
+            <div className="flex gap-2 items-center flex-1">
+                <FormField
+                    name="data.type"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Language Required</FormLabel>
+                            <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                            >
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a Language"/>
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    <SelectItem value="French">French</SelectItem>
+                                    <SelectItem value="German">German</SelectItem>
+                                    <SelectItem value="Spanish">Spanish</SelectItem>
+                                    <SelectItem value="Finnish">Finnish</SelectItem>
+                                    <SelectItem value="Russian">Russian</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <FormDescription>What language is Required?</FormDescription>
+                        </FormItem>
+                    )}
+                    />
+
+            </div>
         </>
     );
 };
