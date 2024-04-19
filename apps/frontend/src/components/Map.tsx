@@ -61,8 +61,8 @@ export default function Map({
   const [newNodeY, setNewNodeY] = useState(0);
 
   function resetZoom() {
-    setScale(1.2);
-    setOffset({ x: 100, y: 25 });
+    setScale(1);
+    setOffset({ x: 0, y: 0 });
   }
 
   const nodeDown = useCallback(() => {
