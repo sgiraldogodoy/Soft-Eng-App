@@ -44,7 +44,7 @@ export default function WeatherIcon({ iconCode }: WeatherIconProps) {
         return <Cloudy size={iconSize} />;
       }
       case "04n": {
-        return <Cloudy size={iconSize} />;
+        return <Cloudy size={iconSize} color="#FFFFFF" />;
       }
       case "09d": {
         return <CloudRain size={iconSize} />;
