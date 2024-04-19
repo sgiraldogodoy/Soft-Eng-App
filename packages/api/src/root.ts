@@ -7,6 +7,7 @@ import { FlowerRouter } from "./routes/Services/flowerRouter.ts";
 import { GiftRouter } from "./routes/Services/giftRouter.ts";
 import { serviceRouter } from "./routes/serviceRouter.ts";
 import { RoomRouter } from "./routes/Services/roomRouter.ts";
+import { Patient } from "./routes/patientRouter.ts";
 
 export const appRouter = router({
   service: serviceRouter,
@@ -17,6 +18,7 @@ export const appRouter = router({
   room: RoomRouter,
   node: Node,
   edge: Edge,
+  patient: Patient,
 });
 
 export type AppRouter = typeof appRouter;
