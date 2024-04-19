@@ -99,9 +99,11 @@ model Security {
 }
 
 model Interpreter {
-  id      String  @id @default(uuid())
+  id        String  @id @default(uuid())
   serviceId String  @unique
-  service Service   @relation(name: "interpreter")
+  service   Service   @relation(name: "interpreter")
+  dateTime  DateTime
+  language  String
 }
 
 model AV {
