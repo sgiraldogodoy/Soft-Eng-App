@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -28,6 +28,10 @@ interface newNodeDialogProps {
   onSubmit: (nodeData: Node) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+const alpha = Array.from(Array(26)).map((e, i) => i + 65);
+const alphabet = alpha.map((x) => String.fromCharCode(x));
+
 export function NewNodeDialog({
   x,
   y,
@@ -36,28 +40,43 @@ export function NewNodeDialog({
   open,
   setDialogOpen,
 }: newNodeDialogProps) {
-  const handleSubmit = () => {
-    const id = (document.getElementById("id") as HTMLInputElement)?.value;
-    const building = (document.getElementById("building") as HTMLInputElement)
-      ?.value;
-    const type = (document.getElementById("type") as HTMLInputElement)?.value;
-    const longName = (document.getElementById("longname") as HTMLInputElement)
-      ?.value;
-    const shortName = (document.getElementById("shortname") as HTMLInputElement)
-      ?.value;
+  const [building, setBuilding] = useState("");
+  const [type, setType] = useState("");
+  const [elevatorletter, setElevatorLetter] = useState("");
+  const [id, setID] = useState("");
+  const [longname, setLongName] = useState("");
+  const [shortname, setShortName] = useState("");
+  const [missingFields, setMissingFields] = useState(false);
 
-    if (!id || !building || !type || !longName || !shortName) {
-      // If any required field is empty, return or handle the error
+  const handleElevatorLetter = (value: string) => {
+    setElevatorLetter(value);
+    if (floor === "1" || floor === "2" || floor === "3")
+      setLongName("Elevator" + " " + value + " " + "0" + floor);
+    else setLongName("Elevator" + " " + value + " " + floor);
+    setShortName("Elevator" + " " + value + " " + floor);
+  };
+
+  const handleSubmit = () => {
+    if (type === "ELEV" && !elevatorletter) {
+      // console.log("Missing fields: ", { elevatorletter });
+      setMissingFields(true);
       return;
     }
+    if (!id || !building || !type || !longname || !shortname) {
+      // console.log("Missing fields: ", { id, building, type, longname, shortname });
+      setMissingFields(true);
+      return;
+    }
+
+    setMissingFields(false);
 
     const nodeData = {
       id,
       building,
       floor,
       type,
-      longName,
-      shortName,
+      longName: longname,
+      shortName: shortname,
       x,
       y,
     };
@@ -76,15 +95,21 @@ export function NewNodeDialog({
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="id" className="text-right">
-              Node ID
+              Node ID*
             </Label>
-            <Input id="id" defaultValue="" className="col-span-3" />
+            <Input
+              id="id"
+              defaultValue=""
+              className="col-span-3"
+              value={id}
+              onChange={(event) => setID(event.target.value)}
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="building" className="text-right">
-              Building
+              Building*
             </Label>
-            <Select>
+            <Select value={building} onValueChange={setBuilding}>
               {/*45 Francis, BTM, Tower, 15 Francis, Shapiro*/}
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="" />
@@ -100,9 +125,9 @@ export function NewNodeDialog({
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="type" className="text-right">
-              Node Type
+              Node Type*
             </Label>
-            <Select>
+            <Select value={type} onValueChange={setType}>
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder="" />
               </SelectTrigger>
@@ -121,18 +146,61 @@ export function NewNodeDialog({
               </SelectContent>
             </Select>
           </div>
+
+          {type === "ELEV" && (
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="Elevator Letter" className="text-right">
+                Elevator Letter*
+              </Label>
+              <Select
+                value={elevatorletter}
+                onValueChange={handleElevatorLetter}
+              >
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="A-Z" />
+                  <SelectContent>
+                    {alphabet.map((letter) => (
+                      <SelectItem key={letter} value={letter}>
+                        {letter}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </SelectTrigger>
+              </Select>
+            </div>
+          )}
+
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="longname" className="text-right">
-              Long Name
+              Long Name*
             </Label>
-            <Input id="longname" defaultValue="" className="col-span-3" />
+            <Input
+              id="longname"
+              defaultValue=""
+              className="col-span-3"
+              value={longname}
+              onChange={(event) => setLongName(event.target.value)}
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="shortname" className="text-right">
-              Short Name
+              Short Name*
             </Label>
-            <Input id="shortname" defaultValue="" className="col-span-3" />
+            <Input
+              id="shortname"
+              defaultValue=""
+              className="col-span-3"
+              value={shortname}
+              onChange={(event) => setShortName(event.target.value)}
+            />
           </div>
+          {missingFields && (
+            <div className="grid grid-cols-5 items-center gap-4 text-red-600">
+              <span className="col-start-2 col-span-4">
+                Please fill in all required fields.
+              </span>
+            </div>
+          )}
         </div>
         <DialogFooter>
           <Button onClick={handleSubmit} type="submit">
