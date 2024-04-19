@@ -7,7 +7,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import clsx from "clsx";
 import { reverseScaleCoordinate } from "@/utils/scaleCoordinate.ts";
 import { trpc } from "@/utils/trpc.ts";
-import { NewNodeDialog } from "@/components/newNodeDialog.tsx";
+import { NewNodeDialog } from "@/components/NewNodeDialog.tsx";
 
 const origImageWidth = 5000;
 const origImageHeight = 3400;
@@ -258,7 +258,11 @@ export default function Map({
       style={{
         position: "relative",
         overflow: "hidden",
-        cursor: dragging ? "grabbing" : "grab",
+        cursor: dragging
+          ? "grabbing"
+          : typeEdit === "aNode"
+            ? 'url("/circle-plus.svg") 12 12, auto'
+            : "grab",
         userSelect: "none",
       }}
       onClick={handleEditClick}
