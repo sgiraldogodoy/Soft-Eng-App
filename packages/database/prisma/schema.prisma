@@ -37,20 +37,21 @@ model Edge {
 }
 
 model Service {
-  id       String      @id @default(uuid())
-  nodeId   String
-  node     Node        @relation(name: "ServiceToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  priority String
-  date     DateTime    @default(now())
-  login    String
-  status   String
-  type     ServiceType
-  note     String
-  flower   Flower?     @relation(name: "FlowerToService")
-  gift     Gift?       @relation(name: "GiftToService")
-  room     Room?       @relation(name: "RoomToService")
-  security Security?   @relation(name: "SecurityToService")
-  av       AV?         @relation(name: "AVToService")
+  id          String       @id @default(uuid())
+  nodeId      String
+  node        Node         @relation(name: "ServiceToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  priority    String
+  date        DateTime     @default(now())
+  login       String
+  status      String
+  type        ServiceType
+  note        String
+  flower      Flower?      @relation(name: "FlowerToService")
+  gift        Gift?        @relation(name: "GiftToService")
+  room        Room?        @relation(name: "RoomToService")
+  security    Security?    @relation(name: "SecurityToService")
+  av          AV?          @relation(name: "AVToService")
+  maintenance Maintenance? @relation(name: "MaintenanceToService")
 }
 
 enum ServiceType {
@@ -59,6 +60,7 @@ enum ServiceType {
   room
   security
   av
+  maintenance
 }
 
 model Flower {
@@ -101,6 +103,16 @@ model AV {
   service   Service  @relation(name: "AVToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   dateTime  DateTime
   type      String
+}
+
+model Maintenance {
+  id        String    @id @default(uuid())
+  serviceId String    @unique
+  service   Service   @relation(name: "MaintenanceToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  type      String
+  severity  String
+  startDate DateTime  @default(now())
+  endDate   DateTime?
 }
 
 model Patient {

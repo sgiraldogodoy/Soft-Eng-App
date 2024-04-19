@@ -7,6 +7,7 @@ import { FlowerRouter } from "./routes/Services/flowerRouter.ts";
 import { GiftRouter } from "./routes/Services/giftRouter.ts";
 import { serviceRouter } from "./routes/serviceRouter.ts";
 import { RoomRouter } from "./routes/Services/roomRouter.ts";
+import { maintenanceRequestRouter } from "./routes/Services/maintenanceRouter.ts";
 
 export const appRouter = router({
   service: serviceRouter,
@@ -14,6 +15,7 @@ export const appRouter = router({
   av: avRequestRouter,
   gift: GiftRouter,
   flower: FlowerRouter,
+  maintenance: maintenanceRequestRouter,
   room: RoomRouter,
   node: Node,
   edge: Edge,

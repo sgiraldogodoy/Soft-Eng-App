@@ -44,6 +44,7 @@ const MaintenanceRequestFields = () => {
                   <SelectItem value="Security">Security</SelectItem>
                   <SelectItem value="Device">Device</SelectItem>
                   <SelectItem value="Vehicle">Vehicle</SelectItem>
+                  <SelectItem value="Plumbing">Plumbing</SelectItem>
                   <SelectItem value="Other">Other</SelectItem>
                 </SelectContent>
               </Select>

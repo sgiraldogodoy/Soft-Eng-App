@@ -35,6 +35,7 @@ import AVRequestFields from "./AVRequestFields";
 import FlowerRequestFields from "./FlowerRequestFields";
 import SecurityRequestFields from "@/components/services/SecurityRequestFields.tsx";
 import GiftRequestFields from "./GiftRequestFields";
+import MaintenanceRequestFields from "./MaintenanceRequestFields";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
 import {
@@ -92,6 +93,10 @@ const FORMTYPE_RECORD: Record<
     longName: "Request Gift",
     formFields: GiftRequestFields,
   },
+  maintenance: {
+    longName: "Request Maintenance",
+    formFields: MaintenanceRequestFields,
+  },
 };
 
 interface Props {
@@ -122,6 +127,7 @@ export default function InputForm({ variant }: Props) {
   const createGiftRequest = trpc.gift.createOne.useMutation();
   const createAVRequest = trpc.av.createOne.useMutation();
   const createRoomRequest = trpc.room.createOne.useMutation();
+  const createMaintenanceRequest = trpc.maintenance.createOne.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
@@ -214,6 +220,26 @@ export default function InputForm({ variant }: Props) {
       case "room":
         toast.promise(
           createRoomRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving room request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "maintenance":
+        toast.promise(
+          createMaintenanceRequest.mutateAsync(
             {
               login: session.user?.email ?? "",
               ...data,
