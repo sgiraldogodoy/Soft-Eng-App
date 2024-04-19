@@ -42,6 +42,7 @@ export const serviceRouter = router({
           flower: true,
           security: true,
           room: true,
+            interpreter: true,
         },
       });
     }),
@@ -54,6 +55,7 @@ export const serviceRouter = router({
         flower: true,
         security: true,
         room: true,
+          interpreter: true,
       },
     });
   }),

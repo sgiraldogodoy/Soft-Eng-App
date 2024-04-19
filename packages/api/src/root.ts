@@ -11,6 +11,7 @@ import { InterpreterRouter } from "./routes/Services/languageRouter.ts";
 
 export const appRouter = router({
   service: serviceRouter,
+    interpreter: InterpreterRouter,
   security: SecurityRouter,
   av: avRequestRouter,
   gift: GiftRouter,
@@ -18,7 +19,6 @@ export const appRouter = router({
   room: RoomRouter,
   node: Node,
   edge: Edge,
-    Interpreter: InterpreterRouter,
 });
 
 export type AppRouter = typeof appRouter;
