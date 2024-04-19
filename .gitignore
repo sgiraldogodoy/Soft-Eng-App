@@ -5,6 +5,7 @@
 **/.turbo
 
 **/.prisma
+packages/common/src/zod
 
 out
 

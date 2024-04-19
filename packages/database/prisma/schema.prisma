@@ -13,18 +13,19 @@ datasource db {
 }
 
 model Node {
-  id        String    @id
-  x         Int
-  y         Int
-  building  String
-  floor     String
-  type      String
-  longName  String
-  shortName String
-  outgoing  Edge[]    @relation(name: "NodeOutgoingEdge")
-  incoming  Edge[]    @relation(name: "NodeIncomingEdge")
-  service   Service[] @relation(name: "ServiceToNode")
-  patients  Patient[] @relation(name: "PatientToNode")
+  id           String        @id
+  x            Int
+  y            Int
+  building     String
+  floor        String
+  type         String
+  longName     String
+  shortName    String
+  outgoing     Edge[]        @relation(name: "NodeOutgoingEdge")
+  incoming     Edge[]        @relation(name: "NodeIncomingEdge")
+  service      Service[]     @relation(name: "ServiceToNode")
+  patients     Patient[]     @relation(name: "PatientToNode")
+  appointments Appointment[] @relation(name: "AppointmentToNode")
 }
 
 model Edge {
@@ -104,15 +105,77 @@ model AV {
 }
 
 model Patient {
-  id          String   @id @default(uuid())
-  SSN         Int?     @unique
-  nodeId      String   @default("BINFO00202")
-  location    Node     @relation(name: "PatientToNode", fields: [nodeId], references: [id], onUpdate: SetDefault, onDelete: SetDefault)
-  doctor      String
-  entryDate   DateTime @default(now())
-  firstName   String
-  middleName  String?
-  lastName    String
-  inTreatment Boolean  @default(true)
-  insurance   String?
+  id           String        @id @default(uuid())
+  SSN          Int?          @unique
+  nodeId       String?
+  location     Node?         @relation(name: "PatientToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  pcpId        String?
+  pcp          Staff?        @relation(name: "PatientStaff_PCP", fields: [pcpId], references: [userId], onUpdate: Cascade, onDelete: SetNull)
+  entryDate    DateTime      @default(now())
+  firstName    String
+  middleName   String?
+  lastName     String
+  dateOfBirth  DateTime
+  phoneNumber  String?
+  inTreatment  Boolean       @default(false)
+  insurance    String?
+  visits       Visit[]       @relation(name: "VisitPatient")
+  appointments Appointment[] @relation(name: "AppointmentToPatient")
+  userId       String?       @unique
+  user         User?         @relation(name: "PatientUser", fields: [userId], references: [id])
+}
+
+model Appointment {
+  id              String   @id @default(uuid())
+  createdTime     DateTime
+  appointmentTime DateTime
+  checkedIn       Boolean
+  nodeId          String?
+  location        Node?    @relation(name: "AppointmentToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  patientId       String
+  patient         Patient  @relation(name: "AppointmentToPatient", fields: [patientId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  visitId         String?  @unique
+  visit           Visit?   @relation(name: "AppointmentVisit", fields: [visitId], references: [id])
+  notes           String
+}
+
+model Visit {
+  id          String       @id @default(uuid())
+  notes       VisitNote[]  @relation(name: "VisitNoteToVisit")
+  patientId   String
+  patient     Patient      @relation(name: "VisitPatient", fields: [patientId], references: [id])
+  visitTime   DateTime
+  appointment Appointment? @relation("AppointmentVisit")
+}
+
+model VisitNote {
+  id       String @id @default(uuid())
+  type     String
+  content  String
+  authorId String
+  author   Staff  @relation("VisitNoteToUser_Author", fields: [authorId], references: [userId])
+  visitId  String
+  visit    Visit  @relation(name: "VisitNoteToVisit", fields: [visitId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
+
+model User {
+  id      String   @id @default(uuid())
+  sub     String   @unique
+  email   String?
+  role    String
+  patient Patient? @relation("PatientUser")
+  staff   Staff?   @relation(name: "StaffUser")
+}
+
+model Staff {
+  userId     String      @id
+  user       User        @relation(name: "StaffUser", fields: [userId], references: [id])
+  visitNotes VisitNote[] @relation(name: "VisitNoteToUser_Author")
+  patients   Patient[]   @relation(name: "PatientStaff_PCP")
+}
+
+enum Role {
+  patient
+  staff
+  admin
 }
