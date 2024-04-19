@@ -93,6 +93,26 @@ export const InterpreterRouter = router({
             });
         }),
 
+    getAll: publicProcedure
+        .query(async({ ctx }) => {
+            return ctx.db.interpreter.findMany({
+                include: {
+                    service: true,
+                },
+            });
+        }),
 
+    getOne: publicProcedure
+        .input(z.object({id: z.string()}))
+        .query(async ({ input, ctx}) => {
+            return ctx.db.interpreter.findUnique({
+                where: {
+                    id: input.id,
+                },
+                include: {
+                    service: true,
+                },
+            });
+        }),
 });
 
