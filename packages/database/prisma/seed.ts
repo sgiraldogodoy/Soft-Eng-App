@@ -46,7 +46,14 @@ async function main() {
   }
 
   // Save to database
-  await prisma.node.createMany({ data: nodes, skipDuplicates: true });
+  for (let i = 0; i < nodes.length; i += 1) {
+    try {
+      const node = nodes[i];
+      await prisma.node.create({ data: node });
+    } catch (e) {
+      /* empty */
+    }
+  }
 
   const edges: Edge[] = [];
 

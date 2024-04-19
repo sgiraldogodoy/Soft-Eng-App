@@ -91,6 +91,7 @@ export const Node = router({
           const occurences = await ctx.db.node.findMany({
             where: {
               type: input.data.type,
+              floor: input.data.floor,
             },
           });
 
@@ -117,6 +118,18 @@ export const Node = router({
         longName: input.data.longName,
         shortName: input.data.shortName,
       };
+      //check if node exists
+      const exists = await ctx.db.node.findUnique({
+        where: {
+          id: nodeId,
+        },
+      });
+      if (exists) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Node already exists",
+        });
+      }
       await ctx.db.node.create({
         data: data,
       });
