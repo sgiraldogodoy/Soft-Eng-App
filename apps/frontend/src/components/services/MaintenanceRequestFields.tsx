@@ -14,11 +14,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select.tsx";
+import { Input } from "@/components/ui/input.tsx";
 
 export const MaintenanceRequestSchema = z.object({
   type: z.literal("maintenance-request"),
   equipmentType: z.string(),
   severity: z.string(),
+  startTime: z.string(),
+  endTime: z.string(),
 });
 
 const MaintenanceRequestFields = () => {
@@ -57,7 +60,7 @@ const MaintenanceRequestFields = () => {
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select the Equipment Type" />
+                    <SelectValue placeholder="Select the Severity" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -69,6 +72,32 @@ const MaintenanceRequestFields = () => {
                 </SelectContent>
               </Select>
               <FormDescription>How bad is the damage?</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="data.startDate"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel>Start Date</FormLabel>
+              <FormControl>
+                <Input type="datetime-local" {...field} />
+              </FormControl>
+              <FormDescription>When will maintenance start?</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="data.endDate"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel>End Date</FormLabel>
+              <FormControl>
+                <Input type="datetime-local" {...field} />
+              </FormControl>
+              <FormDescription>When will maintenance end?</FormDescription>
               <FormMessage />
             </FormItem>
           )}
