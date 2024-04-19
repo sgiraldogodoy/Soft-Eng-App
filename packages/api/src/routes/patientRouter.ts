@@ -84,4 +84,38 @@ export const Patient = router({
         data: input.data,
       });
     }),
+
+  connectToUser: protectedProcedure
+    .input(z.object({ patientId: z.string(), userId: z.string() }))
+    .mutation(({ input, ctx }) => {
+      return ctx.db.patient.update({
+        where: {
+          id: input.patientId,
+        },
+        data: {
+          user: {
+            connect: {
+              id: input.userId,
+            },
+          },
+        },
+      });
+    }),
+
+  connectToPcp: protectedProcedure
+    .input(z.object({ patientId: z.string(), staffId: z.string() }))
+    .mutation(({ input, ctx }) => {
+      return ctx.db.patient.update({
+        where: {
+          id: input.patientId,
+        },
+        data: {
+          pcp: {
+            connect: {
+              userId: input.staffId,
+            },
+          },
+        },
+      });
+    }),
 });

@@ -20,6 +20,7 @@ export const patient = z.object({
   lastName: z.string(),
   inTreatment: z.boolean().optional(),
   insurance: z.string().optional(),
+  dateOfBirth: z.coerce.date(),
 });
 
 export const edge = z.object({

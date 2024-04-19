@@ -19,7 +19,9 @@
     "tsconfig-custom": "workspace:*",
     "tsx": "^4.7.1",
     "typescript": "^5.4.3",
-    "vitest": "^0.34.1"
+    "vitest": "^0.34.1",
+    "zod": "^3.22.5",
+    "zod-prisma": "^0.5.4"
   },
   "scripts": {
     "lint": "dotenv -e ${PROJECT_CWD}/.env -- yarn shared:prettierlint && dotenv -e ${PROJECT_CWD}/.env -- prisma validate && dotenv -e ${PROJECT_CWD}/.env -- yarn shared:eslint && dotenv -e ${PROJECT_CWD}/.env -- yarn shared:tslint",
