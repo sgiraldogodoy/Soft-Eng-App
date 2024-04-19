@@ -128,5 +128,3 @@ model Patient {
   inTreatment Boolean  @default(true)
   insurance   String?
 }
-
-Done in 0.30s.
