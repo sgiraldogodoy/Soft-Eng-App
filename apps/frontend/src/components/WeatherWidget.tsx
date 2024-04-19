@@ -34,9 +34,9 @@ export default function WeatherWidget() {
   console.log(JSON.stringify(data, null, 2));
 
   return (
-    <div className="absolute flex items-center gap-5 bottom-8 left-7">
+    <div className="flex items-center gap-5">
       <WeatherIcon iconCode={iconCode} />
-      <div className="flex flex-col text-left text-2xl">
+      <div className="flex flex-col text-left text-xl text-white">
         {data.main ? <h1>{Math.round(data.main.temp)} ºF</h1> : null}
         <div>{formattedDescription}</div>
         <div className="flex gap-2">

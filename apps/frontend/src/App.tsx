@@ -3,9 +3,9 @@ import { httpBatchLink } from "@trpc/client";
 import superjson from "superjson";
 import { useMemo, useState } from "react";
 import { trpc } from "./utils/trpc";
-import { AppRouter } from "./routes/AppRouter.tsx";
 import { Toaster } from "./components/ui/sonner.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
+import { AppRouter } from "@/routes/AppRouter.tsx";
 
 export default function App() {
   const session = useAuth0();
