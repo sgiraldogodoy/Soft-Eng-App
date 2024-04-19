@@ -14,6 +14,8 @@ export const VisitRequestSchema = z.object({
   type: z.literal("visit-request"),
   visitorName: z.string(),
   visiteeName: z.string(),
+  startDate: z.string(),
+  endDate: z.string(),
 });
 
 const VisitRequestFields = () => {
@@ -42,6 +44,32 @@ const VisitRequestFields = () => {
                 <Input {...field} />
               </FormControl>
               <FormDescription>Who is being visited?</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="data.startDate"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel>Start Date</FormLabel>
+              <FormControl>
+                <Input type="datetime-local" {...field} />
+              </FormControl>
+              <FormDescription>When will the visit start?</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="data.endDate"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormLabel>End Date</FormLabel>
+              <FormControl>
+                <Input type="datetime-local" {...field} />
+              </FormControl>
+              <FormDescription>When will the visit end?</FormDescription>
               <FormMessage />
             </FormItem>
           )}
