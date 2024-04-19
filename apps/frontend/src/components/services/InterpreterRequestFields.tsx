@@ -1,4 +1,3 @@
-import { z } from "zod";
 import {
     FormControl,
     FormDescription,
@@ -62,9 +61,25 @@ const Interpreter = () => {
                         </FormItem>
                     )}
                     />
-
+                <FormField
+                    name="data.dateTime"
+                    render={({ field }) => (
+                        <FormItem className="">
+                            <FormLabel>Date</FormLabel>
+                            <FormControl>
+                                <Input type="datetime-local" {...field} />
+                            </FormControl>
+                            <FormDescription>
+                                What date does is the request needed for?
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
             </div>
         </>
     );
 };
+
+export default Interpreter;
 
