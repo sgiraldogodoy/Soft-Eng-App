@@ -37,7 +37,9 @@
   },
   "dependencies": {
     "@prisma/client": "4.15.0",
-    "prisma": "4.15.0"
+    "common": "workspace:^",
+    "prisma": "4.15.0",
+    "zod": "^3.22.5"
   },
   "prisma": {
     "seed": "dotenv -e ../../.env -- tsx prisma/seed.ts"

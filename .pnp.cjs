@@ -6654,6 +6654,7 @@ const RAW_RUNTIME_STATE =
           ["@faker-js/faker", "npm:8.4.1"],\
           ["@prisma/client", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:4.15.0"],\
           ["@types/node", "npm:20.12.2"],\
+          ["common", "workspace:packages/common"],\
           ["dotenv", "npm:16.4.5"],\
           ["dotenv-cli", "npm:7.4.1"],\
           ["eslint", "npm:8.56.0"],\
@@ -6665,7 +6666,8 @@ const RAW_RUNTIME_STATE =
           ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
           ["tsx", "npm:4.7.1"],\
           ["typescript", "patch:typescript@npm%3A5.4.3#optional!builtin<compat/typescript>::version=5.4.3&hash=e012d7"],\
-          ["vitest", "virtual:281b7ec5658d805f88196484313c874810ad4b28fdb3886a7f2b6292faec9bee3b9a92af4348cfaefb8b484dd7e409e815eac63879fbb0501eb0b5d3afa613d1#npm:0.34.6"]\
+          ["vitest", "virtual:281b7ec5658d805f88196484313c874810ad4b28fdb3886a7f2b6292faec9bee3b9a92af4348cfaefb8b484dd7e409e815eac63879fbb0501eb0b5d3afa613d1#npm:0.34.6"],\
+          ["zod", "npm:3.22.5"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -14561,6 +14563,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/zod-npm-3.22.4-2bccbc41b4-73622ca36a.zip/node_modules/zod/",\
         "packageDependencies": [\
           ["zod", "npm:3.22.4"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:3.22.5", {\
+        "packageLocation": "./.yarn/cache/zod-npm-3.22.5-36ba7d9667-a60c1b55c4.zip/node_modules/zod/",\
+        "packageDependencies": [\
+          ["zod", "npm:3.22.5"]\
         ],\
         "linkType": "HARD"\
       }]\

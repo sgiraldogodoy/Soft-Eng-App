@@ -5192,6 +5192,7 @@ __metadata:
     "@faker-js/faker": "npm:^8.4.1"
     "@prisma/client": "npm:4.15.0"
     "@types/node": "npm:^20.12.2"
+    common: "workspace:^"
     dotenv: "npm:^16.4.5"
     dotenv-cli: "npm:^7.4.1"
     eslint: "npm:latest"
@@ -5204,6 +5205,7 @@ __metadata:
     tsx: "npm:^4.7.1"
     typescript: "npm:^5.4.3"
     vitest: "npm:^0.34.1"
+    zod: "npm:^3.22.5"
   languageName: unknown
   linkType: soft
 
@@ -11899,5 +11901,12 @@ __metadata:
   version: 3.22.4
   resolution: "zod@npm:3.22.4"
   checksum: 73622ca36a916f785cf528fe612a884b3e0f183dbe6b33365a7d0fc92abdbedf7804c5e2bd8df0a278e1472106d46674281397a3dd800fa9031dc3429758c6ac
+  languageName: node
+  linkType: hard
+
+"zod@npm:^3.22.5":
+  version: 3.22.5
+  resolution: "zod@npm:3.22.5"
+  checksum: a60c1b55c4cc824a5d0432ee29d93b087b5d8a1bd2d0f4cd6e7ffe5b602da9cab2f2c27b1ae6c96d88d9f778cc933cead70e08b7944a98893576c61dca5e0c74
   languageName: node
   linkType: hard
