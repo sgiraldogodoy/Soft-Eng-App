@@ -56,6 +56,7 @@ model Service {
   sanitation  Sanitation?  @relation(name: "SanitationToService")
   visit       Visit?       @relation(name: "VisitToService")
   it          IT?          @relation(name: "ITToService")
+  religious   Religious?   @relation(name: "ReligiousToService")
 }
 
 enum ServiceType {
@@ -69,6 +70,7 @@ enum ServiceType {
   sanitation
   visit
   it
+  religious
 }
 
 model Flower {
@@ -157,6 +159,14 @@ model IT {
   service    Service @relation(name: "ITToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   type       String
   errorCodes String?
+}
+
+model Religious {
+  id        String   @id @default(uuid())
+  serviceId String   @unique
+  service   Service  @relation(name: "ReligiousToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  religion  String
+  dateTime  DateTime
 }
 
 model Patient {

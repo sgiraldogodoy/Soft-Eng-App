@@ -47,6 +47,7 @@ export const serviceRouter = router({
           sanitation: true,
           visit: true,
           it: true,
+          religious: true,
         },
       });
     }),
@@ -64,6 +65,7 @@ export const serviceRouter = router({
         sanitation: true,
         visit: true,
         it: true,
+        religious: true,
       },
     });
   }),

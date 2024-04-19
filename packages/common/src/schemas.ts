@@ -74,6 +74,11 @@ export const it = z.object({
   errorCodes: z.string().optional(),
 });
 
+export const religious = z.object({
+  religion: z.string(),
+  dateTime: z.coerce.date(),
+});
+
 export const baseService = z.object({
   nodeId: z.string(),
   priority: z.enum(["LOW", "MEDIUM", "HIGH", "EMERGENCY"]),
@@ -92,6 +97,7 @@ export const baseService = z.object({
     "sanitation",
     "visit",
     "it",
+    "religious",
   ]),
   note: z.string(),
 });
@@ -107,6 +113,7 @@ export const service = z.discriminatedUnion("type", [
   baseService.extend({ data: sanitation, type: z.literal("sanitation") }),
   baseService.extend({ data: visit, type: z.literal("visit") }),
   baseService.extend({ data: it, type: z.literal("it") }),
+  baseService.extend({ data: religious, type: z.literal("religious") }),
 ]);
 
 export const formService = z.discriminatedUnion("type", [
@@ -136,4 +143,7 @@ export const formService = z.discriminatedUnion("type", [
     .extend({ data: visit, type: z.literal("visit") })
     .omit({ login: true }),
   baseService.extend({ data: it, type: z.literal("it") }).omit({ login: true }),
+  baseService
+    .extend({ data: religious, type: z.literal("religious") })
+    .omit({ login: true }),
 ]);
