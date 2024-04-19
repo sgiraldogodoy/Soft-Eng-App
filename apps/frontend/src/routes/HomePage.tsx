@@ -4,9 +4,13 @@ import { Check, CalendarDays, Navigation, ExternalLink } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import WeatherWidget from "@/components/WeatherWidget.tsx";
 import { DateTime } from "luxon";
+import CheckInForm from "@/components/CheckInForm.tsx";
+import { motion } from "framer-motion";
 
 export default function HomePage() {
   const session = useAuth0();
+
+  const [checkingIn, setCheckingIn] = useState(false);
 
   const [dateTime, setDateTime] = useState(DateTime.now());
 
@@ -27,46 +31,73 @@ export default function HomePage() {
 
   return (
     <div className="h-screen min-w-screen flex">
-      <div className="flex flex-col h-full justify-center gap-12 items-start w-full px-6">
+      <motion.div
+        layout
+        className="flex flex-col h-full justify-center gap-12 items-start w-full px-6"
+      >
         {session.isAuthenticated && <Redirect to="/pathfind" />}
-        <Link to="/pathfind" asChild>
-          <div className="w-full space-y-2 cursor-pointer transition transform origin-left hover:scale-105">
-            <Navigation size={75} strokeWidth={1.5} />
-            <div className="space-y-1">
-              <p className="text-2xl">Get Directions</p>
-              <p className="text-md text-gray-600">Find your way around BWH</p>
-            </div>
+        {!checkingIn && (
+          <>
+            <Link to="/pathfind" asChild>
+              <motion.div
+                layout
+                className="w-full space-y-2 cursor-pointer transition transform origin-left hover:scale-105"
+              >
+                <Navigation size={75} strokeWidth={1.5} />
+                <div className="space-y-1">
+                  <p className="text-2xl">Get Directions</p>
+                  <p className="text-md text-gray-600">
+                    Find your way around BWH
+                  </p>
+                </div>
+              </motion.div>
+            </Link>
+            <hr className="w-full" />
+          </>
+        )}
+        <motion.div
+          layout
+          onClick={() => {
+            setCheckingIn(true);
+          }}
+          className="w-full cursor-pointer space-y-2 transition transform origin-left hover:scale-105"
+        >
+          <Check size={75} strokeWidth={1.5} />
+          <div className="space-y-1">
+            <p className="text-2xl">Check-in</p>
+            <p className="text-md text-gray-600">
+              Check-in to your appointment
+            </p>
           </div>
-        </Link>
+        </motion.div>
         <hr className="w-full" />
-        <Link to="/" asChild>
-          <div className="w-full cursor-pointer space-y-2 transition transform origin-left hover:scale-105">
-            <Check size={75} strokeWidth={1.5} />
-            <div className="space-y-1">
-              <p className="text-2xl">Check-in</p>
-              <p className="text-md text-gray-600">
-                Check-in to your appointment
-              </p>
-            </div>
-          </div>
-        </Link>
-        <hr className="w-full" />
-        <Link to="/" asChild>
-          <div className="w-full cursor-pointer space-y-2 transition transform origin-left hover:scale-105">
-            <CalendarDays size={75} strokeWidth={1.5} />
-            <div className="space-y-1">
-              <p className="text-2xl">Manage Appointments</p>
-              <p className="text-md text-gray-600">
-                Schedule, cancel, or change upcoming appointments
-              </p>
-            </div>
-          </div>
-        </Link>
+
+        {!checkingIn && (
+          <Link to="/" asChild>
+            <motion.div
+              layout
+              className="w-full cursor-pointer space-y-2 transition transform origin-left hover:scale-105"
+            >
+              <CalendarDays size={75} strokeWidth={1.5} />
+              <div className="space-y-1">
+                <p className="text-2xl">Manage Appointments</p>
+                <p className="text-md text-gray-600">
+                  Schedule, cancel, or change upcoming appointments
+                </p>
+              </div>
+            </motion.div>
+          </Link>
+        )}
+        {checkingIn && (
+          <motion.div className="w-full" layout>
+            <CheckInForm onOpenChange={setCheckingIn} />
+          </motion.div>
+        )}
         <div
           onClick={() => session.loginWithRedirect()}
           className="flex gap-2 cursor-pointer"
         ></div>
-      </div>
+      </motion.div>
       <Link to="/pathfind" asChild>
         <div className="basis-2/3 shrink-0 h-full relative bg-[#001430] cursor-pointer">
           <img
@@ -83,7 +114,7 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center gap-3">
               <div className="flex gap-3 items-center">
                 <svg
                   width="40"

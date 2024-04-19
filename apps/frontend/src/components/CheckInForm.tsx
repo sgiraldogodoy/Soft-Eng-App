@@ -26,7 +26,11 @@ const formSchema = z.object({
   documentIdNumber: z.string(),
 });
 
-export default function CheckInForm() {
+interface Props {
+  onOpenChange: (open: boolean) => void;
+}
+
+export default function CheckInForm({ onOpenChange }: Props) {
   const form = useForm<z.input<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -36,69 +40,72 @@ export default function CheckInForm() {
   }, []);
 
   return (
-    <div>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full flex flex-col justify-between items-stretch gap-3"
-        >
-          <div className="flex flex-col gap-2 items-stretch">
-            <FormField
-              control={form.control}
-              name="fullName"
-              render={({ field }) => (
-                <FormItem className="flex flex-col h-full justify-between flex-1">
-                  <FormLabel>Full Name</FormLabel>
-                  <Input placeholder="John Appleseed" type="text" {...field} />
-                  <FormDescription>Enter your full legal name</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="dob"
-              render={({ field }) => (
-                <FormItem className="flex flex-col h-full justify-between flex-1">
-                  <FormLabel>Date of Birth</FormLabel>
-                  <Input type="date" {...field} />
-                  <FormDescription>Enter your date of birth</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="documentIdNumber"
-              render={({ field }) => (
-                <FormItem className="flex flex-col h-full justify-between flex-1">
-                  <FormLabel>ID Number</FormLabel>
-                  <Input placeholder="123456789" type="text" {...field} />
-                  <FormDescription>
-                    Enter your driver&apos;s license or passport number
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button
-              asChild
-              className="flex-1"
-              variant="outline"
-              onClick={() => {
-                form.reset();
-              }}
-            >
-              <Link to="/">Back</Link>
-            </Button>
-            <Button className="flex-1 " type="submit">
-              Submit
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-full flex flex-col justify-between items-center gap-8"
+      >
+        <div className="w-full flex flex-col gap-8 items-stretch">
+          <FormField
+            control={form.control}
+            name="fullName"
+            render={({ field }) => (
+              <FormItem className="w-full flex flex-col h-full justify-between flex-1">
+                <FormLabel>Full Name</FormLabel>
+                <Input
+                  className="w-full"
+                  placeholder="John Appleseed"
+                  type="text"
+                  {...field}
+                />
+                <FormDescription>Enter your full legal name</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="dob"
+            render={({ field }) => (
+              <FormItem className="flex flex-col h-full justify-between flex-1">
+                <FormLabel>Date of Birth</FormLabel>
+                <Input type="date" {...field} />
+                <FormDescription>Enter your date of birth</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="documentIdNumber"
+            render={({ field }) => (
+              <FormItem className="flex flex-col h-full justify-between flex-1">
+                <FormLabel>ID Number</FormLabel>
+                <Input placeholder="123456789" type="text" {...field} />
+                <FormDescription>
+                  Enter your driver&apos;s license or passport number
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="w-full flex gap-5">
+          <Button
+            asChild
+            className="flex-1 w-full"
+            variant="secondary"
+            onClick={() => {
+              onOpenChange(false);
+            }}
+          >
+            <Link to="/">Back</Link>
+          </Button>
+          <Button className="flex-1 w-full" type="submit">
+            Submit
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

@@ -3,10 +3,9 @@ import { httpBatchLink } from "@trpc/client";
 import superjson from "superjson";
 import { useMemo, useState } from "react";
 import { trpc } from "./utils/trpc";
-// import { AppRouter } from "./routes/AppRouter.tsx";
 import { Toaster } from "./components/ui/sonner.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
-import CheckInForm from "@/components/CheckInForm.tsx";
+import { AppRouter } from "@/routes/AppRouter.tsx";
 
 export default function App() {
   const session = useAuth0();
@@ -41,7 +40,7 @@ export default function App() {
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <Toaster />
-        <CheckInForm />
+        <AppRouter />
       </QueryClientProvider>
     </trpc.Provider>
   );
