@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/popover";
 import PathfindSettings from "@/components/PathfindSettings.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import { TextNavigation } from "@/components/TextNav.tsx";
 
 import { Link } from "wouter";
 
@@ -156,6 +157,11 @@ export default function PathFind() {
       <div className="absolute flex items-center gap-[2px] text-xl font-bold bottom-10 right-8">
         <FloorSelection onFloorClick={handleFloorClick} />
       </div>
+      {pathData && pathData.length > 0 && (
+        <div className="absolute bottom-0 left-0">
+          <TextNavigation nodes={pathData} />
+        </div>
+      )}
     </div>
   );
 }

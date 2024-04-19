@@ -38,6 +38,7 @@
     "@trpc/client": "11.0.0-next.327",
     "@trpc/react-query": "11.0.0-next.327",
     "@trpc/server": "11.0.0-next.327",
+    "accordion": "^3.0.2",
     "add": "^2.0.6",
     "api": "workspace:^",
     "autoprefixer": "^10.4.18",
