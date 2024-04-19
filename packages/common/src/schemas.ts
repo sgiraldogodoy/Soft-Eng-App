@@ -38,6 +38,11 @@ export const security = z.object({
   threat: z.string(),
 });
 
+export const interpreter = z.object({
+    dateTime: z.coerce.date(),
+    language: z.enum(["French", "German", "Spanish", "Finnish", "Russian"]),
+});
+
 export const av = z.object({
   dateTime: z.coerce.date(),
   type: z.string(),
@@ -50,7 +55,7 @@ export const baseService = z.object({
   status: z
     .enum(["ASSIGNED", "UNASSIGNED", "IN_PROGRESS", "COMPLETED"])
     .default("UNASSIGNED"),
-  type: z.enum(["av", "security", "room", "gift", "flower"]),
+  type: z.enum(["av", "security", "room", "gift", "flower", "interpreter"]),
   note: z.string(),
 });
 
@@ -60,6 +65,7 @@ export const service = z.discriminatedUnion("type", [
   baseService.extend({ data: room, type: z.literal("room") }),
   baseService.extend({ data: gift, type: z.literal("gift") }),
   baseService.extend({ data: flower, type: z.literal("flower") }),
+    baseService.extend({data: interpreter, type: z.literal("interpreter")}),
 ]);
 
 export const formService = z.discriminatedUnion("type", [
@@ -76,4 +82,6 @@ export const formService = z.discriminatedUnion("type", [
   baseService
     .extend({ data: flower, type: z.literal("flower") })
     .omit({ login: true }),
+    baseService
+        .extend({data: interpreter, type: z.literal("interpreter")}),
 ]);

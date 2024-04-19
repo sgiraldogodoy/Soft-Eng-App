@@ -1,3 +1,4 @@
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -37,20 +38,21 @@ model Edge {
 }
 
 model Service {
-  id       String      @id @default(uuid())
-  nodeId   String
-  node     Node        @relation(name: "ServiceToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  priority String
-  date     DateTime    @default(now())
-  login    String
-  status   String
-  type     ServiceType
-  note     String
-  flower   Flower?     @relation(name: "FlowerToService")
-  gift     Gift?       @relation(name: "GiftToService")
-  room     Room?       @relation(name: "RoomToService")
-  security Security?   @relation(name: "SecurityToService")
-  av       AV?         @relation(name: "AVToService")
+  id          String       @id @default(uuid())
+  nodeId      String
+  node        Node         @relation(name: "ServiceToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  priority    String
+  date        DateTime     @default(now())
+  login       String
+  status      String
+  type        ServiceType
+  note        String
+  flower      Flower?      @relation(name: "FlowerToService")
+  gift        Gift?        @relation(name: "GiftToService")
+  room        Room?        @relation(name: "RoomToService")
+  security    Security?    @relation(name: "SecurityToService")
+  av          AV?          @relation(name: "AVToService")
+  Interpreter Interpreter? @relation(name: "Interpreter", fields: [], references: [])
 }
 
 enum ServiceType {
@@ -59,6 +61,7 @@ enum ServiceType {
   room
   security
   av
+  interpreter
 }
 
 model Flower {
@@ -95,6 +98,12 @@ model Security {
   threat    String
 }
 
+model Interpreter {
+  id      String  @id @default(uuid())
+  serviceId String  @unique
+  service Service   @relation(name: "interpreter")
+}
+
 model AV {
   id        String   @id @default(uuid())
   serviceId String   @unique
@@ -116,3 +125,5 @@ model Patient {
   inTreatment Boolean  @default(true)
   insurance   String?
 }
+
+Done in 0.30s.

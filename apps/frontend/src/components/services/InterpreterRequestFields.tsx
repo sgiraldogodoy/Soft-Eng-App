@@ -31,7 +31,12 @@ const Interpreter = () => {
                     name="data.recipientName"
                     render={({field}) => (
                         <FormItem>
-                            <FormLabel></FormLabel>
+                            <FormLabel>Recipient</FormLabel>
+                            <FormControl>
+                                <Input {...field} />
+                            </FormControl>
+                            <FormDescription>Who shall receive the service.</FormDescription>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
