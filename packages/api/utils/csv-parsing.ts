@@ -1,4 +1,6 @@
 import { Prisma } from "database";
+import { node as nodeSchema } from "common";
+import { z } from "zod";
 
 type Node = Prisma.NodeCreateManyInput;
 type Edge = Prisma.EdgeCreateManyInput;
@@ -15,8 +17,17 @@ export async function parseCSVNode(csv: string) {
       i++;
       continue;
     }
-    const [id, xString, yString, floor, building, type, longName, shortName] =
-      line.split(",");
+    const [
+      id,
+      xString,
+      yString,
+      floor,
+      building,
+      typeString,
+      longName,
+      shortName,
+    ] = line.split(",");
+    const type = typeString as z.infer<typeof nodeSchema.shape.type>;
     const x = Number(xString);
     const y = Number(yString);
     if (

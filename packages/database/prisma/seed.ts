@@ -1,4 +1,4 @@
-import { PrismaClient, Edge, Prisma } from "../.prisma/client";
+import { PrismaClient, Edge, Prisma, NodeType } from "../.prisma/client";
 import readline from "readline";
 import fs from "fs";
 import NodeCreateManyInput = Prisma.NodeCreateManyInput;
@@ -26,10 +26,11 @@ async function main() {
       ycordsString,
       floor,
       building,
-      type,
+      typeString,
       longName,
       shortName,
     ] = line.split(",");
+    const type = typeString as NodeType;
     const x = Number(xcordsString);
     const y = Number(ycordsString);
     nodes.push({
