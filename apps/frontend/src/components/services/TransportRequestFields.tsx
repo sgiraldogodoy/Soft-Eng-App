@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/select.tsx";
 import { Input } from "@/components/ui/input.tsx";
 
-export const MaintenanceRequestSchema = z.object({
+export const TransportRequestSchema = z.object({
   type: z.literal("transport-request"),
   vehicleType: z.string(),
   patientCount: z.string(),
@@ -38,13 +38,17 @@ const TransportRequestFields = () => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="Ambulance">Emergency Ambulance</SelectItem>
+                  <SelectItem value="Emergency Ambulance">
+                    Emergency Ambulance
+                  </SelectItem>
                   <SelectItem value="Helicopter">Helicopter</SelectItem>
-                  <SelectItem value="Aircraft">Fixed-Wing Aircraft</SelectItem>
+                  <SelectItem value="Fixed-Wing Aircraft">
+                    Fixed-Wing Aircraft
+                  </SelectItem>
                   <SelectItem value="Boat">Boat</SelectItem>
-                  <SelectItem value="Bus">Ambulance Bus</SelectItem>
+                  <SelectItem value="Ambulance Bus">Ambulance Bus</SelectItem>
                   <SelectItem value="Van">Van</SelectItem>
-                  <SelectItem value="AllTerrain">
+                  <SelectItem value="All-Terrain Vehicle">
                     All-Terrain Vehicle
                   </SelectItem>
                   <SelectItem value="Train">Train</SelectItem>
