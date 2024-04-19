@@ -5,8 +5,8 @@ import {
   reverseScaleCoordinate,
 } from "../utils/scaleCoordinate.ts";
 import { trpc } from "@/utils/trpc.ts";
-import { useSelectNodes } from "@/components/createNode.tsx";
-import { EditNodeDialog } from "@/components/editNodeDialog.tsx";
+import { useSelectNodes } from "@/utils/useSelectNodes.tsx";
+import { EditNodeDialog } from "@/components/EditNodeDialog.tsx";
 
 const origImageWidth = 5000;
 const origImageHeight = 3400;
