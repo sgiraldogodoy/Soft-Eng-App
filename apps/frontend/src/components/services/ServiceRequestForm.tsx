@@ -37,6 +37,7 @@ import SecurityRequestFields from "@/components/services/SecurityRequestFields.t
 import GiftRequestFields from "./GiftRequestFields";
 import MaintenanceRequestFields from "./MaintenanceRequestFields";
 import TransportRequestFields from "./TransportRequestFields";
+import SanitationRequestFields from "./SanitationRequestFields";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
 import {
@@ -102,6 +103,10 @@ const FORMTYPE_RECORD: Record<
     longName: "Request Transport",
     formFields: TransportRequestFields,
   },
+  sanitation: {
+    longName: "Request Sanitation",
+    formFields: SanitationRequestFields,
+  },
 };
 
 interface Props {
@@ -134,6 +139,7 @@ export default function InputForm({ variant }: Props) {
   const createRoomRequest = trpc.room.createOne.useMutation();
   const createMaintenanceRequest = trpc.maintenance.createOne.useMutation();
   const createTransportRequest = trpc.transport.createOne.useMutation();
+  const createSanitationRequest = trpc.sanitation.createOne.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
@@ -279,6 +285,26 @@ export default function InputForm({ variant }: Props) {
           {
             success: "Successfully saved to the database.",
             loading: "Saving transport request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "sanitation":
+        toast.promise(
+          createSanitationRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving sanitation request to the database.",
             error: "Error saving to database.",
           },
         );
