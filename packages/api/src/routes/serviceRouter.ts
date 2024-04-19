@@ -45,6 +45,7 @@ export const serviceRouter = router({
           maintenance: true,
           transport: true,
           sanitation: true,
+          visit: true,
         },
       });
     }),
@@ -60,6 +61,7 @@ export const serviceRouter = router({
         maintenance: true,
         transport: true,
         sanitation: true,
+        visit: true,
       },
     });
   }),
