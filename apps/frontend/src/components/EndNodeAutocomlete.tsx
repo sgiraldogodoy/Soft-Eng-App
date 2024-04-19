@@ -6,12 +6,14 @@ interface FrameworkProps {
   Rooms: Node[] | undefined;
   onChange: (selectedNodeId: string) => void;
   selectedNode: string;
+  placeholder: string;
 }
 
 export function EndNodeAutocomlete({
   Rooms,
   onChange,
   selectedNode,
+  placeholder,
 }: FrameworkProps) {
   const [value, setValue] = useState<Option>();
 
@@ -33,7 +35,7 @@ export function EndNodeAutocomlete({
     <AutoComplete
       options={rooms}
       emptyMessage="No results."
-      placeholder="Where to?"
+      placeholder={placeholder}
       onValueChange={setValue}
       value={value}
       onChange={onChange}

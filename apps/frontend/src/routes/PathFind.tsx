@@ -51,14 +51,15 @@ export default function PathFind() {
   const pathData = path.data;
 
   const handleNodeClickInApp = (clickedNode: string) => {
-    // if (startNode && goalNode) {
-    //   setStartNode(clickedNode);
-    //   setGoalNode("");
-    // } else if (!startNode) {
-    //   setStartNode(clickedNode);
-    // } else if (!goalNode) {
-    setGoalNode(clickedNode);
-    // }
+    if (startNode && goalNode) {
+      setStartNode(clickedNode);
+      setGoalNode("");
+    } else if (!startNode) {
+      setStartNode(clickedNode);
+    } else if (!goalNode) {
+      setGoalNode(clickedNode);
+      // }
+    }
   };
 
   const handleFloorClick = useCallback(
@@ -112,13 +113,24 @@ export default function PathFind() {
           </Button>
         </div>
       )}
+      <div className="absolute top-12 w-full flex justify-center gap-4">
+        <div className="backdrop-blur-[4px] bg-white/90 rounded-[100px] shadow-inner drop-shadow-md">
+          <EndNodeAutocomlete
+            Rooms={nodesQuery.data}
+            onChange={(e) => setStartNode(e)}
+            selectedNode={startNode}
+            placeholder="Start Location"
+          />
+        </div>
 
-      <div className="absolute backdrop-blur-[4px] bg-white/90 top-12 left-1/2 transform -translate-x-1/2 rounded-[100px] shadow-inner drop-shadow-md">
-        <EndNodeAutocomlete
-          Rooms={nodesQuery.data}
-          onChange={(e) => setGoalNode(e)}
-          selectedNode={goalNode}
-        />
+        <div className="backdrop-blur-[4px] bg-white/90 rounded-[100px] shadow-inner drop-shadow-md">
+          <EndNodeAutocomlete
+            Rooms={nodesQuery.data}
+            onChange={(e) => setGoalNode(e)}
+            selectedNode={goalNode}
+            placeholder="Where to?"
+          />
+        </div>
       </div>
 
       <div className="absolute flex gap-5 bottom-6 left-1/2 transform -translate-x-1/2">
