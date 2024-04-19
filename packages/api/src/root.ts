@@ -11,6 +11,7 @@ import { maintenanceRequestRouter } from "./routes/Services/maintenanceRouter.ts
 import { transportRequestRouter } from "./routes/Services/transportRouter.ts";
 import { sanitationRequestRouter } from "./routes/Services/sanitationRouter.ts";
 import { visitRequestRouter } from "./routes/Services/visitRouter.ts";
+import { itRequestRouter } from "./routes/Services/itRouter.ts";
 
 export const appRouter = router({
   service: serviceRouter,
@@ -22,6 +23,7 @@ export const appRouter = router({
   transport: transportRequestRouter,
   sanitation: sanitationRequestRouter,
   visit: visitRequestRouter,
+  it: itRequestRouter,
   room: RoomRouter,
   node: Node,
   edge: Edge,
