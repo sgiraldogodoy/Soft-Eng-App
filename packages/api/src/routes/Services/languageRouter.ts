@@ -30,5 +30,21 @@ export const InterpreterRouter = router({
                 },
             });
         }),
+    deleteMany: protectedProcedure
+        .input(z.object({ids: z.array(z.string()) }))
+        .mutation(async ({input, ctx}) => {
+            return ctx.db.interpreter.deleteMany({
+                where: {
+                    id: {
+                        in: input.ids
+                    },
+                },
+            });
+        }),
+    deleteAll: protectedProcedure.mutation(async ({ ctx}) => {
+        return ctx.db.interpreter.deleteMany();
+    }),
+
+
 });
 
