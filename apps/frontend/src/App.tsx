@@ -6,6 +6,7 @@ import { trpc } from "./utils/trpc";
 import { Toaster } from "./components/ui/sonner.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppRouter } from "@/routes/AppRouter.tsx";
+import { TooltipProvider } from "@/components/ui/tooltip.tsx";
 
 export default function App() {
   const session = useAuth0();
@@ -40,7 +41,9 @@ export default function App() {
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <Toaster />
-        <AppRouter />
+        <TooltipProvider>
+          <AppRouter />
+        </TooltipProvider>
       </QueryClientProvider>
     </trpc.Provider>
   );
