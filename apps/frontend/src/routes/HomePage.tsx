@@ -157,9 +157,11 @@ export default function HomePage() {
                   Brigham and Women's Hospital
                 </p>
               </div>
-              <div className="space-y-2">
-                <p className="text-white text-xl">
-                  This is a WPI CS3733 Software Engineering project!{" "}
+              <div className="space-y-2 justify-center">
+                <p className="text-white text-xl text-center px-24">
+                  This website is a term project exercise for WPI CS 3733
+                  Software Engineering (Prof. Wong) and is not to be confused
+                  with the actual Brigham & Women’s Hospital website.{" "}
                 </p>
               </div>
             </div>
