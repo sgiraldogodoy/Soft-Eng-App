@@ -1,11 +1,13 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import {
-  // ArrowRightIcon,
   DatabaseIcon,
+  // ArrowRightIcon,
   HammerIcon,
-  HomeIcon,
   LogOut,
   MapIcon,
+  PencilRuler,
+  Settings,
+  UserRound,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -13,8 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { TooltipProvider } from "../ui/tooltip";
-import { ButtonLink } from "../ButtonLink";
+import { SidebarButton } from "@/components/SidebarButton.tsx";
 
 export default function DashboardLayout({ children }: React.PropsWithChildren) {
   const session = useAuth0();
@@ -24,44 +25,17 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
   }
 
   return (
-    <div className="h-screen min-w-screen flex">
-      <div className="flex flex-col gap-[15px] py-[23px] px-[10px] border-r border-gray-300 items-center bg-gray-200 shadow-[inset_-10px_0_10px_-5px_hsla(0,0%,0%,.05)]">
-        <TooltipProvider delayDuration={0}>
-          <ButtonLink
-            link="/pathfind"
-            icon={HomeIcon}
-            name={"Home"}
-            color="#005DE2"
-          />
-          <ButtonLink
-            link="/mapediting"
-            icon={MapIcon}
-            name={"Map Editor"}
-            color="#005DE2"
-          />
-          <ButtonLink
-            link="/services"
-            icon={HammerIcon}
-            name={"Service Requests"}
-            color="#005DE2"
-          />
-          <ButtonLink
-            link="/database"
-            icon={DatabaseIcon}
-            name={"DB Editor"}
-            color="#005DE2"
-          />
-        </TooltipProvider>
-        {/* <ArrowRightIcon size={30} className="mt-auto" /> */}
-      </div>
-      <div className="flex flex-col max-h-screen h-full flex-1">
-        <div className="flex px-[17px] py-[18px] border-b border-gray-300 bg-gray-200/50 items-center gap-2">
+    <div className="flex flex-col bg-background min-h-screen max-h-screen overflow-auto">
+      <div className="flex h-14 border-b items-center flex-none">
+        <div className="relative w-14 flex-none border-r h-full flex items-center justify-center">
+          {/*<BackgroundGradientAnimation />*/}
           <svg
             width="21"
             height="30"
             viewBox="0 0 29 41"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="z-10"
           >
             <path
               d="M3.8 15.3999H0V21.8999V27.7999H3.8V15.3999Z"
@@ -93,21 +67,24 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
               fill="#005DE2"
             />
           </svg>
-          <p className="text-black text-xl font-bold">
+        </div>
+        <div className="h-full w-full flex items-center px-4 gap-2">
+          <p className="text-black text-lg">
             Brigham and Women&apos;s Hospital
           </p>
-          <p className="ml-auto text-lg">
+          <div className="flex-1" />
+          <p className="text-lg">
             Welcome,{" "}
             <span className="font-semibold">{session.user?.email}</span>
           </p>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <img
-                className="h-[40px] w-[40px] rounded-full object-contain hover:border-[5px] border-slate-500 cursor-pointer"
+                className="h-3/5 rounded-full object-contain hover:border border-slate-500 cursor-pointer"
                 src={session.user?.picture}
               />
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
+            <DropdownMenuContent className="w-auto">
               <DropdownMenuItem
                 onClick={() => {
                   session.logout();
@@ -119,7 +96,36 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="flex-1 overflow-auto relative">{children}</div>
+      </div>
+      <div className="flex-1 min-w-screen flex overflow-auto">
+        <aside className="z-10 hidden w-14 flex-col border-r bg-background sm:flex flex-none">
+          <nav className="flex flex-col items-center gap-4 px-2 sm:py-4">
+            <SidebarButton link="/pathfind" name="Map">
+              <MapIcon />
+            </SidebarButton>
+            <SidebarButton link="/mapediting" name="Map Editor">
+              <PencilRuler />
+            </SidebarButton>
+            <SidebarButton link="/services" name="Service Requests">
+              <HammerIcon />
+            </SidebarButton>
+            <SidebarButton link="/patients" name="Patients">
+              <UserRound />
+            </SidebarButton>
+            <SidebarButton link="/database" name="Database">
+              <DatabaseIcon />
+            </SidebarButton>
+          </nav>
+          <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
+            <SidebarButton link="/settings" name="Settings">
+              <Settings className="h-5 w-5" />
+            </SidebarButton>
+          </nav>
+        </aside>
+
+        <div className="flex-1 w-full overflow-auto relative bg-muted">
+          {children}
+        </div>
       </div>
     </div>
   );
