@@ -5,8 +5,10 @@ interface LaserProps {
   id: number;
   path: string;
   death: () => void;
-  lifespan: number;
+  speed: number;
+  sameSpeed: boolean;
   delay: number;
+  ease: boolean;
   imgWidth: number;
   imgHeight: number;
 }
@@ -15,12 +17,24 @@ export default function Laser({
   id,
   path,
   death,
-  lifespan,
+  speed,
+  sameSpeed,
   delay,
+  ease,
   imgWidth,
   imgHeight,
 }: LaserProps) {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  if (sameSpeed) {
+    const svgPathElement: SVGPathElement = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "path",
+    );
+    svgPathElement.setAttribute("d", path);
+    const pathLength = svgPathElement.getTotalLength();
+    speed = pathLength / speed;
+  }
 
   const handleDeath = useCallback(() => {
     if (timerRef.current) {
@@ -35,9 +49,9 @@ export default function Laser({
       () => {
         handleDeath();
       },
-      (lifespan + delay + 2) * 1000,
+      (speed + delay + 2) * 1000,
     );
-  }, [delay, handleDeath, lifespan]);
+  }, [delay, handleDeath, speed]);
 
   return (
     <div>
@@ -74,8 +88,9 @@ export default function Laser({
               pathLength: {
                 delay: 1,
                 type: "tween",
-                duration: lifespan,
+                duration: speed,
                 bounce: 0,
+                ease: ease ? "easeInOut" : "linear",
               },
             }}
           />
@@ -93,8 +108,9 @@ export default function Laser({
               pathLength: {
                 delay: delay + 1,
                 type: "tween",
-                duration: lifespan,
+                duration: speed,
                 bounce: 0,
+                ease: ease ? "easeInOut" : "linear",
               },
             }}
           />

@@ -6,17 +6,25 @@ import Laser from "@/components/Laser.tsx";
 
 interface MapProps {
   spawnrate: number;
-  lifespan: number;
+  speed: number;
+  sameSpeed: boolean;
   delay: number;
+  ease: boolean;
 }
 
-export default function LaserMap({ spawnrate, lifespan, delay }: MapProps) {
+export default function LaserMap({
+  spawnrate,
+  speed,
+  sameSpeed,
+  delay,
+  ease,
+}: MapProps) {
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height
   const origImageWidth = 5400;
   const origImageHeight = 3000;
   const image = useRef<HTMLImageElement>(null);
-  const scale = 1;
+  const scale = 1.4;
   const offset = { x: 0, y: 0 };
   //const containerRef = useRef<HTMLDivElement>(null);
   const imgURL = "/02_thesecondfloor.png";
@@ -192,8 +200,10 @@ export default function LaserMap({ spawnrate, lifespan, delay }: MapProps) {
           id={laser.id}
           path={laser.path}
           death={() => removeLaser(laser.id)}
-          lifespan={lifespan}
+          speed={speed}
+          sameSpeed={sameSpeed}
           delay={delay}
+          ease={ease}
           imgWidth={imgWidth}
           imgHeight={imgHeight}
         />
