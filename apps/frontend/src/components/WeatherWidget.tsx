@@ -40,8 +40,8 @@ export default function WeatherWidget() {
         {data.main ? <h1>{Math.round(data.main.temp)} ºF</h1> : null}
         <div>{formattedDescription}</div>
         <div className="flex gap-2">
-          {data.main ? <h1>H: {Math.round(data.main.temp_min)} ºF</h1> : null}
-          {data.main ? <h1>L: {Math.round(data.main.temp_max)} ºF</h1> : null}
+          {data.main ? <h1>H: {Math.round(data.main.temp_max)} ºF</h1> : null}
+          {data.main ? <h1>L: {Math.round(data.main.temp_min)} ºF</h1> : null}
         </div>
       </div>
     </div>
