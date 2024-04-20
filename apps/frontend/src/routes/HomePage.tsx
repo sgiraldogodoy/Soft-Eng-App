@@ -107,6 +107,7 @@ export default function HomePage() {
             sameSpeed={true}
             delay={0.4}
             ease={false}
+            floor={"1"}
           />
           <div className="absolute w-full h-full flex flex-col justify-between items-center px-10 py-8 z-10">
             <div className="flex items-center justify-between w-full">

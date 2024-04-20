@@ -10,6 +10,7 @@ interface MapProps {
   sameSpeed: boolean;
   delay: number;
   ease: boolean;
+  floor: string;
 }
 
 export default function LaserMap({
@@ -18,6 +19,7 @@ export default function LaserMap({
   sameSpeed,
   delay,
   ease,
+  floor,
 }: MapProps) {
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height
@@ -26,15 +28,82 @@ export default function LaserMap({
   const image = useRef<HTMLImageElement>(null);
   const scale = 1.4;
   const offset = { x: 0, y: 0 };
-  const imgURL = "/02_thesecondfloor.png";
+
+  let imgSrc = "";
+  switch (floor) {
+    case "L2":
+      imgSrc = "00_thelowerlevel2.png";
+      break;
+    case "L1":
+      imgSrc = "00_thelowerlevel1.png";
+      break;
+    case "1":
+      imgSrc = "01_thefirstfloor.png";
+      break;
+    case "2":
+      imgSrc = "02_thesecondfloor.png";
+      break;
+    case "3":
+      imgSrc = "03_thethirdfloor.png";
+      break;
+  }
+  const imgURL = imgSrc;
 
   const nodesQuery = trpc.node.getAll.useQuery() || [];
   const nodes = useMemo(() => {
     let filteredNodes = nodesQuery.data || [];
-    filteredNodes = filteredNodes.filter((node) => node.floor === "2");
+    filteredNodes = filteredNodes.filter((node) => node.floor === floor);
     filteredNodes = filteredNodes.filter((node) => node.type !== "HALL");
     return filteredNodes;
-  }, [nodesQuery.data]);
+  }, [floor, nodesQuery.data]);
+
+  const buildingNodes: Node[][] = useMemo(() => {
+    const filteredNodes: Node[][] = [];
+    switch (floor) {
+      case "L2":
+        filteredNodes.push(nodes.filter((node) => node.building === "BTM"));
+        filteredNodes.push(
+          nodes.filter(
+            (node) =>
+              node.building === "45 Francis" ||
+              node.building === "Tower" ||
+              node.building === "Shapiro",
+          ),
+        );
+        break;
+      case "L1":
+        filteredNodes.push(nodes.filter((node) => node.building === "Shapiro"));
+        filteredNodes.push(
+          nodes.filter(
+            (node) =>
+              node.building === "45 Francis" || node.building === "Tower",
+          ),
+        );
+        break;
+      case "1":
+        filteredNodes.push(nodes.filter((node) => node.building === "Shapiro"));
+        filteredNodes.push(nodes.filter((node) => node.building === "BTM"));
+        filteredNodes.push(
+          nodes.filter(
+            (node) =>
+              node.building === "45 Francis" || node.building === "Tower",
+          ),
+        );
+        break;
+      case "2":
+        filteredNodes.push(nodes);
+        break;
+      case "3":
+        filteredNodes.push(nodes.filter((node) => node.building === "Shapiro"));
+        filteredNodes.push(nodes.filter((node) => node.building === "BTM"));
+        filteredNodes.push(
+          nodes.filter((node) => node.building === "45 Francis"),
+        );
+        filteredNodes.push(nodes.filter((node) => node.building === "Tower"));
+        break;
+    }
+    return filteredNodes;
+  }, [floor, nodes]);
 
   const [startNode, setStartNode] = useState<Node | null>(null);
   const [endNode, setEndNode] = useState<Node | null>(null);
@@ -105,14 +174,20 @@ export default function LaserMap({
     return "M" + pathStrings.join(" L");
   }, [imgHeight, imgWidth, offset.x, offset.y, path.data]);
 
-  const randomNode = useCallback(() => {
-    const length = nodes.length;
-    return nodes[Math.floor(Math.random() * (length + 1))];
-  }, [nodes]);
+  const randomNode = useCallback((nodeList: Node[]) => {
+    const length = nodeList.length;
+    return nodeList[Math.floor(Math.random() * (length + 1))];
+  }, []);
+
+  const getPathNodes = useCallback(() => {
+    const length = buildingNodes.length;
+    const building = buildingNodes[Math.floor(Math.random() * (length + 1))];
+    setStartNode(randomNode(building));
+    setEndNode(randomNode(building));
+  }, [buildingNodes, randomNode]);
 
   const createLaser = useCallback(() => {
-    setStartNode(randomNode());
-    setEndNode(randomNode());
+    getPathNodes();
     if (startNode && endNode) {
       const newLaser = {
         id: counter,
@@ -121,7 +196,7 @@ export default function LaserMap({
       setCounter(counter + 1);
       setLasers((lasers) => [...lasers, newLaser]);
     }
-  }, [counter, endNode, generatePath, randomNode, startNode]);
+  }, [counter, endNode, generatePath, getPathNodes, startNode]);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
