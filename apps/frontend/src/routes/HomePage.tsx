@@ -101,7 +101,7 @@ export default function HomePage() {
       </motion.div>
       <Link to="/pathfind" asChild>
         <div className="basis-2/3 shrink-0 h-full relative bg-[#001430] cursor-pointer">
-          <LaserMap spawnrate={1} lifespan={3} />
+          <LaserMap spawnrate={1} lifespan={3} delay={0.5} />
           <div className="absolute w-full h-full flex flex-col justify-between items-center px-10 py-8 z-10">
             <div className="flex items-center justify-between w-full">
               <WeatherWidget />

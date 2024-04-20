@@ -7,9 +7,10 @@ import Laser from "@/components/Laser.tsx";
 interface MapProps {
   spawnrate: number;
   lifespan: number;
+  delay: number;
 }
 
-export default function LaserMap({ spawnrate, lifespan }: MapProps) {
+export default function LaserMap({ spawnrate, lifespan, delay }: MapProps) {
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height
   const origImageWidth = 5400;
@@ -192,6 +193,7 @@ export default function LaserMap({ spawnrate, lifespan }: MapProps) {
           path={laser.path}
           death={() => removeLaser(laser.id)}
           lifespan={lifespan}
+          delay={delay}
           imgWidth={imgWidth}
           imgHeight={imgHeight}
         />

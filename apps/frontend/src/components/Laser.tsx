@@ -6,6 +6,7 @@ interface LaserProps {
   path: string;
   death: () => void;
   lifespan: number;
+  delay: number;
   imgWidth: number;
   imgHeight: number;
 }
@@ -15,6 +16,7 @@ export default function Laser({
   path,
   death,
   lifespan,
+  delay,
   imgWidth,
   imgHeight,
 }: LaserProps) {
@@ -33,9 +35,9 @@ export default function Laser({
       () => {
         handleDeath();
       },
-      (lifespan + 1) * 1000,
+      (lifespan + delay + 2) * 1000,
     );
-  }, [handleDeath, lifespan]);
+  }, [delay, handleDeath, lifespan]);
 
   return (
     <div>
@@ -89,7 +91,7 @@ export default function Laser({
             animate={{ pathLength: 1 }}
             transition={{
               pathLength: {
-                delay: 1.2,
+                delay: delay + 1,
                 type: "tween",
                 duration: lifespan,
                 bounce: 0,
