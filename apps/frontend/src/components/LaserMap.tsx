@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { scaleCoordinate } from "@/utils/scaleCoordinate.ts";
 import { trpc } from "@/utils/trpc.ts";
 import { Node } from "database";
@@ -16,6 +16,12 @@ export default function LaserMap() {
   const imgURL = "/02_thesecondfloor.png";
 
   const nodesQuery = trpc.node.getAll.useQuery() || [];
+  const nodes = useMemo(() => {
+    let filteredNodes = nodesQuery.data || [];
+    filteredNodes = filteredNodes.filter((node) => node.floor === "2");
+    filteredNodes = filteredNodes.filter((node) => node.type !== "HALL");
+    return filteredNodes;
+  }, [nodesQuery.data]);
 
   const [startNode, setStartNode] = useState<Node | null>(null);
   const [endNode, setEndNode] = useState<Node | null>(null);
@@ -34,95 +40,100 @@ export default function LaserMap() {
     },
   );
 
-  const generatePath = useCallback(
-    (nodes: Node[]) => {
-      const pathData = path.data;
-      if (pathData == undefined) {
-        return "";
-      }
+  const generatePath = useCallback(() => {
+    const pathData = path.data;
+    if (pathData == undefined) {
+      return "";
+    }
 
-      const transitions: Node[][] = pathData.reduce(
-        (acc: Node[][], current, index, array) => {
-          if (index < array.length - 1) {
-            const transition = [current, array[index + 1]];
-            acc.push(transition);
-          }
-          return acc;
-        },
-        [],
-      );
-
-      for (let i = 1; i < pathData.length; i++) {
-        const currentNode = nodes?.find((n) => n.id === pathData[i].id);
-        const prevNode = nodes?.find((n) => n.id === pathData[i - 1].id);
-        if (currentNode && prevNode) {
-          // totalLength += Math.sqrt(
-          //   Math.pow(currentNode.x - prevNode.x, 2) +
-          //     Math.pow(currentNode.y - prevNode.y, 2),
-          // );
+    const transitions: Node[][] = pathData.reduce(
+      (acc: Node[][], current, index, array) => {
+        if (index < array.length - 1) {
+          const transition = [current, array[index + 1]];
+          acc.push(transition);
         }
-      }
+        return acc;
+      },
+      [],
+    );
 
-      const pathStrings = transitions.map((transition) => {
-        const [currentNode, nextNode] = transition;
-        return `${scaleCoordinate(
-          currentNode.x,
-          imgWidth,
-          origImageWidth,
-          0,
-          offset.x,
-          scale,
-        )} ${scaleCoordinate(
-          currentNode.y,
-          imgHeight,
-          origImageHeight,
-          0,
-          offset.y,
-          scale,
-        )} L ${scaleCoordinate(
-          nextNode.x,
-          imgWidth,
-          origImageWidth,
-          0,
-          offset.x,
-          scale,
-        )} ${scaleCoordinate(
-          nextNode.y,
-          imgHeight,
-          origImageHeight,
-          0,
-          offset.y,
-          scale,
-        )}`;
-      });
-      return "M" + pathStrings.join(" L");
-    },
-    [imgHeight, imgWidth, offset.x, offset.y, path],
-  );
+    for (let i = 1; i < pathData.length; i++) {
+      const currentNode = nodes?.find((n) => n.id === pathData[i].id);
+      const prevNode = nodes?.find((n) => n.id === pathData[i - 1].id);
+      if (currentNode && prevNode) {
+        // totalLength += Math.sqrt(
+        //   Math.pow(currentNode.x - prevNode.x, 2) +
+        //     Math.pow(currentNode.y - prevNode.y, 2),
+        // );
+      }
+    }
+
+    const pathStrings = transitions.map((transition) => {
+      const [currentNode, nextNode] = transition;
+      return `${scaleCoordinate(
+        currentNode.x,
+        imgWidth,
+        origImageWidth,
+        0,
+        offset.x,
+        scale,
+      )} ${scaleCoordinate(
+        currentNode.y,
+        imgHeight,
+        origImageHeight,
+        0,
+        offset.y,
+        scale,
+      )} L ${scaleCoordinate(
+        nextNode.x,
+        imgWidth,
+        origImageWidth,
+        0,
+        offset.x,
+        scale,
+      )} ${scaleCoordinate(
+        nextNode.y,
+        imgHeight,
+        origImageHeight,
+        0,
+        offset.y,
+        scale,
+      )}`;
+    });
+    return "M" + pathStrings.join(" L");
+  }, [imgHeight, imgWidth, nodes, offset.x, offset.y, path.data]);
+
+  const randomNode = useCallback(() => {
+    const length = nodes.length;
+    return nodes[Math.floor(Math.random() * (length + 1))];
+  }, [nodes]);
+
+  const createLaser = useCallback(() => {
+    setStartNode(randomNode());
+    setEndNode(randomNode());
+    if (startNode && endNode) {
+      const newLaser = {
+        id: counter,
+        path: generatePath(),
+      };
+      setCounter(counter + 1);
+      setLasers((lasers) => [...lasers, newLaser]);
+    }
+  }, [counter, endNode, generatePath, randomNode, startNode]);
+
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const nodes = nodesQuery.data || [];
-    let filteredNodes = nodes.filter((node) => node.floor === "2");
-    filteredNodes = filteredNodes.filter((node) => node.type !== "HALL");
-    const length = filteredNodes ? filteredNodes.length : 0;
-
-    const interval = setInterval(() => {
-      setStartNode(filteredNodes[Math.floor(Math.random() * (length + 1))]);
-      setEndNode(filteredNodes[Math.floor(Math.random() * (length + 1))]);
-      if (startNode && endNode) {
-        const newLaser = {
-          id: counter,
-          path: generatePath(nodes),
-        };
-        setCounter(counter + 1);
-        setLasers((lasers) => [...lasers, newLaser]);
-      }
-    }, 2000);
+    intervalRef.current = setInterval(() => {
+      createLaser();
+    }, 1000);
 
     return () => {
-      clearInterval(interval);
+      if (intervalRef.current != null) {
+        clearInterval(intervalRef.current);
+      }
     };
-  }, [lasers, counter, endNode, generatePath, nodesQuery.data, startNode]);
+  }, [createLaser]);
 
   const handleResize = useCallback(() => {
     setImageWidth(image.current!.getBoundingClientRect().width / scale);

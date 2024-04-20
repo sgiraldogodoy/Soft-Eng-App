@@ -29,7 +29,7 @@ export default function Laser({
   useEffect(() => {
     timerRef.current = setTimeout(() => {
       handleDeath();
-    }, 4000);
+    }, 6000);
   }, [handleDeath]);
 
   return (
@@ -67,7 +67,7 @@ export default function Laser({
               pathLength: {
                 delay: 1,
                 type: "tween",
-                duration: 3,
+                duration: 5,
                 bounce: 0,
               },
             }}
@@ -86,7 +86,7 @@ export default function Laser({
               pathLength: {
                 delay: 1.2,
                 type: "tween",
-                duration: 3,
+                duration: 5,
                 bounce: 0,
               },
             }}

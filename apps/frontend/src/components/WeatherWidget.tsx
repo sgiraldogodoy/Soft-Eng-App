@@ -31,7 +31,6 @@ export default function WeatherWidget() {
 
   const formattedDescription = capitalizeEachWord(data.weather[0].description);
   const iconCode = data.weather[0].icon;
-  console.log(JSON.stringify(data, null, 2));
 
   return (
     <div className="flex items-center gap-5">
