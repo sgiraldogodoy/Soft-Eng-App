@@ -21,9 +21,9 @@ export default function ServiceRequestPage() {
             onValueChange={(v) => {
               setVariant(v as FormTypes);
             }}
-            className="w-full flex items-center justify-center bg-transparent"
+            className="w-full items-center justify-center bg-transparent"
           >
-            <TabsList className="w-full bg-white/90 backdrop-blur-md shadow-inner rounded shadow-md">
+            <TabsList className="flex-wrap h-full justify-around w-full bg-white/90 backdrop-blur-md shadow-inner rounded shadow-md">
               <TabsTrigger className="flex-1" value="flower">
                 Flower Request
               </TabsTrigger>
@@ -39,20 +39,20 @@ export default function ServiceRequestPage() {
               <TabsTrigger className="flex-1" value="gift">
                 Gift Request
               </TabsTrigger>
-              <TabsTrigger className="flex-1" value="maintenance">
-                Maintenance Request
-              </TabsTrigger>
               <TabsTrigger className="flex-1" value="transport">
                 Transport Request
               </TabsTrigger>
-              <TabsTrigger className="flex-1" value="sanitation">
-                Sanitation Request
+              <TabsTrigger className="flex-1" value="it">
+                IT Request
               </TabsTrigger>
               <TabsTrigger className="flex-1" value="visit">
                 Visit Request
               </TabsTrigger>
-              <TabsTrigger className="flex-1" value="it">
-                IT Request
+              <TabsTrigger className="flex-1" value="maintenance">
+                Maintenance Request
+              </TabsTrigger>
+              <TabsTrigger className="flex-1" value="sanitation">
+                Sanitation Request
               </TabsTrigger>
               <TabsTrigger className="flex-1" value="religious">
                 Religious Request
