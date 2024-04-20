@@ -1,7 +1,14 @@
 import { Node } from "database";
 import { AccordionTextNav } from "@/components/AccordionTextNav.tsx";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const pixToFeet = 47 / 148;
+
 // const feetToPix = 148/47;
 
 interface TextNavigationProps {
@@ -61,8 +68,9 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
 
   function getStart(node1: Node, node2: Node): string {
     if (node1.floor !== node2.floor) {
-      if (node1.type === "STAI") return "Take the stairs to " + node2.floor;
-      else return "Take the elevator to " + node2.floor;
+      if (node1.type === "STAI")
+        return "Take the stairs to floor " + node2.floor;
+      else return "Take the elevator to floor " + node2.floor;
     }
 
     return "Turn till facing " + getCardinalDirection(node1, node2);
@@ -103,7 +111,7 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
         prevFloor = currFloor;
       } else {
         if (prevFloor === floor) {
-          filteredPath.push("");
+          filteredPath.push("When Back On This Floor:");
         }
         prevFloor = currFloor;
       }
@@ -191,21 +199,62 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
 
   return (
     <div>
-      {dirFloor1.length > 0 ? (
-        <AccordionTextNav directions={dirFloor1} floor="1" />
-      ) : null}
-      {dirFloor2.length > 0 ? (
-        <AccordionTextNav directions={dirFloor2} floor="2" />
-      ) : null}
-      {dirFloor3.length > 0 ? (
-        <AccordionTextNav directions={dirFloor3} floor="3" />
-      ) : null}
-      {dirFloorL1.length > 0 ? (
-        <AccordionTextNav directions={dirFloorL1} floor="L1" />
-      ) : null}
-      {dirFloorL2.length > 0 ? (
-        <AccordionTextNav directions={dirFloorL2} floor="L2" />
-      ) : null}
+      <Accordion type="single" collapsible className="w-full max-h-[80vh]">
+        {dirFloor3.length > 0 ? (
+          <AccordionItem value="Floor 3">
+            <AccordionTrigger className="w-[23vw] pl-2">
+              Directions For Floor 3
+            </AccordionTrigger>
+            <AccordionContent className="max-h-[55vh] overflow-y-auto">
+              <AccordionTextNav directions={dirFloor3} />
+            </AccordionContent>
+          </AccordionItem>
+        ) : null}
+
+        {dirFloor2.length > 0 ? (
+          <AccordionItem value="Floor 2">
+            <AccordionTrigger className="w-[23vw] pl-2">
+              Directions For Floor 2
+            </AccordionTrigger>
+            <AccordionContent className="max-h-[55vh] overflow-y-auto">
+              <AccordionTextNav directions={dirFloor2} />
+            </AccordionContent>
+          </AccordionItem>
+        ) : null}
+
+        {dirFloor1.length > 0 ? (
+          <AccordionItem value="Floor 1">
+            <AccordionTrigger className="w-[23vw] pl-2">
+              Directions For Floor 1
+            </AccordionTrigger>
+            <AccordionContent className="max-h-[55vh] overflow-y-auto">
+              <AccordionTextNav directions={dirFloor1} />
+            </AccordionContent>
+          </AccordionItem>
+        ) : null}
+
+        {dirFloorL1.length > 0 ? (
+          <AccordionItem value="Floor L1">
+            <AccordionTrigger className="w-[23vw] pl-2">
+              Directions For Floor L1
+            </AccordionTrigger>
+            <AccordionContent className="max-h-[55vh] overflow-y-auto">
+              <AccordionTextNav directions={dirFloorL1} />
+            </AccordionContent>
+          </AccordionItem>
+        ) : null}
+
+        {dirFloorL2.length > 0 ? (
+          <AccordionItem value="Floor L2">
+            <AccordionTrigger className="w-[23vw] pl-2">
+              Directions For Floor L2
+            </AccordionTrigger>
+            <AccordionContent className="max-h-[55vh] overflow-y-auto">
+              <AccordionTextNav directions={dirFloorL2} />
+            </AccordionContent>
+          </AccordionItem>
+        ) : null}
+      </Accordion>
     </div>
   );
 }
