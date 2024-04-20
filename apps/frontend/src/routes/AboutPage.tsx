@@ -27,123 +27,171 @@ export default function AboutPage() {
           </p>
         </div>
       </div>
-      <div className="flex py-10 gap-8 mx-8">
-        <Card className="bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
-          <CardHeader>
-            <CardTitle className="capitalize">Wilson Wong</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-            <img src={"/Wong.jpg"} alt="Wilson Wong" className="" />
-            <p>Course Professor</p>
-          </CardContent>
-        </Card>
-        <Card className="bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
-          <CardHeader>
-            <CardTitle className="capitalize">Ian Wright</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-            <img src={"/Ian.jpg"} alt="Ian Wright" className="" />
-            <p>Team Coach</p>
-          </CardContent>
-        </Card>
+      <div className="flex justify-center py-10 gap-8 mx-8">
+        <div className="w-1/3">
+          <Card className="bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+            <CardHeader>
+              <CardTitle className="capitalize text-center">
+                Wilson Wong
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
+              <img src={"/Wong.jpg"} alt="Wilson Wong" className="" />
+              <p>Course Professor</p>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="w-1/3">
+          <Card className="bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+            <CardHeader>
+              <CardTitle className="capitalize text-center">
+                Ian Wright
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
+              <img src={"/Ian.jpg"} alt="Ian Wright" className="" />
+              <p>Team Coach</p>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-      <div className="flex flex-wrap justify-evenly">
-        <Card className="w-1/4 bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
-          <CardHeader>
-            <CardTitle className="capitalize">Thomas Beattie (Ace)</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-            <img src={"/Ace.jpg"} alt="Ace" className="size-1/6" />
-            <p>Lead Software Engineer</p>
-          </CardContent>
-        </Card>
-        <Card className="w-1/4 bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
-          <CardHeader>
-            <CardTitle className="capitalize">Matthew Franco</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-            <img src={"/Matt.jpg"} alt="Matthew" className="size-1/6" />
-            <p>Assistant Lead Software Engineer</p>
-            <p>Front-End and Feature Engineer</p>
-          </CardContent>
-        </Card>
-        <Card className="w-1/4 bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
-          <CardHeader>
-            <CardTitle className="capitalize">Santiago Giraldo Godoy</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-            <img src={"/Santiago.jpg"} alt="Santiago" className="size-1/6" />
-            <p>Algorithms and Feature Engineer</p>
-            <p>Back-End Database Engineer</p>
-          </CardContent>
-        </Card>
-        <Card className="w-1/4 bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
-          <CardHeader>
-            <CardTitle className="capitalize">Parker Glispin</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-            <img src={"/Parker.jpg"} alt="Parker" className="size-1/6" />
-            <p>Product Owner</p>
-            <p>Algorithms and Feature Engineer</p>
-          </CardContent>
-        </Card>
-        <Card className="w-1/4 bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
-          <CardHeader>
-            <CardTitle className="capitalize">Michael Lin</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-            <img src={"/Michael.jpg"} alt="Michael" className="size-1/6" />
-            <p>Back-End Database Engineer</p>
-          </CardContent>
-        </Card>
-        <Card className="w-1/4 bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
-          <CardHeader>
-            <CardTitle className="capitalize">Kevin McCrudden</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-            <img src={"/Kevin.jpg"} alt="Kevin" className="size-1/6" />
-            <p>Project Manager</p>
-            <p>Scrum Master</p>
-          </CardContent>
-        </Card>
-        <Card className="w-1/4 bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
-          <CardHeader>
-            <CardTitle className="capitalize">Keenan Porter</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-            <img src={"/Keenan.jpg"} alt="Keenan" className="size-1/6" />
-            <p>Front-End and Feature Engineer</p>
-            <p>Documentation Analyst</p>
-          </CardContent>
-        </Card>
-        <Card className="w-1/4 bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
-          <CardHeader>
-            <CardTitle className="capitalize">Daniel Reynolds</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-            <img src={"/Daniel.jpg"} alt="Daniel" className="size-1/6" />
-            <p>Front-End and Feature Engineer</p>
-          </CardContent>
-        </Card>
-        <Card className="w-1/4 bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
-          <CardHeader>
-            <CardTitle className="capitalize">Cole Welcher</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-            <img src={"/Cole.jpg"} alt="Pookie" className="size-1/6" />
-            <p>Assistant Lead Software Engineer</p>
-            <p>Algorithms and Feature Engineer</p>
-          </CardContent>
-        </Card>
-        <Card className="w-1/4 bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
-          <CardHeader>
-            <CardTitle className="capitalize">Justin Yip</CardTitle>
-          </CardHeader>
-          <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-            <img src={"/Justin.jpg"} alt="Justin" className="size-1/6" />
-            <p>Front-End and Feature Engineer</p>
-          </CardContent>
-        </Card>
+      <div className="flex flex-wrap justify-center gap-16">
+        <div className="w-1/4">
+          <Card className="bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+            <CardHeader>
+              <CardTitle className="capitalize text-center">
+                Thomas Beattie (Ace)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
+              <img src={"/Ace.jpg"} alt="Ace" className="size-1/2" />
+              <p>Lead Software Engineer</p>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="w-1/4">
+          <Card className="bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+            <CardHeader>
+              <CardTitle className="capitalize text-center">
+                Matthew Franco
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
+              <img src={"/Matt.jpg"} alt="Matthew" className="size-1/2" />
+              <p>Assistant Lead Software Engineer</p>
+              <p>Front-End and Feature Engineer</p>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="w-1/4">
+          <Card className="bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+            <CardHeader>
+              <CardTitle className="capitalize text-center">
+                Santiago Giraldo Godoy
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
+              <img src={"/Santiago.jpg"} alt="Santiago" className="size-1/2" />
+              <p>Algorithms and Feature Engineer</p>
+              <p>Back-End Database Engineer</p>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="w-1/4">
+          <Card className="bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+            <CardHeader>
+              <CardTitle className="capitalize text-center">
+                Parker Glispin
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
+              <img src={"/Parker.jpg"} alt="Parker" className="size-1/2" />
+              <p>Product Owner</p>
+              <p>Algorithms and Feature Engineer</p>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="w-1/4">
+          <Card className="bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+            <CardHeader>
+              <CardTitle className="capitalize text-center">
+                Michael Lin
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
+              <img src={"/Michael.jpg"} alt="Michael" className="size-1/2" />
+              <p>Back-End Database Engineer</p>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="w-1/4">
+          <Card className="bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+            <CardHeader>
+              <CardTitle className="capitalize text-center">
+                Kevin McCrudden
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
+              <img src={"/Kevin.jpg"} alt="Kevin" className="size-1/2" />
+              <p>Project Manager</p>
+              <p>Scrum Master</p>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="w-1/4">
+          <Card className="bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+            <CardHeader>
+              <CardTitle className="capitalize text-center">
+                Keenan Porter
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
+              <img src={"/Keenan.jpg"} alt="Keenan" className="size-1/2" />
+              <p>Front-End and Feature Engineer</p>
+              <p>Documentation Analyst</p>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="w-1/4">
+          <Card className="bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+            <CardHeader>
+              <CardTitle className="capitalize text-center">
+                Daniel Reynolds
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
+              <img src={"/Daniel.jpg"} alt="Daniel" className="size-1/2" />
+              <p>Front-End and Feature Engineer</p>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="w-1/4">
+          <Card className="bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+            <CardHeader>
+              <CardTitle className="capitalize text-center">
+                Cole Welcher
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
+              <img src={"/Cole.jpg"} alt="Pookie" className="size-1/2" />
+              <p>Assistant Lead Software Engineer</p>
+              <p>Algorithms and Feature Engineer</p>
+            </CardContent>
+          </Card>
+        </div>
+        <div className="w-1/4">
+          <Card className="bg-slate-300 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+            <CardHeader>
+              <CardTitle className="capitalize text-center">
+                Justin Yip
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
+              <img src={"/Justin.jpg"} alt="Justin" className="size-1/2" />
+              <p>Front-End and Feature Engineer</p>
+            </CardContent>
+          </Card>
+        </div>
       </div>
       <div className="flex-row py-10">
         <p>
@@ -161,16 +209,3 @@ export default function AboutPage() {
     </div>
   );
 }
-
-/*
-    Requirements:
-
-    The About page lists the following: WPI
-Computer Science Department, CS3733-D24 Software Engineering, Prof. Wilson Wong,
-the name of your team coach, and the names, positions, and photos of each team
-member. Also thank Brigham and Women’s Hospital and their representative, Andrew
-Shinn.
-
-
-Needs to also convert to Poppins Font?
- */
