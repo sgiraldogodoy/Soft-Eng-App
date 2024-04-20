@@ -5,6 +5,7 @@ interface LaserProps {
   id: number;
   path: string;
   death: () => void;
+  lifespan: number;
   imgWidth: number;
   imgHeight: number;
 }
@@ -13,6 +14,7 @@ export default function Laser({
   id,
   path,
   death,
+  lifespan,
   imgWidth,
   imgHeight,
 }: LaserProps) {
@@ -27,10 +29,13 @@ export default function Laser({
   }, [death]);
 
   useEffect(() => {
-    timerRef.current = setTimeout(() => {
-      handleDeath();
-    }, 6000);
-  }, [handleDeath]);
+    timerRef.current = setTimeout(
+      () => {
+        handleDeath();
+      },
+      (lifespan + 1) * 1000,
+    );
+  }, [handleDeath, lifespan]);
 
   return (
     <div>
@@ -67,7 +72,7 @@ export default function Laser({
               pathLength: {
                 delay: 1,
                 type: "tween",
-                duration: 5,
+                duration: lifespan,
                 bounce: 0,
               },
             }}
@@ -86,7 +91,7 @@ export default function Laser({
               pathLength: {
                 delay: 1.2,
                 type: "tween",
-                duration: 5,
+                duration: lifespan,
                 bounce: 0,
               },
             }}

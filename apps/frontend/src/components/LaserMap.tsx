@@ -4,7 +4,12 @@ import { trpc } from "@/utils/trpc.ts";
 import { Node } from "database";
 import Laser from "@/components/Laser.tsx";
 
-export default function LaserMap() {
+interface MapProps {
+  spawnrate: number;
+  lifespan: number;
+}
+
+export default function LaserMap({ spawnrate, lifespan }: MapProps) {
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height
   const origImageWidth = 5400;
@@ -126,14 +131,14 @@ export default function LaserMap() {
   useEffect(() => {
     intervalRef.current = setInterval(() => {
       createLaser();
-    }, 1000);
+    }, spawnrate * 1000);
 
     return () => {
       if (intervalRef.current != null) {
         clearInterval(intervalRef.current);
       }
     };
-  }, [createLaser]);
+  }, [createLaser, spawnrate]);
 
   const handleResize = useCallback(() => {
     setImageWidth(image.current!.getBoundingClientRect().width / scale);
@@ -186,6 +191,7 @@ export default function LaserMap() {
           id={laser.id}
           path={laser.path}
           death={() => removeLaser(laser.id)}
+          lifespan={lifespan}
           imgWidth={imgWidth}
           imgHeight={imgHeight}
         />
