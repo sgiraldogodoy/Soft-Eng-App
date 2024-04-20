@@ -35,7 +35,7 @@ export default function Laser({
   }, [death]);
 
   if (!path.startsWith("M") && path.length <= 1) {
-    handleDeath();
+    path = "";
   }
 
   if (sameSpeed) {
