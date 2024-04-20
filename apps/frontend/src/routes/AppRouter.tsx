@@ -6,6 +6,7 @@ import { InspectDatabase } from "@/routes/InspectDatabase.tsx";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import FloorTabs from "./MapEdit";
 import ServiceRequestPage from "./ServiceRequestPage";
+import PatientIntegration from "./PatientIntegration";
 
 export function AppRouter() {
   const { isAuthenticated } = useAuth0();
@@ -30,6 +31,10 @@ export function AppRouter() {
           <Route path="/mapediting">
             {!isAuthenticated && <Redirect to="/" />}
             <FloorTabs />
+          </Route>
+          <Route path="/patients">
+            <PatientIntegration />
+            {!isAuthenticated && <Redirect to="/" />}
           </Route>
         </DashboardLayout>
       </Switch>

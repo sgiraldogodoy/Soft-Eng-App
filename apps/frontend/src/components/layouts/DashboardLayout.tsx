@@ -6,6 +6,7 @@ import {
   HomeIcon,
   LogOut,
   MapIcon,
+  UserRound,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -49,6 +50,12 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
             link="/database"
             icon={DatabaseIcon}
             name={"DB Editor"}
+            color="#005DE2"
+          />
+          <ButtonLink
+            link="/patients"
+            icon={UserRound}
+            name={"Patient Management"}
             color="#005DE2"
           />
         </TooltipProvider>
