@@ -1,4 +1,3 @@
-import "./test.css";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { scaleCoordinate } from "@/utils/scaleCoordinate.ts";
 import { trpc } from "@/utils/trpc.ts";
