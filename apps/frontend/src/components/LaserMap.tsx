@@ -26,7 +26,6 @@ export default function LaserMap({
   const image = useRef<HTMLImageElement>(null);
   const scale = 1.4;
   const offset = { x: 0, y: 0 };
-  //const containerRef = useRef<HTMLDivElement>(null);
   const imgURL = "/02_thesecondfloor.png";
 
   const nodesQuery = trpc.node.getAll.useQuery() || [];
@@ -71,17 +70,6 @@ export default function LaserMap({
       [],
     );
 
-    for (let i = 1; i < pathData.length; i++) {
-      const currentNode = nodes?.find((n) => n.id === pathData[i].id);
-      const prevNode = nodes?.find((n) => n.id === pathData[i - 1].id);
-      if (currentNode && prevNode) {
-        // totalLength += Math.sqrt(
-        //   Math.pow(currentNode.x - prevNode.x, 2) +
-        //     Math.pow(currentNode.y - prevNode.y, 2),
-        // );
-      }
-    }
-
     const pathStrings = transitions.map((transition) => {
       const [currentNode, nextNode] = transition;
       return `${scaleCoordinate(
@@ -115,7 +103,7 @@ export default function LaserMap({
       )}`;
     });
     return "M" + pathStrings.join(" L");
-  }, [imgHeight, imgWidth, nodes, offset.x, offset.y, path.data]);
+  }, [imgHeight, imgWidth, offset.x, offset.y, path.data]);
 
   const randomNode = useCallback(() => {
     const length = nodes.length;
