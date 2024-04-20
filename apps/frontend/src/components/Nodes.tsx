@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Node } from "database";
+import type { Node, Prisma } from "database";
 import {
   scaleCoordinate,
   reverseScaleCoordinate,
@@ -7,6 +7,7 @@ import {
 import { trpc } from "@/utils/trpc.ts";
 import { useSelectNodes } from "@/utils/useSelectNodes.tsx";
 import { EditNodeDialog } from "@/components/EditNodeDialog.tsx";
+type NodeCreateInput = Prisma.NodeCreateInput;
 
 const origImageWidth = 5000;
 const origImageHeight = 3400;
@@ -115,7 +116,7 @@ export function Nodes({
     setOpenDialog(false);
   };
 
-  const handleEditNodeSubmit = (nodeData: Node, oldID: string) => {
+  const handleEditNodeSubmit = (nodeData: NodeCreateInput, oldID: string) => {
     // console.log("Node Data: ", nodeData);
     nodeUpdate.mutate({
       id: oldID,

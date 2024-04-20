@@ -6,9 +6,23 @@ export const node = z.object({
   y: z.number(),
   building: z.string(),
   floor: z.string(),
-  type: z.string(),
+  type: z.enum([
+    "HALL",
+    "ELEV",
+    "REST",
+    "STAI",
+    "DEPT",
+    "LABS",
+    "INFO",
+    "CONF",
+    "EXIT",
+    "RETL",
+    "SERV",
+  ]),
   longName: z.string(),
   shortName: z.string(),
+  elevatorLetter: z.string().optional(),
+  available: z.boolean().optional(),
 });
 
 export const patient = z.object({
