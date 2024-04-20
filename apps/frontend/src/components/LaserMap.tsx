@@ -21,8 +21,8 @@ export default function LaserMap({
 }: MapProps) {
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height
-  const origImageWidth = 5400;
-  const origImageHeight = 3000;
+  const origImageWidth = 5000;
+  const origImageHeight = 3400;
   const image = useRef<HTMLImageElement>(null);
   const scale = 1.4;
   const offset = { x: 0, y: 0 };
