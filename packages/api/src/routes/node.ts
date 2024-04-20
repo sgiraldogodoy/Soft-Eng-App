@@ -132,7 +132,7 @@ export const Node = router({
           message: "Node already exists",
         });
       }
-      await ctx.db.node.create({
+      return ctx.db.node.create({
         data: data,
       });
     }),
