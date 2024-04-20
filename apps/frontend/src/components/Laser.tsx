@@ -53,6 +53,8 @@ export default function Laser({
     );
   }, [delay, handleDeath, speed]);
 
+  const strokeWidth = 3;
+
   return (
     <div>
       <svg
@@ -66,10 +68,9 @@ export default function Laser({
             d={path}
             style={{
               stroke: "blue",
-              strokeWidth: 2,
+              strokeWidth: strokeWidth,
               fill: "none",
             }}
-            strokeWidth="2"
           />
         </g>
 
@@ -78,10 +79,9 @@ export default function Laser({
             d={path}
             style={{
               stroke: "white",
-              strokeWidth: 2,
+              strokeWidth: strokeWidth,
               fill: "none",
             }}
-            strokeWidth="2"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
             transition={{
@@ -98,10 +98,9 @@ export default function Laser({
             d={path}
             style={{
               stroke: "black",
-              strokeWidth: 2,
+              strokeWidth: strokeWidth + 1,
               fill: "none",
             }}
-            strokeWidth="2.5"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: 1 }}
             transition={{
