@@ -82,7 +82,7 @@ async function main() {
             nodeId: "ACONF00102",
             type: "flower",
             login: "Ace",
-            priority: "High",
+            priority: "HIGH",
             status: "UNASSIGNED",
             note: "Note",
           },
