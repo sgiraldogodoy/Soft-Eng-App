@@ -26,6 +26,18 @@ export default function Laser({
 }: LaserProps) {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  const handleDeath = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    death();
+  }, [death]);
+
+  if (!path.startsWith("M") && path.length <= 1) {
+    handleDeath();
+  }
+
   if (sameSpeed) {
     const svgPathElement: SVGPathElement = document.createElementNS(
       "http://www.w3.org/2000/svg",
@@ -35,14 +47,6 @@ export default function Laser({
     const pathLength = svgPathElement.getTotalLength();
     speed = pathLength / speed;
   }
-
-  const handleDeath = useCallback(() => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-      death();
-    }
-  }, [death]);
 
   useEffect(() => {
     timerRef.current = setTimeout(

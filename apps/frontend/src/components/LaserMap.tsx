@@ -176,12 +176,12 @@ export default function LaserMap({
 
   const randomNode = useCallback((nodeList: Node[]) => {
     const length = nodeList.length;
-    return nodeList[Math.floor(Math.random() * (length + 1))];
+    return nodeList[Math.floor(Math.random() * length)];
   }, []);
 
   const getPathNodes = useCallback(() => {
     const length = buildingNodes.length;
-    const building = buildingNodes[Math.floor(Math.random() * (length + 1))];
+    const building = buildingNodes[Math.floor(Math.random() * length)];
     setStartNode(randomNode(building));
     setEndNode(randomNode(building));
   }, [buildingNodes, randomNode]);
