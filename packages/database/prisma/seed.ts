@@ -73,7 +73,7 @@ async function main() {
   await prisma.edge.createMany({ data: edges, skipDuplicates: true });
 
   await prisma.flower.deleteMany();
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 10; i++) {
     await prisma.flower.create({
       data: {
         flower: "Pretty Flower",

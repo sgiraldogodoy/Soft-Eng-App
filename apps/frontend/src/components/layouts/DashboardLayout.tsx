@@ -123,7 +123,7 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
           </nav>
         </aside>
 
-        <div className="flex-1 w-full overflow-auto relative bg-muted">
+        <div className="flex-1 w-full overflow-auto relative bg-muted/40">
           {children}
         </div>
       </div>

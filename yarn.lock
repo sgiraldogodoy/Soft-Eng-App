@@ -4038,6 +4038,7 @@ __metadata:
     "@types/jsonwebtoken": "npm:^9"
     "@types/node": "npm:^20.12.2"
     "@types/priorityqueuejs": "npm:^1.0.4"
+    auth0: "npm:^4.3.1"
     common: "workspace:^"
     database: "workspace:^"
     eslint: "npm:latest"
@@ -4157,6 +4158,16 @@ __metadata:
   version: 0.4.0
   resolution: "asynckit@npm:0.4.0"
   checksum: 3ce727cbc78f69d6a4722517a58ee926c8c21083633b1d3fdf66fd688f6c127a53a592141bd4866f9b63240a86e9d8e974b13919450bd17fa33c2d22c4558ad8
+  languageName: node
+  linkType: hard
+
+"auth0@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "auth0@npm:4.3.1"
+  dependencies:
+    jose: "npm:^4.13.2"
+    uuid: "npm:^9.0.0"
+  checksum: 0fb7073718a376d38ec6e59a7a69e02adcc448b6126b2615104e346241aa4abe15fca8362d0d57497d3020e632fabbce06ccea0c8b1385e0325a312fa92a928b
   languageName: node
   linkType: hard
 
@@ -7587,7 +7598,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^4.14.6":
+"jose@npm:^4.13.2, jose@npm:^4.14.6":
   version: 4.15.5
   resolution: "jose@npm:4.15.5"
   checksum: 17944fcc0d9afa07387eef23127c30ecfcc77eafddc4b4f1a349a8eee0536bee9b08ecd745406eaa0af65d531f738b94d2467976479cbfe8b3b60f8fc8082b8d
@@ -11517,6 +11528,15 @@ __metadata:
   version: 1.0.1
   resolution: "utils-merge@npm:1.0.1"
   checksum: 5d6949693d58cb2e636a84f3ee1c6e7b2f9c16cb1d42d0ecb386d8c025c69e327205aa1c69e2868cc06a01e5e20681fbba55a4e0ed0cce913d60334024eae798
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.0":
+  version: 9.0.1
+  resolution: "uuid@npm:9.0.1"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 9d0b6adb72b736e36f2b1b53da0d559125ba3e39d913b6072f6f033e0c87835b414f0836b45bcfaf2bdf698f92297fea1c3cc19b0b258bc182c9c43cc0fab9f2
   languageName: node
   linkType: hard
 

@@ -6,6 +6,8 @@ import { InspectDatabase } from "@/routes/InspectDatabase.tsx";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import FloorTabs from "./MapEdit";
 import ServiceRequestPage from "./ServiceRequestPage";
+import { Settings } from "@/routes/Settings.tsx";
+// import Settings from "./Settings";
 
 export function AppRouter() {
   const { isAuthenticated } = useAuth0();
@@ -30,6 +32,10 @@ export function AppRouter() {
           <Route path="/mapediting">
             {!isAuthenticated && <Redirect to="/" />}
             <FloorTabs />
+          </Route>
+          <Route path="/settings">
+            <Settings />
+            {!isAuthenticated && <Redirect to="/" />}
           </Route>
         </DashboardLayout>
       </Switch>

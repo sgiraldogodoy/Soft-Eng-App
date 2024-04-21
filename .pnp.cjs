@@ -5310,6 +5310,7 @@ const RAW_RUNTIME_STATE =
           ["@types/jsonwebtoken", "npm:9.0.6"],\
           ["@types/node", "npm:20.12.2"],\
           ["@types/priorityqueuejs", "npm:1.0.4"],\
+          ["auth0", "npm:4.3.1"],\
           ["common", "workspace:packages/common"],\
           ["database", "workspace:packages/database"],\
           ["eslint", "npm:8.56.0"],\
@@ -5448,6 +5449,17 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/asynckit-npm-0.4.0-c718858525-3ce727cbc7.zip/node_modules/asynckit/",\
         "packageDependencies": [\
           ["asynckit", "npm:0.4.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["auth0", [\
+      ["npm:4.3.1", {\
+        "packageLocation": "./.yarn/cache/auth0-npm-4.3.1-a71089ad97-0fb7073718.zip/node_modules/auth0/",\
+        "packageDependencies": [\
+          ["auth0", "npm:4.3.1"],\
+          ["jose", "npm:4.15.5"],\
+          ["uuid", "npm:9.0.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -13951,6 +13963,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/utils-merge-npm-1.0.1-363bbdfbca-5d6949693d.zip/node_modules/utils-merge/",\
         "packageDependencies": [\
           ["utils-merge", "npm:1.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["uuid", [\
+      ["npm:9.0.1", {\
+        "packageLocation": "./.yarn/cache/uuid-npm-9.0.1-39a8442bc6-9d0b6adb72.zip/node_modules/uuid/",\
+        "packageDependencies": [\
+          ["uuid", "npm:9.0.1"]\
         ],\
         "linkType": "HARD"\
       }]\
