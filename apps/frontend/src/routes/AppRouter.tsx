@@ -4,7 +4,7 @@ import PathFind from "@/routes/PathFind.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import { InspectDatabase } from "@/routes/InspectDatabase.tsx";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
-import FloorTabs from "./MapEdit";
+import MapEdit from "./MapEdit";
 import ServiceRequestPage from "./ServiceRequestPage";
 
 export function AppRouter() {
@@ -29,7 +29,7 @@ export function AppRouter() {
           </Route>
           <Route path="/mapediting">
             {!isAuthenticated && <Redirect to="/" />}
-            <FloorTabs />
+            <MapEdit />
           </Route>
         </DashboardLayout>
       </Switch>

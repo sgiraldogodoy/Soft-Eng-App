@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { Node, Prisma } from "database";
 import {
   scaleCoordinate,
@@ -26,6 +26,8 @@ interface NodesProps {
   scale: number;
   editable?: boolean;
   typeEdit?: string;
+  selectedNodes?: Node[];
+  setSelectedNodes?: () => void;
 }
 
 export function Nodes({
@@ -42,6 +44,8 @@ export function Nodes({
   scale,
   editable,
   typeEdit,
+  selectedNodes,
+  setSelectedNodes,
 }: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [hoveredNodeString, setHoveredNodeString] = useState<string | null>(
@@ -54,6 +58,7 @@ export function Nodes({
   const nodeUpdate = trpc.node.updateOne.useMutation();
   const deleteNode = trpc.node.deleteOne.useMutation();
   const createEdge = trpc.edge.createOne.useMutation();
+  const deleteManyNodes = trpc.node.deleteMany.useMutation();
 
   const { firstNode, setNode, clearNodes } = useSelectNodes();
 
@@ -78,18 +83,100 @@ export function Nodes({
 
   const handleDelete = () => {
     if (hoveredNode) {
-      deleteNode.mutate(
-        {
-          id: hoveredNode,
-        },
-        {
-          onSuccess: () => {
-            utils.node.getAll.invalidate();
+      const nodeHovered = nodes.find((node) => node.id === hoveredNode);
+      if (
+        selectedNodes &&
+        selectedNodes.length > 0 &&
+        nodeHovered &&
+        selectedNodes.includes(nodeHovered)
+      ) {
+        deleteManyNodes.mutate(
+          {
+            ids: selectedNodes.map((node) => node.id),
           },
-        },
-      );
+          {
+            onSuccess: () => {
+              utils.node.getAll.invalidate();
+            },
+          },
+        );
+      } else {
+        deleteNode.mutate(
+          {
+            id: hoveredNode,
+          },
+          {
+            onSuccess: () => {
+              utils.node.getAll.invalidate();
+            },
+          },
+        );
+      }
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Delete") {
+        if (selectedNodes && selectedNodes.length > 0) {
+          deleteManyNodes.mutate(
+            {
+              ids: selectedNodes.map((node) => node.id),
+            },
+            {
+              onSuccess: () => {
+                utils.node.getAll.invalidate();
+              },
+            },
+          );
+        } else if (hoveredNode) {
+          deleteNode.mutate(
+            {
+              id: hoveredNode,
+            },
+            {
+              onSuccess: () => {
+                utils.node.getAll.invalidate();
+              },
+            },
+          );
+        }
+      } else if (e.key === "Escape" && setSelectedNodes) setSelectedNodes();
+    };
+
+    document.body.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.removeEventListener("keydown", handleKeyDown);
+    };
+  });
+
+  // const handleDeleteKey = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  //     console.log("got here");
+  //     if(event.key === "Delete") {
+  //         if (selectedNodes && selectedNodes.length > 0){
+  //             deleteManyNodes.mutate({
+  //                     ids: selectedNodes.map((node) => node.id),
+  //                 },
+  //                 {
+  //                     onSuccess: () => {
+  //                         utils.node.getAll.invalidate();
+  //                     },
+  //                 });
+  //         } else if (hoveredNode) {
+  //             deleteNode.mutate(
+  //                 {
+  //                     id: hoveredNode,
+  //                 },
+  //                 {
+  //                     onSuccess: () => {
+  //                         utils.node.getAll.invalidate();
+  //                     },
+  //                 },
+  //             );
+  //         }
+  //     }
+  // };
 
   const handleEditNode = () => {
     if (hoveredNode) {
@@ -163,11 +250,18 @@ export function Nodes({
         handleDelete();
         return;
       case "aEdge":
-        if (firstNode && hoveredNode && firstNode !== hoveredNode)
+        if (firstNode && hoveredNode && firstNode !== hoveredNode) {
           handleCreateEdge();
+        }
+        if (setSelectedNodes) {
+          setSelectedNodes();
+        }
         return;
       case "Edit":
         handleEditNode();
+        if (setSelectedNodes) {
+          setSelectedNodes();
+        }
         return;
       default:
         return;
@@ -243,6 +337,7 @@ export function Nodes({
       {filteredNodes.map((node, index) => (
         <div
           key={index}
+          // tabIndex={0}
           style={{
             position: "absolute",
             left: scaleCoordinate(
@@ -268,7 +363,9 @@ export function Nodes({
                   ? "8px"
                   : node.id === startNode
                     ? "8px"
-                    : "5px",
+                    : selectedNodes && selectedNodes.includes(node)
+                      ? "8px"
+                      : "5px",
             height:
               node.id === hoveredNode
                 ? "8px"
@@ -276,13 +373,17 @@ export function Nodes({
                   ? "8px"
                   : node.id === startNode
                     ? "8px"
-                    : "5px",
+                    : selectedNodes && selectedNodes.includes(node)
+                      ? "8px"
+                      : "5px",
             backgroundColor:
               node.id === goalNode
                 ? "red"
                 : node.id === startNode
                   ? "#003A96"
-                  : "white",
+                  : selectedNodes && selectedNodes.includes(node)
+                    ? "darkgray"
+                    : "white",
             boxShadow:
               node.id === hoveredNode
                 ? "0 0 0 2px cyan"
@@ -290,7 +391,9 @@ export function Nodes({
                   ? "0 0 0 2px red"
                   : node.id === startNode
                     ? "0 0 0 2px #003A96"
-                    : "0 0 0 2px black",
+                    : selectedNodes && selectedNodes.includes(node)
+                      ? "0 0 0 2px black"
+                      : "0 0 0 2px black",
             borderRadius: "100%",
             transform: `translate(-50%, -50%) scale(${scale})`,
             cursor: editable
@@ -311,6 +414,7 @@ export function Nodes({
           }}
           onContextMenu={handleRightClick}
           onMouseDown={handleEditClick}
+          // onKeyDown={handleDeleteKey}
           onClick={() => {
             if (onNodeClick) onNodeClick(node.id);
           }}
