@@ -170,9 +170,15 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
         currentWalkDistance = 0;
       }
       if (node1.type === "STAI") {
-        directions.push(["Take the stairs to " + node2.floor, node1.floor]);
+        directions.push([
+          "Take the stairs to floor " + node2.floor,
+          node1.floor,
+        ]);
       } else {
-        directions.push(["Take the elevator to " + node2.floor, node1.floor]);
+        directions.push([
+          "Take the elevator to floor " + node2.floor,
+          node1.floor,
+        ]);
       }
     }
   }
@@ -199,13 +205,17 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
 
   return (
     <div>
-      <Accordion type="single" collapsible className="w-full max-h-[80vh]">
+      <Accordion
+        type="single"
+        collapsible
+        className="w-full max-h-[80vh] pb-0.5"
+      >
         {dirFloor3.length > 0 ? (
           <AccordionItem value="Floor 3">
             <AccordionTrigger className="w-[23vw] pl-2">
               Directions For Floor 3
             </AccordionTrigger>
-            <AccordionContent className="max-h-[55vh] overflow-y-auto">
+            <AccordionContent className="max-h-[55vh] overflow-y-auto pl-2  ">
               <AccordionTextNav directions={dirFloor3} />
             </AccordionContent>
           </AccordionItem>
@@ -216,7 +226,7 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
             <AccordionTrigger className="w-[23vw] pl-2">
               Directions For Floor 2
             </AccordionTrigger>
-            <AccordionContent className="max-h-[55vh] overflow-y-auto">
+            <AccordionContent className="max-h-[55vh] overflow-y-auto pl-2  ">
               <AccordionTextNav directions={dirFloor2} />
             </AccordionContent>
           </AccordionItem>
@@ -227,7 +237,7 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
             <AccordionTrigger className="w-[23vw] pl-2">
               Directions For Floor 1
             </AccordionTrigger>
-            <AccordionContent className="max-h-[55vh] overflow-y-auto">
+            <AccordionContent className="max-h-[55vh] overflow-y-auto pl-2  ">
               <AccordionTextNav directions={dirFloor1} />
             </AccordionContent>
           </AccordionItem>
@@ -238,7 +248,7 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
             <AccordionTrigger className="w-[23vw] pl-2">
               Directions For Floor L1
             </AccordionTrigger>
-            <AccordionContent className="max-h-[55vh] overflow-y-auto">
+            <AccordionContent className="max-h-[55vh] overflow-y-auto pl-2  ">
               <AccordionTextNav directions={dirFloorL1} />
             </AccordionContent>
           </AccordionItem>
@@ -249,7 +259,7 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
             <AccordionTrigger className="w-[23vw] pl-2">
               Directions For Floor L2
             </AccordionTrigger>
-            <AccordionContent className="max-h-[55vh] overflow-y-auto">
+            <AccordionContent className="max-h-[55vh] overflow-y-auto pl-2  ">
               <AccordionTextNav directions={dirFloorL2} />
             </AccordionContent>
           </AccordionItem>
