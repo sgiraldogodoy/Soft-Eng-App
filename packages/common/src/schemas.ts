@@ -25,18 +25,6 @@ export const node = z.object({
   available: z.boolean().optional(),
 });
 
-export const patient = z.object({
-  SSN: z.number().optional(),
-  NodeID: z.string().optional(),
-  doctor: z.string(),
-  firstName: z.string(),
-  middleName: z.string().optional(),
-  lastName: z.string(),
-  inTreatment: z.boolean().optional(),
-  insurance: z.string().optional(),
-  dateOfBirth: z.coerce.date(),
-});
-
 export const edge = z.object({
   startNodeId: z.string(),
   endNodeId: z.string(),
@@ -102,4 +90,38 @@ export const formService = z.discriminatedUnion("type", [
   baseService
     .extend({ data: flower, type: z.literal("flower") })
     .omit({ login: true }),
+]);
+
+export const staff = z.object({
+  userId: z.string(),
+});
+
+export const baseUser = z.object({
+  id: z.string(),
+  sub: z.string(),
+  email: z.string().nullish(),
+  name: z.string(),
+  role: z.enum(["patient", "staff", "admin"]).nullish(),
+});
+
+export const patient = z.object({
+  SSN: z.number().optional(),
+  nodeId: z.string().optional(),
+  entryDate: z.coerce.date().optional(),
+  pcpId: z.string(),
+  firstName: z.string(),
+  middleName: z.string().optional(),
+  lastName: z.string(),
+  inTreatment: z.boolean().optional(),
+  insurance: z.string().optional(),
+  dateOfBirth: z.coerce.date(),
+  phoneNumber: z.string().optional(),
+  userId: z.string().optional(),
+});
+
+export const user = z.discriminatedUnion("role", [
+  baseUser.extend({ data: staff, role: z.literal("staff") }),
+  baseUser.extend({ data: staff, role: z.literal("admin") }),
+  baseUser.extend({ data: patient, role: z.literal("patient") }),
+  baseUser.extend({ role: z.undefined() }),
 ]);

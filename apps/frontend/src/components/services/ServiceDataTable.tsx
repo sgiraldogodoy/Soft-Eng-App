@@ -15,7 +15,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/components/ui/table.tsx";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -24,7 +24,7 @@ interface DataTableProps<TData, TValue> {
   setSelectionState: OnChangeFn<RowSelectionState>;
 }
 
-export function DataTable<TData extends { id: string }, TValue>({
+export function ServiceDataTable<TData extends { id: string }, TValue>({
   columns,
   data,
   selectionState,

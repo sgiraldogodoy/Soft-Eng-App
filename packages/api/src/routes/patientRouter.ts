@@ -1,14 +1,48 @@
 import { protectedProcedure, publicProcedure } from "../trpc";
 import { router } from "../trpc";
 import { z } from "zod";
-import { patient } from "common";
+import { baseUser, patient } from "common";
 
 export const Patient = router({
   createOne: protectedProcedure
-    .input(z.object({ data: patient }))
+    .input(
+      z.object({
+        data: patient.omit({ userId: true }),
+        user: z.union([z.object({ id: z.string() }), baseUser]).optional(),
+      }),
+    )
     .mutation(async ({ input, ctx }) => {
+      let userId;
+
+      if (input.user && "sub" in input.user)
+        userId = (await ctx.db.user.create({ data: input.user })).id;
+      else if (input.user) userId = input.user.id;
+
       await ctx.db.patient.create({
-        data: input.data,
+        data: {
+          ...input.data,
+          nodeId: undefined,
+          pcpId: undefined,
+          user: {
+            connect: {
+              id: userId,
+            },
+          },
+          location: input.data.nodeId
+            ? {
+                connect: {
+                  id: input.data.nodeId,
+                },
+              }
+            : undefined,
+          pcp: input.data.pcpId
+            ? {
+                connect: {
+                  userId: input.data.pcpId,
+                },
+              }
+            : undefined,
+        },
       });
     }),
 

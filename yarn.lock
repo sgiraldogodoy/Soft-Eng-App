@@ -1507,6 +1507,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@radix-ui/react-alert-dialog@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "@radix-ui/react-alert-dialog@npm:1.0.5"
+  dependencies:
+    "@babel/runtime": "npm:^7.13.10"
+    "@radix-ui/primitive": "npm:1.0.1"
+    "@radix-ui/react-compose-refs": "npm:1.0.1"
+    "@radix-ui/react-context": "npm:1.0.1"
+    "@radix-ui/react-dialog": "npm:1.0.5"
+    "@radix-ui/react-primitive": "npm:1.0.3"
+    "@radix-ui/react-slot": "npm:1.0.2"
+  peerDependencies:
+    "@types/react": "*"
+    "@types/react-dom": "*"
+    react: ^16.8 || ^17.0 || ^18.0
+    react-dom: ^16.8 || ^17.0 || ^18.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+    "@types/react-dom":
+      optional: true
+  checksum: 966eeef94056caa4105278686018bc8ec5ec10584191d9e878944b1785ae88a355cbff0b754af4c3878bd97af8d954583b7a2e4819b928ccf6839cd2962e8a09
+  languageName: node
+  linkType: hard
+
 "@radix-ui/react-arrow@npm:1.0.3":
   version: 1.0.3
   resolution: "@radix-ui/react-arrow@npm:1.0.3"
@@ -1682,7 +1707,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@radix-ui/react-dialog@npm:^1.0.5":
+"@radix-ui/react-dialog@npm:1.0.5, @radix-ui/react-dialog@npm:^1.0.5":
   version: 1.0.5
   resolution: "@radix-ui/react-dialog@npm:1.0.5"
   dependencies:
@@ -4038,6 +4063,7 @@ __metadata:
     "@types/jsonwebtoken": "npm:^9"
     "@types/node": "npm:^20.12.2"
     "@types/priorityqueuejs": "npm:^1.0.4"
+    auth0: "npm:^4.3.1"
     common: "workspace:^"
     database: "workspace:^"
     eslint: "npm:latest"
@@ -4052,7 +4078,7 @@ __metadata:
     tsconfig-custom: "workspace:*"
     typescript: "npm:^5.0.4"
     vitest: "npm:^0.34.1"
-    zod: "npm:^3.22.4"
+    zod: "npm:^3.22.5"
   languageName: unknown
   linkType: soft
 
@@ -4157,6 +4183,16 @@ __metadata:
   version: 0.4.0
   resolution: "asynckit@npm:0.4.0"
   checksum: 3ce727cbc78f69d6a4722517a58ee926c8c21083633b1d3fdf66fd688f6c127a53a592141bd4866f9b63240a86e9d8e974b13919450bd17fa33c2d22c4558ad8
+  languageName: node
+  linkType: hard
+
+"auth0@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "auth0@npm:4.3.1"
+  dependencies:
+    jose: "npm:^4.13.2"
+    uuid: "npm:^9.0.0"
+  checksum: 0fb7073718a376d38ec6e59a7a69e02adcc448b6126b2615104e346241aa4abe15fca8362d0d57497d3020e632fabbce06ccea0c8b1385e0325a312fa92a928b
   languageName: node
   linkType: hard
 
@@ -4906,7 +4942,7 @@ __metadata:
     tsconfig-custom: "workspace:*"
     typescript: "npm:^5.0.4"
     vitest: "npm:^0.34.1"
-    zod: "npm:^3.22.4"
+    zod: "npm:^3.22.5"
   languageName: unknown
   linkType: soft
 
@@ -6620,6 +6656,7 @@ __metadata:
     "@hookform/resolvers": "npm:^3.3.4"
     "@popperjs/core": "npm:^2.11.8"
     "@radix-ui/react-accordion": "npm:^1.1.2"
+    "@radix-ui/react-alert-dialog": "npm:^1.0.5"
     "@radix-ui/react-checkbox": "npm:^1.0.4"
     "@radix-ui/react-dialog": "npm:^1.0.5"
     "@radix-ui/react-dropdown-menu": "npm:^2.0.6"
@@ -6699,7 +6736,7 @@ __metadata:
     vite-plugin-eslint: "npm:^1.8.1"
     vitest: "npm:^0.34.1"
     wouter: "npm:^3.1.0"
-    zod: "npm:^3.22.4"
+    zod: "npm:^3.22.5"
   languageName: unknown
   linkType: soft
 
@@ -7587,7 +7624,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^4.14.6":
+"jose@npm:^4.13.2, jose@npm:^4.14.6":
   version: 4.15.5
   resolution: "jose@npm:4.15.5"
   checksum: 17944fcc0d9afa07387eef23127c30ecfcc77eafddc4b4f1a349a8eee0536bee9b08ecd745406eaa0af65d531f738b94d2467976479cbfe8b3b60f8fc8082b8d
@@ -11520,6 +11557,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"uuid@npm:^9.0.0":
+  version: 9.0.1
+  resolution: "uuid@npm:9.0.1"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 9d0b6adb72b736e36f2b1b53da0d559125ba3e39d913b6072f6f033e0c87835b414f0836b45bcfaf2bdf698f92297fea1c3cc19b0b258bc182c9c43cc0fab9f2
+  languageName: node
+  linkType: hard
+
 "v8-compile-cache-lib@npm:^3.0.1":
   version: 3.0.1
   resolution: "v8-compile-cache-lib@npm:3.0.1"
@@ -12031,7 +12077,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.20.2, zod@npm:^3.22.4":
+"zod@npm:^3.20.2":
   version: 3.22.4
   resolution: "zod@npm:3.22.4"
   checksum: 73622ca36a916f785cf528fe612a884b3e0f183dbe6b33365a7d0fc92abdbedf7804c5e2bd8df0a278e1472106d46674281397a3dd800fa9031dc3429758c6ac
