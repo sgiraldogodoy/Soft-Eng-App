@@ -12,26 +12,29 @@ import { useState } from "react";
 import { trpc } from "@/utils/trpc.ts";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog.tsx";
 import { CreateUserDialog } from "@/components/CreateUserDialog.tsx";
+import { UserTable } from "@/components/UserTable.tsx";
 
 export function Settings() {
   const [tableFilter, setTableFilter] = useState("patients");
 
-  const users = trpc.user.getAll.useQuery();
+  const usersQuery = trpc.user.getAll.useQuery();
 
-  if (users.isLoading) {
+  if (usersQuery.isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (users.isError) {
-    return <div>No users found</div>;
+  if (usersQuery.isError) {
+    return <div>An error occurred.</div>;
   }
 
-  console.log(users.data);
+  if (!usersQuery.data) {
+    return <div>An error occurred.</div>;
+  }
 
   return (
     <>
       <Dialog>
-        <Tabs value={tableFilter} onValueChange={setTableFilter}>
+        <Tabs value={tableFilter} onValueChange={setTableFilter} asChild>
           <div className="w-full h-full flex flex-col justify-center items-center p-6 gap-2">
             <div className="w-full flex">
               <TabsList>
@@ -50,7 +53,9 @@ export function Settings() {
                 <CardTitle>Users</CardTitle>
                 <CardDescription>Create, edit, and view users.</CardDescription>
               </CardHeader>
-              <CardContent></CardContent>
+              <CardContent>
+                <UserTable data={usersQuery.data} />
+              </CardContent>
             </Card>
           </div>
         </Tabs>

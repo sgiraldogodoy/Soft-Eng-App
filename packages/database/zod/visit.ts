@@ -1,23 +1,16 @@
-import * as z from "zod";
-import {
-  CompleteVisitNote,
-  RelatedVisitNoteModel,
-  CompletePatient,
-  RelatedPatientModel,
-  CompleteAppointment,
-  RelatedAppointmentModel,
-} from "./index";
+import * as z from "zod"
+import { CompleteVisitNote, RelatedVisitNoteModel, CompletePatient, RelatedPatientModel, CompleteAppointment, RelatedAppointmentModel } from "./index"
 
 export const VisitModel = z.object({
   id: z.string(),
   patientId: z.string(),
   visitTime: z.date(),
-});
+})
 
 export interface CompleteVisit extends z.infer<typeof VisitModel> {
-  notes: CompleteVisitNote[];
-  patient: CompletePatient;
-  appointment?: CompleteAppointment | null;
+  notes: CompleteVisitNote[]
+  patient: CompletePatient
+  appointment?: CompleteAppointment | null
 }
 
 /**
@@ -25,10 +18,8 @@ export interface CompleteVisit extends z.infer<typeof VisitModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedVisitModel: z.ZodSchema<CompleteVisit> = z.lazy(() =>
-  VisitModel.extend({
-    notes: RelatedVisitNoteModel.array(),
-    patient: RelatedPatientModel,
-    appointment: RelatedAppointmentModel.nullish(),
-  }),
-);
+export const RelatedVisitModel: z.ZodSchema<CompleteVisit> = z.lazy(() => VisitModel.extend({
+  notes: RelatedVisitNoteModel.array(),
+  patient: RelatedPatientModel,
+  appointment: RelatedAppointmentModel.nullish(),
+}))

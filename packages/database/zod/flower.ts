@@ -1,15 +1,15 @@
-import * as z from "zod";
-import { CompleteService, RelatedServiceModel } from "./index";
+import * as z from "zod"
+import { CompleteService, RelatedServiceModel } from "./index"
 
 export const FlowerModel = z.object({
   id: z.string(),
   serviceId: z.string(),
   flower: z.string(),
   recipientName: z.string(),
-});
+})
 
 export interface CompleteFlower extends z.infer<typeof FlowerModel> {
-  service: CompleteService;
+  service: CompleteService
 }
 
 /**
@@ -17,8 +17,6 @@ export interface CompleteFlower extends z.infer<typeof FlowerModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedFlowerModel: z.ZodSchema<CompleteFlower> = z.lazy(() =>
-  FlowerModel.extend({
-    service: RelatedServiceModel,
-  }),
-);
+export const RelatedFlowerModel: z.ZodSchema<CompleteFlower> = z.lazy(() => FlowerModel.extend({
+  service: RelatedServiceModel,
+}))

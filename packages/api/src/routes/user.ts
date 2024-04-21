@@ -33,7 +33,7 @@ export const userRouter = router({
     .input(
       z.object({
         id: z.string(),
-        data: baseUser.partial(),
+        data: userCreate.partial(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -78,5 +78,15 @@ export const userRouter = router({
       } else {
         return false;
       }
+    }),
+
+  deleteOne: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(({ input, ctx }) => {
+      return ctx.db.user.delete({
+        where: {
+          id: input.id,
+        },
+      });
     }),
 });

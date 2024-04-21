@@ -99,9 +99,9 @@ export const staff = z.object({
 export const baseUser = z.object({
   id: z.string(),
   sub: z.string(),
-  email: z.string().optional(),
+  email: z.string().nullish(),
   name: z.string(),
-  role: z.enum(["patient", "staff", "admin"]).optional(),
+  role: z.enum(["patient", "staff", "admin"]).nullish(),
 });
 
 export const patient = z.object({
