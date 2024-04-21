@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { TextNavigation } from "@/components/TextNav.tsx";
 
 import { Link } from "wouter";
+import { LoadingSpinner } from "@/components/ui/loader.tsx";
 
 type Floor = "L1" | "L2" | "1" | "2" | "3";
 const FLOOR_URLS: Record<Floor, string> = {
@@ -38,9 +39,6 @@ export default function PathFind() {
 
   if (nodesQuery.isError) {
     console.log("Error in nodesQuery");
-  }
-  if (nodesQuery.isLoading) {
-    console.log("Nodes are loading");
   }
 
   const pathQuery = trpc.node.findPath;
@@ -87,6 +85,10 @@ export default function PathFind() {
     },
     [setStartNode, setFloor, setImgUrl, nodesQuery],
   );
+
+  if (nodesQuery.isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="relative h-full">

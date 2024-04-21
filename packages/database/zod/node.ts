@@ -1,6 +1,15 @@
-import * as z from "zod"
-import { NodeType } from "../.prisma/client"
-import { CompleteEdge, RelatedEdgeModel, CompleteService, RelatedServiceModel, CompletePatient, RelatedPatientModel, CompleteAppointment, RelatedAppointmentModel } from "./index"
+import * as z from "zod";
+import { NodeType } from "../.prisma/client";
+import {
+  CompleteEdge,
+  RelatedEdgeModel,
+  CompleteService,
+  RelatedServiceModel,
+  CompletePatient,
+  RelatedPatientModel,
+  CompleteAppointment,
+  RelatedAppointmentModel,
+} from "./index";
 
 export const NodeModel = z.object({
   id: z.string(),
@@ -12,14 +21,14 @@ export const NodeModel = z.object({
   longName: z.string(),
   shortName: z.string(),
   available: z.boolean(),
-})
+});
 
 export interface CompleteNode extends z.infer<typeof NodeModel> {
-  outgoing: CompleteEdge[]
-  incoming: CompleteEdge[]
-  service: CompleteService[]
-  patients: CompletePatient[]
-  appointments: CompleteAppointment[]
+  outgoing: CompleteEdge[];
+  incoming: CompleteEdge[];
+  service: CompleteService[];
+  patients: CompletePatient[];
+  appointments: CompleteAppointment[];
 }
 
 /**
@@ -27,10 +36,12 @@ export interface CompleteNode extends z.infer<typeof NodeModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedNodeModel: z.ZodSchema<CompleteNode> = z.lazy(() => NodeModel.extend({
-  outgoing: RelatedEdgeModel.array(),
-  incoming: RelatedEdgeModel.array(),
-  service: RelatedServiceModel.array(),
-  patients: RelatedPatientModel.array(),
-  appointments: RelatedAppointmentModel.array(),
-}))
+export const RelatedNodeModel: z.ZodSchema<CompleteNode> = z.lazy(() =>
+  NodeModel.extend({
+    outgoing: RelatedEdgeModel.array(),
+    incoming: RelatedEdgeModel.array(),
+    service: RelatedServiceModel.array(),
+    patients: RelatedPatientModel.array(),
+    appointments: RelatedAppointmentModel.array(),
+  }),
+);

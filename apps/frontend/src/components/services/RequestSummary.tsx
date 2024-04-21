@@ -23,6 +23,7 @@ import {
 import { motion } from "framer-motion";
 import { type baseService } from "common";
 import { z } from "zod";
+import { LoadingSpinner } from "@/components/ui/loader.tsx";
 
 export default function RequestSummary() {
   const [rowSelectionState, setRowSelectionState] = useState<RowSelectionState>(
@@ -53,7 +54,7 @@ export default function RequestSummary() {
   );
 
   if (servicesQuery.isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingSpinner />;
   }
 
   if (servicesQuery.isError) {

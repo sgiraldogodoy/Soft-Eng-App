@@ -89,4 +89,18 @@ export const userRouter = router({
         },
       });
     }),
+
+  me: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.db.user.findUnique({
+      where: {
+        sub: ctx.token.payload.sub as string,
+      },
+    });
+
+    if (user) {
+      return user;
+    } else {
+      return null;
+    }
+  }),
 });

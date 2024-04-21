@@ -34,6 +34,7 @@
     "migrate:resolve": "prisma migrate resolve",
     "db:pull": "prisma db pull --skip-generate",
     "db:push": "dotenv -e ../../.env -- prisma db push --skip-generate",
+    "db:reset": "dotenv -e ../../.env -- prisma migrate reset --skip-generate && yarn run build:dev",
     "db:seed": "prisma db seed",
     "db:studio": "dotenv -e ../../.env -- prisma studio"
   },

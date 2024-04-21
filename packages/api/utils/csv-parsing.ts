@@ -1,5 +1,4 @@
 import { Prisma } from "database";
-import { z } from "zod";
 import { node as nodeSchema } from "common";
 
 type Node = Prisma.NodeCreateManyInput;
@@ -27,31 +26,24 @@ export async function parseCSVNode(csv: string) {
       longName,
       shortName,
     ] = line.split(",");
-    const type = typeString as z.infer<typeof nodeSchema.shape.type>;
-    const x = Number(xString);
-    const y = Number(yString);
-    if (
-      !id ||
-      !x ||
-      !y ||
-      !floor ||
-      !building ||
-      !type ||
-      !longName ||
-      !shortName
-    ) {
-      continue;
-    }
-    nodes.push({
+
+    const node = nodeSchema.safeParse({
       id,
-      x,
-      y,
+      x: Number(xString),
+      y: Number(yString),
       building,
       floor,
-      type,
+      type: typeString,
       longName,
       shortName,
     });
+
+    if (!node.success) {
+      console.error(node.error);
+      continue;
+    }
+
+    nodes.push(node.data);
   }
   return nodes;
 }
