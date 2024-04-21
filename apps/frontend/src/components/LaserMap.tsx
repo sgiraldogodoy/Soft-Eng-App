@@ -115,6 +115,7 @@ export default function LaserMap({
     {
       startNodeId: startNode ? startNode.id : "BINFO00202",
       endNodeId: endNode ? endNode.id : "ACONF00102",
+      wheelchair: false,
       algorithm: "A*",
     },
     {
@@ -246,7 +247,7 @@ export default function LaserMap({
         overflow: "hidden",
         userSelect: "none",
       }}
-      className="absolute object-cover w-full h-full grayscale opacity-35"
+      className="absolute object-cover h-full grayscale opacity-35"
     >
       <img
         ref={image}
@@ -255,6 +256,7 @@ export default function LaserMap({
         style={{
           transform: `scale(${scale}) translate(${offset.x}px, ${offset.y}px)`,
         }}
+        className="h-full"
         onLoad={handleResize}
       />
       {lasers.map((laser) => (

@@ -14,6 +14,8 @@ const toggleVariants = cva(
           "border border-slate-200 bg-transparent hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:hover:bg-slate-800 dark:hover:text-slate-50",
         outlinefilled:
           "border background-blur-md border-slate-200/90 bg-slate-100/90  hover:bg-slate-200 hover:text-slate-900 dark:border-slate-800 dark:hover:bg-slate-900 dark:hover:text-slate-50",
+        outlinefilledacc:
+          "border background-blur-md border-slate-200/90 bg-slate-100/90  hover:bg-blue-200 hover:text-slate-900 dark:border-slate-800 dark:hover:bg-slate-900 dark:hover:text-slate-50 data-[state=on]:bg-blue-500 data-[state=on]:text-slate-50",
       },
       size: {
         default: "h-10 px-3",

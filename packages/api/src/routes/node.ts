@@ -51,6 +51,7 @@ export const Node = router({
       z.object({
         startNodeId: z.string(),
         endNodeId: z.string(),
+        wheelchair: z.boolean(),
         algorithm: z.string(),
       }),
     )
@@ -67,6 +68,7 @@ export const Node = router({
         input.startNodeId,
         input.endNodeId,
         ctx.db,
+        input.wheelchair === true,
         input.algorithm === "DIJ",
       );
     }),
