@@ -65,7 +65,9 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
               <img src={"/Ace.jpg"} alt="Ace" className="" />
-              <p>Lead Software Engineer</p>
+              <div className="h-0.5">
+                <p>Lead Software Engineer</p>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -78,8 +80,10 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
               <img src={"/Matt.jpg"} alt="Matthew" className="" />
-              <p>Assistant Lead Software Engineer</p>
-              <p>Front-End and Feature Engineer</p>
+              <div className="h-0.5">
+                <p>Assistant Lead Software Engineer</p>
+                <p>Front-End and Feature Engineer</p>
+              </div>
             </CardContent>
           </Card>
         </div>
