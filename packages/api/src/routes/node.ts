@@ -73,10 +73,69 @@ export const Node = router({
       );
     }),
   createOne: protectedProcedure
-    .input(z.object({ data: node }))
+    .input(
+      z.object({ data: node.omit({ id: true }), id: z.string().optional() }),
+    )
     .mutation(async ({ input, ctx }) => {
-      await ctx.db.node.create({
-        data: input.data,
+      let nodeId = "";
+      let number = "";
+      if (input.id) {
+        nodeId = input.id;
+      } else if (input.data.elevatorLetter) {
+        if (input.data.type === "ELEV") {
+          const pattern = /^[A-Z]*$/;
+          if (!pattern.test(input.data.elevatorLetter)) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "Elevators must be a Capital letter",
+            });
+          }
+          number = "00" + input.data.elevatorLetter;
+        } else {
+          const occurences = await ctx.db.node.findMany({
+            where: {
+              type: input.data.type,
+              floor: input.data.floor,
+            },
+          });
+
+          //count number of nodes with the same type
+          const numOccurences = 3 - occurences.length.toString().length;
+          number = "0".repeat(numOccurences) + occurences.length.toString();
+        }
+        const prefixFloor = input.data.floor.length === 1 ? "0" : "";
+        const floor = prefixFloor + input.data.floor;
+        nodeId = "q" + input.data.type + number + floor;
+      } else {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Node must have a elevator number or an id",
+        });
+      }
+      const data = {
+        id: nodeId,
+        x: input.data.x,
+        y: input.data.y,
+        building: input.data.building,
+        floor: input.data.floor,
+        type: input.data.type,
+        longName: input.data.longName,
+        shortName: input.data.shortName,
+      };
+      //check if node exists
+      const exists = await ctx.db.node.findUnique({
+        where: {
+          id: nodeId,
+        },
+      });
+      if (exists) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Node already exists",
+        });
+      }
+      return ctx.db.node.create({
+        data: data,
       });
     }),
 

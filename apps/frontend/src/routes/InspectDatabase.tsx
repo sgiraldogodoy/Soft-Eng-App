@@ -7,7 +7,6 @@ import { trpc } from "@/utils/trpc";
 import { getBase64 } from "@/utils/files";
 import { toast } from "sonner";
 import { Card } from "@/components/ui/card";
-import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation.tsx";
 
 export function InspectDatabase() {
   const uploadButton = useRef<HTMLInputElement>(null);
@@ -22,9 +21,8 @@ export function InspectDatabase() {
 
   return (
     <>
-      <BackgroundGradientAnimation />
       <div className="relative h-full max-h-full p-6">
-        <Card className="relative max-h-full overflow-auto">
+        <Card className="relative max-h-full p-4 overflow-auto">
           <Tabs defaultValue="nodes">
             <div className="w-full flex items-center justify-center p-4">
               <TabsList>
@@ -49,7 +47,7 @@ export function InspectDatabase() {
 
                   anchor.click();
                 }}
-                className="absolute top-[16px] right-[104px]"
+                className="absolute top-[32px] right-[120px]"
               >
                 Download
               </Button>
@@ -70,7 +68,7 @@ export function InspectDatabase() {
 
                   anchor.click();
                 }}
-                className="absolute top-[16px] right-[104px]"
+                className="absolute top-[32px] right-[120px]"
               >
                 Download
               </Button>
@@ -80,7 +78,7 @@ export function InspectDatabase() {
             onClick={() => {
               uploadButton.current?.click();
             }}
-            className="absolute top-[16px] right-4"
+            className="absolute top-[32px] right-8"
           >
             Upload
           </Button>

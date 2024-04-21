@@ -1,11 +1,12 @@
-import { PrismaClient, Node, Edge } from "../.prisma/client";
+import { PrismaClient, Edge, NodeType, Prisma } from "../.prisma/client";
 import readline from "readline";
 import fs from "fs";
+import NodeCreateManyInput = Prisma.NodeCreateManyInput;
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const nodes: Node[] = [];
+  const nodes: NodeCreateManyInput[] = [];
 
   // Parse nodes CSV
   const nodeStream = readline.createInterface({
@@ -25,10 +26,11 @@ async function main() {
       ycordsString,
       floor,
       building,
-      type,
+      typeString,
       longName,
       shortName,
     ] = line.split(",");
+    const type = typeString as NodeType;
     const x = Number(xcordsString);
     const y = Number(ycordsString);
     nodes.push({
@@ -80,7 +82,7 @@ async function main() {
             nodeId: "ACONF00102",
             type: "flower",
             login: "Ace",
-            priority: "High",
+            priority: "HIGH",
             status: "UNASSIGNED",
             note: "Note",
           },

@@ -18,14 +18,29 @@ model Node {
   y            Int
   building     String
   floor        String
-  type         String
+  type         NodeType
   longName     String
   shortName    String
+  available    Boolean       @default(true)
   outgoing     Edge[]        @relation(name: "NodeOutgoingEdge")
   incoming     Edge[]        @relation(name: "NodeIncomingEdge")
   service      Service[]     @relation(name: "ServiceToNode")
   patients     Patient[]     @relation(name: "PatientToNode")
   appointments Appointment[] @relation(name: "AppointmentToNode")
+}
+
+enum NodeType {
+  HALL
+  ELEV
+  REST
+  STAI
+  DEPT
+  LABS
+  INFO
+  CONF
+  EXIT
+  RETL
+  SERV
 }
 
 model Edge {

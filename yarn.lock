@@ -4814,16 +4814,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cmdk@npm:0.2.0":
-  version: 0.2.0
-  resolution: "cmdk@npm:0.2.0"
+"cmdk@npm:^0.2.0":
+  version: 0.2.1
+  resolution: "cmdk@npm:0.2.1"
   dependencies:
     "@radix-ui/react-dialog": "npm:1.0.0"
-    command-score: "npm:0.1.2"
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: e178e3d3276e0b5fd158c9c99716c0405427871f48fa97c15c4be2de24be4a478cf0205ffa04244628dbe103dd8573a1bd1aa68f04f8b60633d4ffc04e5eee62
+  checksum: f2f90cafa026d7905c76147a032caa202eeab28b267b90ac22d2e9a93fbbee92735e530eeac7cc5e5e1d0978424b0743264da144570e2646bf89f6ccf10e91c2
   languageName: node
   linkType: hard
 
@@ -4879,13 +4878,6 @@ __metadata:
   dependencies:
     delayed-stream: "npm:~1.0.0"
   checksum: 2e969e637d05d09fa50b02d74c83a1186f6914aae89e6653b62595cc75a221464f884f55f231b8f4df7a49537fba60bdc0427acd2bf324c09a1dbb84837e36e4
-  languageName: node
-  linkType: hard
-
-"command-score@npm:0.1.2":
-  version: 0.1.2
-  resolution: "command-score@npm:0.1.2"
-  checksum: 84f6a69e6b215d3fc8c9ed402d109587f511e4cc84cd5da10a7857b50fb1638953e32dcce8ed8f3549b0bfe499e82601fb7fb6891c9c71b48933d4bb8bac238a
   languageName: node
   linkType: hard
 
@@ -6662,7 +6654,7 @@ __metadata:
     axios: "npm:^1.4.0"
     class-variance-authority: "npm:^0.7.0"
     clsx: "npm:^2.1.0"
-    cmdk: "npm:0.2.0"
+    cmdk: "npm:^0.2.0"
     common: "workspace:^"
     database: "workspace:*"
     date-fns: "npm:^3.6.0"
@@ -6685,7 +6677,7 @@ __metadata:
     react-datetime: "npm:^3.2.0"
     react-day-picker: "npm:^8.10.1"
     react-dom: "npm:^18.2.0"
-    react-hook-form: "npm:^7.51.2"
+    react-hook-form: "npm:^7.51.3"
     react-hot-toast: "npm:^2.4.1"
     react-router-bootstrap: "npm:^0.26.2"
     react-zoom-pan-pinch: "npm:^3.1.0"
@@ -9680,12 +9672,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.51.2":
-  version: 7.51.2
-  resolution: "react-hook-form@npm:7.51.2"
+"react-hook-form@npm:^7.51.3":
+  version: 7.51.3
+  resolution: "react-hook-form@npm:7.51.3"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: 30a6d7dec2d8bcdfd9ad92508d0a19e0fb6b344034a5dfb74ff419b54ef29f70e381bbf11bf57ddb808d37748f86581f1679fecac33860944b1baf3217a10f7a
+  checksum: 37f5d681b0f9d6a64b56e38c6ea98941c78d2634e175e7722e66a6bd72b4b22a73a5b912ada8cc010b5ec9e1019b8e2d4a6b0f38e87280600f8e921dee96aaca
   languageName: node
   linkType: hard
 
