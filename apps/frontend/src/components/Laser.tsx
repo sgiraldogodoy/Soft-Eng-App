@@ -71,10 +71,11 @@ export default function Laser({
           <path
             d={path}
             style={{
-              filter: "drop-shadow(0 0 5px white)",
-              stroke: "white",
+              filter: "drop-shadow(white 1rem 1rem 10px)",
+              stroke: "#f6bd38",
               strokeWidth: strokeWidth,
               fill: "none",
+              opacity: 0.8,
             }}
           />
         </g>

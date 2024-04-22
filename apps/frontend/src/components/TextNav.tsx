@@ -101,24 +101,24 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
     return angle > 30;
   }
 
-  function dirFilter(directions: [string, string][], floor: string): string[] {
-    const filteredPath: string[] = [];
-    let prevFloor = "";
-
-    for (const [dir, currFloor] of directions) {
-      if (currFloor === floor) {
-        filteredPath.push(dir);
-        prevFloor = currFloor;
-      } else {
-        if (prevFloor === floor) {
-          filteredPath.push("When Back On This Floor:");
-        }
-        prevFloor = currFloor;
-      }
-    }
-
-    return filteredPath;
-  }
+  // function dirFilter(directions: [string, string][], floor: string): string[] {
+  //   const filteredPath: string[] = [];
+  //   let prevFloor = "";
+  //
+  //   for (const [dir, currFloor] of directions) {
+  //     if (currFloor === floor) {
+  //       filteredPath.push(dir);
+  //       prevFloor = currFloor;
+  //     } else {
+  //       if (prevFloor === floor) {
+  //         filteredPath.push("When Back On This Floor:");
+  //       }
+  //       prevFloor = currFloor;
+  //     }
+  //   }
+  //
+  //   return filteredPath;
+  // }
 
   const directions: [string, string][] = [];
   if (nodes.length <= 0) {
@@ -197,73 +197,61 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
     nodes[nodes.length - 1].floor,
   ]);
 
-  const dirFloor1 = dirFilter(directions, "1");
-  const dirFloor2 = dirFilter(directions, "2");
-  const dirFloor3 = dirFilter(directions, "3");
-  const dirFloorL1 = dirFilter(directions, "L1");
-  const dirFloorL2 = dirFilter(directions, "L2");
+  // const dirFloor1 = dirFilter(directions, "1");
+  // const dirFloor2 = dirFilter(directions, "2");
+  // const dirFloor3 = dirFilter(directions, "3");
+  // const dirFloorL1 = dirFilter(directions, "L1");
+  // const dirFloorL2 = dirFilter(directions, "L2");
+
+  function dirFilter(directions: [string, string][]): [string, string][][] {
+    const dirFloor: [string, string][][] = [];
+    let currentFloor: [string, string][] = [];
+    let prevFloor: string = directions[0][1];
+
+    for (let i = 0; i < directions.length; i++) {
+      const currentDir = directions[i];
+
+      if (prevFloor === currentDir[1]) {
+        currentFloor.push(currentDir);
+      } else {
+        dirFloor.push(currentFloor);
+        currentFloor = [];
+        currentFloor.push(currentDir);
+        prevFloor = currentDir[1];
+      }
+    }
+    if (currentFloor.length > 0) {
+      dirFloor.push(currentFloor);
+    }
+
+    return dirFloor;
+  }
+
+  const dirFloor = dirFilter(directions);
+  //console.log(directions);
 
   return (
     <div>
       <Accordion
         type="single"
         collapsible
-        className="w-full max-h-[80vh] pb-0.5"
+        className="w-full max-h-[80vh] w-[30vw] pb-0.5"
       >
-        {dirFloor3.length > 0 ? (
-          <AccordionItem value="Floor 3">
-            <AccordionTrigger className="w-[23vw] pl-2">
-              Directions For Floor 3
-            </AccordionTrigger>
-            <AccordionContent className="max-h-[55vh] overflow-y-auto pl-2  ">
-              <AccordionTextNav directions={dirFloor3} />
-            </AccordionContent>
-          </AccordionItem>
-        ) : null}
-
-        {dirFloor2.length > 0 ? (
-          <AccordionItem value="Floor 2">
-            <AccordionTrigger className="w-[23vw] pl-2">
-              Directions For Floor 2
-            </AccordionTrigger>
-            <AccordionContent className="max-h-[55vh] overflow-y-auto pl-2  ">
-              <AccordionTextNav directions={dirFloor2} />
-            </AccordionContent>
-          </AccordionItem>
-        ) : null}
-
-        {dirFloor1.length > 0 ? (
-          <AccordionItem value="Floor 1">
-            <AccordionTrigger className="w-[23vw] pl-2">
-              Directions For Floor 1
-            </AccordionTrigger>
-            <AccordionContent className="max-h-[55vh] overflow-y-auto pl-2  ">
-              <AccordionTextNav directions={dirFloor1} />
-            </AccordionContent>
-          </AccordionItem>
-        ) : null}
-
-        {dirFloorL1.length > 0 ? (
-          <AccordionItem value="Floor L1">
-            <AccordionTrigger className="w-[23vw] pl-2">
-              Directions For Floor L1
-            </AccordionTrigger>
-            <AccordionContent className="max-h-[55vh] overflow-y-auto pl-2  ">
-              <AccordionTextNav directions={dirFloorL1} />
-            </AccordionContent>
-          </AccordionItem>
-        ) : null}
-
-        {dirFloorL2.length > 0 ? (
-          <AccordionItem value="Floor L2">
-            <AccordionTrigger className="w-[23vw] pl-2">
-              Directions For Floor L2
-            </AccordionTrigger>
-            <AccordionContent className="max-h-[55vh] overflow-y-auto pl-2  ">
-              <AccordionTextNav directions={dirFloorL2} />
-            </AccordionContent>
-          </AccordionItem>
-        ) : null}
+        {dirFloor.map((dir, index) => {
+          return (
+            <AccordionItem
+              value={"Floor " + dir[0][1] + "-" + index}
+              key={index}
+            >
+              <AccordionTrigger className=" pl-2">
+                Directions For Floor {dir[0][1]}
+              </AccordionTrigger>
+              <AccordionContent className="max-h-[55vh] overflow-y-auto pl-2">
+                <AccordionTextNav directions={dir} />
+              </AccordionContent>
+            </AccordionItem>
+          );
+        })}
       </Accordion>
     </div>
   );
