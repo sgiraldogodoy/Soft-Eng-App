@@ -13,6 +13,7 @@ import { sanitationRequestRouter } from "./routes/Services/sanitationRouter.ts";
 import { visitRequestRouter } from "./routes/Services/visitRouter.ts";
 import { itRequestRouter } from "./routes/Services/itRouter.ts";
 import { religiousRequestRouter } from "./routes/Services/religiousRouter.ts";
+import { InterpreterRouter } from "./routes/Services/languageRouter.ts";
 
 export const appRouter = router({
   service: serviceRouter,
@@ -26,6 +27,7 @@ export const appRouter = router({
   visit: visitRequestRouter,
   it: itRequestRouter,
   religious: religiousRequestRouter,
+  interpreter: InterpreterRouter,
   room: RoomRouter,
   node: Node,
   edge: Edge,

@@ -57,6 +57,7 @@ model Service {
   visit       Visit?       @relation(name: "VisitToService")
   it          IT?          @relation(name: "ITToService")
   religious   Religious?   @relation(name: "ReligiousToService")
+  interpreter Interpreter? @relation(name: "InterpreterToService")
 }
 
 enum ServiceType {
@@ -71,6 +72,7 @@ enum ServiceType {
   visit
   it
   religious
+  interpreter
 }
 
 model Flower {
@@ -167,6 +169,15 @@ model Religious {
   service   Service  @relation(name: "ReligiousToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   religion  String
   dateTime  DateTime
+}
+
+model Interpreter {
+  id            String   @id @default(uuid())
+  serviceId     String   @unique
+  service       Service  @relation(name: "InterpreterToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  recipientName String
+  type          String
+  dateTime      DateTime
 }
 
 model Patient {

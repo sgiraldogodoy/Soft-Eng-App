@@ -48,6 +48,7 @@ export const serviceRouter = router({
           visit: true,
           it: true,
           religious: true,
+          interpreter: true,
         },
       });
     }),
@@ -66,6 +67,7 @@ export const serviceRouter = router({
         visit: true,
         it: true,
         religious: true,
+        interpreter: true,
       },
     });
   }),

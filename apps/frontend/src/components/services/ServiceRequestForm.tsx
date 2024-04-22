@@ -41,6 +41,7 @@ import SanitationRequestFields from "./SanitationRequestFields";
 import VisitRequestFields from "./VisitRequestFields";
 import ITRequestFields from "./ITRequestFields";
 import ReligiousRequestFields from "./ReligiousRequestFields";
+import InterpreterRequestFields from "./InterpreterRequestFields";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
 import {
@@ -122,6 +123,10 @@ const FORMTYPE_RECORD: Record<
     longName: "Request Religious",
     formFields: ReligiousRequestFields,
   },
+  interpreter: {
+    longName: "Request Interpreter",
+    formFields: InterpreterRequestFields,
+  },
 };
 
 interface Props {
@@ -158,6 +163,7 @@ export default function InputForm({ variant }: Props) {
   const createVisitRequest = trpc.visit.createOne.useMutation();
   const createITRequest = trpc.it.createOne.useMutation();
   const createReligiousRequest = trpc.religious.createOne.useMutation();
+  const createInterpreterRequest = trpc.interpreter.createOne.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
@@ -383,6 +389,26 @@ export default function InputForm({ variant }: Props) {
           {
             success: "Successfully saved to the database.",
             loading: "Saving religious request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "interpreter":
+        toast.promise(
+          createInterpreterRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving interpreter request to the database.",
             error: "Error saving to database.",
           },
         );
