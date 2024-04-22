@@ -35,6 +35,7 @@ import AVRequestFields from "./AVRequestFields";
 import FlowerRequestFields from "./FlowerRequestFields";
 import SecurityRequestFields from "@/components/services/SecurityRequestFields.tsx";
 import GiftRequestFields from "./GiftRequestFields";
+import InterpreterRequestFields from "./InterpreterRequestFields";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
 import {
@@ -91,6 +92,10 @@ const FORMTYPE_RECORD: Record<
   gift: {
     longName: "Request Gift",
     formFields: GiftRequestFields,
+  },
+  interpreter: {
+    longName: "Request Interpreter",
+    formFields: InterpreterRequestFields,
   },
 };
 

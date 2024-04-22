@@ -1,4 +1,3 @@
-
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -52,7 +51,7 @@ model Service {
   room        Room?        @relation(name: "RoomToService")
   security    Security?    @relation(name: "SecurityToService")
   av          AV?          @relation(name: "AVToService")
-  Interpreter Interpreter? @relation(name: "Interpreter", fields: [], references: [])
+  interpreter Interpreter? @relation(name: "InterpreterToService")
 }
 
 enum ServiceType {
@@ -99,12 +98,12 @@ model Security {
 }
 
 model Interpreter {
-  id              String  @id @default(uuid())
-  serviceId       String  @unique
-  service         Service   @relation(name: "interpreter")
-  dateTime        DateTime
-  language        String
-  recipientName   String
+  id            String   @id @default(uuid())
+  serviceId     String   @unique
+  service       Service  @relation(name: "InterpreterToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  recipientName String
+  type          String
+  dateTime      DateTime
 }
 
 model AV {
