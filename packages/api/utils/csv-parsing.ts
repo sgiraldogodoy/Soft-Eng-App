@@ -3,6 +3,7 @@ import { node as nodeSchema } from "common";
 
 type Node = Prisma.NodeCreateManyInput;
 type Edge = Prisma.EdgeCreateManyInput;
+type Staff = Prisma.StaffCreateManyInput;
 
 export async function parseCSVNode(csv: string) {
   const nodes: Node[] = [];
@@ -75,7 +76,40 @@ export async function parseCSVEdge(csv: string) {
     }
   }
 
-  console.log(edges);
-
   return edges;
+}
+
+export async function parseCSVStaff(csv: string) {
+  const staff: Staff[] = [];
+  // Parse staff CSV
+  const lines = csv.split(/\r?\n/);
+
+  let i = 0;
+  for await (const line of lines) {
+    if (i == 0) {
+      i++;
+      continue;
+    }
+
+    const fields = line.split(",");
+    if (fields.length < 3) {
+      console.error("Invalid number of fields in CSV line ", line);
+      continue;
+    }
+
+    const [id, name, jobTitle, userId] = fields;
+    // console.log(id, name, jobTitle, userId);
+    try {
+      staff.push({
+        id,
+        name,
+        jobTitle,
+        userId: userId.trim() || undefined,
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  return staff;
 }

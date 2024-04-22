@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EdgesTable } from "./EdgesTable";
 import { NodesTable } from "./NodesTable";
+import { StaffTable } from "./StaffTable";
 import { Button } from "@/components/ui/button";
 import { useRef } from "react";
 import { trpc } from "@/utils/trpc";
@@ -26,11 +27,13 @@ export function InspectDatabase() {
 
   const downloadNodes = trpc.node.csvExport.useQuery();
   const downloadEdges = trpc.edge.csvExport.useQuery();
+  const downloadEmployees = trpc.staff.csvExport.useQuery();
 
   const utils = trpc.useUtils();
 
   const nodeMutation = trpc.node.csvUpload.useMutation();
   const edgeMutation = trpc.edge.csvUpload.useMutation();
+  const staffMutation = trpc.staff.csvUpload.useMutation();
 
   return (
     <>
@@ -97,7 +100,22 @@ export function InspectDatabase() {
                   Edges
                   <Spline color="hsla(var(--primary) / 0.5)" className="pl-1" />
                 </DropdownMenuItem>
-                <DropdownMenuItem className="flex justify-between items-center">
+                <DropdownMenuItem
+                  className="flex justify-between items-center"
+                  onClick={() => {
+                    const base64String = downloadEmployees.data ?? "";
+                    const decodedString = atob(base64String);
+                    const blob = new Blob([decodedString], {
+                      type: "text/csv",
+                    });
+                    const anchor = document.createElement("a");
+                    anchor.href = window.URL.createObjectURL(blob);
+                    anchor.download = "employees-csv-file.csv";
+                    document.body.appendChild(anchor);
+
+                    anchor.click();
+                  }}
+                >
                   Employees
                   <ContactRound
                     color="hsla(var(--primary) / 0.5)"
@@ -125,12 +143,15 @@ export function InspectDatabase() {
             <TabsContent value="edges">
               <EdgesTable />
             </TabsContent>
+            <TabsContent value="employees">
+              <StaffTable />
+            </TabsContent>
             <input
               ref={uploadButton}
               onChange={async (e) => {
                 const files = e.target.files;
 
-                console.log("changed");
+                // console.log("changed");
 
                 if (!files || files.length == 0) return;
 
@@ -152,11 +173,11 @@ export function InspectDatabase() {
                     ),
                     {
                       loading: "Adding nodes...",
-                      success: "Done!",
+                      success: "Done N!",
                       error: "An error occured.",
                     },
                   );
-                } else {
+                } else if (text.toLowerCase().includes("startnode")) {
                   toast.promise(
                     edgeMutation.mutateAsync(
                       {
@@ -169,8 +190,26 @@ export function InspectDatabase() {
                       },
                     ),
                     {
-                      loading: "Adding nodes...",
-                      success: "Done!",
+                      loading: "Adding Edges...",
+                      success: "Done E!",
+                      error: "An error occured.",
+                    },
+                  );
+                } else {
+                  toast.promise(
+                    staffMutation.mutateAsync(
+                      {
+                        buffer: base64,
+                      },
+                      {
+                        onSuccess() {
+                          utils.staff.getAll.invalidate();
+                        },
+                      },
+                    ),
+                    {
+                      loading: "Adding Employees...",
+                      success: "Done Emp!",
                       error: "An error occured.",
                     },
                   );
