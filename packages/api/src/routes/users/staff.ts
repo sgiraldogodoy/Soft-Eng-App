@@ -1,38 +1,19 @@
-import { protectedProcedure, publicProcedure } from "../trpc.ts";
-import { router } from "../trpc.ts";
+import { protectedProcedure, publicProcedure } from "../../trpc.ts";
+import { router } from "../../trpc.ts";
 import { z } from "zod";
-import { baseUser, staff } from "common";
+import { ZCreateStaffSchema } from "common";
 
 export const staffRouter = router({
   createOne: protectedProcedure
-    .input(
-      z.object({
-        data: staff,
-        user: z.union([z.object({ id: z.string() }), baseUser]).optional(),
-      }),
-    )
+    .input(ZCreateStaffSchema)
     .mutation(async ({ input, ctx }) => {
-      let userId;
-
-      if (input.user && "sub" in input.user)
-        userId = (await ctx.db.user.create({ data: input.user })).id;
-      else if (input.user) userId = input.user.id;
-
       await ctx.db.staff.create({
-        data: {
-          ...input.data,
-          userId: undefined,
-          user: {
-            connect: {
-              id: userId,
-            },
-          },
-        },
+        data: input,
       });
     }),
 
   createMany: protectedProcedure
-    .input(z.object({ data: z.array(staff) }))
+    .input(z.object({ data: z.array(ZCreateStaffSchema) }))
     .mutation(async ({ input, ctx }) => {
       ctx.db.staff.createMany({
         data: input.data,
@@ -81,7 +62,7 @@ export const staffRouter = router({
   }),
 
   updateOne: protectedProcedure
-    .input(z.object({ id: z.string(), data: staff.partial() }))
+    .input(z.object({ id: z.string(), data: ZCreateStaffSchema.partial() }))
     .mutation(async ({ input, ctx }) => {
       return ctx.db.staff.update({
         where: {
@@ -92,7 +73,12 @@ export const staffRouter = router({
     }),
 
   updateMany: protectedProcedure
-    .input(z.object({ ids: z.array(z.string()), data: staff.partial() }))
+    .input(
+      z.object({
+        ids: z.array(z.string()),
+        data: ZCreateStaffSchema.partial(),
+      }),
+    )
     .mutation(async ({ input, ctx }) => {
       return ctx.db.staff.updateMany({
         where: {

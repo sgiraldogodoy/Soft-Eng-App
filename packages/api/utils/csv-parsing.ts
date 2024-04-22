@@ -1,5 +1,5 @@
 import { Prisma } from "database";
-import { node as nodeSchema } from "common";
+import { ZCreateNodeSchema as nodeSchema } from "common";
 
 type Node = Prisma.NodeCreateManyInput;
 type Edge = Prisma.EdgeCreateManyInput;

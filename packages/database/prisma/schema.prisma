@@ -170,6 +170,8 @@ model Appointment {
   location        Node?    @relation(name: "AppointmentToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: SetNull)
   patientId       String
   patient         Patient  @relation(name: "AppointmentToPatient", fields: [patientId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  staffId         String
+  staff           Staff    @relation(name: "AppointmentToStaff", fields: [staffId], references: [id], onUpdate: Cascade, onDelete: SetNull)
   visitId         String?  @unique
   visit           Visit?   @relation(name: "AppointmentVisit", fields: [visitId], references: [id], onUpdate: Cascade, onDelete: SetNull)
   notes           String
@@ -178,8 +180,10 @@ model Appointment {
 model Visit {
   id          String       @id @default(uuid())
   notes       VisitNote[]  @relation(name: "VisitNoteToVisit")
+  staffId     String
+  staff       Staff        @relation(name: "VisitStaff", fields: [staffId], references: [id], onUpdate: Cascade, onDelete: SetNull)
   patientId   String
-  patient     Patient      @relation(name: "VisitPatient", fields: [patientId], references: [id])
+  patient     Patient      @relation(name: "VisitPatient", fields: [patientId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   visitTime   DateTime
   appointment Appointment? @relation(name: "AppointmentVisit")
 }
@@ -205,13 +209,15 @@ model User {
 }
 
 model Staff {
-  id         String      @id @default(uuid())
-  name       String
-  jobTitle   String
-  userId     String?     @unique
-  user       User?       @relation(name: "StaffUser", fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
-  visitNotes VisitNote[] @relation(name: "VisitNoteToUser_Author")
-  patients   Patient[]   @relation(name: "PatientStaff_PCP")
+  id          String        @id @default(uuid())
+  name        String
+  jobTitle    String
+  appointment Appointment[] @relation(name: "AppointmentToStaff")
+  visit       Visit[]       @relation(name: "VisitStaff")
+  userId      String?       @unique
+  user        User?         @relation(name: "StaffUser", fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  visitNotes  VisitNote[]   @relation(name: "VisitNoteToUser_Author")
+  patients    Patient[]     @relation(name: "PatientStaff_PCP")
 }
 
 enum Role {
