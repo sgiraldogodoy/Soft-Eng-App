@@ -30,7 +30,7 @@ export default function AboutPage() {
       </div>
       <div className="flex justify-center py-10 gap-36 mx-8 mb-8">
         <div className="">
-          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#2D83FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 Wilson Wong
@@ -49,7 +49,7 @@ export default function AboutPage() {
           </Card>
         </div>
         <div className="">
-          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#2D83FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 Ian Wright
@@ -70,7 +70,7 @@ export default function AboutPage() {
       </div>
       <div className="flex flex-wrap justify-center gap-16 mb-6">
         <div className="w-1/4">
-          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 Thomas Beattie (Ace)
@@ -85,7 +85,7 @@ export default function AboutPage() {
           </Card>
         </div>
         <div className="w-1/4">
-          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 Matthew Franco
@@ -105,7 +105,7 @@ export default function AboutPage() {
           </Card>
         </div>
         <div className="w-1/4">
-          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 Santiago Giraldo Godoy
@@ -125,7 +125,7 @@ export default function AboutPage() {
           </Card>
         </div>
         <div className="w-1/4">
-          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 Parker Glispin
@@ -145,7 +145,7 @@ export default function AboutPage() {
           </Card>
         </div>
         <div className="w-1/4">
-          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 Michael Lin
@@ -164,7 +164,7 @@ export default function AboutPage() {
           </Card>
         </div>
         <div className="w-1/4">
-          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 Kevin McCrudden
@@ -180,7 +180,7 @@ export default function AboutPage() {
           </Card>
         </div>
         <div className="w-1/4">
-          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 Keenan Porter
@@ -200,7 +200,7 @@ export default function AboutPage() {
           </Card>
         </div>
         <div className="w-1/4">
-          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 Daniel Reynolds
@@ -219,7 +219,7 @@ export default function AboutPage() {
           </Card>
         </div>
         <div className="w-1/4">
-          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 Cole Welcher
@@ -235,7 +235,7 @@ export default function AboutPage() {
           </Card>
         </div>
         <div className="w-1/4">
-          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col">
+          <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 Justin Yip
