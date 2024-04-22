@@ -9,6 +9,7 @@ export interface PathFinding {
     root: string,
     goal: string,
     db: PrismaClient,
+    wheelchair?: boolean,
     dij?: boolean,
   ): Promise<Node[]>;
 }
@@ -19,9 +20,15 @@ export class breadthFirstSearch implements PathFinding {
    * @param root the start node
    * @param goal the end node
    * @param db the database
+   * @param wheelchair boolean to determine if the path should be calculated for a wheelchair
    * @returns the path between the two nodes
    */
-  async run(root: string, goal: string, db: PrismaClient): Promise<Node[]> {
+  async run(
+    root: string,
+    goal: string,
+    db: PrismaClient,
+    wheelchair: boolean,
+  ): Promise<Node[]> {
     const visited: string[] = [];
 
     const nodeArray = await db.node.findMany({
@@ -60,8 +67,13 @@ export class breadthFirstSearch implements PathFinding {
 
       for (const outgoingEdge of currNode.outgoing) {
         const neighbor = nodeRecord[outgoingEdge.endNode.id];
-
-        if (!visited.includes(neighbor.id)) {
+        if (
+          wheelchair &&
+          neighbor.floor !== currNode.floor &&
+          neighbor.type === "STAI"
+        ) {
+          continue;
+        } else if (!visited.includes(neighbor.id)) {
           visited.push(neighbor.id);
           queue.push({ currNode: neighbor, path: [...path, neighbor] });
         }
@@ -83,6 +95,7 @@ export class aStar implements PathFinding {
     root: string,
     goal: string,
     db: PrismaClient,
+    wheelchair?: boolean,
     dij?: boolean,
   ): Promise<Node[]> {
     const visited: string[] = [];
@@ -131,7 +144,13 @@ export class aStar implements PathFinding {
 
       for (const outgoingEdge of currNode.outgoing) {
         const neighbor = nodeRecord[outgoingEdge.endNode.id];
-        if (!visited.includes(neighbor.id)) {
+        if (
+          wheelchair &&
+          neighbor.floor !== currNode.floor &&
+          neighbor.type === "STAI"
+        ) {
+          continue;
+        } else if (!visited.includes(neighbor.id)) {
           visited.push(neighbor.id);
           const pyth = this.pythDist(currNode, neighbor);
           let newPriority = 0;
@@ -172,9 +191,9 @@ export class aStar implements PathFinding {
 
   private floorChange(currNode: Node, neighbor: Node): number {
     if (neighbor.type === "ELEV" && currNode.floor !== neighbor.floor)
-      return 3000;
-    else if (neighbor.type === "STAI" && currNode.floor !== neighbor.floor)
       return 6000;
+    else if (neighbor.type === "STAI" && currNode.floor !== neighbor.floor)
+      return 3000;
     else return 0;
   }
 
@@ -217,7 +236,12 @@ export class depthFirstSearch implements PathFinding {
    * @param dij boolean to determine if the path should be calculated using Dijkstra's algorithm
    * @returns the path between the two nodes
    */
-  async run(root: string, goal: string, db: PrismaClient): Promise<Node[]> {
+  async run(
+    root: string,
+    goal: string,
+    db: PrismaClient,
+    wheelchair: boolean,
+  ): Promise<Node[]> {
     const visited: string[] = [];
 
     const nodeArray = await db.node.findMany({
@@ -256,8 +280,13 @@ export class depthFirstSearch implements PathFinding {
 
       for (const outgoingEdge of currNode.outgoing) {
         const neighbor = nodeRecord[outgoingEdge.endNode.id];
-
-        if (!visited.includes(neighbor.id)) {
+        if (
+          wheelchair &&
+          neighbor.floor !== currNode.floor &&
+          neighbor.type === "STAI"
+        ) {
+          continue;
+        } else if (!visited.includes(neighbor.id)) {
           visited.push(neighbor.id);
           queue.push({ currNode: neighbor, path: [...path, neighbor] });
         }
@@ -292,11 +321,17 @@ export class Context {
     root: string,
     goal: string,
     db: PrismaClient,
+    wheelchair?: boolean,
     dij?: boolean,
   ): Promise<Node[]> {
     if (this.pathFindingAlg) {
       if (dij) {
+        if (wheelchair) {
+          return this.pathFindingAlg.run(root, goal, db, wheelchair, dij);
+        }
         return this.pathFindingAlg.run(root, goal, db, dij);
+      } else if (wheelchair) {
+        return this.pathFindingAlg.run(root, goal, db, wheelchair);
       } else {
         return this.pathFindingAlg.run(root, goal, db);
       }
