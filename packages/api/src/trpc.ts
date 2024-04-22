@@ -15,8 +15,6 @@ export const createTRPCContext = async (
     clientSecret: process.env.AUTH0_CLIENT_SECRET ?? "",
   });
 
-  console.log("Made it here");
-
   // dev-x61j30sgxmn7t3u3.us.auth0.com
   try {
     const authorization = opts.req.headers.authorization;
