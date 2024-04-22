@@ -34,6 +34,7 @@ export default function PathFind() {
   const [imgUrl, setImgUrl] = useState("/02_thesecondfloor.png");
   const [floor, setFloor] = useState("2");
   const [algorithm, setAlgorithm] = useState("A*");
+  const [wheelchair, setWheelchair] = useState(true);
   const { isAuthenticated } = useAuth0();
   const nodesQuery = trpc.node.getAll.useQuery();
 
@@ -44,7 +45,12 @@ export default function PathFind() {
   const pathQuery = trpc.node.findPath;
   const path = pathQuery.useQuery(
     startNode && goalNode
-      ? { startNodeId: startNode, endNodeId: goalNode, algorithm: algorithm }
+      ? {
+          startNodeId: startNode,
+          endNodeId: goalNode,
+          wheelchair: wheelchair,
+          algorithm: algorithm,
+        }
       : skipToken,
   );
   const pathData = path.data;
@@ -59,6 +65,10 @@ export default function PathFind() {
       setGoalNode(clickedNode);
       // }
     }
+  };
+
+  const handleWheelChair = () => {
+    setWheelchair(!wheelchair);
   };
 
   const handleFloorClick = useCallback(
@@ -145,6 +155,7 @@ export default function PathFind() {
               </PopoverTrigger>
               <PopoverContent className="w-80" sideOffset={32}>
                 <PathfindSettings
+                  onWheelchair={handleWheelChair}
                   onAlgorithmSelect={setAlgorithm}
                   algorithm={algorithm}
                   Rooms={nodesQuery.data}
@@ -160,7 +171,7 @@ export default function PathFind() {
         <FloorSelection onFloorClick={handleFloorClick} />
       </div>
       {pathData && pathData.length > 0 && (
-        <div className="absolute bottom-0 left-0 backdrop-blur-[4px] bg-white/40 rounded-[10px] shadown-inner drop-shadow-md">
+        <div className="absolute bottom-0 left-0 backdrop-blur-[4px] bg-white/80 rounded-[10px] shadown-inner drop-shadow-md">
           <TextNavigation nodes={pathData} />
         </div>
       )}
