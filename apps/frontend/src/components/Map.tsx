@@ -336,28 +336,7 @@ export default function Map({
     });
 
     setSelectedNodes(selectedNodes);
-    selectedNodes.forEach((selectedNodes) => {
-      console.log(selectedNodes);
-    });
   };
-
-  // const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-  //     console.log("got here");
-  //   if (e.key === "Escape") {
-  //     setSelectedNodes([]);
-  //   }
-  //   if (e.key === "Delete") {
-  //       if (selectedMultiNodes.length > 0) {
-  //           const nodeIds = selectedMultiNodes.map((node) => node.id);
-  //           deleteNodes.mutate({ ids: nodeIds }, {
-  //           onSuccess: () => {
-  //               utils.node.getAll.invalidate();
-  //           },
-  //           });
-  //       }
-  //   }
-  //
-  // };
 
   const handleEscape = () => {
     setSelectedNodes([]);
