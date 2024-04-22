@@ -1,19 +1,20 @@
-import { publicProcedure, protectedProcedure } from "../../trpc";
+import { protectedProcedure, publicProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
-import { baseService, av } from "common";
+import { ZCreateBaseServiceSchema, ZCreateGiftSchema } from "common";
 import { transformCreateServiceInput } from "../../../utils/serviceInputTransformer.ts";
 
-export const avRequestRouter = router({
+export const GiftRouter = router({
   createOne: protectedProcedure
     .input(
-      baseService
-        .extend({ data: av, type: z.literal("av").default("av") })
-        .transform(transformCreateServiceInput),
+      ZCreateBaseServiceSchema.extend({
+        data: ZCreateGiftSchema,
+        type: z.literal("gift").default("gift"),
+      }).transform(transformCreateServiceInput),
     )
     .mutation(async ({ input, ctx }) => {
       console.log(input);
-      return ctx.db.aV.create({
+      return ctx.db.gift.create({
         data: input,
       });
     }),
@@ -21,7 +22,7 @@ export const avRequestRouter = router({
   deleteOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {
-      await ctx.db.aV.delete({
+      await ctx.db.gift.delete({
         where: {
           id: input.id,
         },
@@ -30,7 +31,7 @@ export const avRequestRouter = router({
   deleteMany: protectedProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.aV.deleteMany({
+      return ctx.db.gift.deleteMany({
         where: {
           id: {
             in: input.ids,
@@ -40,23 +41,23 @@ export const avRequestRouter = router({
     }),
 
   deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
-    return ctx.db.aV.deleteMany();
+    return ctx.db.gift.deleteMany();
   }),
 
   updateOne: protectedProcedure
     .input(
       z.object({
         id: z.string(),
-        data: baseService.partial().extend({
-          data: av.partial(),
-          type: z.literal("av").default("av"),
+        data: ZCreateBaseServiceSchema.partial().extend({
+          data: ZCreateGiftSchema.partial(),
+          type: z.literal("gift").default("gift"),
         }),
       }),
     )
     .mutation(async ({ input, ctx }) => {
       const { data, ...rest } = input;
 
-      return ctx.db.aV.update({
+      return ctx.db.gift.update({
         where: {
           id: input.id,
         },
@@ -75,14 +76,14 @@ export const avRequestRouter = router({
     .input(
       z.object({
         ids: z.array(z.string()),
-        data: baseService.partial().extend({
-          data: av.partial(),
-          type: z.literal("av").default("av"),
+        data: ZCreateBaseServiceSchema.partial().extend({
+          data: ZCreateGiftSchema.partial(),
+          type: z.literal("gift").default("gift"),
         }),
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.aV.updateMany({
+      return ctx.db.gift.updateMany({
         where: {
           id: {
             in: input.ids,
@@ -93,7 +94,7 @@ export const avRequestRouter = router({
     }),
 
   getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.aV.findMany({
+    return ctx.db.gift.findMany({
       include: {
         service: true,
       },
@@ -103,7 +104,7 @@ export const avRequestRouter = router({
   getOne: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
-      return ctx.db.aV.findUnique({
+      return ctx.db.gift.findUnique({
         where: {
           id: input.id,
         },

@@ -16,12 +16,18 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { SidebarButton } from "@/components/SidebarButton.tsx";
+import { trpc } from "@/utils/trpc.ts";
 
 export default function DashboardLayout({ children }: React.PropsWithChildren) {
   const session = useAuth0();
+  const me = trpc.user.me.useQuery();
 
   if (!session.isAuthenticated) {
-    return children;
+    return (
+      <div className="w-full min-h-screen overflow-auto relative bg-muted/40">
+        {children}
+      </div>
+    );
   }
 
   return (
@@ -75,7 +81,9 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
           <div className="flex-1" />
           <p className="text-lg">
             Welcome,{" "}
-            <span className="font-semibold">{session.user?.email}</span>
+            <span className="font-semibold">
+              {me.data?.name ?? session.user?.email}
+            </span>
           </p>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

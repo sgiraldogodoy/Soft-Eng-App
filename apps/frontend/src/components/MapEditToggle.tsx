@@ -24,10 +24,10 @@ export function MapEditTab({ onEditSelect }: MapEditTabProps) {
   return (
     <TooltipProvider delayDuration={0}>
       <ToggleGroup
-        variant="default"
+        variant="darker"
         size={"lg"}
         type="single"
-        defaultValue="Hand"
+        defaultValue="Pan"
       >
         <Tooltip>
           <TooltipTrigger className="bg-white/80 rounded-lg">

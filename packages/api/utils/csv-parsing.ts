@@ -1,9 +1,9 @@
 import { Prisma } from "database";
-import { z } from "zod";
-import { node as nodeSchema } from "common";
+import { ZCreateStaffSchema, ZCreateNodeSchema as nodeSchema } from "common";
 
 type Node = Prisma.NodeCreateManyInput;
 type Edge = Prisma.EdgeCreateManyInput;
+type Staff = Prisma.StaffCreateManyInput;
 
 export async function parseCSVNode(csv: string) {
   const nodes: Node[] = [];
@@ -27,31 +27,24 @@ export async function parseCSVNode(csv: string) {
       longName,
       shortName,
     ] = line.split(",");
-    const type = typeString as z.infer<typeof nodeSchema.shape.type>;
-    const x = Number(xString);
-    const y = Number(yString);
-    if (
-      !id ||
-      !x ||
-      !y ||
-      !floor ||
-      !building ||
-      !type ||
-      !longName ||
-      !shortName
-    ) {
-      continue;
-    }
-    nodes.push({
+
+    const node = nodeSchema.safeParse({
       id,
-      x,
-      y,
+      x: Number(xString),
+      y: Number(yString),
       building,
       floor,
-      type,
+      type: typeString,
       longName,
       shortName,
     });
+
+    if (!node.success) {
+      console.error(node.error);
+      continue;
+    }
+
+    nodes.push(node.data);
   }
   return nodes;
 }
@@ -83,7 +76,52 @@ export async function parseCSVEdge(csv: string) {
     }
   }
 
-  console.log(edges);
-
   return edges;
+}
+
+export async function parseCSVStaff(csv: string) {
+  const staff: Staff[] = [];
+  // Parse staff CSV
+  const lines = csv.split(/\r?\n/);
+
+  let i = 0;
+  for await (const line of lines) {
+    if (i == 0) {
+      i++;
+      continue;
+    }
+
+    const fields = line.split(",");
+    if (fields.length < 3) {
+      console.error("Invalid number of fields in CSV line ", line);
+      continue;
+    }
+
+    const [id, name, jobTitle, userId] = fields;
+    // console.log(id, name, jobTitle, userId);
+
+    const data = ZCreateStaffSchema.safeParse({
+      id,
+      name,
+      jobTitle,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    });
+
+    if (!data.success) {
+      continue;
+    }
+
+    staff.push({
+      id,
+      name,
+      jobTitle,
+      userId: userId.trim() || undefined,
+    });
+  }
+
+  return staff;
 }

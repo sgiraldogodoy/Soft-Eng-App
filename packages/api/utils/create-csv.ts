@@ -29,3 +29,21 @@ export async function exportEdgesToDb(db: PrismaClient): Promise<string> {
 
   return output;
 }
+
+export async function exportStaffToDb(db: PrismaClient): Promise<string> {
+  const data = await db.staff.findMany();
+
+  let output = "";
+
+  // Write header columns. Opt not to use Object.values in case DB model order changes.
+  output += "employeeId,name,jobTitle,userId\n";
+
+  data.forEach((d) => {
+    if (d.userId == null) {
+      d.userId = "";
+    }
+    output += `${d.id},${d.name},${d.jobTitle},${d.userId}\n`;
+  });
+
+  return output;
+}
