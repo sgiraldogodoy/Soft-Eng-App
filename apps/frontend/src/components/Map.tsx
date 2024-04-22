@@ -296,18 +296,6 @@ export default function Map({
     }
   };
 
-  // const handleMouseUpSele = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-  //     if(selecting && typeEdit === "Sele") {
-  //         const containerRect = containerRef.current?.getBoundingClientRect();
-  //         if (!containerRect) return;
-  //         const offsetX = e.clientX - containerRect.left;
-  //         const offsetY = e.clientY - containerRect.top;
-  //         setEndPos({ x: offsetX, y: offsetY });
-  //         setSelecting(false);
-  //         handleSelection();
-  //     }
-  // };
-
   const handleSelection = () => {
     const selectedNodes = nodes.filter((node) => {
       const nodeX = scaleCoordinate(

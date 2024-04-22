@@ -9,7 +9,7 @@ export const ZCreateBaseUserSchema = z.object({
 });
 
 export const ZCreateStaffSchema = z.object({
-  userId: z.string().optional(),
+  user: nestSchema(ZCreateBaseUserSchema).optional(),
   name: z.string(),
   jobTitle: z.string(),
 });

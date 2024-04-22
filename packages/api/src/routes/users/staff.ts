@@ -1,9 +1,39 @@
 import { protectedProcedure, publicProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
+import { parseCSVStaff } from "../../../utils/csv-parsing.ts";
+import { exportStaffToDb } from "../../../utils/create-csv.ts";
 import { ZCreateStaffSchema } from "common";
 
 export const staffRouter = router({
+  csvUpload: protectedProcedure
+    .input(z.object({ buffer: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const file = await fetch(input.buffer);
+        const str = await file.text();
+        const staff = await parseCSVStaff(str);
+        await ctx.db.staff.deleteMany();
+        await ctx.db.staff.createMany({
+          data: staff,
+          skipDuplicates: true,
+        });
+        // console.log("staff created");
+        return { message: "Staff added" };
+      } catch (e) {
+        console.log(e);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Error adding staff",
+        });
+      }
+    }),
+  csvExport: protectedProcedure.query(async ({ ctx }) => {
+    const staffStr = await exportStaffToDb(ctx.db);
+    const b64str = Buffer.from(staffStr, "utf8").toString("base64");
+    return b64str;
+  }),
   createOne: protectedProcedure
     .input(ZCreateStaffSchema)
     .mutation(async ({ input, ctx }) => {

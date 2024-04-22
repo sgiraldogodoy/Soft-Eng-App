@@ -14,7 +14,7 @@ export const Edge = router({
         const file = await fetch(input.buffer);
         const str = await file.text();
         const edges = await parseCSVEdge(str);
-        console.log("creating edges");
+        // console.log("creating edges");
         await ctx.db.edge.deleteMany();
         await ctx.db.edge.createMany({
           data: edges,
