@@ -40,7 +40,7 @@ export default function AboutPage() {
               <img
                 src={"/Wong.jpg"}
                 alt="Wilson Wong"
-                className="w-[200px] h-[200px] mb-2 rounded-lg"
+                className="w-[300px] h-[300px] mb-2 rounded-lg"
               />
               <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Course Professor</p>
@@ -59,7 +59,7 @@ export default function AboutPage() {
               <img
                 src={"/Ian.jpg"}
                 alt="Ian Wright"
-                className="w-[200px] h-[200px] mb-2 rounded-lg"
+                className="w-[300px] h-[300px] mb-2 rounded-lg"
               />
               <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Team Coach</p>
@@ -69,11 +69,13 @@ export default function AboutPage() {
         </div>
       </div>
       <div className="flex flex-wrap justify-center gap-16 mb-6">
-        <div className="w-1/4">
+        <div className="w-[325px]">
           <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
-                Thomas Beattie (Ace)
+                <div className="h-8 flex-col justify-center items-center content-center text-center">
+                  <p>Thomas Beattie (Ace)</p>
+                </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
@@ -84,11 +86,13 @@ export default function AboutPage() {
             </CardContent>
           </Card>
         </div>
-        <div className="w-1/4">
+        <div className="w-[325px]">
           <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
-                Matthew Franco
+                <div className="h-8 flex-col justify-center items-center content-center text-center">
+                  <p>Matthew Franco</p>
+                </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
@@ -104,16 +108,18 @@ export default function AboutPage() {
             </CardContent>
           </Card>
         </div>
-        <div className="w-1/4">
+        <div className="w-[325px]">
           <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
-                Santiago Giraldo Godoy
+                <div className="h-8 flex-col justify-center items-center content-center text-center">
+                  <p>Santiago Giraldo Godoy</p>
+                </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
               <img
-                src={"/Santiago.jpg"}
+                src={"/Santiago.png"}
                 alt="Santiago"
                 className="mb-2 rounded-lg"
               />
@@ -124,11 +130,13 @@ export default function AboutPage() {
             </CardContent>
           </Card>
         </div>
-        <div className="w-1/4">
+        <div className="w-[325px]">
           <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
-                Parker Glispin
+                <div className="h-8 flex-col justify-center items-center content-center text-center">
+                  <p>Parker Glispin</p>
+                </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
@@ -144,11 +152,13 @@ export default function AboutPage() {
             </CardContent>
           </Card>
         </div>
-        <div className="w-1/4">
+        <div className="w-[325px]">
           <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
-                Michael Lin
+                <div className="h-8 flex-col justify-center items-center content-center text-center">
+                  <p>Michael Lin</p>
+                </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
@@ -163,11 +173,13 @@ export default function AboutPage() {
             </CardContent>
           </Card>
         </div>
-        <div className="w-1/4">
+        <div className="w-[325px]">
           <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
-                Kevin McCrudden
+                <div className="h-8 flex-col justify-center items-center content-center text-center">
+                  <p>Kevin McCrudden</p>
+                </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
@@ -179,11 +191,13 @@ export default function AboutPage() {
             </CardContent>
           </Card>
         </div>
-        <div className="w-1/4">
+        <div className="w-[325px]">
           <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
-                Keenan Porter
+                <div className="h-8 flex-col justify-center items-center content-center text-center">
+                  <p>Keenan Porter</p>
+                </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
@@ -199,11 +213,13 @@ export default function AboutPage() {
             </CardContent>
           </Card>
         </div>
-        <div className="w-1/4">
+        <div className="w-[325px]">
           <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
-                Daniel Reynolds
+                <div className="h-8 flex-col justify-center items-center content-center text-center">
+                  <p>Daniel Reynolds</p>
+                </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
@@ -218,11 +234,13 @@ export default function AboutPage() {
             </CardContent>
           </Card>
         </div>
-        <div className="w-1/4">
+        <div className="w-[325px]">
           <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
-                Cole Welcher
+                <div className="h-8 flex-col justify-center items-center content-center text-center">
+                  <p>Cole Welcher</p>
+                </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
@@ -234,11 +252,13 @@ export default function AboutPage() {
             </CardContent>
           </Card>
         </div>
-        <div className="w-1/4">
+        <div className="w-[325px]">
           <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
-                Justin Yip
+                <div className="h-8 flex-col justify-center items-center content-center text-center">
+                  <p>Justin Yip</p>
+                </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
