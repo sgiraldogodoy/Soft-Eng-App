@@ -398,6 +398,7 @@ export default function Map({
         editable={editable}
         filter={filter}
         typeEdit={typeEdit}
+        path={path}
         selectedNodes={selectedMultiNodes}
         setSelectedNodes={handleEscape}
       />

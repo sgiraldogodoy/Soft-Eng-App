@@ -28,6 +28,7 @@ interface NodesProps {
   typeEdit?: string;
   selectedNodes?: Node[];
   setSelectedNodes?: () => void;
+  path?: Node[];
 }
 
 export function Nodes({
@@ -46,6 +47,7 @@ export function Nodes({
   typeEdit,
   selectedNodes,
   setSelectedNodes,
+  path,
 }: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [hoveredNodeString, setHoveredNodeString] = useState<string | null>(
@@ -386,6 +388,11 @@ export function Nodes({
   let filteredNodes = nodes.filter((node) => node.floor === floor);
   if (!filter)
     filteredNodes = filteredNodes.filter((node) => node.type !== "HALL");
+  if (path && path.length > 0) {
+    filteredNodes = filteredNodes.filter(
+      (node) => !path.some((p) => p.id === node.id),
+    );
+  }
 
   return (
     <div>
