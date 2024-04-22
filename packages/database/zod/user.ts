@@ -9,7 +9,7 @@ import {
 
 export const UserModel = z.object({
   id: z.string(),
-  sub: z.string(),
+  sub: z.string().nullish(),
   email: z.string().nullish(),
   role: z.nativeEnum(Role).nullish(),
   name: z.string(),

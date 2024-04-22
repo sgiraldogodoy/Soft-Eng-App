@@ -9,11 +9,14 @@ import {
 } from "./index";
 
 export const StaffModel = z.object({
-  userId: z.string(),
+  id: z.string(),
+  name: z.string(),
+  jobTitle: z.string(),
+  userId: z.string().nullish(),
 });
 
 export interface CompleteStaff extends z.infer<typeof StaffModel> {
-  user: CompleteUser;
+  user?: CompleteUser | null;
   visitNotes: CompleteVisitNote[];
   patients: CompletePatient[];
 }
@@ -25,7 +28,7 @@ export interface CompleteStaff extends z.infer<typeof StaffModel> {
  */
 export const RelatedStaffModel: z.ZodSchema<CompleteStaff> = z.lazy(() =>
   StaffModel.extend({
-    user: RelatedUserModel,
+    user: RelatedUserModel.nullish(),
     visitNotes: RelatedVisitNoteModel.array(),
     patients: RelatedPatientModel.array(),
   }),

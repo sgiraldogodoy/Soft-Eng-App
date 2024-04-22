@@ -8,9 +8,13 @@ import { GiftRouter } from "./routes/Services/giftRouter.ts";
 import { serviceRouter } from "./routes/serviceRouter.ts";
 import { RoomRouter } from "./routes/Services/roomRouter.ts";
 import { userRouter } from "./routes/user.ts";
+import { patientRouter } from "./routes/patientRouter.ts";
+import { staffRouter } from "./routes/staff.ts";
 
 export const appRouter = router({
   user: userRouter,
+  patient: patientRouter,
+  staff: staffRouter,
   service: serviceRouter,
   security: SecurityRouter,
   av: avRequestRouter,

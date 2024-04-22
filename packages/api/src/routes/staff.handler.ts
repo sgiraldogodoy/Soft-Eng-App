@@ -2,16 +2,18 @@ import { protectedProcedure } from "../trpc.ts";
 import { router } from "../trpc.ts";
 import { z } from "zod";
 import { baseUser } from "common";
+import { userCreate } from "./user.schema.ts";
+import { staff } from "common";
 
-export const userRouter = router({
+export const staffRouter = router({
   getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.user.findMany();
+    return ctx.db.staff.findMany();
   }),
 
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
-      return ctx.db.user.findUnique({
+      return ctx.db.staff.findUnique({
         where: {
           id: input.id,
         },
@@ -19,9 +21,9 @@ export const userRouter = router({
     }),
 
   createOne: protectedProcedure
-    .input(z.object({ data: baseUser }))
+    .input(z.object({ data: staff }))
     .mutation(({ input, ctx }) => {
-      return ctx.db.user.create({
+      return ctx.db.staff.create({
         data: {
           ...input.data,
         },
@@ -32,12 +34,12 @@ export const userRouter = router({
     .input(
       z.object({
         id: z.string(),
-        data: baseUser.partial(),
+        data: userCreate.partial(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
       const { data } = input;
-      return ctx.db.user.update({
+      return ctx.db.staff.update({
         where: {
           id: input.id,
         },
@@ -55,7 +57,7 @@ export const userRouter = router({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.user.updateMany({
+      return ctx.db.staff.updateMany({
         where: {
           id: {
             in: input.ids,
@@ -65,41 +67,13 @@ export const userRouter = router({
       });
     }),
 
-  findAuth0ByEmail: protectedProcedure
-    .input(z.object({ email: z.string() }))
-    .query(async ({ input, ctx }) => {
-      const res = await ctx.auth0.usersByEmail.getByEmail({
-        email: input.email,
-      });
-
-      if (res.data.length > 0) {
-        return res.data[0].user_id;
-      } else {
-        return false;
-      }
-    }),
-
   deleteOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(({ input, ctx }) => {
-      return ctx.db.user.delete({
+      return ctx.db.staff.delete({
         where: {
           id: input.id,
         },
       });
     }),
-
-  me: protectedProcedure.query(async ({ ctx }) => {
-    const user = await ctx.db.user.findUnique({
-      where: {
-        sub: ctx.token.payload.sub as string,
-      },
-    });
-
-    if (user) {
-      return user;
-    } else {
-      return null;
-    }
-  }),
 });
