@@ -2,14 +2,13 @@ import { protectedProcedure, publicProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
 import { transformCreateServiceInput } from "../../../utils/serviceInputTransformer.ts";
-import { baseService, security } from "common";
+import { ZCreateBaseServiceSchema, ZCreateSecuritySchema } from "common";
 
 export const SecurityRouter = router({
   //Security Request Service
   createOne: protectedProcedure
     .input(
-      baseService
-        .extend({ data: security })
+      ZCreateBaseServiceSchema.extend({ data: ZCreateSecuritySchema })
         .extend({ type: z.literal("security").default("security") })
         .transform(transformCreateServiceInput),
     )
@@ -91,8 +90,8 @@ export const SecurityRouter = router({
     .input(
       z.object({
         id: z.string(),
-        data: baseService.partial().extend({
-          data: security.partial(),
+        data: ZCreateBaseServiceSchema.partial().extend({
+          data: ZCreateSecuritySchema.partial(),
           type: z.literal("security").default("security"),
         }),
       }),
@@ -118,8 +117,8 @@ export const SecurityRouter = router({
     .input(
       z.object({
         ids: z.array(z.string()),
-        data: baseService.partial().extend({
-          data: security.partial(),
+        data: ZCreateBaseServiceSchema.partial().extend({
+          data: ZCreateSecuritySchema.partial(),
           type: z.literal("security").default("security"),
         }),
       }),

@@ -2,14 +2,13 @@ import { protectedProcedure, publicProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
 import { transformCreateServiceInput } from "../../../utils/serviceInputTransformer.ts";
-import { baseService, room } from "common";
+import { ZCreateBaseServiceSchema, ZCreateRoomSchema } from "common";
 
 export const RoomRouter = router({
   //Room Request Service
   createOne: protectedProcedure
     .input(
-      baseService
-        .extend({ data: room })
+      ZCreateBaseServiceSchema.extend({ data: ZCreateRoomSchema })
         .extend({ type: z.literal("room").default("room") })
         .transform(transformCreateServiceInput),
     )
@@ -91,8 +90,8 @@ export const RoomRouter = router({
     .input(
       z.object({
         id: z.string(),
-        data: baseService.partial().extend({
-          data: room.partial(),
+        data: ZCreateBaseServiceSchema.partial().extend({
+          data: ZCreateRoomSchema.partial(),
           type: z.literal("room").default("room"),
         }),
       }),
@@ -118,8 +117,8 @@ export const RoomRouter = router({
     .input(
       z.object({
         ids: z.array(z.string()),
-        data: baseService.partial().extend({
-          data: room.partial(),
+        data: ZCreateBaseServiceSchema.partial().extend({
+          data: ZCreateRoomSchema.partial(),
           type: z.literal("room").default("room"),
         }),
       }),

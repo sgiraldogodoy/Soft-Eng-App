@@ -1,5 +1,5 @@
-import * as z from "zod"
-import { CompleteService, RelatedServiceModel } from "./index"
+import * as z from "zod";
+import { CompleteService, RelatedServiceModel } from "./index";
 
 export const GiftModel = z.object({
   id: z.string(),
@@ -8,10 +8,10 @@ export const GiftModel = z.object({
   recipientName: z.string(),
   wrapping: z.boolean(),
   message: z.string(),
-})
+});
 
 export interface CompleteGift extends z.infer<typeof GiftModel> {
-  service: CompleteService
+  service: CompleteService;
 }
 
 /**
@@ -19,6 +19,8 @@ export interface CompleteGift extends z.infer<typeof GiftModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedGiftModel: z.ZodSchema<CompleteGift> = z.lazy(() => GiftModel.extend({
-  service: RelatedServiceModel,
-}))
+export const RelatedGiftModel: z.ZodSchema<CompleteGift> = z.lazy(() =>
+  GiftModel.extend({
+    service: RelatedServiceModel,
+  }),
+);

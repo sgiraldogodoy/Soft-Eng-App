@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import WeatherIcon from "@/components/WeatherIcon.tsx";
+import { LoadingSpinner } from "@/components/ui/loader.tsx";
 
 export default function WeatherWidget() {
   const url = `https://api.openweathermap.org/data/2.5/weather?lat=42.358429&lon=-71.059769&units=imperial&appid=598fea3387a00ad83ff033ab1b1e733d`;
@@ -15,7 +16,11 @@ export default function WeatherWidget() {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (isError) {

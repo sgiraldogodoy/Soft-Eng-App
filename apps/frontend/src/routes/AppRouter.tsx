@@ -10,7 +10,9 @@ import { Settings } from "@/routes/Settings.tsx";
 // import Settings from "./Settings";
 
 export function AppRouter() {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, isLoading } = useAuth0();
+  const isDefinitelyNotAuthed = !isAuthenticated && !isLoading;
+
   return (
     <Route>
       <Switch>
@@ -21,21 +23,21 @@ export function AppRouter() {
           </Route>
           <Route path="/database">
             <InspectDatabase />
-            {!isAuthenticated && <Redirect to="/" />}
+            {isDefinitelyNotAuthed && <Redirect to="/" />}
           </Route>
           <Route path="/services">
-            {!isAuthenticated && <Redirect to="/" />}
+            {isDefinitelyNotAuthed && <Redirect to="/" />}
             <div className="w-full h-full flex items-center justify-center">
               <ServiceRequestPage />
             </div>
           </Route>
           <Route path="/mapediting">
-            {!isAuthenticated && <Redirect to="/" />}
+            {isDefinitelyNotAuthed && <Redirect to="/" />}
             <MapEdit />
           </Route>
           <Route path="/settings">
             <Settings />
-            {!isAuthenticated && <Redirect to="/" />}
+            {isDefinitelyNotAuthed && <Redirect to="/" />}
           </Route>
         </DashboardLayout>
       </Switch>

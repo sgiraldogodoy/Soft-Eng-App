@@ -3,6 +3,7 @@ import Map from "@/components/Map.tsx";
 import FloorSelection from "@/components/FloorSelection.tsx";
 import React, { useCallback, useState } from "react";
 import { MapEditTab } from "@/components/MapEditToggle.tsx";
+import { LoadingSpinner } from "@/components/ui/loader.tsx";
 
 export default function MapEdit() {
   const [imgUrl, setImgUrl] = useState("/02_thesecondfloor.png");
@@ -27,9 +28,9 @@ export default function MapEdit() {
   const nodesQuery = trpc.node.getAll.useQuery();
   const edgeQuery = trpc.edge.getAll.useQuery();
 
-  // const handleKeyDown = (e: React.KeyboardEvent) => {
-  //     console.log(e.key);
-  // };
+  if (nodesQuery.isLoading || edgeQuery.isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="relative h-full">

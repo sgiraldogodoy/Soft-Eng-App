@@ -1,8 +1,7 @@
-import { protectedProcedure } from "../trpc.ts";
-import { router } from "../trpc.ts";
+import { protectedProcedure } from "../../trpc.ts";
+import { router } from "../../trpc.ts";
 import { z } from "zod";
-import { baseUser } from "common";
-import { userCreate } from "./user.schema.ts";
+import { ZCreateBaseUserSchema } from "common";
 
 export const userRouter = router({
   getAll: protectedProcedure.query(({ ctx }) => {
@@ -20,11 +19,11 @@ export const userRouter = router({
     }),
 
   createOne: protectedProcedure
-    .input(z.object({ data: userCreate }))
+    .input(ZCreateBaseUserSchema)
     .mutation(({ input, ctx }) => {
       return ctx.db.user.create({
         data: {
-          ...input.data,
+          ...input,
         },
       });
     }),
@@ -33,7 +32,7 @@ export const userRouter = router({
     .input(
       z.object({
         id: z.string(),
-        data: userCreate.partial(),
+        data: ZCreateBaseUserSchema.partial(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -52,7 +51,7 @@ export const userRouter = router({
     .input(
       z.object({
         ids: z.array(z.string()),
-        data: baseUser.partial(),
+        data: ZCreateBaseUserSchema.partial(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -89,4 +88,18 @@ export const userRouter = router({
         },
       });
     }),
+
+  me: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.db.user.findUnique({
+      where: {
+        sub: ctx.token.payload.sub as string,
+      },
+    });
+
+    if (user) {
+      return user;
+    } else {
+      return null;
+    }
+  }),
 });
