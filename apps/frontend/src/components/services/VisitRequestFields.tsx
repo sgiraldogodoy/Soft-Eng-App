@@ -21,33 +21,37 @@ export const VisitRequestSchema = z.object({
 const VisitRequestFields = () => {
   return (
     <>
-      <div className="flex gap-2 items-center flex-1">
-        <FormField
-          name="data.visitorName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Visitor Name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription>Who is visiting?</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="data.patientName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Patient Name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription>Who is being visited?</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <div className="flex gap-2 items-center flex-1 w-full">
+        <div className="w-1/2">
+          <FormField
+            name="data.visitorName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Visitor Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormDescription>Who is visiting?</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="w-1/2">
+          <FormField
+            name="data.patientName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Patient Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormDescription>Who is being visited?</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
       </div>
       <div className="flex gap-2 items-center flex-1">
         <FormField

@@ -35,7 +35,7 @@ const ReligiousRequestFields = () => {
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select the relgion you are part of" />
+                    <SelectValue placeholder="Select the associated religion" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

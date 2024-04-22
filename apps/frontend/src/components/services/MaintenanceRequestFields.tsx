@@ -57,7 +57,7 @@ const MaintenanceRequestFields = () => {
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select the Equipment Type" />
+                    <SelectValue placeholder="Select the situation's severity" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

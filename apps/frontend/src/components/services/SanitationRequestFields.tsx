@@ -33,7 +33,7 @@ const SanitationRequestFields = () => {
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select the quality of the cleaning" />
+                    <SelectValue placeholder="Select the type of cleaning" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

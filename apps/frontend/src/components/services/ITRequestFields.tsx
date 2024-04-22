@@ -35,7 +35,7 @@ const ITRequestFields = () => {
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select the type of issue that's occuring" />
+                    <SelectValue placeholder="Select the issue type" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>

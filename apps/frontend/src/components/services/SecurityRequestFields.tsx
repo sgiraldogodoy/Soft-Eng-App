@@ -55,7 +55,7 @@ const SecurityRequest = () => {
                 <Input type="datetime-local" {...field} />
               </FormControl>
               <FormDescription>
-                What date does the request need to be made?
+                What date should it be expected?
               </FormDescription>
               <FormMessage />
             </FormItem>
