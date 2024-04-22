@@ -102,7 +102,7 @@ export default function HomePage() {
       <Link to="/pathfind" asChild>
         <div className="basis-2/3 shrink-0 h-full relative bg-[#001430] cursor-pointer">
           <LaserMap
-            spawnrate={0.1}
+            spawnrate={0.2}
             speed={100}
             sameSpeed={true}
             delay={0.4}
