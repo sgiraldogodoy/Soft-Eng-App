@@ -69,6 +69,7 @@ export const baseService = z.object({
     .default("UNASSIGNED"),
   type: z.enum(["av", "security", "room", "gift", "flower"]),
   note: z.string(),
+  assigneeId: z.string().nullish(),
 });
 
 export const service = z.discriminatedUnion("type", [
@@ -96,11 +97,12 @@ export const formService = z.discriminatedUnion("type", [
 ]);
 
 export const staff = z.object({
-  userId: z.string(),
+  userId: z.string().optional(),
+  name: z.string(),
+  jobTitle: z.string(),
 });
 
 export const baseUser = z.object({
-  id: z.string(),
   sub: z.string(),
   email: z.string().nullish(),
   name: z.string(),

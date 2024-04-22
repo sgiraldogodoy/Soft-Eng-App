@@ -1,13 +1,13 @@
-import { protectedProcedure, publicProcedure } from "../trpc";
-import { router } from "../trpc";
+import { protectedProcedure, publicProcedure } from "../trpc.ts";
+import { router } from "../trpc.ts";
 import { z } from "zod";
-import { baseUser, patient } from "common";
+import { baseUser, staff } from "common";
 
-export const patientRouter = router({
+export const staffRouter = router({
   createOne: protectedProcedure
     .input(
       z.object({
-        data: patient.omit({ userId: true }),
+        data: staff,
         user: z.union([z.object({ id: z.string() }), baseUser]).optional(),
       }),
     )
@@ -18,51 +18,36 @@ export const patientRouter = router({
         userId = (await ctx.db.user.create({ data: input.user })).id;
       else if (input.user) userId = input.user.id;
 
-      await ctx.db.patient.create({
+      await ctx.db.staff.create({
         data: {
           ...input.data,
-          nodeId: undefined,
-          pcpId: undefined,
+          userId: undefined,
           user: {
             connect: {
               id: userId,
             },
           },
-          location: input.data.nodeId
-            ? {
-                connect: {
-                  id: input.data.nodeId,
-                },
-              }
-            : undefined,
-          pcp: input.data.pcpId
-            ? {
-                connect: {
-                  id: input.data.pcpId,
-                },
-              }
-            : undefined,
         },
       });
     }),
 
   createMany: protectedProcedure
-    .input(z.object({ data: z.array(patient) }))
+    .input(z.object({ data: z.array(staff) }))
     .mutation(async ({ input, ctx }) => {
-      ctx.db.patient.createMany({
+      ctx.db.staff.createMany({
         data: input.data,
         skipDuplicates: true,
       });
     }),
 
   getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.patient.findMany();
+    return ctx.db.staff.findMany();
   }),
 
   getOne: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
-      return ctx.db.patient.findUnique({
+      return ctx.db.staff.findUnique({
         where: {
           id: input.id,
         },
@@ -72,7 +57,7 @@ export const patientRouter = router({
   deleteOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.patient.delete({
+      return ctx.db.staff.delete({
         where: {
           id: input.id,
         },
@@ -82,7 +67,7 @@ export const patientRouter = router({
   deleteMany: protectedProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.patient.deleteMany({
+      return ctx.db.staff.deleteMany({
         where: {
           id: {
             in: input.ids,
@@ -92,13 +77,13 @@ export const patientRouter = router({
     }),
 
   deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
-    return ctx.db.patient.deleteMany();
+    return ctx.db.staff.deleteMany();
   }),
 
   updateOne: protectedProcedure
-    .input(z.object({ id: z.string(), data: patient.partial() }))
+    .input(z.object({ id: z.string(), data: staff.partial() }))
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.patient.update({
+      return ctx.db.staff.update({
         where: {
           id: input.id,
         },
@@ -107,9 +92,9 @@ export const patientRouter = router({
     }),
 
   updateMany: protectedProcedure
-    .input(z.object({ ids: z.array(z.string()), data: patient.partial() }))
+    .input(z.object({ ids: z.array(z.string()), data: staff.partial() }))
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.patient.updateMany({
+      return ctx.db.staff.updateMany({
         where: {
           id: {
             in: input.ids,
@@ -120,33 +105,16 @@ export const patientRouter = router({
     }),
 
   connectToUser: protectedProcedure
-    .input(z.object({ patientId: z.string(), userId: z.string() }))
+    .input(z.object({ staffId: z.string(), userId: z.string() }))
     .mutation(({ input, ctx }) => {
-      return ctx.db.patient.update({
+      return ctx.db.staff.update({
         where: {
-          id: input.patientId,
+          id: input.staffId,
         },
         data: {
           user: {
             connect: {
               id: input.userId,
-            },
-          },
-        },
-      });
-    }),
-
-  connectToStaffPcP: protectedProcedure
-    .input(z.object({ patientId: z.string(), staffId: z.string() }))
-    .mutation(({ input, ctx }) => {
-      return ctx.db.patient.update({
-        where: {
-          id: input.patientId,
-        },
-        data: {
-          pcp: {
-            connect: {
-              id: input.staffId,
             },
           },
         },
