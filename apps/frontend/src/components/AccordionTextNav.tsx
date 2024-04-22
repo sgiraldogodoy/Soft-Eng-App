@@ -12,12 +12,14 @@ import {
 } from "lucide-react";
 
 interface AccordionTextNavProps {
-  directions: string[];
+  directions: [string, string][];
 }
 
 const pickIcon = (direction: string) => {
   if (direction.includes("Right")) {
     return <CornerUpRight className="h-8 w-8" />;
+  } else if (direction.includes("You")) {
+    return <MapPin className="h-8 w-8" color="red" />;
   } else if (direction.includes("Left")) {
     return <CornerUpLeft className="h-8 w-8" />;
   } else if (direction.includes("Walk")) {
@@ -29,9 +31,7 @@ const pickIcon = (direction: string) => {
   } else if (direction.includes("till")) {
     return <RotateCcw className="h-8 w-8" />;
   } else if (direction.includes("Start")) {
-    return <Star className="h-8 w-8" color="gold" fill="gold" />;
-  } else if (direction.includes("You")) {
-    return <MapPin className="h-8 w-8" color="red" />;
+    return <Star className="h-8 w-8" color="#003A96" fill="#003A96" />;
   } else if (direction.includes("Error")) {
     return <Ban className="h-8 w-8" />;
   } else return <SeparatorHorizontal className="h-8 w-8" />;
@@ -51,8 +51,8 @@ export function AccordionTextNav({ directions }: AccordionTextNavProps) {
         }
         return (
           <div key={index} className="flex items-center space-x-2">
-            {pickIcon(direction)}
-            <p className="text-lg">{direction}</p>
+            {pickIcon(direction[0])}
+            <p className="text-lg">{direction[0]}</p>
           </div>
         );
       })}
