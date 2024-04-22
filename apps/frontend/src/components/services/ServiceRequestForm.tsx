@@ -35,6 +35,12 @@ import AVRequestFields from "./AVRequestFields";
 import FlowerRequestFields from "./FlowerRequestFields";
 import SecurityRequestFields from "@/components/services/SecurityRequestFields.tsx";
 import GiftRequestFields from "./GiftRequestFields";
+import MaintenanceRequestFields from "./MaintenanceRequestFields";
+import TransportRequestFields from "./TransportRequestFields";
+import SanitationRequestFields from "./SanitationRequestFields";
+import VisitRequestFields from "./VisitRequestFields";
+import ITRequestFields from "./ITRequestFields";
+import ReligiousRequestFields from "./ReligiousRequestFields";
 import InterpreterRequestFields from "./InterpreterRequestFields";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
@@ -93,6 +99,30 @@ const FORMTYPE_RECORD: Record<
     longName: "Request Gift",
     formFields: GiftRequestFields,
   },
+  maintenance: {
+    longName: "Request Maintenance",
+    formFields: MaintenanceRequestFields,
+  },
+  transport: {
+    longName: "Request Transport",
+    formFields: TransportRequestFields,
+  },
+  sanitation: {
+    longName: "Request Sanitation",
+    formFields: SanitationRequestFields,
+  },
+  visit: {
+    longName: "Request Visit",
+    formFields: VisitRequestFields,
+  },
+  it: {
+    longName: "Request IT",
+    formFields: ITRequestFields,
+  },
+  religious: {
+    longName: "Request Religious",
+    formFields: ReligiousRequestFields,
+  },
   interpreter: {
     longName: "Request Interpreter",
     formFields: InterpreterRequestFields,
@@ -127,6 +157,13 @@ export default function InputForm({ variant }: Props) {
   const createGiftRequest = trpc.gift.createOne.useMutation();
   const createAVRequest = trpc.av.createOne.useMutation();
   const createRoomRequest = trpc.room.createOne.useMutation();
+  const createMaintenanceRequest = trpc.maintenance.createOne.useMutation();
+  const createTransportRequest = trpc.transport.createOne.useMutation();
+  const createSanitationRequest = trpc.sanitation.createOne.useMutation();
+  const createVisitRequest = trpc.visit.createOne.useMutation();
+  const createITRequest = trpc.it.createOne.useMutation();
+  const createReligiousRequest = trpc.religious.createOne.useMutation();
+  const createInterpreterRequest = trpc.interpreter.createOne.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
@@ -232,6 +269,146 @@ export default function InputForm({ variant }: Props) {
           {
             success: "Successfully saved to the database.",
             loading: "Saving room request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "maintenance":
+        toast.promise(
+          createMaintenanceRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving maintenance request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "transport":
+        toast.promise(
+          createTransportRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving transport request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "sanitation":
+        toast.promise(
+          createSanitationRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving sanitation request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "visit":
+        toast.promise(
+          createVisitRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving visit request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "it":
+        toast.promise(
+          createITRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving it request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "religious":
+        toast.promise(
+          createReligiousRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving religious request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "interpreter":
+        toast.promise(
+          createInterpreterRequest.mutateAsync(
+            {
+              login: session.user?.email ?? "",
+              ...data,
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving interpreter request to the database.",
             error: "Error saving to database.",
           },
         );

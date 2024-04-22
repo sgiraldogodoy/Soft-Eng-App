@@ -51,6 +51,12 @@ model Service {
   room        Room?        @relation(name: "RoomToService")
   security    Security?    @relation(name: "SecurityToService")
   av          AV?          @relation(name: "AVToService")
+  maintenance Maintenance? @relation(name: "MaintenanceToService")
+  transport   Transport?   @relation(name: "TransportToService")
+  sanitation  Sanitation?  @relation(name: "SanitationToService")
+  visit       Visit?       @relation(name: "VisitToService")
+  it          IT?          @relation(name: "ITToService")
+  religious   Religious?   @relation(name: "ReligiousToService")
   interpreter Interpreter? @relation(name: "InterpreterToService")
 }
 
@@ -60,6 +66,12 @@ enum ServiceType {
   room
   security
   av
+  maintenance
+  transport
+  sanitation
+  visit
+  it
+  religious
   interpreter
 }
 
@@ -97,6 +109,68 @@ model Security {
   threat    String
 }
 
+model AV {
+  id        String   @id @default(uuid())
+  serviceId String   @unique
+  service   Service  @relation(name: "AVToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  dateTime  DateTime
+  type      String
+}
+
+model Maintenance {
+  id        String    @id @default(uuid())
+  serviceId String    @unique
+  service   Service   @relation(name: "MaintenanceToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  type      String
+  severity  String
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+}
+
+model Transport {
+  id        String  @id @default(uuid())
+  serviceId String  @unique
+  service   Service @relation(name: "TransportToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  type      String
+  count     String
+}
+
+model Sanitation {
+  id        String    @id @default(uuid())
+  serviceId String    @unique
+  service   Service   @relation(name: "SanitationToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  type      String
+  quality   String
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+}
+
+model Visit {
+  id          String    @id @default(uuid())
+  serviceId   String    @unique
+  service     Service   @relation(name: "VisitToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  visitorName String
+  patientName String
+  startDate   DateTime  @default(now())
+  endDate     DateTime?
+}
+
+model IT {
+  id         String  @id @default(uuid())
+  serviceId  String  @unique
+  service    Service @relation(name: "ITToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  type       String
+  errorCodes String?
+}
+
+model Religious {
+  id        String   @id @default(uuid())
+  serviceId String   @unique
+  service   Service  @relation(name: "ReligiousToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  religion  String
+  dateTime  DateTime
+}
+
 model Interpreter {
   id            String   @id @default(uuid())
   serviceId     String   @unique
@@ -104,14 +178,6 @@ model Interpreter {
   recipientName String
   type          String
   dateTime      DateTime
-}
-
-model AV {
-  id        String   @id @default(uuid())
-  serviceId String   @unique
-  service   Service  @relation(name: "AVToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  dateTime  DateTime
-  type      String
 }
 
 model Patient {
