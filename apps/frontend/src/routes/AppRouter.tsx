@@ -6,6 +6,7 @@ import { InspectDatabase } from "@/routes/InspectDatabase.tsx";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import FloorTabs from "./MapEdit";
 import ServiceRequestPage from "./ServiceRequestPage";
+import AboutPage from "./AboutPage";
 
 export function AppRouter() {
   const { isAuthenticated } = useAuth0();
@@ -13,6 +14,7 @@ export function AppRouter() {
     <Route>
       <Switch>
         <Route path="/" component={HomePage} />
+        <Route path="/about" component={AboutPage} />
         <DashboardLayout>
           <Route path="/pathfind">
             <PathFind />

@@ -64,8 +64,8 @@ export default function AboutPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img src={"/Ace.jpg"} alt="Ace" className="" />
-              <div className="h-0.5">
+              <img src={"/Ace.jpg"} alt="Ace" className="mb-2" />
+              <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Lead Software Engineer</p>
               </div>
             </CardContent>
@@ -79,8 +79,8 @@ export default function AboutPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img src={"/Matt.jpg"} alt="Matthew" className="" />
-              <div className="h-0.5">
+              <img src={"/Matt.jpg"} alt="Matthew" className="mb-2" />
+              <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Assistant Lead Software Engineer</p>
                 <p>Front-End and Feature Engineer</p>
               </div>
@@ -95,9 +95,11 @@ export default function AboutPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img src={"/Santiago.jpg"} alt="Santiago" className="" />
-              <p>Algorithms and Feature Engineer</p>
-              <p>Back-End Database Engineer</p>
+              <img src={"/Santiago.jpg"} alt="Santiago" className="mb-2" />
+              <div className="h-8 flex-col justify-center items-center content-center text-center">
+                <p>Algorithms and Feature Engineer</p>
+                <p>Back-End Database Engineer</p>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -109,9 +111,11 @@ export default function AboutPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img src={"/Parker.jpg"} alt="Parker" className="" />
-              <p>Product Owner</p>
-              <p>Algorithms and Feature Engineer</p>
+              <img src={"/Parker.jpg"} alt="Parker" className="mb-2" />
+              <div className="h-8 flex-col justify-center items-center content-center text-center">
+                <p>Product Owner</p>
+                <p>Algorithms and Feature Engineer</p>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -123,8 +127,10 @@ export default function AboutPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img src={"/Michael.jpg"} alt="Michael" className="" />
-              <p>Back-End Database Engineer</p>
+              <img src={"/Michael.jpg"} alt="Michael" className="mb-2" />
+              <div className="h-8 flex-col justify-center items-center content-center text-center">
+                <p>Back-End Database Engineer</p>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -136,9 +142,11 @@ export default function AboutPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img src={"/Kevin.jpg"} alt="Kevin" className="" />
-              <p>Project Manager</p>
-              <p>Scrum Master</p>
+              <img src={"/Kevin.jpg"} alt="Kevin" className="mb-2" />
+              <div className="h-8 flex-col justify-center items-center content-center text-center">
+                <p>Project Manager</p>
+                <p>Scrum Master</p>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -150,9 +158,11 @@ export default function AboutPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img src={"/Keenan.jpg"} alt="Keenan" className="" />
-              <p>Front-End and Feature Engineer</p>
-              <p>Documentation Analyst</p>
+              <img src={"/Keenan.jpg"} alt="Keenan" className="mb-2" />
+              <div className="h-8 flex-col justify-center items-center content-center text-center">
+                <p>Front-End and Feature Engineer</p>
+                <p>Documentation Analyst</p>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -164,8 +174,10 @@ export default function AboutPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img src={"/Daniel.jpg"} alt="Daniel" className="" />
-              <p>Front-End and Feature Engineer</p>
+              <img src={"/Daniel.jpg"} alt="Daniel" className="mb-2" />
+              <div className="h-8 flex-col justify-center items-center content-center text-center">
+                <p>Front-End and Feature Engineer</p>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -177,9 +189,11 @@ export default function AboutPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img src={"/Cole.jpg"} alt="Pookie" className="" />
-              <p>Assistant Lead Software Engineer</p>
-              <p>Algorithms and Feature Engineer</p>
+              <img src={"/Cole.jpg"} alt="Pookie" className="mb-2" />
+              <div className="h-8 flex-col justify-center items-center content-center text-center">
+                <p>Assistant Lead Software Engineer</p>
+                <p>Algorithms and Feature Engineer</p>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -191,8 +205,10 @@ export default function AboutPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img src={"/Justin.jpg"} alt="Justin" className="" />
-              <p>Front-End and Feature Engineer</p>
+              <img src={"/Justin.jpg"} alt="Justin" className="mb-2" />
+              <div className="h-8 flex-col justify-center items-center content-center text-center">
+                <p>Front-End and Feature Engineer</p>
+              </div>
             </CardContent>
           </Card>
         </div>
