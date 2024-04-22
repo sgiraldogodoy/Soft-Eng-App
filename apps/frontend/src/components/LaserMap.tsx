@@ -247,7 +247,7 @@ export default function LaserMap({
         overflow: "hidden",
         userSelect: "none",
       }}
-      className="absolute object-cover h-full grayscale opacity-35"
+      className="absolute object-cover h-full"
     >
       <img
         ref={image}
@@ -256,7 +256,7 @@ export default function LaserMap({
         style={{
           transform: `scale(${scale}) translate(${offset.x}px, ${offset.y}px)`,
         }}
-        className="h-full"
+        className="h-full grayscale opacity-35"
         onLoad={handleResize}
       />
       {lasers.map((laser) => (

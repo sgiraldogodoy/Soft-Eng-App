@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { Prisma } from "database";
 type NodeCreateInput = Prisma.NodeCreateInput;
-import { node as nodeSchema } from "common";
+import { ZCreateNodeSchema as nodeSchema } from "common";
 import { z } from "zod";
 
 interface newNodeDialogProps {

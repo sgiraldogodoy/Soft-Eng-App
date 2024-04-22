@@ -1,5 +1,9 @@
 import * as z from "zod";
 import {
+  CompleteAppointment,
+  RelatedAppointmentModel,
+  CompleteVisit,
+  RelatedVisitModel,
   CompleteUser,
   RelatedUserModel,
   CompleteVisitNote,
@@ -16,6 +20,8 @@ export const StaffModel = z.object({
 });
 
 export interface CompleteStaff extends z.infer<typeof StaffModel> {
+  appointment: CompleteAppointment[];
+  visit: CompleteVisit[];
   user?: CompleteUser | null;
   visitNotes: CompleteVisitNote[];
   patients: CompletePatient[];
@@ -28,6 +34,8 @@ export interface CompleteStaff extends z.infer<typeof StaffModel> {
  */
 export const RelatedStaffModel: z.ZodSchema<CompleteStaff> = z.lazy(() =>
   StaffModel.extend({
+    appointment: RelatedAppointmentModel.array(),
+    visit: RelatedVisitModel.array(),
     user: RelatedUserModel.nullish(),
     visitNotes: RelatedVisitNoteModel.array(),
     patients: RelatedPatientModel.array(),

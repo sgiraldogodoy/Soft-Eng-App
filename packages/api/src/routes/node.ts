@@ -9,8 +9,9 @@ import {
   breadthFirstSearch,
   depthFirstSearch,
 } from "../../utils/PathFinding.ts";
-import { node } from "common";
+import { ZCreateNodeSchema } from "common";
 import { TRPCError } from "@trpc/server";
+import { manySchema } from "common/src/zod-utils.ts";
 
 const myPathFinding: Context = new Context();
 myPathFinding.setPathFindingAlg = new aStar();
@@ -74,7 +75,10 @@ export const Node = router({
     }),
   createOne: protectedProcedure
     .input(
-      z.object({ data: node.omit({ id: true }), id: z.string().optional() }),
+      z.object({
+        data: ZCreateNodeSchema.omit({ id: true }),
+        id: z.string().optional(),
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       let nodeId = "";
@@ -140,7 +144,7 @@ export const Node = router({
     }),
 
   createMany: protectedProcedure
-    .input(z.object({ data: z.array(node) }))
+    .input(manySchema(ZCreateNodeSchema))
     .mutation(async ({ input, ctx }) => {
       ctx.db.node.createMany({
         data: input.data,
@@ -183,7 +187,7 @@ export const Node = router({
     return ctx.db.node.deleteMany();
   }),
   updateOne: protectedProcedure
-    .input(z.object({ id: z.string(), data: node.partial() }))
+    .input(z.object({ id: z.string(), data: ZCreateNodeSchema.partial() }))
     .mutation(async ({ input, ctx }) => {
       return ctx.db.node.update({
         where: {
@@ -194,7 +198,9 @@ export const Node = router({
     }),
 
   updateMany: protectedProcedure
-    .input(z.object({ ids: z.array(z.string()), data: node.partial() }))
+    .input(
+      z.object({ ids: z.array(z.string()), data: ZCreateNodeSchema.partial() }),
+    )
     .mutation(async ({ input, ctx }) => {
       return ctx.db.node.updateMany({
         where: {

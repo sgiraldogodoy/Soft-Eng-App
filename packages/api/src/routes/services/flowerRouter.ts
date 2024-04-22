@@ -1,19 +1,20 @@
 import { protectedProcedure, publicProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
-import { baseService, gift } from "common";
+import { ZCreateBaseServiceSchema, ZCreateFlowerSchema } from "common";
 import { transformCreateServiceInput } from "../../../utils/serviceInputTransformer.ts";
 
-export const GiftRouter = router({
+export const FlowerRouter = router({
   createOne: protectedProcedure
     .input(
-      baseService
-        .extend({ data: gift, type: z.literal("gift").default("gift") })
-        .transform(transformCreateServiceInput),
+      ZCreateBaseServiceSchema.extend({
+        data: ZCreateFlowerSchema,
+        type: z.literal("flower").default("flower"),
+      }).transform(transformCreateServiceInput),
     )
     .mutation(async ({ input, ctx }) => {
       console.log(input);
-      return ctx.db.gift.create({
+      return ctx.db.flower.create({
         data: input,
       });
     }),
@@ -21,16 +22,19 @@ export const GiftRouter = router({
   deleteOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {
-      await ctx.db.gift.delete({
+      console.log(input);
+      return ctx.db.flower.delete({
         where: {
           id: input.id,
         },
       });
     }),
+
   deleteMany: protectedProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.gift.deleteMany({
+      console.log(input);
+      return ctx.db.flower.deleteMany({
         where: {
           id: {
             in: input.ids,
@@ -40,23 +44,45 @@ export const GiftRouter = router({
     }),
 
   deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
-    return ctx.db.gift.deleteMany();
+    console.log("Deleted all flower request!");
+    return ctx.db.flower.deleteMany();
+  }),
+
+  getOne: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input, ctx }) => {
+      return ctx.db.flower.findUnique({
+        where: {
+          id: input.id,
+        },
+        include: {
+          service: true,
+        },
+      });
+    }),
+
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    return ctx.db.flower.findMany({
+      include: {
+        service: true,
+      },
+    });
   }),
 
   updateOne: protectedProcedure
     .input(
       z.object({
         id: z.string(),
-        data: baseService.partial().extend({
-          data: gift.partial(),
-          type: z.literal("gift").default("gift"),
+        data: ZCreateBaseServiceSchema.partial().extend({
+          data: ZCreateFlowerSchema.partial(),
+          type: z.literal("flower").default("flower"),
         }),
       }),
     )
     .mutation(async ({ input, ctx }) => {
       const { data, ...rest } = input;
 
-      return ctx.db.gift.update({
+      return ctx.db.flower.update({
         where: {
           id: input.id,
         },
@@ -75,41 +101,20 @@ export const GiftRouter = router({
     .input(
       z.object({
         ids: z.array(z.string()),
-        data: baseService.partial().extend({
-          data: gift.partial(),
-          type: z.literal("gift").default("gift"),
+        data: ZCreateBaseServiceSchema.partial().extend({
+          data: ZCreateFlowerSchema.partial(),
+          type: z.literal("flower").default("flower"),
         }),
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.gift.updateMany({
+      return ctx.db.flower.updateMany({
         where: {
           id: {
             in: input.ids,
           },
         },
         data: input.data,
-      });
-    }),
-
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.gift.findMany({
-      include: {
-        service: true,
-      },
-    });
-  }),
-
-  getOne: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ input, ctx }) => {
-      return ctx.db.gift.findUnique({
-        where: {
-          id: input.id,
-        },
-        include: {
-          service: true,
-        },
       });
     }),
 });

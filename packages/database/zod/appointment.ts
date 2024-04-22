@@ -4,6 +4,8 @@ import {
   RelatedNodeModel,
   CompletePatient,
   RelatedPatientModel,
+  CompleteStaff,
+  RelatedStaffModel,
   CompleteVisit,
   RelatedVisitModel,
 } from "./index";
@@ -15,6 +17,7 @@ export const AppointmentModel = z.object({
   checkedIn: z.boolean(),
   nodeId: z.string().nullish(),
   patientId: z.string(),
+  staffId: z.string(),
   visitId: z.string().nullish(),
   notes: z.string(),
 });
@@ -22,6 +25,7 @@ export const AppointmentModel = z.object({
 export interface CompleteAppointment extends z.infer<typeof AppointmentModel> {
   location?: CompleteNode | null;
   patient: CompletePatient;
+  staff: CompleteStaff;
   visit?: CompleteVisit | null;
 }
 
@@ -35,6 +39,7 @@ export const RelatedAppointmentModel: z.ZodSchema<CompleteAppointment> = z.lazy(
     AppointmentModel.extend({
       location: RelatedNodeModel.nullish(),
       patient: RelatedPatientModel,
+      staff: RelatedStaffModel,
       visit: RelatedVisitModel.nullish(),
     }),
 );

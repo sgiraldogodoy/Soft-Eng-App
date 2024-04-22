@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { motion } from "framer-motion";
-import { type baseService } from "common";
+import { type ZCreateBaseServiceSchema } from "common";
 import { z } from "zod";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
 
@@ -155,7 +155,7 @@ export default function RequestSummary() {
                         id: selectedRow.id,
                         data: {
                           status: newVal as z.infer<
-                            typeof baseService
+                            typeof ZCreateBaseServiceSchema
                           >["status"],
                         },
                       },

@@ -3,7 +3,7 @@ import { router } from "../trpc";
 import { z } from "zod";
 import { parseCSVEdge } from "../../utils/csv-parsing.ts";
 import { exportEdgesToDb } from "../../utils/create-csv.ts";
-import { edge } from "common";
+import { ZCreateEdgeSchema } from "common";
 import { TRPCError } from "@trpc/server";
 
 export const Edge = router({
@@ -30,6 +30,7 @@ export const Edge = router({
         });
       }
     }),
+
   csvExport: protectedProcedure.query(async ({ ctx }) => {
     // get all nodes
     const edgeStr = await exportEdgesToDb(ctx.db);
@@ -37,8 +38,9 @@ export const Edge = router({
 
     return b64str;
   }),
+
   createOne: protectedProcedure
-    .input(z.object({ data: edge }))
+    .input(z.object({ data: ZCreateEdgeSchema }))
     .mutation(async ({ input, ctx }) => {
       const data = [];
       data.push(
@@ -76,7 +78,7 @@ export const Edge = router({
       return data;
     }),
   createMany: protectedProcedure
-    .input(z.object({ data: z.array(edge) }))
+    .input(z.object({ data: z.array(ZCreateEdgeSchema) }))
     .mutation(async ({ input, ctx }) => {
       ctx.db.edge.createMany({
         data: input.data,
@@ -151,7 +153,7 @@ export const Edge = router({
       z.object({
         startNodeId: z.string(),
         endNodeId: z.string(),
-        data: edge.partial(),
+        data: ZCreateEdgeSchema.partial(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -170,7 +172,7 @@ export const Edge = router({
       z.object({
         startNodeIds: z.array(z.string()),
         endNodeIds: z.array(z.string()),
-        data: edge.partial(),
+        data: ZCreateEdgeSchema.partial(),
       }),
     )
     .mutation(async ({ input, ctx }) => {

@@ -1,15 +1,15 @@
-import { avRequestRouter } from "./routes/Services/avRouter.ts";
+import { avRequestRouter } from "./routes/services/avRouter.ts";
 import { router } from "./trpc";
 import { Node } from "./routes/node.ts";
 import { Edge } from "./routes/edge.ts";
-import { SecurityRouter } from "./routes/Services/securityRouter.ts";
-import { FlowerRouter } from "./routes/Services/flowerRouter.ts";
-import { GiftRouter } from "./routes/Services/giftRouter.ts";
+import { SecurityRouter } from "./routes/services/securityRouter.ts";
+import { FlowerRouter } from "./routes/services/flowerRouter.ts";
+import { GiftRouter } from "./routes/services/giftRouter.ts";
 import { serviceRouter } from "./routes/serviceRouter.ts";
-import { RoomRouter } from "./routes/Services/roomRouter.ts";
-import { userRouter } from "./routes/user.ts";
-import { patientRouter } from "./routes/patientRouter.ts";
-import { staffRouter } from "./routes/staff.ts";
+import { RoomRouter } from "./routes/services/roomRouter.ts";
+import { userRouter } from "./routes/users/user.ts";
+import { patientRouter } from "./routes/users/patientRouter.ts";
+import { staffRouter } from "./routes/users/staff.ts";
 
 export const appRouter = router({
   user: userRouter,

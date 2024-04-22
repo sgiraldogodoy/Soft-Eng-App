@@ -56,10 +56,8 @@ export function CreateUserDialog({ open, setOpen }: CreateUserDialogProps) {
 
       const creation = createUserMutation.mutateAsync(
         {
-          data: {
-            ...data,
-            sub: user,
-          },
+          ...data,
+          sub: user,
         },
         {
           onSuccess: () => {

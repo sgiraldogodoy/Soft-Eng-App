@@ -1,5 +1,5 @@
 import { Prisma } from "database";
-import { node as nodeSchema } from "common";
+import { ZCreateStaffSchema, ZCreateNodeSchema as nodeSchema } from "common";
 
 type Node = Prisma.NodeCreateManyInput;
 type Edge = Prisma.EdgeCreateManyInput;
@@ -99,16 +99,28 @@ export async function parseCSVStaff(csv: string) {
 
     const [id, name, jobTitle, userId] = fields;
     // console.log(id, name, jobTitle, userId);
-    try {
-      staff.push({
-        id,
-        name,
-        jobTitle,
-        userId: userId.trim() || undefined,
-      });
-    } catch (e) {
-      console.error(e);
+
+    const data = ZCreateStaffSchema.safeParse({
+      id,
+      name,
+      jobTitle,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    });
+
+    if (!data.success) {
+      continue;
     }
+
+    staff.push({
+      id,
+      name,
+      jobTitle,
+      userId: userId.trim() || undefined,
+    });
   }
 
   return staff;

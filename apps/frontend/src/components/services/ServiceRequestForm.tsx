@@ -48,10 +48,38 @@ import { PopoverContent } from "../ui/popover";
 import { CheckIcon } from "lucide-react";
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { formService } from "common";
+import {
+  ZCreateAvSchema,
+  ZCreateBaseServiceSchema,
+  ZCreateFlowerSchema,
+  ZCreateGiftSchema,
+  ZCreateRoomSchema,
+  ZCreateSecuritySchema,
+} from "common";
 
 // Add your type-specific form schema to this array.
-const FormSchema = formService;
+const FormSchema = z.discriminatedUnion("type", [
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateAvSchema,
+    type: z.literal("av"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateSecuritySchema,
+    type: z.literal("security"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateRoomSchema,
+    type: z.literal("room"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateGiftSchema,
+    type: z.literal("gift"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateFlowerSchema,
+    type: z.literal("flower"),
+  }).omit({ login: true }),
+]);
 
 type FormSchemaType = z.infer<typeof FormSchema>;
 

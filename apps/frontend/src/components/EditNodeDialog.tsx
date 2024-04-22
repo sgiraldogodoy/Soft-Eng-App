@@ -21,7 +21,7 @@ import { Label } from "@/components/ui/label";
 import type { Node, Prisma } from "database";
 type NodeCreateInput = Prisma.NodeCreateInput;
 import { z } from "zod";
-import { node as nodeSchema } from "common";
+import { ZCreateNodeSchema as nodeSchema } from "common";
 
 interface editNodeDialogProps {
   node: Node;

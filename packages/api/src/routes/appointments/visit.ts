@@ -1,19 +1,17 @@
-import { protectedProcedure } from "../trpc.ts";
-import { router } from "../trpc.ts";
+import { protectedProcedure } from "../../trpc.ts";
+import { router } from "../../trpc.ts";
 import { z } from "zod";
-import { baseUser } from "common";
-import { userCreate } from "./user.schema.ts";
-import { staff } from "common";
+import { ZCreateVisitSchema } from "common";
 
-export const staffRouter = router({
+export const visitRouter = router({
   getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.staff.findMany();
+    return ctx.db.visit.findMany();
   }),
 
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
-      return ctx.db.staff.findUnique({
+      return ctx.db.visit.findUnique({
         where: {
           id: input.id,
         },
@@ -21,12 +19,10 @@ export const staffRouter = router({
     }),
 
   createOne: protectedProcedure
-    .input(z.object({ data: staff }))
-    .mutation(({ input, ctx }) => {
-      return ctx.db.staff.create({
-        data: {
-          ...input.data,
-        },
+    .input(ZCreateVisitSchema)
+    .mutation(async ({ input, ctx }) => {
+      return ctx.db.visit.create({
+        data: input,
       });
     }),
 
@@ -34,12 +30,12 @@ export const staffRouter = router({
     .input(
       z.object({
         id: z.string(),
-        data: userCreate.partial(),
+        data: ZCreateVisitSchema.partial(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
       const { data } = input;
-      return ctx.db.staff.update({
+      return ctx.db.visit.update({
         where: {
           id: input.id,
         },
@@ -53,11 +49,11 @@ export const staffRouter = router({
     .input(
       z.object({
         ids: z.array(z.string()),
-        data: baseUser.partial(),
+        data: ZCreateVisitSchema.partial(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.staff.updateMany({
+      return ctx.db.visit.updateMany({
         where: {
           id: {
             in: input.ids,
@@ -70,7 +66,7 @@ export const staffRouter = router({
   deleteOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(({ input, ctx }) => {
-      return ctx.db.staff.delete({
+      return ctx.db.visit.delete({
         where: {
           id: input.id,
         },
