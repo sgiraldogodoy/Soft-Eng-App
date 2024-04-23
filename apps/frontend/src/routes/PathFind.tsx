@@ -175,18 +175,68 @@ export default function PathFind() {
           <TextNavigation nodes={pathData} />
         </div>
       )}
-      <div className="absolute bottom-2 left-2 bg-white h-fit w-fit rounded-[5px]">
-        <h1 className="font-bold text-nowrap">Map Key:</h1>
-        <ul>
-          <li>
-            <img src="@\public\mapkeyicons\restroom.png"></img>Restrooms
-          </li>
-          <li>Elevator</li>
-          <li>Emergency</li>
-          <li>ATM</li>
-          <li>Gift Shop</li>
-          <li>Pharmacy</li>
-        </ul>
+      <div className="absolute bottom-2 left-2 bg-white h-fit w-fit rounded-[5px] grid grid-cols-2 m-2">
+        <h1 className="font-bold text-nowrap col-span-2 pt-2 ps-2">Map Key:</h1>
+        <img
+          src="./mapkeyicons/restroom.png"
+          alt="restroom"
+          className="object-scale-down h-7 w-7 ps-2"
+        />
+        <p className="pe-2">Restrooms</p>
+        <img
+          src="./mapkeyicons/elevator.png"
+          alt="elevator"
+          className="object-scale-down h-7 w-7 ps-2"
+        />
+        <p className="">Elevator</p>
+        <img
+          src="./mapkeyicons/ATM.png"
+          alt="ATM"
+          className="object-scale-down h-7 w-7 ps-2"
+        />
+        <p className="">ATM</p>
+        <img
+          src="./mapkeyicons/cafe.png"
+          alt="cafe"
+          className="object-scale-down h-7 w-7 ps-2"
+        />
+        <p className="">Cafe</p>
+        <img
+          src="./mapkeyicons/emergency.png"
+          alt="emergency"
+          className="object-scale-down h-7 w-7 ps-2"
+        />
+        <p className="">Emergency</p>
+        <img
+          src="./mapkeyicons/giftshop.png"
+          alt="giftshop"
+          className="object-scale-down h-7 w-7 ps-2"
+        />
+        <p className="">Gift Shop</p>
+        <img
+          src="./mapkeyicons/information.png"
+          alt="information"
+          className="object-scale-down h-7 w-7 ps-2"
+        />
+        <p className="">Information</p>
+        <img
+          src="./mapkeyicons/parking.png"
+          alt="parking"
+          className="object-scale-down h-7 w-7 ps-2"
+        />
+        <p className="">Parking</p>
+        <img
+          src="./mapkeyicons/pharmacy.png"
+          alt="pharmacy"
+          className="object-scale-down h-7 w-7 ps-2"
+        />
+        <p className="">Pharmacy</p>
+        <img
+          src="./mapkeyicons/valet.png"
+          alt="valet"
+          className="object-scale-down h-7 w-7 ps-2"
+        />
+        <p className="">Valet</p>
       </div>
     </div>
   );
