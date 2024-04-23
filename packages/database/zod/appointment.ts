@@ -1,14 +1,5 @@
-import * as z from "zod";
-import {
-  CompleteNode,
-  RelatedNodeModel,
-  CompletePatient,
-  RelatedPatientModel,
-  CompleteStaff,
-  RelatedStaffModel,
-  CompleteVisit,
-  RelatedVisitModel,
-} from "./index";
+import * as z from "zod"
+import { CompleteNode, RelatedNodeModel, CompletePatient, RelatedPatientModel, CompleteStaff, RelatedStaffModel, CompleteVisit, RelatedVisitModel } from "./index"
 
 export const AppointmentModel = z.object({
   id: z.string(),
@@ -17,16 +8,16 @@ export const AppointmentModel = z.object({
   checkedIn: z.boolean(),
   nodeId: z.string().nullish(),
   patientId: z.string(),
-  staffId: z.string(),
+  staffId: z.string().nullish(),
   visitId: z.string().nullish(),
   notes: z.string(),
-});
+})
 
 export interface CompleteAppointment extends z.infer<typeof AppointmentModel> {
-  location?: CompleteNode | null;
-  patient: CompletePatient;
-  staff: CompleteStaff;
-  visit?: CompleteVisit | null;
+  location?: CompleteNode | null
+  patient: CompletePatient
+  staff?: CompleteStaff | null
+  visit?: CompleteVisit | null
 }
 
 /**
@@ -34,12 +25,9 @@ export interface CompleteAppointment extends z.infer<typeof AppointmentModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedAppointmentModel: z.ZodSchema<CompleteAppointment> = z.lazy(
-  () =>
-    AppointmentModel.extend({
-      location: RelatedNodeModel.nullish(),
-      patient: RelatedPatientModel,
-      staff: RelatedStaffModel,
-      visit: RelatedVisitModel.nullish(),
-    }),
-);
+export const RelatedAppointmentModel: z.ZodSchema<CompleteAppointment> = z.lazy(() => AppointmentModel.extend({
+  location: RelatedNodeModel.nullish(),
+  patient: RelatedPatientModel,
+  staff: RelatedStaffModel.nullish(),
+  visit: RelatedVisitModel.nullish(),
+}))

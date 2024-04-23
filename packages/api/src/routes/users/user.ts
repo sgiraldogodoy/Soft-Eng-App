@@ -1,7 +1,8 @@
 import { protectedProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
-import { ZCreateBaseUserSchema } from "common";
+import { ZCreateBaseUserSchema, ZCreateUserWithAuth0 } from "common";
+import { TRPCError } from "@trpc/server";
 
 export const userRouter = router({
   getAll: protectedProcedure.query(({ ctx }) => {
@@ -19,11 +20,36 @@ export const userRouter = router({
     }),
 
   createOne: protectedProcedure
-    .input(ZCreateBaseUserSchema)
-    .mutation(({ input, ctx }) => {
+    .input(ZCreateUserWithAuth0)
+    .mutation(async ({ input, ctx }) => {
+      const { auth, ...rest } = input;
+      let user;
+
+      if (typeof auth === "string") {
+        user = auth;
+      } else {
+        // Hopefully create a user in auth0 :)
+        const userRes = await ctx.auth0.users
+          .create({
+            email: rest.email,
+            password: auth.password,
+            connection: "Username-Password-Authentication",
+          })
+          .catch((e) => {
+            console.error(e);
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: "Error occured creating an auth0 user.",
+            });
+          });
+
+        user = userRes.data.user_id;
+      }
+
       return ctx.db.user.create({
         data: {
-          ...input,
+          ...rest,
+          sub: user,
         },
       });
     }),
@@ -73,7 +99,7 @@ export const userRouter = router({
       });
 
       if (res.data.length > 0) {
-        return res.data[0].user_id;
+        return res.data[0];
       } else {
         return false;
       }
