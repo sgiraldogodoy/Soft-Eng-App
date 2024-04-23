@@ -1,12 +1,12 @@
 import { Node } from "database";
-import { AccordionTextNav } from "@/components/AccordionTextNav.tsx";
+import { AccordionTextNav } from "@/components/AccordionTextNav";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import TextToSpeech from "@/components/services/TextToSpeech.tsx";
+import TextToSpeech from "@/components/services/TextToSpeech";
 
 const pixToFeet = 47 / 148;
 
