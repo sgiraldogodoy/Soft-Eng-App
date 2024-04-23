@@ -4,6 +4,9 @@ import {
   CardTitle,
   CardContent,
 } from "@/components/ui/card.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { Link } from "wouter";
+import { ArrowLeft } from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -332,6 +335,18 @@ export default function AboutPage() {
           The Brigham & Women’s Hospital maps and data used in this application
           are copyrighted and provided for the sole use of educational purposes.
         </footer>
+      </div>
+      <div className="absolute top-0 right-0 mt-4 mr-4 border-2 rounded-lg border-black">
+        <Button
+          asChild
+          size="icon"
+          className="backdrop-blur-[4px] bg-white/90 shadow-inner drop-shadow-md"
+          variant="ghost"
+        >
+          <Link to="/">
+            <ArrowLeft color="#000000" />
+          </Link>
+        </Button>
       </div>
     </div>
   );
