@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import TextToSpeech from "@/components/services/TextToSpeech.tsx";
 
 const pixToFeet = 47 / 148;
 
@@ -227,6 +228,8 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
     return dirFloor;
   }
 
+  // creating direction string for use with TTS
+  const directionsString = directions.map(([dir]) => dir).join(", ");
   const dirFloor = dirFilter(directions);
   //console.log(directions);
 
@@ -243,6 +246,12 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
               value={"Floor " + dir[0][1] + "-" + index}
               key={index}
             >
+              <AccordionTrigger className=" pl-2">
+                Audio Directions
+              </AccordionTrigger>
+              <AccordionContent>
+                <TextToSpeech text={directionsString} />
+              </AccordionContent>
               <AccordionTrigger className=" pl-2">
                 Directions For Floor {dir[0][1]}
               </AccordionTrigger>
