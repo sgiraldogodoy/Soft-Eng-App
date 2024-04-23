@@ -51,16 +51,19 @@ const TextToSpeech = ({ text }: { text: string }) => {
   };
 
   return (
-    <div className="flex flex-row justify-items justify-center py-2 space-x-3">
-      <button onClick={handlePlay}>
-        <Play />
-      </button>
-      <button onClick={handlePause}>
-        <Pause />
-      </button>
-      <button onClick={handleStop}>
-        <StopCircle />
-      </button>
+    <div className="text-center py-4">
+      <h1 className="text-lg"> Audio Directions</h1>
+      <div className="flex flex-row justify-items justify-center py-2 space-x-3">
+        <button onClick={handlePlay}>
+          <Play />
+        </button>
+        <button onClick={handlePause}>
+          <Pause />
+        </button>
+        <button onClick={handleStop}>
+          <StopCircle />
+        </button>
+      </div>
     </div>
   );
 };

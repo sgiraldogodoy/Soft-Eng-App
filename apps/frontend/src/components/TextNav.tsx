@@ -247,15 +247,10 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
               key={index}
             >
               <AccordionTrigger className=" pl-2">
-                Audio Directions
-              </AccordionTrigger>
-              <AccordionContent>
-                <TextToSpeech text={directionsString} />
-              </AccordionContent>
-              <AccordionTrigger className=" pl-2">
                 Directions For Floor {dir[0][1]}
               </AccordionTrigger>
               <AccordionContent className="max-h-[55vh] overflow-y-auto pl-2">
+                <TextToSpeech text={directionsString} />
                 <AccordionTextNav directions={dir} />
               </AccordionContent>
             </AccordionItem>
