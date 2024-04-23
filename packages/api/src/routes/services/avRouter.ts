@@ -2,16 +2,10 @@ import { publicProcedure, protectedProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
 import { ZCreateBaseServiceSchema, ZCreateAvSchema } from "common";
-import { transformCreateServiceInput } from "../../../utils/serviceInputTransformer.ts";
-
+import { updateSchema } from "common/src/zod-utils.ts";
 export const avRequestRouter = router({
   createOne: protectedProcedure
-    .input(
-      ZCreateBaseServiceSchema.extend({
-        data: ZCreateAvSchema,
-        type: z.literal("av").default("av"),
-      }).transform(transformCreateServiceInput),
-    )
+    .input(ZCreateAvSchema)
     .mutation(async ({ input, ctx }) => {
       console.log(input);
       return ctx.db.aV.create({
@@ -45,30 +39,13 @@ export const avRequestRouter = router({
   }),
 
   updateOne: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        data: ZCreateBaseServiceSchema.partial().extend({
-          data: ZCreateAvSchema.partial(),
-          type: z.literal("av").default("av"),
-        }),
-      }),
-    )
+    .input(updateSchema(ZCreateAvSchema))
     .mutation(async ({ input, ctx }) => {
-      const { data, ...rest } = input;
-
       return ctx.db.aV.update({
         where: {
           id: input.id,
         },
-        data: {
-          ...data,
-          service: {
-            update: {
-              ...rest,
-            },
-          },
-        },
+        data: input.data,
       });
     }),
 

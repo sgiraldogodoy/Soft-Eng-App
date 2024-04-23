@@ -1,17 +1,13 @@
 import { protectedProcedure, publicProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
-import { transformCreateServiceInput } from "../../../utils/serviceInputTransformer.ts";
 import { ZCreateBaseServiceSchema, ZCreateSecuritySchema } from "common";
+import { updateSchema } from "common/src/zod-utils.ts";
 
 export const SecurityRouter = router({
   //Security Request Service
   createOne: protectedProcedure
-    .input(
-      ZCreateBaseServiceSchema.extend({ data: ZCreateSecuritySchema })
-        .extend({ type: z.literal("security").default("security") })
-        .transform(transformCreateServiceInput),
-    )
+    .input(ZCreateSecuritySchema)
     .mutation(async ({ input, ctx }) => {
       console.log(input);
       return await ctx.db.security.create({
@@ -87,29 +83,13 @@ export const SecurityRouter = router({
     }),
 
   updateOne: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        data: ZCreateBaseServiceSchema.partial().extend({
-          data: ZCreateSecuritySchema.partial(),
-          type: z.literal("security").default("security"),
-        }),
-      }),
-    )
+    .input(updateSchema(ZCreateSecuritySchema))
     .mutation(async ({ input, ctx }) => {
-      const { data, ...rest } = input;
       return ctx.db.security.update({
         where: {
           id: input.id,
         },
-        data: {
-          ...data,
-          service: {
-            update: {
-              ...rest,
-            },
-          },
-        },
+        data: input.data,
       });
     }),
 

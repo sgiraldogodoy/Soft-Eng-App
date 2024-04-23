@@ -2,8 +2,9 @@ import { protectedProcedure, publicProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
 import { ZCreatePatientSchema } from "common";
+import { manySchema, updateSchema } from "common/src/zod-utils.ts";
 
-export const patientRouter = router({
+export const patient = router({
   createOne: protectedProcedure
     .input(ZCreatePatientSchema)
     .mutation(async ({ input, ctx }) => {
@@ -15,7 +16,7 @@ export const patientRouter = router({
     }),
 
   createMany: protectedProcedure
-    .input(z.object({ data: z.array(ZCreatePatientSchema) }))
+    .input(manySchema(ZCreatePatientSchema))
     .mutation(async ({ input, ctx }) => {
       ctx.db.patient.createMany({
         data: input.data,
@@ -64,7 +65,7 @@ export const patientRouter = router({
   }),
 
   updateOne: protectedProcedure
-    .input(z.object({ id: z.string(), data: ZCreatePatientSchema.partial() }))
+    .input(updateSchema(ZCreatePatientSchema))
     .mutation(async ({ input, ctx }) => {
       return ctx.db.patient.update({
         where: {

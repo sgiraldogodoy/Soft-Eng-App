@@ -1,7 +1,8 @@
-import { ZCreateBaseServiceSchema } from "common";
+import { ZCreateBaseServiceSchema, ZCreateServiceSchema } from "common";
 import { publicProcedure, protectedProcedure } from "../trpc";
 import { router } from "../trpc";
 import { z } from "zod";
+import { updateSchema } from "common/src/zod-utils.ts";
 
 export const serviceRouter = router({
   deleteOne: protectedProcedure
@@ -42,6 +43,13 @@ export const serviceRouter = router({
           flower: true,
           security: true,
           room: true,
+          maintenance: true,
+          transport: true,
+          sanitation: true,
+          visitor: true,
+          it: true,
+          religious: true,
+          interpreter: true,
         },
       });
     }),
@@ -54,20 +62,32 @@ export const serviceRouter = router({
         flower: true,
         security: true,
         room: true,
+        maintenance: true,
+        transport: true,
+        sanitation: true,
+        visitor: true,
+        it: true,
+        religious: true,
+        interpreter: true,
       },
     });
   }),
 
   updateOne: protectedProcedure
-    .input(
-      z.object({ id: z.string(), data: ZCreateBaseServiceSchema.partial() }),
-    )
+    .input(updateSchema(ZCreateBaseServiceSchema))
     .mutation(async ({ input, ctx }) => {
-      return await ctx.db.service.update({
+      return ctx.db.service.update({
         where: {
           id: input.id,
         },
         data: input.data,
+      });
+    }),
+  createOne: protectedProcedure
+    .input(ZCreateServiceSchema)
+    .mutation(async ({ input, ctx }) => {
+      return ctx.db.service.create({
+        data: input,
       });
     }),
 });

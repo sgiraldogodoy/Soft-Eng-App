@@ -13,6 +13,20 @@ import {
   RelatedSecurityModel,
   CompleteAV,
   RelatedAVModel,
+  CompleteMaintenance,
+  RelatedMaintenanceModel,
+  CompleteTransport,
+  RelatedTransportModel,
+  CompleteSanitation,
+  RelatedSanitationModel,
+  CompleteVisitor,
+  RelatedVisitorModel,
+  CompleteIT,
+  RelatedITModel,
+  CompleteReligious,
+  RelatedReligiousModel,
+  CompleteInterpreter,
+  RelatedInterpreterModel,
 } from "./index";
 
 export const ServiceModel = z.object({
@@ -33,6 +47,13 @@ export interface CompleteService extends z.infer<typeof ServiceModel> {
   room?: CompleteRoom | null;
   security?: CompleteSecurity | null;
   av?: CompleteAV | null;
+  maintenance?: CompleteMaintenance | null;
+  transport?: CompleteTransport | null;
+  sanitation?: CompleteSanitation | null;
+  visitor?: CompleteVisitor | null;
+  it?: CompleteIT | null;
+  religious?: CompleteReligious | null;
+  interpreter?: CompleteInterpreter | null;
 }
 
 /**
@@ -48,5 +69,12 @@ export const RelatedServiceModel: z.ZodSchema<CompleteService> = z.lazy(() =>
     room: RelatedRoomModel.nullish(),
     security: RelatedSecurityModel.nullish(),
     av: RelatedAVModel.nullish(),
+    maintenance: RelatedMaintenanceModel.nullish(),
+    transport: RelatedTransportModel.nullish(),
+    sanitation: RelatedSanitationModel.nullish(),
+    visitor: RelatedVisitorModel.nullish(),
+    it: RelatedITModel.nullish(),
+    religious: RelatedReligiousModel.nullish(),
+    interpreter: RelatedInterpreterModel.nullish(),
   }),
 );

@@ -1,15 +1,15 @@
-import { protectedProcedure, publicProcedure } from "../../trpc";
+import { publicProcedure, protectedProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
-import { ZCreateBaseServiceSchema, ZCreateFlowerSchema } from "common";
+import { ZCreateBaseServiceSchema, ZCreateMaintenanceSchema } from "common";
 import { updateSchema } from "common/src/zod-utils.ts";
 
-export const FlowerRouter = router({
+export const maintenanceRequestRouter = router({
   createOne: protectedProcedure
-    .input(ZCreateFlowerSchema)
+    .input(ZCreateMaintenanceSchema)
     .mutation(async ({ input, ctx }) => {
       console.log(input);
-      return ctx.db.flower.create({
+      return ctx.db.maintenance.create({
         data: input,
       });
     }),
@@ -17,19 +17,16 @@ export const FlowerRouter = router({
   deleteOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {
-      console.log(input);
-      return ctx.db.flower.delete({
+      await ctx.db.maintenance.delete({
         where: {
           id: input.id,
         },
       });
     }),
-
   deleteMany: protectedProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input, ctx }) => {
-      console.log(input);
-      return ctx.db.flower.deleteMany({
+      return ctx.db.maintenance.deleteMany({
         where: {
           id: {
             in: input.ids,
@@ -39,35 +36,13 @@ export const FlowerRouter = router({
     }),
 
   deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
-    console.log("Deleted all flower request!");
-    return ctx.db.flower.deleteMany();
-  }),
-
-  getOne: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ input, ctx }) => {
-      return ctx.db.flower.findUnique({
-        where: {
-          id: input.id,
-        },
-        include: {
-          service: true,
-        },
-      });
-    }),
-
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.flower.findMany({
-      include: {
-        service: true,
-      },
-    });
+    return ctx.db.maintenance.deleteMany();
   }),
 
   updateOne: protectedProcedure
-    .input(updateSchema(ZCreateFlowerSchema))
+    .input(updateSchema(ZCreateMaintenanceSchema))
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.flower.update({
+      return ctx.db.maintenance.update({
         where: {
           id: input.id,
         },
@@ -80,19 +55,40 @@ export const FlowerRouter = router({
       z.object({
         ids: z.array(z.string()),
         data: ZCreateBaseServiceSchema.partial().extend({
-          data: ZCreateFlowerSchema.partial(),
-          type: z.literal("flower").default("flower"),
+          data: ZCreateMaintenanceSchema.partial(),
+          type: z.literal("maintenance").default("maintenance"),
         }),
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.flower.updateMany({
+      return ctx.db.maintenance.updateMany({
         where: {
           id: {
             in: input.ids,
           },
         },
         data: input.data,
+      });
+    }),
+
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    return ctx.db.maintenance.findMany({
+      include: {
+        service: true,
+      },
+    });
+  }),
+
+  getOne: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input, ctx }) => {
+      return ctx.db.maintenance.findUnique({
+        where: {
+          id: input.id,
+        },
+        include: {
+          service: true,
+        },
       });
     }),
 });

@@ -1,3 +1,4 @@
+/*
 import { ZCreateServiceSchema } from "common";
 import { Prisma } from "database";
 import { z } from "zod";
@@ -27,3 +28,4 @@ export const transformCreateServiceInput = <
     ...data,
   };
 };
+*/

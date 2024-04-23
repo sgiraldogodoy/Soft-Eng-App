@@ -68,10 +68,8 @@ export function Nodes({
     if (!hoveredNode) return;
     createEdge.mutate(
       {
-        data: {
-          startNodeId: firstNode,
-          endNodeId: hoveredNode,
-        },
+        startNodeId: firstNode,
+        endNodeId: hoveredNode,
       },
       {
         onSuccess: () => {
