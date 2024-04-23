@@ -104,8 +104,9 @@ export const Node = router({
           });
 
           //count number of nodes with the same type
-          const numOccurences = 3 - occurences.length.toString().length;
-          number = "0".repeat(numOccurences) + occurences.length.toString();
+          const numOccurences = occurences.length + 1;
+          const numPrefix = 3 - numOccurences.toString().length;
+          number = "0".repeat(numPrefix) + numOccurences.toString();
         }
         const prefixFloor = input.data.floor.length === 1 ? "0" : "";
         const floor = prefixFloor + input.data.floor;

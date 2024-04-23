@@ -74,55 +74,51 @@ import {
 // Add your type-specific form schema to this array.
 const FormSchema = z.discriminatedUnion("type", [
   ZCreateBaseServiceSchema.extend({
-    data: ZCreateAvSchema,
+    data: ZCreateAvSchema.omit({ service: true }),
     type: z.literal("av"),
   }).omit({ login: true }),
   ZCreateBaseServiceSchema.extend({
-    data: ZCreateSecuritySchema,
+    data: ZCreateSecuritySchema.omit({ service: true }),
     type: z.literal("security"),
   }).omit({ login: true }),
   ZCreateBaseServiceSchema.extend({
-    data: ZCreateRoomSchema,
+    data: ZCreateRoomSchema.omit({ service: true }),
     type: z.literal("room"),
   }).omit({ login: true }),
   ZCreateBaseServiceSchema.extend({
-    data: ZCreateGiftSchema,
+    data: ZCreateGiftSchema.omit({ service: true }),
     type: z.literal("gift"),
   }).omit({ login: true }),
   ZCreateBaseServiceSchema.extend({
-    data: ZCreateFlowerSchema,
+    data: ZCreateFlowerSchema.omit({ service: true }),
     type: z.literal("flower"),
   }).omit({ login: true }),
   ZCreateBaseServiceSchema.extend({
-    data: ZCreateItSchema,
+    data: ZCreateItSchema.omit({ service: true }),
     type: z.literal("it"),
   }).omit({ login: true }),
   ZCreateBaseServiceSchema.extend({
-    data: ZCreateInterpreterSchema,
+    data: ZCreateInterpreterSchema.omit({ service: true }),
     type: z.literal("interpreter"),
   }).omit({ login: true }),
   ZCreateBaseServiceSchema.extend({
-    data: ZCreateMaintenanceSchema,
+    data: ZCreateMaintenanceSchema.omit({ service: true }),
     type: z.literal("maintenance"),
   }).omit({ login: true }),
   ZCreateBaseServiceSchema.extend({
-    data: ZCreateReligiousSchema,
+    data: ZCreateReligiousSchema.omit({ service: true }),
     type: z.literal("religious"),
   }).omit({ login: true }),
   ZCreateBaseServiceSchema.extend({
-    data: ZCreateRoomSchema,
-    type: z.literal("room"),
-  }).omit({ login: true }),
-  ZCreateBaseServiceSchema.extend({
-    data: ZCreateSanitationSchema,
+    data: ZCreateSanitationSchema.omit({ service: true }),
     type: z.literal("sanitation"),
   }).omit({ login: true }),
   ZCreateBaseServiceSchema.extend({
-    data: ZCreateTransportSchema,
+    data: ZCreateTransportSchema.omit({ service: true }),
     type: z.literal("transport"),
   }).omit({ login: true }),
   ZCreateBaseServiceSchema.extend({
-    data: ZCreateVisitorSchema,
+    data: ZCreateVisitorSchema.omit({ service: true }),
     type: z.literal("visitor"),
   }).omit({ login: true }),
 ]);
@@ -149,7 +145,10 @@ const FORMTYPE_RECORD: Record<
     formFields: FormComponent<unknown>;
   }
 > = {
-  room: { longName: "Request a Room", formFields: RoomRequestFields },
+  room: {
+    longName: "Request a Room",
+    formFields: RoomRequestFields,
+  },
   av: {
     longName: "Request AV Equipment",
     formFields: AVRequestFields,
@@ -238,7 +237,6 @@ export default function InputForm({ variant }: Props) {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     data.nodeId = nodesQuery.find((n) => data.nodeId === n.longName)?.id ?? "";
-
     switch (data.type) {
       case "flower":
         toast.promise(

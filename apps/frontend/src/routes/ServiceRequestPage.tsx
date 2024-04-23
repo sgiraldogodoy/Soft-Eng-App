@@ -45,8 +45,8 @@ export default function ServiceRequestPage() {
               <TabsTrigger className="flex-1" value="it">
                 IT Request
               </TabsTrigger>
-              <TabsTrigger className="flex-1" value="visit">
-                Visit Request
+              <TabsTrigger className="flex-1" value="visitor">
+                Visitor Request
               </TabsTrigger>
               <TabsTrigger className="flex-1" value="maintenance">
                 Maintenance Request
