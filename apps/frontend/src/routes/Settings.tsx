@@ -39,30 +39,10 @@ export function Settings() {
         <div className="w-full h-full flex flex-col justify-center items-center p-6 gap-2">
           <div className="w-full flex">
             <TabsList className="animate-in fade-in zoom-in-105 duration-300">
-              <TabsTrigger
-                className="animate-in fade-in zoom-in-105 duration-500 delay-100 fill-mode-both"
-                value="all"
-              >
-                All
-              </TabsTrigger>
-              <TabsTrigger
-                className="animate-in fade-in zoom-in-105 duration-500 delay-100 fill-mode-both"
-                value="patient"
-              >
-                Patients
-              </TabsTrigger>
-              <TabsTrigger
-                className="animate-in fade-in zoom-in-105 duration-500 delay-200 fill-mode-both"
-                value="staff"
-              >
-                Staff
-              </TabsTrigger>
-              <TabsTrigger
-                className="animate-in fade-in zoom-in-105 duration-500 delay-200 fill-mode-both"
-                value="admin"
-              >
-                Admin
-              </TabsTrigger>
+              <TabsTrigger value="all">All</TabsTrigger>
+              <TabsTrigger value="patient">Patients</TabsTrigger>
+              <TabsTrigger value="staff">Staff</TabsTrigger>
+              <TabsTrigger value="admin">Admin</TabsTrigger>
             </TabsList>
             <Button
               onClick={() => {
