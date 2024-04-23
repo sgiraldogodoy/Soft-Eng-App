@@ -24,13 +24,13 @@ export function MapEditTab({ onEditSelect }: MapEditTabProps) {
   return (
     <TooltipProvider delayDuration={0}>
       <ToggleGroup
-        variant="outlinefilled"
+        variant="darker"
         size={"lg"}
         type="single"
-        defaultValue="Hand"
+        defaultValue="Pan"
       >
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger className="bg-white/80 rounded-lg">
             <ToggleGroupItem
               value="Pan"
               aria-label="Pan"
@@ -45,7 +45,7 @@ export function MapEditTab({ onEditSelect }: MapEditTabProps) {
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger className="bg-white/80 rounded-lg">
             <ToggleGroupItem
               value="Sele"
               aria-label="Sele"
@@ -60,7 +60,7 @@ export function MapEditTab({ onEditSelect }: MapEditTabProps) {
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger className="bg-white/80 rounded-lg">
             <ToggleGroupItem
               value="Edit"
               aria-label="Edit"
@@ -75,7 +75,7 @@ export function MapEditTab({ onEditSelect }: MapEditTabProps) {
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger className="bg-white/80 rounded-lg">
             <ToggleGroupItem
               value="Eraser"
               aria-label="Eraser"
@@ -90,7 +90,7 @@ export function MapEditTab({ onEditSelect }: MapEditTabProps) {
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger className="bg-white/80 rounded-lg">
             <ToggleGroupItem
               value="Move"
               aria-label="Move"
@@ -105,7 +105,7 @@ export function MapEditTab({ onEditSelect }: MapEditTabProps) {
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger className="bg-white/80 rounded-lg">
             <ToggleGroupItem
               value="aNode"
               aria-label="Add Node"
@@ -120,7 +120,7 @@ export function MapEditTab({ onEditSelect }: MapEditTabProps) {
         </Tooltip>
 
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger className="bg-white/80 rounded-lg">
             <ToggleGroupItem
               value="aEdge"
               aria-label="Add Edge"

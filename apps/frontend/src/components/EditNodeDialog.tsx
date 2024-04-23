@@ -18,12 +18,15 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Node } from "database";
+import type { Node, Prisma } from "database";
+type NodeCreateInput = Prisma.NodeCreateInput;
+import { z } from "zod";
+import { ZCreateNodeSchema as nodeSchema } from "common";
 
 interface editNodeDialogProps {
   node: Node;
   open: boolean;
-  onSubmit: (nodeData: Node, oldID: string) => void;
+  onSubmit: (nodeData: NodeCreateInput, oldID: string) => void;
   handleDelete: (nodeData: Node) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -173,7 +176,12 @@ export function EditNodeDialog({
             <Label htmlFor="type" className="text-right">
               Node Type*
             </Label>
-            <Select value={type} onValueChange={setType}>
+            <Select
+              value={type}
+              onValueChange={(v) => {
+                setType(v as z.infer<typeof nodeSchema.shape.type>);
+              }}
+            >
               <SelectTrigger className="col-span-3">
                 <SelectValue placeholder={type} />
               </SelectTrigger>

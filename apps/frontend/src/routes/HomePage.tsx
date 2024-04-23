@@ -6,6 +6,7 @@ import WeatherWidget from "@/components/WeatherWidget.tsx";
 import { DateTime } from "luxon";
 import CheckInForm from "@/components/CheckInForm.tsx";
 import { motion } from "framer-motion";
+import LaserMap from "@/components/LaserMap.tsx";
 
 export default function HomePage() {
   const session = useAuth0();
@@ -100,10 +101,14 @@ export default function HomePage() {
       </motion.div>
       <Link to="/pathfind" asChild>
         <div className="basis-2/3 shrink-0 h-full relative bg-[#001430] cursor-pointer">
-          <img
-            className="absolute object-cover w-full h-full grayscale opacity-35"
-            src="/02_thesecondfloor.png"
-            alt="Floor two"
+          <LaserMap
+            // Don't set spawn rate lower than 0.5
+            spawnrate={0.5}
+            speed={100}
+            sameSpeed={true}
+            delay={0.4}
+            ease={false}
+            floor={"2"}
           />
           <div className="absolute w-full h-full flex flex-col justify-between items-center px-10 py-8 z-10">
             <div className="flex items-center justify-between w-full">
@@ -157,9 +162,11 @@ export default function HomePage() {
                   Brigham and Women's Hospital
                 </p>
               </div>
-              <div className="space-y-2">
-                <p className="text-white text-xl">
-                  This is a WPI CS3733 Software Engineering project!{" "}
+              <div className="space-y-2 justify-center">
+                <p className="text-white text-xl text-center px-24">
+                  This website is a term project exercise for WPI CS 3733
+                  Software Engineering (Prof. Wong) and is not to be confused
+                  with the actual Brigham & Women’s Hospital website.{" "}
                 </p>
               </div>
             </div>

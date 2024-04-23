@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import WeatherIcon from "@/components/WeatherIcon.tsx";
+import { LoadingSpinner } from "@/components/ui/loader.tsx";
 
 export default function WeatherWidget() {
   const url = `https://api.openweathermap.org/data/2.5/weather?lat=42.358429&lon=-71.059769&units=imperial&appid=598fea3387a00ad83ff033ab1b1e733d`;
@@ -15,7 +16,11 @@ export default function WeatherWidget() {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (isError) {
@@ -31,7 +36,6 @@ export default function WeatherWidget() {
 
   const formattedDescription = capitalizeEachWord(data.weather[0].description);
   const iconCode = data.weather[0].icon;
-  console.log(JSON.stringify(data, null, 2));
 
   return (
     <div className="flex items-center gap-5">
@@ -40,8 +44,8 @@ export default function WeatherWidget() {
         {data.main ? <h1>{Math.round(data.main.temp)} ºF</h1> : null}
         <div>{formattedDescription}</div>
         <div className="flex gap-2">
-          {data.main ? <h1>H: {Math.round(data.main.temp_min)} ºF</h1> : null}
-          {data.main ? <h1>L: {Math.round(data.main.temp_max)} ºF</h1> : null}
+          {data.main ? <h1>H: {Math.round(data.main.temp_max)} ºF</h1> : null}
+          {data.main ? <h1>L: {Math.round(data.main.temp_min)} ºF</h1> : null}
         </div>
       </div>
     </div>

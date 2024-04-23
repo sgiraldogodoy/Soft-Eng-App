@@ -4,6 +4,7 @@ import { ReceiptText } from "lucide-react";
 import { RouterOutput } from "@/utils/trpc";
 import { DateTime } from "luxon";
 import { Badge } from "../ui/badge";
+import { cn } from "@/lib/utils";
 
 export const columns: ColumnDef<RouterOutput["service"]["getAll"][0]>[] = [
   {
@@ -28,15 +29,22 @@ export const columns: ColumnDef<RouterOutput["service"]["getAll"][0]>[] = [
   {
     header: "Priority",
     accessorKey: "priority",
-    cell: ({ row }) => (
-      <Badge
-        variant={
-          row.getValue("priority") === "EMERGENCY" ? "destructive" : "default"
-        }
-      >
-        {row.getValue("priority")}
-      </Badge>
-    ),
+    cell: ({ row }) => {
+      const val: string = row.getValue("priority");
+
+      return (
+        <Badge
+          className={cn("capitalize", {
+            "bg-purple-600": val === "EMERGENCY",
+            "bg-red-600": val === "HIGH",
+            "bg-orange-600": val === "MEDIUM",
+            "bg-green-600": val === "LOW",
+          })}
+        >
+          {val}
+        </Badge>
+      );
+    },
   },
   {
     id: "select",

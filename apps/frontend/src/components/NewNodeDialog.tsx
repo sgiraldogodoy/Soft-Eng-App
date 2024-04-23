@@ -18,14 +18,17 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Node } from "database";
+import type { Prisma } from "database";
+type NodeCreateInput = Prisma.NodeCreateInput;
+import { ZCreateNodeSchema as nodeSchema } from "common";
+import { z } from "zod";
 
 interface newNodeDialogProps {
   open: boolean;
   x: number;
   y: number;
   floor: string;
-  onSubmit: (nodeData: Node) => void;
+  onSubmit: (nodeData: NodeCreateInput) => void;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -74,7 +77,7 @@ export function NewNodeDialog({
       id,
       building,
       floor,
-      type,
+      type: type as z.infer<typeof nodeSchema.shape.type>,
       longName: longname,
       shortName: shortname,
       x,

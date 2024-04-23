@@ -1,13 +1,17 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Nodes } from "./Nodes.tsx";
-import { Node, Edge } from "database";
+import type { Node, Edge, Prisma } from "database";
 import { Lines } from "./Lines.tsx";
 import { Edges } from "../components/Edges.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import clsx from "clsx";
-import { reverseScaleCoordinate } from "@/utils/scaleCoordinate.ts";
+import {
+  reverseScaleCoordinate,
+  scaleCoordinate,
+} from "@/utils/scaleCoordinate.ts";
 import { trpc } from "@/utils/trpc.ts";
 import { NewNodeDialog } from "@/components/NewNodeDialog.tsx";
+type NodeCreateInput = Prisma.NodeCreateInput;
 
 const origImageWidth = 5000;
 const origImageHeight = 3400;
@@ -47,6 +51,10 @@ export default function Map({
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const [startDragOffset, setStartDragOffset] = useState({ x: 0, y: 0 });
+  const [selecting, setSelecting] = useState(false);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+  const [endPos, setEndPos] = useState({ x: 0, y: 0 });
+  const [selectedMultiNodes, setSelectedNodes] = useState<Node[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const createNode = trpc.node.createOne.useMutation();
   const utils = trpc.useUtils();
@@ -72,6 +80,9 @@ export default function Map({
   }, [dragging]);
 
   useEffect(() => {
+    if (typeEdit === "Sele") {
+      return;
+    }
     const resizeObserver = new ResizeObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.target === image.current) {
@@ -182,7 +193,7 @@ export default function Map({
     typeEdit,
   ]);
 
-  const handleCreateNodeSubmit = (data: Node) => {
+  const handleCreateNodeSubmit = (data: NodeCreateInput) => {
     createNode.mutate(
       {
         data,
@@ -236,6 +247,9 @@ export default function Map({
       case "aNode":
         handleCreateNode(e);
         return;
+      case "Sele":
+        handleMouseDownSele(e);
+        return;
       default:
         return;
     }
@@ -251,6 +265,71 @@ export default function Map({
     return <p>No nodes found</p>;
   }
 
+  const handleMouseDownSele = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    if (typeEdit !== "Sele") return;
+    const containerRect = containerRef.current?.getBoundingClientRect();
+    if (!containerRect) return;
+    const offsetX = e.clientX - containerRect.left;
+    const offsetY = e.clientY - containerRect.top;
+
+    if (!selecting) {
+      setStartPos({ x: offsetX, y: offsetY });
+      setEndPos({ x: offsetX, y: offsetY });
+      setSelecting(true);
+    } else {
+      setSelecting(false);
+      handleSelection();
+    }
+  };
+
+  const handleMouseMoveSele = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    if (selecting && typeEdit === "Sele") {
+      const containerRect = containerRef.current?.getBoundingClientRect();
+      if (!containerRect) return;
+      const offsetX = e.clientX - containerRect.left;
+      const offsetY = e.clientY - containerRect.top;
+      setEndPos({ x: offsetX, y: offsetY });
+    }
+  };
+
+  const handleSelection = () => {
+    const selectedNodes = nodes.filter((node) => {
+      const nodeX = scaleCoordinate(
+        node.x,
+        imgWidth,
+        origImageWidth,
+        0,
+        offset.x,
+        scale,
+      );
+      const nodeY = scaleCoordinate(
+        node.y,
+        imgHeight,
+        origImageHeight,
+        0,
+        offset.y,
+        scale,
+      );
+      return (
+        nodeX >= Math.min(startPos.x, endPos.x) &&
+        nodeX <= Math.max(startPos.x, endPos.x) &&
+        nodeY >= Math.min(startPos.y, endPos.y) &&
+        nodeY <= Math.max(startPos.y, endPos.y) &&
+        node.floor === floor
+      );
+    });
+
+    setSelectedNodes(selectedNodes);
+  };
+
+  const handleEscape = () => {
+    setSelectedNodes([]);
+  };
+
   return (
     <div
       className="relative h-full"
@@ -262,10 +341,15 @@ export default function Map({
           ? "grabbing"
           : typeEdit === "aNode"
             ? 'url("/circle-plus.svg") 12 12, auto'
-            : "grab",
+            : typeEdit === "Sele"
+              ? 'url("/plus.svg") 12 12, auto'
+              : "grab",
         userSelect: "none",
       }}
       onClick={handleEditClick}
+      onMouseMove={handleMouseMoveSele}
+      onMouseDown={handleMouseDownSele}
+      // onKeyDown={handleKeyDown}
     >
       <img
         ref={image}
@@ -314,6 +398,9 @@ export default function Map({
         editable={editable}
         filter={filter}
         typeEdit={typeEdit}
+        path={path}
+        selectedNodes={selectedMultiNodes}
+        setSelectedNodes={handleEscape}
       />
       {path && (
         <Lines
@@ -337,6 +424,17 @@ export default function Map({
             setDialogOpen={setOpenDialog}
           />
         </div>
+      )}
+      {selecting && typeEdit === "Sele" && (
+        <div
+          className="bg-black/10 absolute border border-black/20"
+          style={{
+            left: Math.min(startPos.x, endPos.x),
+            top: Math.min(startPos.y, endPos.y),
+            width: Math.abs(endPos.x - startPos.x),
+            height: Math.abs(endPos.y - startPos.y),
+          }}
+        />
       )}
     </div>
   );

@@ -1,12 +1,12 @@
 import { RouterOutput } from "@/utils/trpc";
 import { columns } from "./DTColumns";
-import { DataTable } from "@/components/ui/data-table";
+import { ServiceDataTable } from "@/components/services/ServiceDataTable.tsx";
 import type { OnChangeFn, RowSelectionState } from "@tanstack/react-table";
 
 export default function RequestTable(
   props: Omit<
     React.ComponentProps<
-      typeof DataTable<RouterOutput["service"]["getAll"][0], unknown>
+      typeof ServiceDataTable<RouterOutput["service"]["getAll"][0], unknown>
     > & {
       selectionState: RowSelectionState;
       setSelectionState: OnChangeFn<RowSelectionState>;
@@ -14,5 +14,5 @@ export default function RequestTable(
     "columns"
   >,
 ) {
-  return <DataTable {...props} columns={columns} />;
+  return <ServiceDataTable {...props} columns={columns} />;
 }

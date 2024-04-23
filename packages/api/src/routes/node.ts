@@ -9,8 +9,9 @@ import {
   breadthFirstSearch,
   depthFirstSearch,
 } from "../../utils/PathFinding.ts";
-import { node } from "common";
+import { ZCreateNodeSchema } from "common";
 import { TRPCError } from "@trpc/server";
+import { manySchema, updateSchema } from "common/src/zod-utils.ts";
 
 const myPathFinding: Context = new Context();
 myPathFinding.setPathFindingAlg = new aStar();
@@ -51,6 +52,7 @@ export const Node = router({
       z.object({
         startNodeId: z.string(),
         endNodeId: z.string(),
+        wheelchair: z.boolean(),
         algorithm: z.string(),
       }),
     )
@@ -67,19 +69,83 @@ export const Node = router({
         input.startNodeId,
         input.endNodeId,
         ctx.db,
+        input.wheelchair === true,
         input.algorithm === "DIJ",
       );
     }),
   createOne: protectedProcedure
-    .input(z.object({ data: node }))
+    .input(
+      z.object({
+        data: ZCreateNodeSchema.omit({ id: true }),
+        id: z.string().optional(),
+      }),
+    )
     .mutation(async ({ input, ctx }) => {
-      await ctx.db.node.create({
-        data: input.data,
+      let nodeId = "";
+      let number = "";
+      if (input.id) {
+        nodeId = input.id;
+      } else if (input.data.elevatorLetter) {
+        if (input.data.type === "ELEV") {
+          const pattern = /^[A-Z]*$/;
+          if (!pattern.test(input.data.elevatorLetter)) {
+            throw new TRPCError({
+              code: "BAD_REQUEST",
+              message: "Elevators must be a Capital letter",
+            });
+          }
+          number = "00" + input.data.elevatorLetter;
+        } else {
+          const occurences = await ctx.db.node.findMany({
+            where: {
+              type: input.data.type,
+              floor: input.data.floor,
+            },
+          });
+
+          //count number of nodes with the same type
+          const numOccurences = occurences.length + 1;
+          const numPrefix = 3 - numOccurences.toString().length;
+          number = "0".repeat(numPrefix) + numOccurences.toString();
+        }
+        const prefixFloor = input.data.floor.length === 1 ? "0" : "";
+        const floor = prefixFloor + input.data.floor;
+        nodeId = "q" + input.data.type + number + floor;
+      } else {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Node must have a elevator number or an id",
+        });
+      }
+      const data = {
+        id: nodeId,
+        x: input.data.x,
+        y: input.data.y,
+        building: input.data.building,
+        floor: input.data.floor,
+        type: input.data.type,
+        longName: input.data.longName,
+        shortName: input.data.shortName,
+      };
+      //check if node exists
+      const exists = await ctx.db.node.findUnique({
+        where: {
+          id: nodeId,
+        },
+      });
+      if (exists) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Node already exists",
+        });
+      }
+      return ctx.db.node.create({
+        data: data,
       });
     }),
 
   createMany: protectedProcedure
-    .input(z.object({ data: z.array(node) }))
+    .input(manySchema(ZCreateNodeSchema))
     .mutation(async ({ input, ctx }) => {
       ctx.db.node.createMany({
         data: input.data,
@@ -122,7 +188,7 @@ export const Node = router({
     return ctx.db.node.deleteMany();
   }),
   updateOne: protectedProcedure
-    .input(z.object({ id: z.string(), data: node.partial() }))
+    .input(updateSchema(ZCreateNodeSchema))
     .mutation(async ({ input, ctx }) => {
       return ctx.db.node.update({
         where: {
@@ -133,7 +199,9 @@ export const Node = router({
     }),
 
   updateMany: protectedProcedure
-    .input(z.object({ ids: z.array(z.string()), data: node.partial() }))
+    .input(
+      z.object({ ids: z.array(z.string()), data: ZCreateNodeSchema.partial() }),
+    )
     .mutation(async ({ input, ctx }) => {
       return ctx.db.node.updateMany({
         where: {
