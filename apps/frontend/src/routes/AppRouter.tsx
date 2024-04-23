@@ -37,7 +37,7 @@ export function AppRouter() {
             {isDefinitelyNotAuthed && <Redirect to="/" />}
             <MapEdit />
           </Route>
-          <Route path="/settings">
+          <Route path="/settings" nest>
             <Settings />
             {isDefinitelyNotAuthed && <Redirect to="/" />}
           </Route>

@@ -13,10 +13,11 @@ import { trpc } from "@/utils/trpc.ts";
 import { CreateUserDialog } from "@/components/CreateUserDialog.tsx";
 import { UserTable } from "@/components/UserTable.tsx";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
+import { Route, useLocation } from "wouter";
 
 export function Settings() {
-  const [tableFilter, setTableFilter] = useState("patients");
-  const [creatingUser, setCreatingUser] = useState(false);
+  const [tableFilter, setTableFilter] = useState("all");
+  const [, setLocation] = useLocation();
 
   const usersQuery = trpc.user.getAll.useQuery();
 
@@ -40,20 +41,32 @@ export function Settings() {
             <TabsList className="animate-in fade-in zoom-in-105 duration-300">
               <TabsTrigger
                 className="animate-in fade-in zoom-in-105 duration-500 delay-100 fill-mode-both"
-                value="patients"
+                value="all"
+              >
+                All
+              </TabsTrigger>
+              <TabsTrigger
+                className="animate-in fade-in zoom-in-105 duration-500 delay-100 fill-mode-both"
+                value="patient"
               >
                 Patients
               </TabsTrigger>
               <TabsTrigger
                 className="animate-in fade-in zoom-in-105 duration-500 delay-200 fill-mode-both"
-                value="admins"
+                value="staff"
               >
                 Staff
+              </TabsTrigger>
+              <TabsTrigger
+                className="animate-in fade-in zoom-in-105 duration-500 delay-200 fill-mode-both"
+                value="admin"
+              >
+                Admin
               </TabsTrigger>
             </TabsList>
             <Button
               onClick={() => {
-                setCreatingUser(true);
+                setLocation("/create");
               }}
               size="sm"
               className="gap-1 ml-auto animate-in fade-in zoom-in-105 duration-500 fill-mode-both delay-300"
@@ -68,12 +81,22 @@ export function Settings() {
               <CardDescription>Create, edit, and view users.</CardDescription>
             </CardHeader>
             <CardContent>
-              <UserTable data={usersQuery.data} />
+              <UserTable
+                data={
+                  tableFilter === "all"
+                    ? usersQuery.data
+                    : usersQuery.data.filter(
+                        (user) => user.role === tableFilter,
+                      )
+                }
+              />
             </CardContent>
           </Card>
         </div>
       </Tabs>
-      <CreateUserDialog open={creatingUser} setOpen={setCreatingUser} />
+      <Route path="/create" nest>
+        <CreateUserDialog open={true} setOpen={() => setLocation("/")} />
+      </Route>
     </>
   );
 }

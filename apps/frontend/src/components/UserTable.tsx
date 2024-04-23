@@ -41,6 +41,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { trpc } from "@/utils/trpc.ts";
+import { Route, useLocation } from "wouter";
 // import {trpc} from "@/utils/trpc.ts";
 // import {skipToken} from "@tanstack/react-query";
 
@@ -49,8 +50,9 @@ interface DataTableProps {
 }
 
 export function UserTable({ data }: DataTableProps) {
-  const [editingId, setEditingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const [, setLocation] = useLocation();
 
   const deleteMutation = trpc.user.deleteOne.useMutation();
   const utils = trpc.useUtils();
@@ -110,7 +112,7 @@ export function UserTable({ data }: DataTableProps) {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onSelect={() => {
-                  setEditingId(user.id);
+                  setLocation(`/edit/${user.id}`);
                 }}
               >
                 Edit user
@@ -228,9 +230,14 @@ export function UserTable({ data }: DataTableProps) {
         </TableBody>
       </Table>
       <Suspense>
-        {editingId && (
-          <UserEditDialog editingId={editingId} setEditingId={setEditingId} />
-        )}
+        <Route path="/edit/:id">
+          {(params) => (
+            <UserEditDialog
+              editingId={params.id}
+              setEditingId={() => setLocation("/")}
+            />
+          )}
+        </Route>
       </Suspense>
     </div>
   );
