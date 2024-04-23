@@ -74,7 +74,7 @@ export default function RequestSummary() {
       transition={{ duration: 1, type: "easeOut" }}
       className="w-full flex flex-col gap-4 flex-1 max-h-full"
     >
-      <Card className="flex flex-col flex-1 overflow-auto">
+      <Card className="flex flex-col flex-1 overflow-auto bg-white/90 backdrop-blur-md">
         <CardHeader>
           <CardTitle>Open Requests</CardTitle>
         </CardHeader>
@@ -87,7 +87,7 @@ export default function RequestSummary() {
         </CardContent>
       </Card>
       {selectedRow && (
-        <Card className="p-4">
+        <Card className="p-4 bg-white/90 backdrop-blur-md">
           <CardHeader>
             <CardTitle>Details</CardTitle>
             <CardDescription>

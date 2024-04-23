@@ -107,7 +107,7 @@ export const AutoComplete = ({
   return (
     <CommandPrimitive
       onKeyDown={handleKeyDown}
-      className="min-w-[731px] min-h-[24px] px-[30px]"
+      className="min-w-[30vw] min-h-[24px] px-[30px]"
     >
       <div>
         <CommandInput
