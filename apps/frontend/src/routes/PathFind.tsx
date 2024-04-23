@@ -15,6 +15,7 @@ import {
 import PathfindSettings from "@/components/PathfindSettings.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { TextNavigation } from "@/components/TextNav.tsx";
+import MapKeyAccordion from "@/components/MapKeyAccordion.tsx";
 
 import { Link } from "wouter";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
@@ -175,69 +176,7 @@ export default function PathFind() {
           <TextNavigation nodes={pathData} />
         </div>
       )}
-      <div className="absolute bottom-2 left-2 bg-white/70 h-fit w-fit rounded-[10px] grid grid-cols-auto gap-x-5 m-2 drop-shadow-lg">
-        <h1 className="font-bold text-nowrap col-span-2 pt-2 ps-2">Map Key:</h1>
-        <img
-          src="./mapkeyicons/restroom.png"
-          alt="restroom"
-          className="object-scale-down h-7 w-7 ps-2"
-        />
-        <p className="pe-5">Restrooms</p>
-        <img
-          src="./mapkeyicons/elevator.png"
-          alt="elevator"
-          className="object-scale-down h-7 w-7 ps-2"
-        />
-        <p className="">Elevator</p>
-        <img
-          src="./mapkeyicons/ATM.png"
-          alt="ATM"
-          className="object-scale-down h-7 w-7 ps-2"
-        />
-        <p className="">ATM</p>
-        <img
-          src="./mapkeyicons/cafe.png"
-          alt="cafe"
-          className="object-scale-down h-7 w-7 ps-2"
-        />
-        <p className="">Cafe</p>
-        <img
-          src="./mapkeyicons/emergency.png"
-          alt="emergency"
-          className="object-scale-down h-7 w-7 ps-2"
-        />
-        <p className="">Emergency</p>
-        <img
-          src="./mapkeyicons/giftshop.png"
-          alt="giftshop"
-          className="object-scale-down h-7 w-7 ps-2"
-        />
-        <p className="">Gift Shop</p>
-        <img
-          src="./mapkeyicons/information.png"
-          alt="information"
-          className="object-scale-down h-7 w-7 ps-2"
-        />
-        <p className="">Information</p>
-        <img
-          src="./mapkeyicons/parking.png"
-          alt="parking"
-          className="object-scale-down h-7 w-7 ps-2"
-        />
-        <p className="">Parking</p>
-        <img
-          src="./mapkeyicons/pharmacy.png"
-          alt="pharmacy"
-          className="object-scale-down h-7 w-7 ps-2"
-        />
-        <p className="">Pharmacy</p>
-        <img
-          src="./mapkeyicons/valet.png"
-          alt="valet"
-          className="object-scale-down h-7 w-7 ps-2"
-        />
-        <p className="">Valet</p>
-      </div>
+      <MapKeyAccordion />
     </div>
   );
 }
