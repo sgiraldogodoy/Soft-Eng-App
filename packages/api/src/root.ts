@@ -1,21 +1,32 @@
-import { avRequestRouter } from "./routes/Services/avRouter.ts";
+import { avRequestRouter } from "./routes/services/avRouter.ts";
 import { router } from "./trpc";
 import { Node } from "./routes/node.ts";
 import { Edge } from "./routes/edge.ts";
-import { SecurityRouter } from "./routes/Services/securityRouter.ts";
-import { FlowerRouter } from "./routes/Services/flowerRouter.ts";
-import { GiftRouter } from "./routes/Services/giftRouter.ts";
+import { SecurityRouter } from "./routes/services/securityRouter.ts";
+import { FlowerRouter } from "./routes/services/flowerRouter.ts";
+import { GiftRouter } from "./routes/services/giftRouter.ts";
 import { serviceRouter } from "./routes/serviceRouter.ts";
-import { RoomRouter } from "./routes/Services/roomRouter.ts";
-import { maintenanceRequestRouter } from "./routes/Services/maintenanceRouter.ts";
-import { transportRequestRouter } from "./routes/Services/transportRouter.ts";
-import { sanitationRequestRouter } from "./routes/Services/sanitationRouter.ts";
-import { visitRequestRouter } from "./routes/Services/visitRouter.ts";
-import { itRequestRouter } from "./routes/Services/itRouter.ts";
-import { religiousRequestRouter } from "./routes/Services/religiousRouter.ts";
-import { InterpreterRouter } from "./routes/Services/languageRouter.ts";
+import { maintenanceRequestRouter } from "./routes/services/maintenanceRouter.ts";
+import { transportRequestRouter } from "./routes/services/transportRouter.ts";
+import { sanitationRequestRouter } from "./routes/services/sanitationRouter.ts";
+import { visitorRequestRouter } from "./routes/services/visitorRouter.ts";
+import { itRequestRouter } from "./routes/services/itRouter.ts";
+import { religiousRequestRouter } from "./routes/services/religiousRouter.ts";
+import { InterpreterRouter } from "./routes/services/interpreterRouter.ts";
+import { RoomRouter } from "./routes/services/roomRouter.ts";
+import { userRouter } from "./routes/users/user.ts";
+import { patient } from "./routes/users/patient.ts";
+import { staffRouter } from "./routes/users/staff.ts";
+import { appointmentRouter } from "./routes/appointments/appointment.ts";
+import { visitRouter } from "./routes/appointments/visit.ts";
 
 export const appRouter = router({
+  //user routers
+  user: userRouter,
+  patient: patient,
+  staff: staffRouter,
+
+  //service routers
   service: serviceRouter,
   security: SecurityRouter,
   av: avRequestRouter,
@@ -24,11 +35,18 @@ export const appRouter = router({
   maintenance: maintenanceRequestRouter,
   transport: transportRequestRouter,
   sanitation: sanitationRequestRouter,
-  visit: visitRequestRouter,
+  visitor: visitorRequestRouter,
   it: itRequestRouter,
   religious: religiousRequestRouter,
   interpreter: InterpreterRouter,
   room: RoomRouter,
+
+  //appointment routers
+  appointment: appointmentRouter,
+  visit: visitRouter,
+  //visitNote: visitNoteRouter,
+
+  //node and edge routers
   node: Node,
   edge: Edge,
 });

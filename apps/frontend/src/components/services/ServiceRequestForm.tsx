@@ -38,7 +38,7 @@ import GiftRequestFields from "./GiftRequestFields";
 import MaintenanceRequestFields from "./MaintenanceRequestFields";
 import TransportRequestFields from "./TransportRequestFields";
 import SanitationRequestFields from "./SanitationRequestFields";
-import VisitRequestFields from "./VisitRequestFields";
+import VisitorRequestFields from "./VisitorRequestFields.tsx";
 import ITRequestFields from "./ITRequestFields";
 import ReligiousRequestFields from "./ReligiousRequestFields";
 import InterpreterRequestFields from "./InterpreterRequestFields";
@@ -55,10 +55,77 @@ import { PopoverContent } from "../ui/popover";
 import { CheckIcon } from "lucide-react";
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { formService } from "common";
+import {
+  ZCreateAvSchema,
+  ZCreateBaseServiceSchema,
+  ZCreateFlowerSchema,
+  ZCreateGiftSchema,
+  ZCreateRoomSchema,
+  ZCreateSecuritySchema,
+  ZCreateReligiousSchema,
+  ZCreateMaintenanceSchema,
+  ZCreateSanitationSchema,
+  ZCreateTransportSchema,
+  ZCreateInterpreterSchema,
+  ZCreateVisitorSchema,
+  ZCreateItSchema,
+} from "common";
 
 // Add your type-specific form schema to this array.
-const FormSchema = formService;
+const FormSchema = z.discriminatedUnion("type", [
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateAvSchema,
+    type: z.literal("av"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateSecuritySchema,
+    type: z.literal("security"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateRoomSchema,
+    type: z.literal("room"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateGiftSchema,
+    type: z.literal("gift"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateFlowerSchema,
+    type: z.literal("flower"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateItSchema,
+    type: z.literal("it"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateInterpreterSchema,
+    type: z.literal("interpreter"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateMaintenanceSchema,
+    type: z.literal("maintenance"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateReligiousSchema,
+    type: z.literal("religious"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateRoomSchema,
+    type: z.literal("room"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateSanitationSchema,
+    type: z.literal("sanitation"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateTransportSchema,
+    type: z.literal("transport"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateVisitorSchema,
+    type: z.literal("visitor"),
+  }).omit({ login: true }),
+]);
 
 type FormSchemaType = z.infer<typeof FormSchema>;
 
@@ -111,9 +178,9 @@ const FORMTYPE_RECORD: Record<
     longName: "Request Sanitation",
     formFields: SanitationRequestFields,
   },
-  visit: {
-    longName: "Request Visit",
-    formFields: VisitRequestFields,
+  visitor: {
+    longName: "Request Visitor",
+    formFields: VisitorRequestFields,
   },
   it: {
     longName: "Request IT",
@@ -160,7 +227,7 @@ export default function InputForm({ variant }: Props) {
   const createMaintenanceRequest = trpc.maintenance.createOne.useMutation();
   const createTransportRequest = trpc.transport.createOne.useMutation();
   const createSanitationRequest = trpc.sanitation.createOne.useMutation();
-  const createVisitRequest = trpc.visit.createOne.useMutation();
+  const createVisitorRequest = trpc.visitor.createOne.useMutation();
   const createITRequest = trpc.it.createOne.useMutation();
   const createReligiousRequest = trpc.religious.createOne.useMutation();
   const createInterpreterRequest = trpc.interpreter.createOne.useMutation();
@@ -177,8 +244,14 @@ export default function InputForm({ variant }: Props) {
         toast.promise(
           createFlowerRequest.mutateAsync(
             {
-              login: session.user?.email ?? "",
-              ...data,
+              flower: data.data.flower,
+              recipientName: data.data.recipientName,
+              service: {
+                create: {
+                  login: session.user?.email ?? "",
+                  ...data,
+                },
+              },
             },
             {
               onSuccess: () => {
@@ -197,8 +270,14 @@ export default function InputForm({ variant }: Props) {
         toast.promise(
           createSecurityRequest.mutateAsync(
             {
-              login: session.user?.email ?? "",
-              ...data,
+              dateTime: data.data.dateTime,
+              threat: data.data.threat,
+              service: {
+                create: {
+                  login: session.user?.email ?? "",
+                  ...data,
+                },
+              },
             },
             {
               onSuccess: () => {
@@ -217,8 +296,16 @@ export default function InputForm({ variant }: Props) {
         toast.promise(
           createGiftRequest.mutateAsync(
             {
-              login: session.user?.email ?? "",
-              ...data,
+              type: data.data.type,
+              recipientName: data.data.recipientName,
+              wrapping: data.data.wrapping,
+              message: data.data.message,
+              service: {
+                create: {
+                  login: session.user?.email ?? "",
+                  ...data,
+                },
+              },
             },
             {
               onSuccess: () => {
@@ -237,8 +324,14 @@ export default function InputForm({ variant }: Props) {
         toast.promise(
           createAVRequest.mutateAsync(
             {
-              login: session.user?.email ?? "",
-              ...data,
+              dateTime: data.data.dateTime,
+              type: data.data.type,
+              service: {
+                create: {
+                  login: session.user?.email ?? "",
+                  ...data,
+                },
+              },
             },
             {
               onSuccess: () => {
@@ -257,8 +350,14 @@ export default function InputForm({ variant }: Props) {
         toast.promise(
           createRoomRequest.mutateAsync(
             {
-              login: session.user?.email ?? "",
-              ...data,
+              checkIn: data.data.checkIn,
+              checkOut: data.data.checkOut,
+              service: {
+                create: {
+                  login: session.user?.email ?? "",
+                  ...data,
+                },
+              },
             },
             {
               onSuccess: () => {
@@ -277,8 +376,16 @@ export default function InputForm({ variant }: Props) {
         toast.promise(
           createMaintenanceRequest.mutateAsync(
             {
-              login: session.user?.email ?? "",
-              ...data,
+              type: data.data.type,
+              severity: data.data.severity,
+              startDate: data.data.startDate,
+              endDate: data.data.endDate,
+              service: {
+                create: {
+                  login: session.user?.email ?? "",
+                  ...data,
+                },
+              },
             },
             {
               onSuccess: () => {
@@ -297,8 +404,14 @@ export default function InputForm({ variant }: Props) {
         toast.promise(
           createTransportRequest.mutateAsync(
             {
-              login: session.user?.email ?? "",
-              ...data,
+              type: data.data.type,
+              count: data.data.count,
+              service: {
+                create: {
+                  login: session.user?.email ?? "",
+                  ...data,
+                },
+              },
             },
             {
               onSuccess: () => {
@@ -317,8 +430,16 @@ export default function InputForm({ variant }: Props) {
         toast.promise(
           createSanitationRequest.mutateAsync(
             {
-              login: session.user?.email ?? "",
-              ...data,
+              type: data.data.type,
+              quality: data.data.quality,
+              startDate: data.data.startDate,
+              endDate: data.data.endDate,
+              service: {
+                create: {
+                  login: session.user?.email ?? "",
+                  ...data,
+                },
+              },
             },
             {
               onSuccess: () => {
@@ -333,12 +454,20 @@ export default function InputForm({ variant }: Props) {
           },
         );
         break;
-      case "visit":
+      case "visitor":
         toast.promise(
-          createVisitRequest.mutateAsync(
+          createVisitorRequest.mutateAsync(
             {
-              login: session.user?.email ?? "",
-              ...data,
+              visitorName: data.data.visitorName,
+              patientName: data.data.patientName,
+              startDate: data.data.startDate,
+              endDate: data.data.endDate,
+              service: {
+                create: {
+                  login: session.user?.email ?? "",
+                  ...data,
+                },
+              },
             },
             {
               onSuccess: () => {
@@ -357,8 +486,14 @@ export default function InputForm({ variant }: Props) {
         toast.promise(
           createITRequest.mutateAsync(
             {
-              login: session.user?.email ?? "",
-              ...data,
+              type: data.data.type,
+              errorCodes: data.data.errorCodes,
+              service: {
+                create: {
+                  login: session.user?.email ?? "",
+                  ...data,
+                },
+              },
             },
             {
               onSuccess: () => {
@@ -377,8 +512,14 @@ export default function InputForm({ variant }: Props) {
         toast.promise(
           createReligiousRequest.mutateAsync(
             {
-              login: session.user?.email ?? "",
-              ...data,
+              religion: data.data.religion,
+              dateTime: data.data.dateTime,
+              service: {
+                create: {
+                  login: session.user?.email ?? "",
+                  ...data,
+                },
+              },
             },
             {
               onSuccess: () => {
@@ -397,8 +538,15 @@ export default function InputForm({ variant }: Props) {
         toast.promise(
           createInterpreterRequest.mutateAsync(
             {
-              login: session.user?.email ?? "",
-              ...data,
+              recipientName: data.data.recipientName,
+              type: data.data.type,
+              dateTime: data.data.dateTime,
+              service: {
+                create: {
+                  login: session.user?.email ?? "",
+                  ...data,
+                },
+              },
             },
             {
               onSuccess: () => {
@@ -427,7 +575,7 @@ export default function InputForm({ variant }: Props) {
 
   return (
     <>
-      <Card className="h-full bg-white/90 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col overflow-auto">
+      <Card className="h-full backdrop-blur-md flex-1 flex flex-col overflow-auto z-0">
         <CardHeader>
           <CardTitle className="capitalize">
             {FORMTYPE_RECORD[variant].longName}

@@ -3,8 +3,9 @@ import { router } from "../trpc";
 import { z } from "zod";
 import { parseCSVEdge } from "../../utils/csv-parsing.ts";
 import { exportEdgesToDb } from "../../utils/create-csv.ts";
-import { edge } from "common";
+import { ZCreateEdgeSchema } from "common";
 import { TRPCError } from "@trpc/server";
+import { manySchema } from "common/src/zod-utils.ts";
 
 export const Edge = router({
   csvUpload: protectedProcedure
@@ -14,7 +15,7 @@ export const Edge = router({
         const file = await fetch(input.buffer);
         const str = await file.text();
         const edges = await parseCSVEdge(str);
-        console.log("creating edges");
+        // console.log("creating edges");
         await ctx.db.edge.deleteMany();
         await ctx.db.edge.createMany({
           data: edges,
@@ -30,6 +31,7 @@ export const Edge = router({
         });
       }
     }),
+
   csvExport: protectedProcedure.query(async ({ ctx }) => {
     // get all nodes
     const edgeStr = await exportEdgesToDb(ctx.db);
@@ -37,8 +39,9 @@ export const Edge = router({
 
     return b64str;
   }),
+
   createOne: protectedProcedure
-    .input(z.object({ data: edge }))
+    .input(ZCreateEdgeSchema)
     .mutation(async ({ input, ctx }) => {
       const data = [];
       data.push(
@@ -46,12 +49,12 @@ export const Edge = router({
           data: {
             startNode: {
               connect: {
-                id: input.data.startNodeId,
+                id: input.startNodeId,
               },
             },
             endNode: {
               connect: {
-                id: input.data.endNodeId,
+                id: input.endNodeId,
               },
             },
           },
@@ -62,12 +65,12 @@ export const Edge = router({
           data: {
             startNode: {
               connect: {
-                id: input.data.endNodeId,
+                id: input.endNodeId,
               },
             },
             endNode: {
               connect: {
-                id: input.data.startNodeId,
+                id: input.startNodeId,
               },
             },
           },
@@ -76,7 +79,7 @@ export const Edge = router({
       return data;
     }),
   createMany: protectedProcedure
-    .input(z.object({ data: z.array(edge) }))
+    .input(manySchema(ZCreateEdgeSchema))
     .mutation(async ({ input, ctx }) => {
       ctx.db.edge.createMany({
         data: input.data,
@@ -151,7 +154,7 @@ export const Edge = router({
       z.object({
         startNodeId: z.string(),
         endNodeId: z.string(),
-        data: edge.partial(),
+        data: ZCreateEdgeSchema.partial(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -170,7 +173,7 @@ export const Edge = router({
       z.object({
         startNodeIds: z.array(z.string()),
         endNodeIds: z.array(z.string()),
-        data: edge.partial(),
+        data: ZCreateEdgeSchema.partial(),
       }),
     )
     .mutation(async ({ input, ctx }) => {

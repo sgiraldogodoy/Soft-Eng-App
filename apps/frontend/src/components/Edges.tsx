@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Node, Edge } from "database";
 import { scaleCoordinate } from "../utils/scaleCoordinate";
 import { trpc } from "@/utils/trpc";
@@ -57,6 +57,34 @@ export function Edges({
       }
     }
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Delete") {
+        if (hoveredEdgeID) {
+          if (hoveredStartNode && hoveredEndNode) {
+            deleteEdge.mutate(
+              {
+                startNodeId: hoveredStartNode,
+                endNodeId: hoveredEndNode,
+              },
+              {
+                onSuccess: () => {
+                  utils.edge.getAll.invalidate();
+                },
+              },
+            );
+          }
+        }
+      }
+    };
+
+    document.body.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.removeEventListener("keydown", handleKeyDown);
+    };
+  });
 
   if (!edges || edges.length < 2) return null; // At least two for path
   const filteredNode = nodes.filter((node) => node.floor === floor);

@@ -4,7 +4,7 @@ import ServiceRequestForm, {
 } from "@/components/services/ServiceRequestForm";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation.tsx";
+// import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation.tsx";
 import { motion } from "framer-motion";
 
 export default function ServiceRequestPage() {
@@ -12,8 +12,8 @@ export default function ServiceRequestPage() {
 
   return (
     <>
-      <BackgroundGradientAnimation className="overflow-hidden -z-10" />
-      <div className=" absolute z-20 inset-0 flex flex-row h-[95%] w-[95%] gap-4 items-stretch justify-center pointer-events-auto mx-10 my-6">
+      {/*<BackgroundGradientAnimation className="overflow-hidden -z-10" />*/}
+      <div className="absolute inset-0 flex flex-row h-[95%] w-[95%] gap-4 items-stretch justify-center pointer-events-auto mx-10 my-6">
         <RequestSummary />
         <div className="flex flex-col gap-4 items-stretch">
           <Tabs

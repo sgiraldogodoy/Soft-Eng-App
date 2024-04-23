@@ -12,18 +12,20 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
+import { Toggle } from "@/components/ui/toggle";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Accessibility } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Node } from "database";
 
 type PathfindSettingsProps = {
+  onWheelchair: () => void;
   Rooms: Node[] | undefined;
   onAlgorithmSelect: (clickedAlgorithm: string) => void;
   algorithm: string;
@@ -32,6 +34,7 @@ type PathfindSettingsProps = {
 };
 
 export default function PathfindSettings({
+  onWheelchair,
   Rooms,
   algorithm,
   onAlgorithmSelect,
@@ -64,6 +67,18 @@ export default function PathfindSettings({
   return (
     <div className="flex flex-col justify-start gap-8">
       <div className="flex flex-col gap-3">
+        <div className="flex flex-row gap-8 items-center ">
+          <p> Wheelchair Accesible? </p>
+          <Toggle
+            variant="outlinefilledacc"
+            onClick={() => {
+              onWheelchair();
+            }}
+            defaultPressed={true}
+          >
+            <Accessibility className="h-4 w-4" />
+          </Toggle>
+        </div>
         <p>Select your preferred algorithm:</p>
         <Select onValueChange={onAlgorithmSelect} value={algorithm}>
           <SelectTrigger>

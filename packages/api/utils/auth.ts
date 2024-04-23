@@ -17,7 +17,9 @@ export async function verifyJwt(token: string) {
   if (!kid) throw new Error("Couldn't find KID.");
 
   const signingKey = await client.getSigningKey(kid);
-  const verified = verify(token, signingKey.getPublicKey());
+  const verified = verify(token, signingKey.getPublicKey(), {
+    complete: true,
+  });
 
   return verified;
 }

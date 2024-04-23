@@ -21,8 +21,9 @@ import {
   SelectValue,
 } from "../ui/select";
 import { motion } from "framer-motion";
-import { type baseService } from "common";
+import { type ZCreateBaseServiceSchema } from "common";
 import { z } from "zod";
+import { LoadingSpinner } from "@/components/ui/loader.tsx";
 
 export default function RequestSummary() {
   const [rowSelectionState, setRowSelectionState] = useState<RowSelectionState>(
@@ -53,7 +54,7 @@ export default function RequestSummary() {
   );
 
   if (servicesQuery.isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingSpinner />;
   }
 
   if (servicesQuery.isError) {
@@ -73,7 +74,7 @@ export default function RequestSummary() {
       transition={{ duration: 1, type: "easeOut" }}
       className="w-full flex flex-col gap-4 flex-1 max-h-full"
     >
-      <Card className="flex flex-col flex-1 overflow-auto bg-white/90 backdrop-blur-md drop-shadow-md shadow-inner">
+      <Card className="flex flex-col flex-1 overflow-auto">
         <CardHeader>
           <CardTitle>Open Requests</CardTitle>
         </CardHeader>
@@ -86,7 +87,7 @@ export default function RequestSummary() {
         </CardContent>
       </Card>
       {selectedRow && (
-        <Card className="p-4 bg-white/90 backdrop-blur-md drop-shadow-md shadow-inner">
+        <Card className="p-4">
           <CardHeader>
             <CardTitle>Details</CardTitle>
             <CardDescription>
@@ -154,7 +155,7 @@ export default function RequestSummary() {
                         id: selectedRow.id,
                         data: {
                           status: newVal as z.infer<
-                            typeof baseService
+                            typeof ZCreateBaseServiceSchema
                           >["status"],
                         },
                       },
