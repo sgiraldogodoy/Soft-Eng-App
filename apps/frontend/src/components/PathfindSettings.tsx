@@ -18,7 +18,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Check, ChevronsUpDown, Accessibility } from "lucide-react";
+import {
+  Check,
+  ChevronsUpDown,
+  Accessibility,
+  PersonStanding,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
@@ -31,6 +36,7 @@ type PathfindSettingsProps = {
   algorithm: string;
   startNode: string;
   onStartNodeSelect: (selectedNode: string) => void;
+  wheelchair: boolean;
 };
 
 export default function PathfindSettings({
@@ -40,9 +46,11 @@ export default function PathfindSettings({
   onAlgorithmSelect,
   startNode,
   onStartNodeSelect,
+  wheelchair,
 }: PathfindSettingsProps) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
+  const [toggle, setToggle] = useState(wheelchair);
 
   useEffect(() => {
     if (startNode) {
@@ -64,19 +72,34 @@ export default function PathfindSettings({
     a.label.localeCompare(b.label),
   );
 
+  let toggleWheelchar = "On";
+  if (toggle === false) {
+    toggleWheelchar = "Off";
+  } else {
+    toggleWheelchar = "On";
+  }
+
+  let lucideIconToRender = <Accessibility className="h-4 w-4" />;
+  if (toggle) {
+    lucideIconToRender = <Accessibility className="h-4 w-4 opacity-50" />;
+  } else {
+    lucideIconToRender = <PersonStanding className="h-4 w-4 opacity-50" />;
+  }
+
   return (
     <div className="flex flex-col justify-start gap-8">
       <div className="flex flex-col gap-3">
-        <div className="flex flex-row gap-8 items-center ">
-          <p> Wheelchair Accesible? </p>
+        <div className="flex flex-row gap-2 items-center ">
+          <p> Wheelchair Accesible? ({toggleWheelchar})</p>
           <Toggle
             variant="outlinefilledacc"
             onClick={() => {
               onWheelchair();
+              setToggle(!toggle);
             }}
-            defaultPressed={true}
+            defaultPressed={toggle}
           >
-            <Accessibility className="h-4 w-4" />
+            {lucideIconToRender}
           </Toggle>
         </div>
         <p>Select your preferred algorithm:</p>
