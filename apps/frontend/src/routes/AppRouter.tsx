@@ -6,6 +6,7 @@ import { InspectDatabase } from "@/routes/InspectDatabase.tsx";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import MapEdit from "./MapEdit";
 import ServiceRequestPage from "./ServiceRequestPage";
+import AboutPage from "./AboutPage";
 import PatientIntegration from "./PatientIntegration";
 import { Settings } from "@/routes/Settings.tsx";
 
@@ -17,6 +18,7 @@ export function AppRouter() {
     <Route>
       <Switch>
         <Route path="/" component={HomePage} />
+        <Route path="/about" component={AboutPage} />
         <DashboardLayout>
           <Route path="/pathfind">
             <PathFind />
