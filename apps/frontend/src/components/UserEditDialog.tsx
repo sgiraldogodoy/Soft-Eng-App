@@ -66,7 +66,7 @@ export default function UserEditDialog({
         {
           data: {
             ...data,
-            sub: user,
+            sub: user.user_id,
           },
           id: editingId,
         },
