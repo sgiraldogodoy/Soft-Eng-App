@@ -10,6 +10,8 @@ import {
   RelatedVisitNoteModel,
   CompletePatient,
   RelatedPatientModel,
+  CompleteService,
+  RelatedServiceModel,
 } from "./index";
 
 export const StaffModel = z.object({
@@ -25,6 +27,7 @@ export interface CompleteStaff extends z.infer<typeof StaffModel> {
   user?: CompleteUser | null;
   visitNotes: CompleteVisitNote[];
   patients: CompletePatient[];
+  services: CompleteService[];
 }
 
 /**
@@ -39,5 +42,6 @@ export const RelatedStaffModel: z.ZodSchema<CompleteStaff> = z.lazy(() =>
     user: RelatedUserModel.nullish(),
     visitNotes: RelatedVisitNoteModel.array(),
     patients: RelatedPatientModel.array(),
+    services: RelatedServiceModel.array(),
   }),
 );

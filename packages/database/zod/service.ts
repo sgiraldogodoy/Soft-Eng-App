@@ -3,6 +3,8 @@ import { ServiceType } from "../.prisma/client";
 import {
   CompleteNode,
   RelatedNodeModel,
+  CompleteStaff,
+  RelatedStaffModel,
   CompleteFlower,
   RelatedFlowerModel,
   CompleteGift,
@@ -38,10 +40,12 @@ export const ServiceModel = z.object({
   status: z.string(),
   type: z.nativeEnum(ServiceType),
   note: z.string(),
+  staffId: z.string().nullish(),
 });
 
 export interface CompleteService extends z.infer<typeof ServiceModel> {
   node: CompleteNode;
+  assignee?: CompleteStaff | null;
   flower?: CompleteFlower | null;
   gift?: CompleteGift | null;
   room?: CompleteRoom | null;
@@ -64,6 +68,7 @@ export interface CompleteService extends z.infer<typeof ServiceModel> {
 export const RelatedServiceModel: z.ZodSchema<CompleteService> = z.lazy(() =>
   ServiceModel.extend({
     node: RelatedNodeModel,
+    assignee: RelatedStaffModel.nullish(),
     flower: RelatedFlowerModel.nullish(),
     gift: RelatedGiftModel.nullish(),
     room: RelatedRoomModel.nullish(),

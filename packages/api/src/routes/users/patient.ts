@@ -4,7 +4,7 @@ import { z } from "zod";
 import { ZCreatePatientSchema } from "common";
 import { manySchema, updateSchema } from "common/src/zod-utils.ts";
 
-export const patientRouter = router({
+export const patient = router({
   createOne: protectedProcedure
     .input(ZCreatePatientSchema)
     .mutation(async ({ input, ctx }) => {
