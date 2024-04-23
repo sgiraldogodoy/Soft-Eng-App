@@ -731,6 +731,7 @@ export default function InputForm({ variant }: Props) {
                                 key={assignee.name}
                                 onSelect={() => {
                                   form.setValue("staffId", assignee.id);
+                                  form.setValue("status", "ASSIGNED");
                                 }}
                               >
                                 {assignee.name}
