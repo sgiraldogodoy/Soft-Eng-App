@@ -183,8 +183,11 @@ export default function LaserMap({
   const getPathNodes = useCallback(() => {
     const length = buildingNodes.length;
     const building = buildingNodes[Math.floor(Math.random() * length)];
-    setStartNode(randomNode(building));
-    setEndNode(randomNode(building));
+    const filterNode = randomNode(building);
+    setStartNode(filterNode);
+    setEndNode(
+      randomNode(building.filter((node) => node.id != filterNode?.id)),
+    );
   }, [buildingNodes, randomNode]);
 
   const createLaser = useCallback(() => {

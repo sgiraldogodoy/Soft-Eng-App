@@ -2,16 +2,11 @@ import { protectedProcedure, publicProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
 import { ZCreateBaseServiceSchema, ZCreateFlowerSchema } from "common";
-import { transformCreateServiceInput } from "../../../utils/serviceInputTransformer.ts";
+import { updateSchema } from "common/src/zod-utils.ts";
 
 export const FlowerRouter = router({
   createOne: protectedProcedure
-    .input(
-      ZCreateBaseServiceSchema.extend({
-        data: ZCreateFlowerSchema,
-        type: z.literal("flower").default("flower"),
-      }).transform(transformCreateServiceInput),
-    )
+    .input(ZCreateFlowerSchema)
     .mutation(async ({ input, ctx }) => {
       console.log(input);
       return ctx.db.flower.create({
@@ -70,30 +65,13 @@ export const FlowerRouter = router({
   }),
 
   updateOne: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        data: ZCreateBaseServiceSchema.partial().extend({
-          data: ZCreateFlowerSchema.partial(),
-          type: z.literal("flower").default("flower"),
-        }),
-      }),
-    )
+    .input(updateSchema(ZCreateFlowerSchema))
     .mutation(async ({ input, ctx }) => {
-      const { data, ...rest } = input;
-
       return ctx.db.flower.update({
         where: {
           id: input.id,
         },
-        data: {
-          ...data,
-          service: {
-            update: {
-              ...rest,
-            },
-          },
-        },
+        data: input.data,
       });
     }),
 

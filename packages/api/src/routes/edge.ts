@@ -5,6 +5,7 @@ import { parseCSVEdge } from "../../utils/csv-parsing.ts";
 import { exportEdgesToDb } from "../../utils/create-csv.ts";
 import { ZCreateEdgeSchema } from "common";
 import { TRPCError } from "@trpc/server";
+import { manySchema } from "common/src/zod-utils.ts";
 
 export const Edge = router({
   csvUpload: protectedProcedure
@@ -40,7 +41,7 @@ export const Edge = router({
   }),
 
   createOne: protectedProcedure
-    .input(z.object({ data: ZCreateEdgeSchema }))
+    .input(ZCreateEdgeSchema)
     .mutation(async ({ input, ctx }) => {
       const data = [];
       data.push(
@@ -48,12 +49,12 @@ export const Edge = router({
           data: {
             startNode: {
               connect: {
-                id: input.data.startNodeId,
+                id: input.startNodeId,
               },
             },
             endNode: {
               connect: {
-                id: input.data.endNodeId,
+                id: input.endNodeId,
               },
             },
           },
@@ -64,12 +65,12 @@ export const Edge = router({
           data: {
             startNode: {
               connect: {
-                id: input.data.endNodeId,
+                id: input.endNodeId,
               },
             },
             endNode: {
               connect: {
-                id: input.data.startNodeId,
+                id: input.startNodeId,
               },
             },
           },
@@ -78,7 +79,7 @@ export const Edge = router({
       return data;
     }),
   createMany: protectedProcedure
-    .input(z.object({ data: z.array(ZCreateEdgeSchema) }))
+    .input(manySchema(ZCreateEdgeSchema))
     .mutation(async ({ input, ctx }) => {
       ctx.db.edge.createMany({
         data: input.data,

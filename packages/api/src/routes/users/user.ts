@@ -3,6 +3,7 @@ import { router } from "../../trpc.ts";
 import { z } from "zod";
 import { ZCreateBaseUserSchema, ZCreateUserWithAuth0 } from "common";
 import { TRPCError } from "@trpc/server";
+import { updateSchema } from "common/src/zod-utils.ts";
 
 export const userRouter = router({
   getAll: protectedProcedure.query(({ ctx }) => {
@@ -55,12 +56,7 @@ export const userRouter = router({
     }),
 
   updateOne: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        data: ZCreateBaseUserSchema.partial(),
-      }),
-    )
+    .input(updateSchema(ZCreateBaseUserSchema))
     .mutation(async ({ input, ctx }) => {
       const { data } = input;
       return ctx.db.user.update({

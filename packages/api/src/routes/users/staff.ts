@@ -5,6 +5,7 @@ import { TRPCError } from "@trpc/server";
 import { parseCSVStaff } from "../../../utils/csv-parsing.ts";
 import { exportStaffToDb } from "../../../utils/create-csv.ts";
 import { ZCreateStaffSchema } from "common";
+import { manySchema, updateSchema } from "common/src/zod-utils.ts";
 
 export const staffRouter = router({
   csvUpload: protectedProcedure
@@ -43,7 +44,7 @@ export const staffRouter = router({
     }),
 
   createMany: protectedProcedure
-    .input(z.object({ data: z.array(ZCreateStaffSchema) }))
+    .input(manySchema(ZCreateStaffSchema))
     .mutation(async ({ input, ctx }) => {
       ctx.db.staff.createMany({
         data: input.data,
@@ -92,7 +93,7 @@ export const staffRouter = router({
   }),
 
   updateOne: protectedProcedure
-    .input(z.object({ id: z.string(), data: ZCreateStaffSchema.partial() }))
+    .input(updateSchema(ZCreateStaffSchema))
     .mutation(async ({ input, ctx }) => {
       return ctx.db.staff.update({
         where: {

@@ -1,17 +1,13 @@
 import { protectedProcedure, publicProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
-import { transformCreateServiceInput } from "../../../utils/serviceInputTransformer.ts";
 import { ZCreateBaseServiceSchema, ZCreateRoomSchema } from "common";
+import { updateSchema } from "common/src/zod-utils.ts";
 
 export const RoomRouter = router({
   //Room Request Service
   createOne: protectedProcedure
-    .input(
-      ZCreateBaseServiceSchema.extend({ data: ZCreateRoomSchema })
-        .extend({ type: z.literal("room").default("room") })
-        .transform(transformCreateServiceInput),
-    )
+    .input(ZCreateRoomSchema)
     .mutation(async ({ input, ctx }) => {
       console.log(input);
       return await ctx.db.room.create({
@@ -87,29 +83,13 @@ export const RoomRouter = router({
     }),
 
   updateOne: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        data: ZCreateBaseServiceSchema.partial().extend({
-          data: ZCreateRoomSchema.partial(),
-          type: z.literal("room").default("room"),
-        }),
-      }),
-    )
+    .input(updateSchema(ZCreateRoomSchema))
     .mutation(async ({ input, ctx }) => {
-      const { data, ...rest } = input;
       return ctx.db.room.update({
         where: {
           id: input.id,
         },
-        data: {
-          ...data,
-          service: {
-            update: {
-              ...rest,
-            },
-          },
-        },
+        data: input.data,
       });
     }),
 

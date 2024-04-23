@@ -171,7 +171,7 @@ export default function PathFind() {
         <FloorSelection onFloorClick={handleFloorClick} />
       </div>
       {pathData && pathData.length > 0 && (
-        <div className="absolute bottom-0 left-0 backdrop-blur-[4px] bg-white/80 rounded-[10px] shadown-inner drop-shadow-md">
+        <div className="absolute bottom-2 left-2 backdrop-blur-[4px] bg-white/80 rounded-[10px] shadown-inner drop-shadow-md">
           <TextNavigation nodes={pathData} />
         </div>
       )}

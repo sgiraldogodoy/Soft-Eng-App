@@ -6,8 +6,9 @@ import { InspectDatabase } from "@/routes/InspectDatabase.tsx";
 import DashboardLayout from "@/components/layouts/DashboardLayout";
 import MapEdit from "./MapEdit";
 import ServiceRequestPage from "./ServiceRequestPage";
+import AboutPage from "./AboutPage";
+import PatientIntegration from "./PatientIntegration";
 import { Settings } from "@/routes/Settings.tsx";
-// import Settings from "./Settings";
 
 export function AppRouter() {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -17,6 +18,7 @@ export function AppRouter() {
     <Route>
       <Switch>
         <Route path="/" component={HomePage} />
+        <Route path="/about" component={AboutPage} />
         <DashboardLayout>
           <Route path="/pathfind">
             <PathFind />
@@ -38,6 +40,10 @@ export function AppRouter() {
           <Route path="/settings" nest>
             <Settings />
             {isDefinitelyNotAuthed && <Redirect to="/" />}
+          </Route>
+          <Route path="/patients">
+            <PatientIntegration />
+            {!isAuthenticated && <Redirect to="/" />}
           </Route>
         </DashboardLayout>
       </Switch>

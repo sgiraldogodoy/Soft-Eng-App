@@ -2,16 +2,11 @@ import { protectedProcedure, publicProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
 import { ZCreateBaseServiceSchema, ZCreateGiftSchema } from "common";
-import { transformCreateServiceInput } from "../../../utils/serviceInputTransformer.ts";
+import { updateSchema } from "common/src/zod-utils.ts";
 
 export const GiftRouter = router({
   createOne: protectedProcedure
-    .input(
-      ZCreateBaseServiceSchema.extend({
-        data: ZCreateGiftSchema,
-        type: z.literal("gift").default("gift"),
-      }).transform(transformCreateServiceInput),
-    )
+    .input(ZCreateGiftSchema)
     .mutation(async ({ input, ctx }) => {
       console.log(input);
       return ctx.db.gift.create({
@@ -45,30 +40,13 @@ export const GiftRouter = router({
   }),
 
   updateOne: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        data: ZCreateBaseServiceSchema.partial().extend({
-          data: ZCreateGiftSchema.partial(),
-          type: z.literal("gift").default("gift"),
-        }),
-      }),
-    )
+    .input(updateSchema(ZCreateGiftSchema))
     .mutation(async ({ input, ctx }) => {
-      const { data, ...rest } = input;
-
       return ctx.db.gift.update({
         where: {
           id: input.id,
         },
-        data: {
-          ...data,
-          service: {
-            update: {
-              ...rest,
-            },
-          },
-        },
+        data: input.data,
       });
     }),
 
