@@ -246,7 +246,7 @@ export default function InputForm({ variant }: Props) {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     data.nodeId = nodesQuery.find((n) => data.nodeId === n.longName)?.id ?? "";
-    data.staffId = staffQuery.find((n) => data.staffId === n.name)?.id ?? "";
+
     switch (data.type) {
       case "flower":
         console.log(data);
@@ -710,7 +710,7 @@ export default function InputForm({ variant }: Props) {
                           >
                             {field.value
                               ? staffQuery.find(
-                                  (staff) => staff.name === field.value,
+                                  (staff) => staff.id === field.value,
                                 )?.name
                               : "Select Staff"}
                             <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -730,7 +730,7 @@ export default function InputForm({ variant }: Props) {
                                 value={assignee.name}
                                 key={assignee.name}
                                 onSelect={() => {
-                                  form.setValue("staffId", assignee.name);
+                                  form.setValue("staffId", assignee.id);
                                 }}
                               >
                                 {assignee.name}

@@ -69,6 +69,7 @@ export const serviceRouter = router({
         it: true,
         religious: true,
         interpreter: true,
+        assignee: true,
       },
     });
   }),
