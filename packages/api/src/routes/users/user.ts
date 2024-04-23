@@ -7,7 +7,12 @@ import { updateSchema } from "common/src/zod-utils.ts";
 
 export const userRouter = router({
   getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.user.findMany();
+    return ctx.db.user.findMany({
+      include: {
+        staff: true,
+        patient: true,
+      },
+    });
   }),
 
   getOne: protectedProcedure
@@ -16,6 +21,10 @@ export const userRouter = router({
       return ctx.db.user.findUnique({
         where: {
           id: input.id,
+        },
+        include: {
+          staff: true,
+          patient: true,
         },
       });
     }),
