@@ -176,7 +176,17 @@ export default function PathFind() {
         </div>
       )}
       <div className="absolute bottom-2 left-2 bg-white h-fit w-fit rounded-[5px]">
-        <p>Map Key</p>
+        <h1 className="font-bold text-nowrap">Map Key:</h1>
+        <ul>
+          <li>
+            <img src="@\public\mapkeyicons\restroom.png"></img>Restrooms
+          </li>
+          <li>Elevator</li>
+          <li>Emergency</li>
+          <li>ATM</li>
+          <li>Gift Shop</li>
+          <li>Pharmacy</li>
+        </ul>
       </div>
     </div>
   );

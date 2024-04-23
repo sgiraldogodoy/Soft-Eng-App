@@ -1,19 +1,6 @@
-import * as z from "zod";
-import { ServiceType } from "../.prisma/client";
-import {
-  CompleteNode,
-  RelatedNodeModel,
-  CompleteFlower,
-  RelatedFlowerModel,
-  CompleteGift,
-  RelatedGiftModel,
-  CompleteRoom,
-  RelatedRoomModel,
-  CompleteSecurity,
-  RelatedSecurityModel,
-  CompleteAV,
-  RelatedAVModel,
-} from "./index";
+import * as z from "zod"
+import { ServiceType } from "../.prisma/client"
+import { CompleteNode, RelatedNodeModel, CompleteFlower, RelatedFlowerModel, CompleteGift, RelatedGiftModel, CompleteRoom, RelatedRoomModel, CompleteSecurity, RelatedSecurityModel, CompleteAV, RelatedAVModel } from "./index"
 
 export const ServiceModel = z.object({
   id: z.string(),
@@ -24,15 +11,15 @@ export const ServiceModel = z.object({
   status: z.string(),
   type: z.nativeEnum(ServiceType),
   note: z.string(),
-});
+})
 
 export interface CompleteService extends z.infer<typeof ServiceModel> {
-  node: CompleteNode;
-  flower?: CompleteFlower | null;
-  gift?: CompleteGift | null;
-  room?: CompleteRoom | null;
-  security?: CompleteSecurity | null;
-  av?: CompleteAV | null;
+  node: CompleteNode
+  flower?: CompleteFlower | null
+  gift?: CompleteGift | null
+  room?: CompleteRoom | null
+  security?: CompleteSecurity | null
+  av?: CompleteAV | null
 }
 
 /**
@@ -40,13 +27,11 @@ export interface CompleteService extends z.infer<typeof ServiceModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedServiceModel: z.ZodSchema<CompleteService> = z.lazy(() =>
-  ServiceModel.extend({
-    node: RelatedNodeModel,
-    flower: RelatedFlowerModel.nullish(),
-    gift: RelatedGiftModel.nullish(),
-    room: RelatedRoomModel.nullish(),
-    security: RelatedSecurityModel.nullish(),
-    av: RelatedAVModel.nullish(),
-  }),
-);
+export const RelatedServiceModel: z.ZodSchema<CompleteService> = z.lazy(() => ServiceModel.extend({
+  node: RelatedNodeModel,
+  flower: RelatedFlowerModel.nullish(),
+  gift: RelatedGiftModel.nullish(),
+  room: RelatedRoomModel.nullish(),
+  security: RelatedSecurityModel.nullish(),
+  av: RelatedAVModel.nullish(),
+}))

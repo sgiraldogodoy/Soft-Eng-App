@@ -1,10 +1,5 @@
-import * as z from "zod";
-import {
-  CompleteStaff,
-  RelatedStaffModel,
-  CompleteVisit,
-  RelatedVisitModel,
-} from "./index";
+import * as z from "zod"
+import { CompleteStaff, RelatedStaffModel, CompleteVisit, RelatedVisitModel } from "./index"
 
 export const VisitNoteModel = z.object({
   id: z.string(),
@@ -12,11 +7,11 @@ export const VisitNoteModel = z.object({
   content: z.string(),
   authorId: z.string().nullish(),
   visitId: z.string(),
-});
+})
 
 export interface CompleteVisitNote extends z.infer<typeof VisitNoteModel> {
-  author?: CompleteStaff | null;
-  visit: CompleteVisit;
+  author?: CompleteStaff | null
+  visit: CompleteVisit
 }
 
 /**
@@ -24,10 +19,7 @@ export interface CompleteVisitNote extends z.infer<typeof VisitNoteModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedVisitNoteModel: z.ZodSchema<CompleteVisitNote> = z.lazy(
-  () =>
-    VisitNoteModel.extend({
-      author: RelatedStaffModel.nullish(),
-      visit: RelatedVisitModel,
-    }),
-);
+export const RelatedVisitNoteModel: z.ZodSchema<CompleteVisitNote> = z.lazy(() => VisitNoteModel.extend({
+  author: RelatedStaffModel.nullish(),
+  visit: RelatedVisitModel,
+}))
