@@ -39,6 +39,13 @@ export function InspectDatabase() {
     <>
       <Tabs defaultValue="nodes" asChild>
         <div className="relative h-full max-h-full p-6 flex flex-col gap-2 overflow-auto">
+          <div className="absolute bottom-0 left-0 w-full h-full">
+            <img
+              src="/wave.svg"
+              alt="Wave"
+              className="absolute bottom-0 left-0 "
+            />
+          </div>
           <div className="flex items-center gap-2">
             <TabsList className="animate-in fade-in zoom-in-105 duration-400 fill-mode-both">
               <TabsTrigger value="nodes">Nodes</TabsTrigger>
@@ -136,7 +143,7 @@ export function InspectDatabase() {
               Upload
             </Button>
           </div>
-          <Card className="relative max-h-full p-4 overflow-auto animate-in fade-in duration-400 zoom-in-105 delay-400 fill-mode-both">
+          <Card className="relative max-h-full p-4 overflow-auto animate-in fade-in duration-400 zoom-in-105 delay-400 fill-mode-both bg-white/90 backdrop-blur-md">
             <TabsContent value="nodes">
               <NodesTable />
             </TabsContent>

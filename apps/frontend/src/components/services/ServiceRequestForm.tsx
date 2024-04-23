@@ -273,7 +273,7 @@ export default function InputForm({ variant }: Props) {
 
   return (
     <>
-      <Card className="h-full backdrop-blur-md flex-1 flex flex-col overflow-auto z-0">
+      <Card className="h-full backdrop-blur-md flex-1 flex flex-col overflow-auto z-0 bg-white/90">
         <CardHeader>
           <CardTitle className="capitalize">
             {FORMTYPE_RECORD[variant].longName}
