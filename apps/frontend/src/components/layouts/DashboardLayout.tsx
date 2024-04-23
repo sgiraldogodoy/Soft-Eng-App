@@ -1,7 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import {
   DatabaseIcon,
-  // ArrowRightIcon,
   HammerIcon,
   LogOut,
   MapIcon,
@@ -34,7 +33,6 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
     <div className="flex flex-col bg-background min-h-screen max-h-screen overflow-auto">
       <div className="flex h-14 border-b items-center flex-none">
         <div className="relative w-14 flex-none border-r h-full flex items-center justify-center">
-          {/*<BackgroundGradientAnimation />*/}
           <svg
             width="21"
             height="30"
