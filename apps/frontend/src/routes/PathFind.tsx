@@ -175,6 +175,9 @@ export default function PathFind() {
           <TextNavigation nodes={pathData} />
         </div>
       )}
+      <div className="absolute bottom-2 left-2 bg-white h-fit w-fit rounded-[5px]">
+        <p>Map Key</p>
+      </div>
     </div>
   );
 }

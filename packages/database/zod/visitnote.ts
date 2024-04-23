@@ -10,12 +10,12 @@ export const VisitNoteModel = z.object({
   id: z.string(),
   type: z.string(),
   content: z.string(),
-  authorId: z.string(),
+  authorId: z.string().nullish(),
   visitId: z.string(),
 });
 
 export interface CompleteVisitNote extends z.infer<typeof VisitNoteModel> {
-  author: CompleteStaff;
+  author?: CompleteStaff | null;
   visit: CompleteVisit;
 }
 
@@ -27,7 +27,7 @@ export interface CompleteVisitNote extends z.infer<typeof VisitNoteModel> {
 export const RelatedVisitNoteModel: z.ZodSchema<CompleteVisitNote> = z.lazy(
   () =>
     VisitNoteModel.extend({
-      author: RelatedStaffModel,
+      author: RelatedStaffModel.nullish(),
       visit: RelatedVisitModel,
     }),
 );
