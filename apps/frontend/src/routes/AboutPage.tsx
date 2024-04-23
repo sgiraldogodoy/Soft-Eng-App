@@ -336,7 +336,7 @@ export default function AboutPage() {
           are copyrighted and provided for the sole use of educational purposes.
         </footer>
       </div>
-      <div className="absolute top-0 right-0 mt-4 mr-4 border-2 rounded-lg border-black">
+      <div className="fixed top-0 right-0 mt-4 mr-4 border-2 rounded-lg border-black">
         <Button
           asChild
           size="icon"
