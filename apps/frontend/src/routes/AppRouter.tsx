@@ -7,7 +7,7 @@ import DashboardLayout from "@/components/layouts/DashboardLayout";
 import MapEdit from "./MapEdit";
 import ServiceRequestPage from "./ServiceRequestPage";
 import PatientIntegration from "./PatientIntegration";
-import Settings from "@/routes/Settings.tsx";
+import { Settings } from "@/routes/Settings.tsx";
 
 export function AppRouter() {
   const { isAuthenticated, isLoading } = useAuth0();
