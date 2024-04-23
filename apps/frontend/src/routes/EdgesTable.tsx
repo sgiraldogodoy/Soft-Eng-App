@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { trpc } from "@/utils/trpc";
+import { LoadingSpinner } from "@/components/ui/loader.tsx";
 
 export function EdgesTable() {
   const { data, isLoading, isError } = trpc.edge.getAll.useQuery();
@@ -17,7 +18,7 @@ export function EdgesTable() {
   }
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingSpinner />;
   }
 
   return (

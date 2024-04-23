@@ -14,8 +14,10 @@ import {
 } from "@/components/ui/popover";
 import PathfindSettings from "@/components/PathfindSettings.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import { TextNavigation } from "@/components/TextNav.tsx";
 
 import { Link } from "wouter";
+import { LoadingSpinner } from "@/components/ui/loader.tsx";
 
 type Floor = "L1" | "L2" | "1" | "2" | "3";
 const FLOOR_URLS: Record<Floor, string> = {
@@ -32,33 +34,41 @@ export default function PathFind() {
   const [imgUrl, setImgUrl] = useState("/02_thesecondfloor.png");
   const [floor, setFloor] = useState("2");
   const [algorithm, setAlgorithm] = useState("A*");
+  const [wheelchair, setWheelchair] = useState(true);
   const { isAuthenticated } = useAuth0();
   const nodesQuery = trpc.node.getAll.useQuery();
 
   if (nodesQuery.isError) {
     console.log("Error in nodesQuery");
   }
-  if (nodesQuery.isLoading) {
-    console.log("Nodes are loading");
-  }
 
   const pathQuery = trpc.node.findPath;
   const path = pathQuery.useQuery(
     startNode && goalNode
-      ? { startNodeId: startNode, endNodeId: goalNode, algorithm: algorithm }
+      ? {
+          startNodeId: startNode,
+          endNodeId: goalNode,
+          wheelchair: wheelchair,
+          algorithm: algorithm,
+        }
       : skipToken,
   );
   const pathData = path.data;
 
   const handleNodeClickInApp = (clickedNode: string) => {
-    // if (startNode && goalNode) {
-    //   setStartNode(clickedNode);
-    //   setGoalNode("");
-    // } else if (!startNode) {
-    //   setStartNode(clickedNode);
-    // } else if (!goalNode) {
-    setGoalNode(clickedNode);
-    // }
+    if (startNode && goalNode) {
+      setStartNode(clickedNode);
+      setGoalNode("");
+    } else if (!startNode) {
+      setStartNode(clickedNode);
+    } else if (!goalNode) {
+      setGoalNode(clickedNode);
+      // }
+    }
+  };
+
+  const handleWheelChair = () => {
+    setWheelchair(!wheelchair);
   };
 
   const handleFloorClick = useCallback(
@@ -86,6 +96,10 @@ export default function PathFind() {
     [setStartNode, setFloor, setImgUrl, nodesQuery],
   );
 
+  if (nodesQuery.isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div className="relative h-full">
       <Map
@@ -112,13 +126,24 @@ export default function PathFind() {
           </Button>
         </div>
       )}
+      <div className="absolute top-12 w-full flex justify-center gap-4">
+        <div className="backdrop-blur-[4px] bg-white/90 rounded-[100px] shadow-inner drop-shadow-md">
+          <EndNodeAutocomlete
+            Rooms={nodesQuery.data}
+            onChange={(e) => setStartNode(e)}
+            selectedNode={startNode}
+            placeholder="Start Location"
+          />
+        </div>
 
-      <div className="absolute backdrop-blur-[4px] bg-white/90 top-12 left-1/2 transform -translate-x-1/2 rounded-[100px] shadow-inner drop-shadow-md">
-        <EndNodeAutocomlete
-          Rooms={nodesQuery.data}
-          onChange={(e) => setGoalNode(e)}
-          selectedNode={goalNode}
-        />
+        <div className="backdrop-blur-[4px] bg-white/90 rounded-[100px] shadow-inner drop-shadow-md">
+          <EndNodeAutocomlete
+            Rooms={nodesQuery.data}
+            onChange={(e) => setGoalNode(e)}
+            selectedNode={goalNode}
+            placeholder="Where to?"
+          />
+        </div>
       </div>
 
       <div className="absolute flex gap-5 bottom-6 left-1/2 transform -translate-x-1/2">
@@ -130,6 +155,7 @@ export default function PathFind() {
               </PopoverTrigger>
               <PopoverContent className="w-80" sideOffset={32}>
                 <PathfindSettings
+                  onWheelchair={handleWheelChair}
                   onAlgorithmSelect={setAlgorithm}
                   algorithm={algorithm}
                   Rooms={nodesQuery.data}
@@ -144,6 +170,11 @@ export default function PathFind() {
       <div className="absolute flex items-center gap-[2px] text-xl font-bold bottom-10 right-8">
         <FloorSelection onFloorClick={handleFloorClick} />
       </div>
+      {pathData && pathData.length > 0 && (
+        <div className="absolute bottom-2 left-2 backdrop-blur-[4px] bg-white/80 rounded-[10px] shadown-inner drop-shadow-md">
+          <TextNavigation nodes={pathData} />
+        </div>
+      )}
     </div>
   );
 }

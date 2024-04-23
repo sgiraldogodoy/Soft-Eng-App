@@ -7,24 +7,61 @@ generator client {
   engineType = "binary"
 }
 
+generator zod {
+  provider = "zod-prisma"
+  output   = "../zod" // (default) the directory where generated zod schemas will be saved
+
+  relationModel = true // (default) Create and export both plain and related models.
+  // relationModel         = "default" // Do not export model without relations.
+  // relationModel         = false // Do not generate related model
+
+  modelCase = "PascalCase" // (default) Output models using pascal case (ex. UserModel, PostModel)
+  // modelCase             = "camelCase" // Output models using camel case (ex. userModel, postModel)
+
+  modelSuffix = "Model" // (default) Suffix to apply to your prisma models when naming Zod schemas
+
+  // useDecimalJs          = false // (default) represent the prisma Decimal type using as a JS number
+  useDecimalJs = true // represent the prisma Decimal type using Decimal.js (as Prisma does)
+
+  // https://www.prisma.io/docs/concepts/components/prisma-client/working-with-fields/working-with-json-fields#filtering-by-null-values
+  prismaJsonNullability = true // (default) uses prisma's scheme for JSON field nullability
+  // prismaJsonNullability = false // allows null assignment to optional JSON fields
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("POSTGRES_URL")
 }
 
 model Node {
-  id        String    @id
-  x         Int
-  y         Int
-  building  String
-  floor     String
-  type      String
-  longName  String
-  shortName String
-  outgoing  Edge[]    @relation(name: "NodeOutgoingEdge")
-  incoming  Edge[]    @relation(name: "NodeIncomingEdge")
-  service   Service[] @relation(name: "ServiceToNode")
-  patients  Patient[] @relation(name: "PatientToNode")
+  id           String        @id
+  x            Int
+  y            Int
+  building     String
+  floor        String
+  type         NodeType
+  longName     String
+  shortName    String
+  available    Boolean       @default(true)
+  outgoing     Edge[]        @relation(name: "NodeOutgoingEdge")
+  incoming     Edge[]        @relation(name: "NodeIncomingEdge")
+  service      Service[]     @relation(name: "ServiceToNode")
+  patients     Patient[]     @relation(name: "PatientToNode")
+  appointments Appointment[] @relation(name: "AppointmentToNode")
+}
+
+enum NodeType {
+  HALL
+  ELEV
+  REST
+  STAI
+  DEPT
+  LABS
+  INFO
+  CONF
+  EXIT
+  RETL
+  SERV
 }
 
 model Edge {
@@ -37,20 +74,27 @@ model Edge {
 }
 
 model Service {
-  id       String      @id @default(uuid())
-  nodeId   String
-  node     Node        @relation(name: "ServiceToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  priority String
-  date     DateTime    @default(now())
-  login    String
-  status   String
-  type     ServiceType
-  note     String
-  flower   Flower?     @relation(name: "FlowerToService")
-  gift     Gift?       @relation(name: "GiftToService")
-  room     Room?       @relation(name: "RoomToService")
-  security Security?   @relation(name: "SecurityToService")
-  av       AV?         @relation(name: "AVToService")
+  id          String       @id @default(uuid())
+  nodeId      String
+  node        Node         @relation(name: "ServiceToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  priority    String
+  date        DateTime     @default(now())
+  login       String
+  status      String
+  type        ServiceType
+  note        String
+  flower      Flower?      @relation(name: "FlowerToService")
+  gift        Gift?        @relation(name: "GiftToService")
+  room        Room?        @relation(name: "RoomToService")
+  security    Security?    @relation(name: "SecurityToService")
+  av          AV?          @relation(name: "AVToService")
+  maintenance Maintenance? @relation(name: "MaintenanceToService")
+  transport   Transport?   @relation(name: "TransportToService")
+  sanitation  Sanitation?  @relation(name: "SanitationToService")
+  visitor     Visitor?     @relation(name: "VisitorToService")
+  it          IT?          @relation(name: "ITToService")
+  religious   Religious?   @relation(name: "ReligiousToService")
+  interpreter Interpreter? @relation(name: "InterpreterToService")
 }
 
 enum ServiceType {
@@ -59,6 +103,13 @@ enum ServiceType {
   room
   security
   av
+  maintenance
+  transport
+  sanitation
+  visitor
+  it
+  religious
+  interpreter
 }
 
 model Flower {
@@ -103,16 +154,151 @@ model AV {
   type      String
 }
 
+model Maintenance {
+  id        String    @id @default(uuid())
+  serviceId String    @unique
+  service   Service   @relation(name: "MaintenanceToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  type      String
+  severity  String
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+}
+
+model Transport {
+  id        String  @id @default(uuid())
+  serviceId String  @unique
+  service   Service @relation(name: "TransportToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  type      String
+  count     String
+}
+
+model Sanitation {
+  id        String    @id @default(uuid())
+  serviceId String    @unique
+  service   Service   @relation(name: "SanitationToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  type      String
+  quality   String
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+}
+
+model Visitor {
+  id          String    @id @default(uuid())
+  serviceId   String    @unique
+  service     Service   @relation(name: "VisitorToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  visitorName String
+  patientName String
+  startDate   DateTime  @default(now())
+  endDate     DateTime?
+}
+
+model IT {
+  id         String  @id @default(uuid())
+  serviceId  String  @unique
+  service    Service @relation(name: "ITToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  type       String
+  errorCodes String?
+}
+
+model Religious {
+  id        String   @id @default(uuid())
+  serviceId String   @unique
+  service   Service  @relation(name: "ReligiousToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  religion  String
+  dateTime  DateTime
+}
+
+model Interpreter {
+  id            String   @id @default(uuid())
+  serviceId     String   @unique
+  service       Service  @relation(name: "InterpreterToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  recipientName String
+  type          String
+  dateTime      DateTime
+}
+
 model Patient {
-  id          String   @id @default(uuid())
-  SSN         Int?     @unique
-  nodeId      String   @default("BINFO00202")
-  location    Node     @relation(name: "PatientToNode", fields: [nodeId], references: [id], onUpdate: SetDefault, onDelete: SetDefault)
-  doctor      String
-  date        DateTime @default(now())
-  firstName   String
-  middleName  String?
-  lastName    String
-  inTreatment Boolean  @default(true)
-  insurance   String?
+  id           String        @id @default(uuid())
+  SSN          Int?          @unique
+  nodeId       String?
+  location     Node?         @relation(name: "PatientToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  pcpId        String?
+  pcp          Staff?        @relation(name: "PatientStaff_PCP", fields: [pcpId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  entryDate    DateTime      @default(now())
+  firstName    String
+  middleName   String?
+  lastName     String
+  dateOfBirth  DateTime
+  phoneNumber  String?
+  inTreatment  Boolean       @default(false)
+  insurance    String?
+  visits       Visit[]       @relation(name: "VisitPatient")
+  appointments Appointment[] @relation(name: "AppointmentToPatient")
+  userId       String?       @unique
+  user         User?         @relation(name: "PatientUser", fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+}
+
+model Appointment {
+  id              String   @id @default(uuid())
+  createdTime     DateTime @default(now())
+  appointmentTime DateTime
+  checkedIn       Boolean
+  nodeId          String?
+  location        Node?    @relation(name: "AppointmentToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  patientId       String
+  patient         Patient  @relation(name: "AppointmentToPatient", fields: [patientId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  staffId         String?
+  staff           Staff?   @relation(name: "AppointmentToStaff", fields: [staffId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  visitId         String?  @unique
+  visit           Visit?   @relation(name: "AppointmentVisit", fields: [visitId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  notes           String
+}
+
+model Visit {
+  id          String       @id @default(uuid())
+  notes       VisitNote[]  @relation(name: "VisitNoteToVisit")
+  staffId     String?
+  staff       Staff?       @relation(name: "VisitStaff", fields: [staffId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  patientId   String
+  patient     Patient      @relation(name: "VisitPatient", fields: [patientId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  visitTime   DateTime
+  appointment Appointment? @relation(name: "AppointmentVisit")
+}
+
+model VisitNote {
+  id       String  @id @default(uuid())
+  type     String
+  content  String
+  authorId String?
+  author   Staff?  @relation(name: "VisitNoteToUser_Author", fields: [authorId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  visitId  String
+  visit    Visit   @relation(name: "VisitNoteToVisit", fields: [visitId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
+
+model User {
+  id      String   @id @default(uuid())
+  sub     String?  @unique
+  email   String?
+  role    Role?
+  name    String
+  patient Patient? @relation(name: "PatientUser")
+  staff   Staff?   @relation(name: "StaffUser")
+}
+
+model Staff {
+  id          String        @id @default(uuid())
+  name        String
+  jobTitle    String
+  appointment Appointment[] @relation(name: "AppointmentToStaff")
+  visit       Visit[]       @relation(name: "VisitStaff")
+  userId      String?       @unique
+  user        User?         @relation(name: "StaffUser", fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  visitNotes  VisitNote[]   @relation(name: "VisitNoteToUser_Author")
+  patients    Patient[]     @relation(name: "PatientStaff_PCP")
+}
+
+enum Role {
+  patient
+  staff
+  admin
 }

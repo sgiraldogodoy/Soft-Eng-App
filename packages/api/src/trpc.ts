@@ -4,10 +4,17 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { verifyJwt } from "../utils/auth";
+import { ManagementClient } from "auth0";
 
 export const createTRPCContext = async (
   opts: trpcExpress.CreateExpressContextOptions,
 ) => {
+  const auth0 = new ManagementClient({
+    domain: "dev-x61j30sgxmn7t3u3.us.auth0.com",
+    clientId: process.env.AUTH0_CLIENT_ID ?? "",
+    clientSecret: process.env.AUTH0_CLIENT_SECRET ?? "",
+  });
+
   // dev-x61j30sgxmn7t3u3.us.auth0.com
   try {
     const authorization = opts.req.headers.authorization;
@@ -16,6 +23,7 @@ export const createTRPCContext = async (
       const token = await verifyJwt(authorization);
 
       return {
+        auth0,
         db,
         token,
       };
@@ -26,6 +34,7 @@ export const createTRPCContext = async (
   }
 
   return {
+    auth0,
     db,
   };
 };

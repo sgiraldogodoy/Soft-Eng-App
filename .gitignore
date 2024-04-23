@@ -5,6 +5,7 @@
 **/.turbo
 
 **/.prisma
+packages/database/zod
 
 out
 

@@ -1,10 +1,11 @@
 import { trpc } from "@/utils/trpc.ts";
 import Map from "@/components/Map.tsx";
 import FloorSelection from "@/components/FloorSelection.tsx";
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { MapEditTab } from "@/components/MapEditToggle.tsx";
+import { LoadingSpinner } from "@/components/ui/loader.tsx";
 
-export default function FloorTabs() {
+export default function MapEdit() {
   const [imgUrl, setImgUrl] = useState("/02_thesecondfloor.png");
   const [floor, setFloor] = useState("2");
   const [typeedit, setTypeEdit] = useState("Move");
@@ -26,6 +27,10 @@ export default function FloorTabs() {
   );
   const nodesQuery = trpc.node.getAll.useQuery();
   const edgeQuery = trpc.edge.getAll.useQuery();
+
+  if (nodesQuery.isLoading || edgeQuery.isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="relative h-full">
