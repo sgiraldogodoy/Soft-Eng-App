@@ -175,14 +175,14 @@ export default function PathFind() {
           <TextNavigation nodes={pathData} />
         </div>
       )}
-      <div className="absolute bottom-2 left-2 bg-white h-fit w-fit rounded-[5px] grid grid-cols-2 m-2">
+      <div className="absolute bottom-2 left-2 bg-white/70 h-fit w-fit rounded-[10px] grid grid-cols-auto gap-x-5 m-2 drop-shadow-lg">
         <h1 className="font-bold text-nowrap col-span-2 pt-2 ps-2">Map Key:</h1>
         <img
           src="./mapkeyicons/restroom.png"
           alt="restroom"
           className="object-scale-down h-7 w-7 ps-2"
         />
-        <p className="pe-2">Restrooms</p>
+        <p className="pe-5">Restrooms</p>
         <img
           src="./mapkeyicons/elevator.png"
           alt="elevator"
