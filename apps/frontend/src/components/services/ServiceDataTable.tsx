@@ -2,10 +2,12 @@ import {
   ColumnDef,
   OnChangeFn,
   RowSelectionState,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
 
 import {
@@ -16,6 +18,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
+import React from "react";
+import { Input } from "@/components/ui/input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -30,12 +34,17 @@ export function ServiceDataTable<TData extends { id: string }, TValue>({
   selectionState,
   setSelectionState,
 }: DataTableProps<TData, TValue>) {
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange: setSelectionState,
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     enableMultiRowSelection: false,
     getRowId: (row) => {
       return row.id;
@@ -49,12 +58,25 @@ export function ServiceDataTable<TData extends { id: string }, TValue>({
       ],
     },
     state: {
+      columnFilters,
       rowSelection: selectionState,
     },
   });
 
   return (
     <div className="rounded-md border overflow-auto">
+      <div className="flex items-center py-4">
+        <Input
+          placeholder="Filter emails..."
+          value={
+            (table.getColumn("assignee")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("assignee")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+      </div>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
