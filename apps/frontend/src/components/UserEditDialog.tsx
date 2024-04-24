@@ -27,7 +27,6 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input.tsx";
 import { trpc } from "@/utils/trpc";
 import { toast } from "sonner";
-import { Card, CardContent, CardHeader } from "./ui/card";
 import { LinkIcon } from "lucide-react";
 
 const formSchema = z.object({
@@ -175,28 +174,30 @@ export default function UserEditDialog({
               )}
             />
             {user.staff && (
-              <Card>
-                <CardHeader className="flex">
-                  <span>{user.staff.name}</span>
-                  <span className="ml-auto">
-                    <LinkIcon />
-                  </span>
-                </CardHeader>
-                <CardContent>{user.staff.jobTitle}</CardContent>
-              </Card>
+              <fieldset className="p-4 border rounded">
+                <legend className="flex flex-row gap-1 items-center px-1">
+                  <LinkIcon className="w-4 h-4" />
+                  <span className="ml-auto">Staff</span>
+                </legend>
+                <div className="flex flex-row items-center gap-2">
+                  <span className="text-nowrap">Job Title</span>
+                  <hr className="flex-1 border border-dashed" />
+                  <span>{user.staff.jobTitle}</span>
+                </div>
+              </fieldset>
             )}
             {user.patient && (
-              <Card>
-                <CardHeader className="flex">
-                  <span>
-                    {user.patient.firstName} {user.patient.lastName}
-                  </span>
-                  <span className="ml-auto">
-                    <LinkIcon />
-                  </span>
-                </CardHeader>
-                <CardContent>{user.patient.id}</CardContent>
-              </Card>
+              <fieldset className="p-4 border rounded">
+                <legend className="flex flex-row gap-1 items-center px-1">
+                  <LinkIcon className="w-4 h-4" />
+                  <span className="ml-auto">Patient</span>
+                </legend>
+                <div className="flex flex-row items-center gap-2">
+                  <span className="text-nowrap">Patient ID</span>
+                  <hr className="flex-1 border border-dashed" />
+                  <span>{user.patient.id}</span>
+                </div>
+              </fieldset>
             )}
             <div className="flex gap-2">
               <Button

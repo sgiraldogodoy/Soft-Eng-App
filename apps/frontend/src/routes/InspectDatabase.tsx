@@ -38,7 +38,7 @@ export function InspectDatabase() {
   return (
     <>
       <Tabs defaultValue="nodes" asChild>
-        <div className="relative h-full max-h-full p-6 flex flex-col gap-2 overflow-auto">
+        <div className="relative h-full min-h-full p-6 flex flex-col gap-2 overflow-auto">
           <div className="absolute bottom-0 left-0 w-full h-full">
             <img
               src="/wave.svg"

@@ -23,7 +23,7 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
 
   if (!session.isAuthenticated) {
     return (
-      <div className="w-full min-h-screen overflow-auto relative bg-muted/40">
+      <div className="w-full h-screen min-h-screen overflow-auto relative bg-muted/40">
         {children}
       </div>
     );
