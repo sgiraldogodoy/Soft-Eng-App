@@ -11,10 +11,10 @@ export default function MapKeyAccordion() {
       <Accordion
         type="single"
         collapsible
-        className="rounded-[8px] bg-white drop-shadow-lg absolute bottom-7 right-72"
+        className="rounded-[10px] bg-white/90 drop-shadow-lg bg-blur-md absolute bottom-7 right-72 px-2 w-44"
       >
         <AccordionItem value="Map">
-          <AccordionTrigger className="font-bold mx-16">
+          <AccordionTrigger className="justify-between mx-2 font-bold">
             Map Key
           </AccordionTrigger>
           <AccordionContent className="grid grid-cols-2 grid-flow-dense">
@@ -23,7 +23,7 @@ export default function MapKeyAccordion() {
               alt="restroom"
               className="object-scale-down h-8 w-8 ps-2"
             />
-            <p className="pe-5">Restrooms</p>
+            <p className="">Restrooms</p>
             <img
               src="./mapkeyicons/elevator.png"
               alt="elevator"
