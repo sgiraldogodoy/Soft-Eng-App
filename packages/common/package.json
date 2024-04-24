@@ -20,6 +20,6 @@
     "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint"
   },
   "dependencies": {
-    "zod": "^3.22.5"
+    "zod": "^3.23.4"
   }
 }

@@ -5358,7 +5358,7 @@ const RAW_RUNTIME_STATE =
           ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
           ["vitest", "virtual:281b7ec5658d805f88196484313c874810ad4b28fdb3886a7f2b6292faec9bee3b9a92af4348cfaefb8b484dd7e409e815eac63879fbb0501eb0b5d3afa613d1#npm:0.34.6"],\
-          ["zod", "npm:3.22.5"]\
+          ["zod", "npm:3.23.4"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -6339,7 +6339,7 @@ const RAW_RUNTIME_STATE =
           ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
           ["vitest", "virtual:281b7ec5658d805f88196484313c874810ad4b28fdb3886a7f2b6292faec9bee3b9a92af4348cfaefb8b484dd7e409e815eac63879fbb0501eb0b5d3afa613d1#npm:0.34.6"],\
-          ["zod", "npm:3.22.5"]\
+          ["zod", "npm:3.23.4"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -6782,7 +6782,7 @@ const RAW_RUNTIME_STATE =
           ["tsx", "npm:4.7.1"],\
           ["typescript", "patch:typescript@npm%3A5.4.3#optional!builtin<compat/typescript>::version=5.4.3&hash=e012d7"],\
           ["vitest", "virtual:281b7ec5658d805f88196484313c874810ad4b28fdb3886a7f2b6292faec9bee3b9a92af4348cfaefb8b484dd7e409e815eac63879fbb0501eb0b5d3afa613d1#npm:0.34.6"],\
-          ["zod", "npm:3.22.5"],\
+          ["zod", "npm:3.23.4"],\
           ["zod-prisma", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:0.5.4"]\
         ],\
         "linkType": "SOFT"\
@@ -8345,7 +8345,7 @@ const RAW_RUNTIME_STATE =
           ["vite-plugin-eslint", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.8.1"],\
           ["vitest", "virtual:281b7ec5658d805f88196484313c874810ad4b28fdb3886a7f2b6292faec9bee3b9a92af4348cfaefb8b484dd7e409e815eac63879fbb0501eb0b5d3afa613d1#npm:0.34.6"],\
           ["wouter", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.1.0"],\
-          ["zod", "npm:3.22.5"]\
+          ["zod", "npm:3.23.4"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -14775,10 +14775,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:3.22.5", {\
-        "packageLocation": "./.yarn/cache/zod-npm-3.22.5-36ba7d9667-a60c1b55c4.zip/node_modules/zod/",\
+      ["npm:3.23.4", {\
+        "packageLocation": "./.yarn/cache/zod-npm-3.23.4-70ef3fd2d8-29117ce59f.zip/node_modules/zod/",\
         "packageDependencies": [\
-          ["zod", "npm:3.22.5"]\
+          ["zod", "npm:3.23.4"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -14803,7 +14803,7 @@ const RAW_RUNTIME_STATE =
           ["parenthesis", "npm:3.1.8"],\
           ["prisma", "npm:4.15.0"],\
           ["ts-morph", "npm:13.0.3"],\
-          ["zod", "npm:3.22.5"]\
+          ["zod", "npm:3.23.4"]\
         ],\
         "packagePeers": [\
           "@types/decimal.js",\

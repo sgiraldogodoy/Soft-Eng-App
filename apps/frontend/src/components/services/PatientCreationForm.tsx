@@ -27,7 +27,6 @@ import {
   CardTitle,
   CardContent,
 } from "@/components/ui/card.tsx";
-import { Textarea } from "@/components/ui/textarea.tsx";
 import { trpc } from "@/utils/trpc";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
@@ -40,25 +39,63 @@ import {
 } from "../ui/command";
 import { PopoverContent } from "../ui/popover";
 import { CheckIcon } from "lucide-react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { ZCreateBaseServiceSchema, ZCreateFlowerSchema } from "common";
+// import { useAuth0 } from "@auth0/auth0-react";
+import { ZCreatePatientSchema } from "common";
+import { Input } from "@/components/ui/input.tsx";
 
 // Add your type-specific form schema to this array.
-const FormSchema = z.discriminatedUnion("type", [
-  ZCreateBaseServiceSchema.extend({
-    data: ZCreateFlowerSchema.omit({ service: true }),
-    type: z.literal("flower"),
-  }).omit({ login: true }),
-]);
+const FormSchema = ZCreatePatientSchema.extend({
+  user: z
+    .object({})
+    .passthrough()
+    .pipe(
+      z.preprocess((user) => {
+        if (typeof user !== "object" || !user) {
+          return false;
+        }
+        if ("connect" in user) {
+          if (typeof user.connect !== "object" || !user.connect) return false;
+          if ("id" in user.connect && user.connect.id !== "") {
+            return user;
+          }
+        }
+
+        return user;
+      }, ZCreatePatientSchema.shape.user),
+    ),
+  pcp: z
+    .object({})
+    .passthrough()
+    .pipe(
+      z.preprocess((pcp) => {
+        if (typeof pcp !== "object" || !pcp) {
+          return false;
+        }
+        if ("connect" in pcp) {
+          if (typeof pcp.connect !== "object" || !pcp.connect) return false;
+          if ("id" in pcp.connect && pcp.connect.id !== "") {
+            return pcp;
+          }
+        }
+
+        return pcp;
+      }, ZCreatePatientSchema.shape.pcp),
+    ),
+});
 
 export default function InputForm() {
   const unfilteredQuery = trpc.node.getAll.useQuery();
   const unfilteredStaffQuery = trpc.staff.getAll.useQuery();
+  const unfilteredUserQuery = trpc.user.getAll.useQuery();
   const unsortedQuery = unfilteredQuery.data
     ? unfilteredQuery.data?.filter((node) => !(node.type === "HALL"))
     : [];
   const unsortedStaffQuery = unfilteredStaffQuery.data
     ? unfilteredStaffQuery.data
+    : [];
+  //filter users only users that email field is populated
+  const unsortedUserQuery = unfilteredUserQuery.data
+    ? unfilteredUserQuery.data?.filter((user) => user.email)
     : [];
   const nodesQuery = unsortedQuery.sort(function (a, b) {
     const nodeA = a.longName.toUpperCase();
@@ -70,6 +107,15 @@ export default function InputForm() {
     const staffB = b.name.toUpperCase();
     return staffA < staffB ? -1 : staffA > staffB ? 1 : 0;
   });
+  const userQuery = unsortedUserQuery.sort(function (a, b) {
+    if (a.email === null || b.email === null) {
+      return 0;
+    } else {
+      const userA = a.email.toUpperCase();
+      const userB = b.email.toUpperCase();
+      return userA < userB ? -1 : userA > userB ? 1 : 0;
+    }
+  });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -77,25 +123,19 @@ export default function InputForm() {
   });
 
   // const { requests, setRequests } = useContext(RequestsContext);
-  const session = useAuth0();
+  // const session = useAuth0();
   const utils = trpc.useUtils();
-  const createFlowerRequest = trpc.flower.createOne.useMutation();
+  const createPatientRequest = trpc.patient.createOne.useMutation();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    data.nodeId = nodesQuery.find((n) => data.nodeId === n.longName)?.id ?? "";
+    data.node.connect.id =
+      nodesQuery.find((n) => data.node.connect.id === n.longName)?.id ?? "";
 
     console.log(data);
     toast.promise(
-      createFlowerRequest.mutateAsync(
+      createPatientRequest.mutateAsync(
         {
-          flower: data.data.flower,
-          recipientName: data.data.recipientName,
-          service: {
-            create: {
-              login: session.user?.email ?? "",
-              ...data,
-            },
-          },
+          ...data,
         },
         {
           onSuccess: () => {
@@ -128,10 +168,65 @@ export default function InputForm() {
               <div className="flex flex-row gap-2 items-stretch">
                 <FormField
                   control={form.control}
-                  name="nodeId"
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>First Name*</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="middleName"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Middle Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Last Name*</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex flex-row gap-2 items-stretch">
+                <FormField
+                  control={form.control}
+                  name="SSN"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>SSN</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" />
+                      </FormControl>
+                      <FormDescription>Only if you have one.</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="node.connect.id"
                   render={({ field }) => (
                     <FormItem className="flex flex-col h-full justify-between flex-1">
-                      <FormLabel>Location</FormLabel>
+                      <FormLabel>Location*</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -165,7 +260,10 @@ export default function InputForm() {
                                   value={location.longName}
                                   key={location.longName}
                                   onSelect={() => {
-                                    form.setValue("nodeId", location.longName);
+                                    form.setValue(
+                                      "node.connect.id",
+                                      location.longName,
+                                    );
                                   }}
                                 >
                                   {location.longName}
@@ -190,31 +288,130 @@ export default function InputForm() {
                     </FormItem>
                   )}
                 />
+              </div>
+              <div className="flex flex-row gap-2 items-stretch">
                 <FormField
                   control={form.control}
-                  name="priority"
+                  name="insurance"
                   render={({ field }) => (
                     <FormItem className="flex flex-col flex-1">
-                      <FormLabel>Priority</FormLabel>
+                      <FormLabel>Patient's Insurance</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a priority" />
+                            <SelectValue placeholder="Select a insurance provider" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="LOW">Low</SelectItem>
-                          <SelectItem value="MEDIUM">Medium</SelectItem>
-                          <SelectItem value="HIGH">High</SelectItem>
-                          <SelectItem value="EMERGENCY">Emergency</SelectItem>
+                          <SelectItem value="None">None</SelectItem>
+                          <SelectItem value="MassHealth">MassHealth</SelectItem>
+                          <SelectItem value="Aetna">Aetna</SelectItem>
+                          <SelectItem value="Cigna">Cigna</SelectItem>
+                          <SelectItem value="Blue Cross">Blue Cross</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormDescription>
-                        This is the urgency of the request.
+                        This is the insurance provider of the patient.
                       </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="pcp.connect.id"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col h-full justify-between flex-1">
+                      <FormLabel>Primary Care Provider</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-full justify-between",
+                                !field.value && "text-muted-foreground",
+                              )}
+                            >
+                              {field.value
+                                ? staffQuery.find(
+                                    (staff) => staff.id === field.value,
+                                  )?.name
+                                : "Select Staff"}
+                              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[310px] max-h-[200px] overflow-scroll p-0">
+                          <Command>
+                            <CommandInput
+                              placeholder="Search employee..."
+                              className="h-9"
+                            />
+                            <CommandEmpty>No employee found.</CommandEmpty>
+                            <CommandGroup>
+                              {staffQuery.map((assignee) => (
+                                <CommandItem
+                                  value={assignee.name}
+                                  key={assignee.name}
+                                  onSelect={() => {
+                                    form.setValue(
+                                      "pcp.connect.id",
+                                      assignee.id,
+                                    );
+                                  }}
+                                >
+                                  {assignee.name}
+                                  <CheckIcon
+                                    className={cn(
+                                      "ml-auto h-4 w-4",
+                                      assignee.name === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0",
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                      <FormDescription>
+                        Who is your care provider?
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex flex-row gap-2 items-stretch">
+                <FormField
+                  control={form.control}
+                  name="dateOfBirth"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Date of Birth</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormDescription>When were you born?</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="phoneNumber"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Primary Phone Number</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -222,10 +419,10 @@ export default function InputForm() {
               </div>
               <FormField
                 control={form.control}
-                name="staffId"
+                name="user.connect.id"
                 render={({ field }) => (
                   <FormItem className="flex flex-col h-full justify-between flex-1">
-                    <FormLabel>Assignee</FormLabel>
+                    <FormLabel>Link user email</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -238,10 +435,10 @@ export default function InputForm() {
                             )}
                           >
                             {field.value
-                              ? staffQuery.find(
-                                  (staff) => staff.id === field.value,
-                                )?.name
-                              : "Select Staff"}
+                              ? userQuery.find(
+                                  (user) => user.id === field.value,
+                                )?.email
+                              : "Select User Email"}
                             <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
                         </FormControl>
@@ -249,24 +446,24 @@ export default function InputForm() {
                       <PopoverContent className="w-[310px] max-h-[200px] overflow-scroll p-0">
                         <Command>
                           <CommandInput
-                            placeholder="Search employee..."
+                            placeholder="Search user..."
                             className="h-9"
                           />
-                          <CommandEmpty>No employee found.</CommandEmpty>
+                          <CommandEmpty>No email found.</CommandEmpty>
                           <CommandGroup>
-                            {staffQuery.map((assignee) => (
+                            {userQuery.map((user) => (
                               <CommandItem
-                                value={assignee.name}
-                                key={assignee.name}
+                                value={user.email ?? ""}
+                                key={user.email}
                                 onSelect={() => {
-                                  form.setValue("staffId", assignee.id);
+                                  form.setValue("user.connect.id", user.id);
                                 }}
                               >
-                                {assignee.name}
+                                {user.email}
                                 <CheckIcon
                                   className={cn(
                                     "ml-auto h-4 w-4",
-                                    assignee.name === field.value
+                                    user.email === field.value
                                       ? "opacity-100"
                                       : "opacity-0",
                                   )}
@@ -277,68 +474,11 @@ export default function InputForm() {
                         </Command>
                       </PopoverContent>
                     </Popover>
-                    <FormDescription>
-                      Who should be assigned the request?
-                    </FormDescription>
+                    <FormDescription>what is your user email?</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col flex-1">
-                    <FormLabel>Status</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a Status for the Request" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="ASSIGNED">Assigned</SelectItem>
-                        <SelectItem value="UNASSIGNED">Unassigned</SelectItem>
-                        <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                        <SelectItem value="COMPLETED">Completed</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>
-                      This is the urgency of the request.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="note"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Notes</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Any other information?"
-                        className="resize-none"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      These are any extra notes for the employee who services
-                      the request.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <p className="text-xs">
-                {" "}
-                created by Daniel Reynolds & Matthew Franco
-              </p>
-              <input type="hidden" {...form.register("type")} />
               <div className="flex gap-2">
                 <Button
                   className="flex-1"

@@ -78,7 +78,7 @@
     "toggle-group": "^1.0.5",
     "use-mask-input": "^3.3.7",
     "wouter": "^3.1.0",
-    "zod": "^3.22.5"
+    "zod": "^3.23.4"
   },
   "devDependencies": {
     "@types/luxon": "^3",

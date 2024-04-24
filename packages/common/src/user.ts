@@ -40,7 +40,7 @@ export const ZCreateStaffSchema = z.object({
 });
 
 export const ZCreatePatientSchema = z.object({
-  SSN: z.number().optional(),
+  SSN: z.coerce.number().optional(),
   node: z.object({ connect: z.object({ id: z.string() }) }),
   entryDate: z.coerce.date().optional(),
   pcp: nestSchema(ZCreateStaffSchema).optional(),
@@ -49,7 +49,7 @@ export const ZCreatePatientSchema = z.object({
   lastName: z.string(),
   inTreatment: z.boolean().optional(),
   insurance: z.string().optional(),
-  dateOfBirth: z.coerce.date(),
+  dateOfBirth: z.string().date(),
   phoneNumber: z.string().optional(),
   user: nestSchema(ZCreateBaseUserSchema).optional(),
 });
