@@ -9,6 +9,7 @@ import ServiceRequestPage from "./ServiceRequestPage";
 import AboutPage from "./AboutPage";
 import PatientIntegration from "./PatientIntegration";
 import { Settings } from "@/routes/Settings.tsx";
+import CreditPage from "@/routes/CreditPage.tsx";
 
 export function AppRouter() {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -19,6 +20,7 @@ export function AppRouter() {
       <Switch>
         <Route path="/" component={HomePage} />
         <Route path="/about" component={AboutPage} />
+        <Route path="/credit" component={CreditPage} />
         <DashboardLayout>
           <Route path="/pathfind">
             <PathFind />
