@@ -78,6 +78,7 @@ export function NewNodeDialog({
       type: type as z.infer<typeof nodeSchema.shape.type>,
       longName: longname,
       shortName: shortname,
+      elevatorLetter: type === "ELEV" ? elevatorletter : undefined,
       x,
       y,
     };
