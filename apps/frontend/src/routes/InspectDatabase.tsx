@@ -180,7 +180,7 @@ export function InspectDatabase() {
                     ),
                     {
                       loading: "Adding nodes...",
-                      success: "Done N!",
+                      success: "Done!",
                       error: "An error occured.",
                     },
                   );
@@ -198,7 +198,7 @@ export function InspectDatabase() {
                     ),
                     {
                       loading: "Adding Edges...",
-                      success: "Done E!",
+                      success: "Done!",
                       error: "An error occured.",
                     },
                   );
@@ -216,7 +216,7 @@ export function InspectDatabase() {
                     ),
                     {
                       loading: "Adding Employees...",
-                      success: "Done Emp!",
+                      success: "Done!",
                       error: "An error occured.",
                     },
                   );
