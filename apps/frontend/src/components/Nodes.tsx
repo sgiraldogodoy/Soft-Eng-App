@@ -388,7 +388,10 @@ export function Nodes({
     filteredNodes = filteredNodes.filter((node) => node.type !== "HALL");
   if (path && path.length > 0) {
     filteredNodes = filteredNodes.filter(
-      (node) => !path.some((p) => p.id === node.id),
+      (node) =>
+        !path.some((p) => p.id === node.id) ||
+        node.id === goalNode ||
+        node.id === startNode,
     );
   }
 
