@@ -73,6 +73,8 @@ export class breadthFirstSearch implements PathFinding {
           neighbor.type === "STAI"
         ) {
           continue;
+        } else if (!neighbor.available) {
+          continue;
         } else if (!visited.includes(neighbor.id)) {
           visited.push(neighbor.id);
           queue.push({ currNode: neighbor, path: [...path, neighbor] });
@@ -149,6 +151,8 @@ export class aStar implements PathFinding {
           neighbor.floor !== currNode.floor &&
           neighbor.type === "STAI"
         ) {
+          continue;
+        } else if (!neighbor.available) {
           continue;
         } else if (!visited.includes(neighbor.id)) {
           visited.push(neighbor.id);
@@ -285,6 +289,8 @@ export class depthFirstSearch implements PathFinding {
           neighbor.floor !== currNode.floor &&
           neighbor.type === "STAI"
         ) {
+          continue;
+        } else if (!neighbor.available) {
           continue;
         } else if (!visited.includes(neighbor.id)) {
           visited.push(neighbor.id);

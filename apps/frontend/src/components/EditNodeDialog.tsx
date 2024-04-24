@@ -51,6 +51,11 @@ export function EditNodeDialog({
   const [x, setX] = useState(node.x);
   const [y, setY] = useState(node.y);
   const [missingFields, setMissingFields] = useState(false);
+  const [available, setAvailable] = React.useState(node.available);
+
+  const setAvailableString = (availability: string) => {
+    setAvailable(availability === "true");
+  };
 
   const handleElevatorLetter = (value: string) => {
     setElevatorLetter(value);
@@ -83,6 +88,7 @@ export function EditNodeDialog({
       shortName: shortname,
       x,
       y,
+      available,
     };
 
     onSubmit(nodeData, node.id);
@@ -223,6 +229,25 @@ export function EditNodeDialog({
               </Select>
             </div>
           )}
+
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="available" className="text-right">
+              Availability*
+            </Label>
+            <Select
+              value={available.toString()}
+              onValueChange={setAvailableString}
+            >
+              {/*45 Francis, BTM, Tower, 15 Francis, Shapiro*/}
+              <SelectTrigger className="col-span-3">
+                <SelectValue placeholder={available.toString()} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="true">Available</SelectItem>
+                <SelectItem value="false">Unavailable</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="longname" className="text-right">

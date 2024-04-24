@@ -189,6 +189,7 @@ export function Nodes({
           type: nodeData.type,
           longName: nodeData.longName,
           shortName: nodeData.shortName,
+          available: nodeData.available,
         },
       },
       {
