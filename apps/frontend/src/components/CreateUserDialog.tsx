@@ -449,6 +449,7 @@ const CreateBaseUser = ({
           <Button
             className="flex-1"
             variant="outline"
+            type="button"
             onClick={() => {
               form.reset();
             }}
@@ -513,6 +514,7 @@ export function CreateUserDialog({ open, setOpen }: CreateUserDialogProps) {
         <Route path="/">
           <CreateBaseUser
             onSubmit={(data) => {
+              console.log("test");
               dispatch({ type: "pushBase", base: data });
               setLocation("/auth0");
             }}
