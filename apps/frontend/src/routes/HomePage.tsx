@@ -185,6 +185,16 @@ export default function HomePage() {
           </div>
         </div>
       </Link>
+      <div className="absolute bottom-0 left-0 mb-6 ml-6">
+        <div className="flex flex-row gap-x-10">
+          <Link to="/about">
+            <p className="text-lg">About Us</p>
+          </Link>
+          <Link to="/">
+            <p className="text-lg">Credits</p>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
