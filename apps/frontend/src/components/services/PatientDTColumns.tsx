@@ -1,44 +1,62 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { RouterOutput } from "@/utils/trpc";
 import { DateTime } from "luxon";
+import { DataTableColumnHeader } from "../ui/dt-sortable";
 
 export const patientColumns: ColumnDef<RouterOutput["patient"]["getAll"][0]>[] =
   [
     {
-      header: "First Name",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="First Name" />
+      ),
       id: "firstName",
       accessorKey: "firstName",
     },
     {
-      header: "Last Name",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Last Name" />
+      ),
       accessorKey: "lastName",
     },
     {
       accessorKey: "location.shortName",
-      header: "Location",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Location" />
+      ),
     },
     {
       accessorKey: "SSN",
-      header: "SSN",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="SSN" />
+      ),
     },
     {
       accessorKey: "pcp.name",
-      header: "PCP",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="PCP" />
+      ),
     },
 
     {
-      header: "DoB",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="DoB" />
+      ),
       accessorFn: (row) =>
         DateTime.fromJSDate(row.dateOfBirth).toLocaleString(
-          DateTime.DATETIME_SHORT,
+          DateTime.DATE_SHORT,
         ),
+      id: "dob",
     },
     {
-      header: "Insurance",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Insurance" />
+      ),
       accessorKey: "insurance",
     },
     {
-      header: "Email",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Email" />
+      ),
       accessorKey: "user.email",
     },
   ];

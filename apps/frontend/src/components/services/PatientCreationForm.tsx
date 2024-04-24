@@ -42,6 +42,7 @@ import { CheckIcon } from "lucide-react";
 // import { useAuth0 } from "@auth0/auth0-react";
 import { ZCreatePatientSchema } from "common";
 import { Input } from "@/components/ui/input.tsx";
+import { DateTime } from "luxon";
 
 // Add your type-specific form schema to this array.
 const FormSchema = ZCreatePatientSchema.extend({
@@ -83,7 +84,7 @@ const FormSchema = ZCreatePatientSchema.extend({
 
       return undefined;
     },
-    z.object({ connect: z.object({ id: z.string() }) }),
+    z.object({ connect: z.object({ id: z.string() }) }).optional(),
   ),
 });
 
@@ -124,6 +125,30 @@ export default function InputForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     shouldUnregister: true,
+    defaultValues: {
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      SSN: 0,
+      dateOfBirth: DateTime.now().toISODate(),
+      location: {
+        connect: {
+          id: "",
+        },
+      },
+      insurance: "",
+      pcp: {
+        connect: {
+          id: "",
+        },
+      },
+      phoneNumber: undefined,
+      user: {
+        connect: {
+          id: "",
+        },
+      },
+    },
   });
 
   // const { requests, setRequests } = useContext(RequestsContext);
@@ -131,30 +156,33 @@ export default function InputForm() {
   const utils = trpc.useUtils();
   const createPatientRequest = trpc.patient.createOne.useMutation();
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
     data.location.connect.id =
       nodesQuery.find((n) => data.location.connect.id === n.longName)?.id ?? "";
 
-    console.log(data);
-    toast.promise(
-      createPatientRequest.mutateAsync(
-        {
-          ...data,
-        },
-        {
-          onSuccess: () => {
-            utils.service.getAll.invalidate();
-          },
-        },
-      ),
+    const createPatient = createPatientRequest.mutateAsync(
       {
-        success: "Successfully saved to the database.",
-        loading: "Saving flower request to the database.",
-        error: "Error saving to database.",
+        ...data,
+      },
+      {
+        onSuccess: () => {
+          utils.service.getAll.invalidate();
+        },
       },
     );
 
-    form.reset();
+    toast.promise(createPatient, {
+      success: "Successfully saved to the database.",
+      loading: "Saving flower request to the database.",
+      error: "Error saving to database.",
+    });
+
+    try {
+      await createPatient;
+      form.reset();
+    } catch {
+      console.error("Error :(");
+    }
   }
 
   return (
@@ -213,14 +241,30 @@ export default function InputForm() {
               <div className="flex flex-row gap-2 items-stretch">
                 <FormField
                   control={form.control}
-                  name="SSN"
+                  name="insurance"
                   render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>SSN</FormLabel>
-                      <FormControl>
-                        <Input {...field} type="number" />
-                      </FormControl>
-                      <FormDescription>Only if you have one.</FormDescription>
+                    <FormItem className="flex flex-col flex-1">
+                      <FormLabel>Patient's Insurance</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a insurance provider" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="None">None</SelectItem>
+                          <SelectItem value="MassHealth">MassHealth</SelectItem>
+                          <SelectItem value="Aetna">Aetna</SelectItem>
+                          <SelectItem value="Cigna">Cigna</SelectItem>
+                          <SelectItem value="Blue Cross">Blue Cross</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        This is the insurance provider of the patient.
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -296,30 +340,14 @@ export default function InputForm() {
               <div className="flex flex-row gap-2 items-stretch">
                 <FormField
                   control={form.control}
-                  name="insurance"
+                  name="SSN"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col flex-1">
-                      <FormLabel>Patient's Insurance</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a insurance provider" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="None">None</SelectItem>
-                          <SelectItem value="MassHealth">MassHealth</SelectItem>
-                          <SelectItem value="Aetna">Aetna</SelectItem>
-                          <SelectItem value="Cigna">Cigna</SelectItem>
-                          <SelectItem value="Blue Cross">Blue Cross</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        This is the insurance provider of the patient.
-                      </FormDescription>
+                    <FormItem className="flex-1">
+                      <FormLabel>SSN</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="number" />
+                      </FormControl>
+                      <FormDescription>Only if you have one.</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -487,6 +515,7 @@ export default function InputForm() {
                 <Button
                   className="flex-1"
                   variant="outline"
+                  type="button"
                   onClick={() => {
                     form.reset();
                   }}

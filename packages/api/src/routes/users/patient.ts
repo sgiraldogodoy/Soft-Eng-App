@@ -26,7 +26,13 @@ export const patient = router({
     }),
 
   getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.patient.findMany();
+    return ctx.db.patient.findMany({
+      include: {
+        location: true,
+        pcp: true,
+        user: true,
+      },
+    });
   }),
 
   getOne: publicProcedure
