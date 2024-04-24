@@ -15,6 +15,7 @@ import {
 import PathfindSettings from "@/components/PathfindSettings.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { TextNavigation } from "@/components/TextNav.tsx";
+import MapKeyAccordion from "@/components/MapKeyAccordion.tsx";
 
 import { Link } from "wouter";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
@@ -173,6 +174,7 @@ export default function PathFind() {
           <TextNavigation nodes={pathData} />
         </div>
       )}
+      <MapKeyAccordion />
     </div>
   );
 }
