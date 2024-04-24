@@ -23,7 +23,7 @@ export const ZCreateBaseServiceSchema = z.object({
     "interpreter",
   ]),
   note: z.string(),
-  assigneeId: z.string().nullish(),
+  staffId: z.string().optional(),
 });
 
 export const ZCreateFlowerSchema = z.object({

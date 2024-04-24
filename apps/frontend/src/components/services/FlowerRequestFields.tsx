@@ -49,7 +49,7 @@ const FlowerRequest = () => {
         <FormField
           name="data.recipientName"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex-1">
               <FormLabel>Recipient</FormLabel>
               <FormControl>
                 <Input {...field} />

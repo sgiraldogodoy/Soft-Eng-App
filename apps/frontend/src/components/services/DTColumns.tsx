@@ -25,6 +25,11 @@ export const columns: ColumnDef<RouterOutput["service"]["getAll"][0]>[] = [
     accessorKey: "status",
     header: "Status",
   },
+  {
+    accessorKey: "assignee.name",
+    header: "Assignee",
+    id: "assignee",
+  },
 
   {
     header: "Priority",
