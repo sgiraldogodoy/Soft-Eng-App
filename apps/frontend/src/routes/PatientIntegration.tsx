@@ -1,7 +1,7 @@
-import RequestSummary from "@/components/services/RequestSummary";
 import PatientCreationForm from "@/components/services/PatientCreationForm.tsx";
 // import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation.tsx";
 import { motion } from "framer-motion";
+import PatientRetrevial from "@/components/services/PatientRetrevialForm.tsx";
 
 export default function ServiceRequestPage() {
   return (
@@ -11,7 +11,7 @@ export default function ServiceRequestPage() {
         <img src="/wave.svg" alt="Wave" className="absolute bottom-0 left-0 " />
       </div>
       <div className="absolute inset-0 flex flex-row h-[95%] w-[95%] gap-4 items-stretch justify-center pointer-events-auto mx-10 my-6">
-        <RequestSummary />
+        <PatientRetrevial />
         <div className="flex flex-col gap-4 items-stretch ">
           <motion.div
             key="patient"
