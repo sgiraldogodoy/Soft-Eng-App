@@ -203,6 +203,7 @@ export function Nodes({
   const handleRightClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
+    if (typeEdit === "aNode") return;
     e.preventDefault();
     if (onNodeDown) onNodeDown();
     if (!editable) return;
