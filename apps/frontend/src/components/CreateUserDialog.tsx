@@ -411,7 +411,7 @@ const CreateBaseUser = ({
                   </>
                 )}
               </TabsContent>
-              <TabsContent value="search">
+              <TabsContent className="space-y-2" value="search">
                 {staffQuery.data?.map((s) => (
                   <button
                     className={cn(
