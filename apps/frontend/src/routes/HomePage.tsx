@@ -170,31 +170,34 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
-            <div
-              className="ml-auto flex gap-2 cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                session.loginWithRedirect().catch((e) => {
-                  console.error(e);
-                });
-              }}
-            >
-              <p className="ml-auto text-xl text-white">Sign In</p>
-              <ExternalLink color="#ffffff" />
+
+            <div className="flex flex-row w-full justify-center">
+              <div className="flex flex-row gap-x-10 absolute left-0 ml-10">
+                <Link to="/about">
+                  <p className="ml-auto text-xl text-white">About Us</p>
+                </Link>
+                <Link to="/">
+                  <p className="ml-auto text-xl text-white">Credits</p>
+                </Link>
+              </div>
+              <div
+                className="ml-auto flex gap-2 cursor-pointer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  session.loginWithRedirect().catch((e) => {
+                    console.error(e);
+                  });
+                }}
+              >
+                <div className="flex flex-row gap-x-1 right-0">
+                  <p className="ml-auto text-xl text-white">Sign In</p>
+                  <ExternalLink color="#ffffff" />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </Link>
-      <div className="absolute bottom-0 left-0 mb-6 ml-6">
-        <div className="flex flex-row gap-x-10">
-          <Link to="/about">
-            <p className="text-lg">About Us</p>
-          </Link>
-          <Link to="/">
-            <p className="text-lg">Credits</p>
-          </Link>
-        </div>
-      </div>
     </div>
   );
 }
