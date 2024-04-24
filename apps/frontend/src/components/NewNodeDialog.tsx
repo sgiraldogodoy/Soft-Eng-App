@@ -18,18 +18,18 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import type { Prisma } from "database";
-type NodeCreateInput = Prisma.NodeCreateInput;
 import { ZCreateNodeSchema as nodeSchema } from "common";
 import { z } from "zod";
+
+const newNodeSchema = nodeSchema.omit({ id: true });
 
 interface newNodeDialogProps {
   open: boolean;
   x: number;
   y: number;
   floor: string;
-  onSubmit: (nodeData: NodeCreateInput) => void;
-  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onSubmit: (nodeData: z.infer<typeof newNodeSchema>) => void;
+  setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const alpha = Array.from(Array(26)).map((e, i) => i + 65);
@@ -41,12 +41,11 @@ export function NewNodeDialog({
   floor,
   onSubmit,
   open,
-  setDialogOpen,
+  setOpenDialog,
 }: newNodeDialogProps) {
   const [building, setBuilding] = useState("");
   const [type, setType] = useState("");
   const [elevatorletter, setElevatorLetter] = useState("");
-  const [id, setID] = useState("");
   const [longname, setLongName] = useState("");
   const [shortname, setShortName] = useState("");
   const [missingFields, setMissingFields] = useState(false);
@@ -65,7 +64,7 @@ export function NewNodeDialog({
       setMissingFields(true);
       return;
     }
-    if (!id || !building || !type || !longname || !shortname) {
+    if (!building || !type || !longname || !shortname) {
       // console.log("Missing fields: ", { id, building, type, longname, shortname });
       setMissingFields(true);
       return;
@@ -74,12 +73,12 @@ export function NewNodeDialog({
     setMissingFields(false);
 
     const nodeData = {
-      id,
       building,
       floor,
       type: type as z.infer<typeof nodeSchema.shape.type>,
       longName: longname,
       shortName: shortname,
+      elevatorLetter: type === "ELEV" ? elevatorletter : undefined,
       x,
       y,
     };
@@ -88,7 +87,7 @@ export function NewNodeDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setDialogOpen}>
+    <Dialog open={open} onOpenChange={setOpenDialog}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create Node</DialogTitle>
@@ -97,15 +96,23 @@ export function NewNodeDialog({
         {/*Delete Node ID after merge main*/}
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="id" className="text-right">
-              Node ID*
+            <Label htmlFor="x" className="text-right">
+              X:
             </Label>
             <Input
-              id="id"
-              defaultValue=""
-              className="col-span-3"
-              value={id}
-              onChange={(event) => setID(event.target.value)}
+              id="x"
+              // defaultValue={x}
+              className="col-span-1"
+              value={x}
+            />
+            <Label htmlFor="y" className="text-right">
+              Y:
+            </Label>
+            <Input
+              id="y"
+              // defaultValue={y}
+              className="col-span-1"
+              value={y}
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">

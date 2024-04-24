@@ -27,11 +27,19 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input.tsx";
 import { trpc } from "@/utils/trpc";
 import { Route, useLocation } from "wouter";
-import { Suspense, useReducer } from "react";
-import { ZCreateBaseUserSchema } from "common";
+import { Suspense, useReducer, useState } from "react";
+import {
+  ZCreateBaseUserSchema,
+  ZCreatePatientSchema,
+  ZCreateStaffSchema,
+} from "common";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card.tsx";
+import { nestSchema } from "common/src/zod-utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { LinkIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface CreateUserDialogProps {
   open: boolean;
@@ -70,13 +78,37 @@ const ZAuth0FormSchema = z
 
 const ZCreateBaseUserSchemaWithoutSub = ZCreateBaseUserSchema.extend({
   sub: z.undefined(),
+  staff: nestSchema(ZCreateStaffSchema).optional(),
+  patient: nestSchema(ZCreatePatientSchema).optional(),
+}).superRefine((values, ctx) => {
+  // doing this the lazy way.
+  //
+  console.log(values);
+
+  if (
+    (values.role === "staff" || values.role === "admin") &&
+    (!values.staff ||
+      (!("connect" in values.staff) && !("create" in values.staff)))
+  ) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Staff is not connected.",
+      path: ["role"],
+    });
+  }
 });
+const ZCreateStaffSchemaWithoutUserOrName = ZCreateStaffSchema.omit({
+  user: true,
+  name: true,
+});
+type TCreateStaffSchema = z.infer<typeof ZCreateStaffSchemaWithoutUserOrName>;
 
 type BaseUser = z.infer<typeof ZCreateBaseUserSchemaWithoutSub>;
 type Auth0UserSchema = z.infer<typeof ZAuth0FormSchema>;
 type CreateUserState = {
   base: BaseUser;
   auth0: Auth0UserSchema;
+  staff?: TCreateStaffSchema;
 };
 
 type DialogAction =
@@ -87,7 +119,63 @@ type DialogAction =
   | {
       type: "pushAuth0";
       auth0: Auth0UserSchema;
+    }
+  | {
+      type: "pushStaff";
+      staff: TCreateStaffSchema;
     };
+
+interface CreateStaffProps {
+  onSubmit: (data: TCreateStaffSchema) => void;
+}
+
+export function CreateStaff({ onSubmit }: CreateStaffProps) {
+  const form = useForm<TCreateStaffSchema>({
+    resolver: zodResolver(ZCreateStaffSchemaWithoutUserOrName),
+  });
+
+  return (
+    <div>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full flex flex-col justify-between items-stretch gap-4"
+        >
+          <div className="flex flex-col gap-2 items-stretch">
+            <FormField
+              control={form.control}
+              name="jobTitle"
+              render={({ field }) => (
+                <FormItem className="flex flex-col h-full justify-between flex-1">
+                  <FormLabel>Job Title</FormLabel>
+                  <Input type="text" {...field} />
+                  <FormDescription>
+                    This is the user&apos;s job title.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex gap-2">
+            <Button
+              className="flex-1"
+              variant="outline"
+              onClick={() => {
+                form.reset();
+              }}
+            >
+              Reset
+            </Button>
+            <Button className="flex-1 " type="submit">
+              Submit
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+}
 
 interface CreateAuth0AccountProps {
   onSubmit: (data: Auth0UserSchema | string) => void;
@@ -137,59 +225,57 @@ export function CreateAuth0Account({
   }
 
   return (
-    <Suspense>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full flex flex-col justify-between items-stretch gap-4"
-        >
-          <div className="flex flex-col gap-2 items-stretch">
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem className="flex flex-col h-full justify-between flex-1">
-                  <FormLabel>Password</FormLabel>
-                  <Input type="password" {...field} />
-                  <FormDescription>
-                    This is the user&apos;s Auth0 password.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem className="flex flex-col h-full justify-between flex-1">
-                  <FormLabel>Confirm Password</FormLabel>
-                  <Input type="password" {...field} />
-                  <FormDescription>
-                    Type your password one more time.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button
-              className="flex-1"
-              variant="outline"
-              onClick={() => {
-                form.reset();
-              }}
-            >
-              Reset
-            </Button>
-            <Button className="flex-1 " type="submit">
-              Submit
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </Suspense>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-full flex flex-col justify-between items-stretch gap-4"
+      >
+        <div className="flex flex-col gap-2 items-stretch">
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem className="flex flex-col h-full justify-between flex-1">
+                <FormLabel>Password</FormLabel>
+                <Input type="password" {...field} />
+                <FormDescription>
+                  This is the user&apos;s Auth0 password.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem className="flex flex-col h-full justify-between flex-1">
+                <FormLabel>Confirm Password</FormLabel>
+                <Input type="password" {...field} />
+                <FormDescription>
+                  Type your password one more time.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="flex gap-2">
+          <Button
+            className="flex-1"
+            variant="outline"
+            onClick={() => {
+              form.reset();
+            }}
+          >
+            Reset
+          </Button>
+          <Button className="flex-1 " type="submit">
+            Submit
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }
 
@@ -204,6 +290,20 @@ const CreateBaseUser = ({
     resolver: zodResolver(ZCreateBaseUserSchemaWithoutSub),
     defaultValues,
   });
+
+  const watchName = form.watch("name");
+  const watchRole = form.watch("role");
+
+  const [staffCreateMode, setStaffCreateMode] = useState("create");
+  const [staffId, setStaffId] = useState<string | null>(null);
+
+  if (staffCreateMode === "create")
+    form.setValue("staff.create.name", watchName);
+
+  if (staffId && staffCreateMode === "search")
+    form.setValue("staff.connect.id", staffId);
+
+  const staffQuery = trpc.staff.getAll.useQuery();
 
   return (
     <Form {...form}>
@@ -268,10 +368,88 @@ const CreateBaseUser = ({
             </FormItem>
           )}
         />
+        {(watchRole === "staff" || watchRole === "admin") && (
+          <Tabs value={staffCreateMode} onValueChange={setStaffCreateMode}>
+            <fieldset className="border p-4 rounded">
+              <legend className="text-sm text-slate-600">
+                Attach a staff member.
+              </legend>
+              <TabsList className="w-full">
+                <TabsTrigger value="create" className="flex-1">
+                  Create
+                </TabsTrigger>
+                <TabsTrigger value="search" className="flex-1">
+                  Search
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="create">
+                {staffCreateMode === "create" && (
+                  <>
+                    <input
+                      type="hidden"
+                      {...form.register("staff.create.name", {
+                        shouldUnregister: true,
+                      })}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="staff.create.jobTitle"
+                      shouldUnregister
+                      render={({ field }) => (
+                        <FormItem className="animate-in duration-300 slide-in-from-bottom-4 ease-out fade-in delay-100 fill-mode-both">
+                          <FormLabel>Job Title</FormLabel>
+                          <FormControl>
+                            <Input type="text" {...field} />
+                          </FormControl>
+                          <FormDescription>
+                            Job title of the user.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </>
+                )}
+              </TabsContent>
+              <TabsContent className="space-y-2" value="search">
+                {staffQuery.data?.map((s) => (
+                  <button
+                    className={cn(
+                      s.id === staffId && "border-green-500 bg-muted",
+                      "w-full p-2 border rounded group flex items-center justify-between transition-colors hover:border-green-500",
+                    )}
+                    type="button"
+                    onClick={() => {
+                      setStaffId(s.id === staffId ? null : s.id);
+                    }}
+                  >
+                    {s.name}
+                    <LinkIcon
+                      className={cn(
+                        s.id === staffId &&
+                          "group-hover:stroke-red-400 stroke-green-500",
+                        s.id !== staffId && "group-hover:stroke-green-500",
+                        "h-4 w-4 transition-colors",
+                      )}
+                    />
+                  </button>
+                ))}
+                <input
+                  type="hidden"
+                  {...form.register("staff.connect.id", {
+                    shouldUnregister: true,
+                  })}
+                />
+              </TabsContent>
+            </fieldset>
+          </Tabs>
+        )}
+        {watchRole === "patient" && <></>}
         <div className="flex gap-2">
           <Button
             className="flex-1"
             variant="outline"
+            type="button"
             onClick={() => {
               form.reset();
             }}
@@ -305,6 +483,11 @@ export function CreateUserDialog({ open, setOpen }: CreateUserDialogProps) {
             ...prevState,
             auth0: action.auth0,
           };
+        case "pushStaff":
+          return {
+            ...prevState,
+            staff: action.staff,
+          };
         default:
           return prevState;
       }
@@ -331,6 +514,7 @@ export function CreateUserDialog({ open, setOpen }: CreateUserDialogProps) {
         <Route path="/">
           <CreateBaseUser
             onSubmit={(data) => {
+              console.log("test");
               dispatch({ type: "pushBase", base: data });
               setLocation("/auth0");
             }}

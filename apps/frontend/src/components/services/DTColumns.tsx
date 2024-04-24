@@ -5,33 +5,48 @@ import { RouterOutput } from "@/utils/trpc";
 import { DateTime } from "luxon";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
+import { DataTableColumnHeader } from "../ui/dt-sortable";
 
 export const columns: ColumnDef<RouterOutput["service"]["getAll"][0]>[] = [
   {
-    header: "Created",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Created" />
+    ),
     id: "creationTime",
     accessorFn: (row) =>
       DateTime.fromJSDate(row.date).toLocaleString(DateTime.DATETIME_SHORT),
   },
   {
-    header: "Type",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Type" />
+    ),
     accessorFn: (row) => row.type.toUpperCase(),
+    id: "type",
   },
   {
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Location" />
+    ),
     accessorKey: "nodeId",
-    header: "Location",
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
   },
   {
     accessorKey: "assignee.name",
-    header: "Assignee",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Assignee" />
+    ),
+    id: "assignee",
   },
 
   {
-    header: "Priority",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Priority" />
+    ),
     accessorKey: "priority",
     cell: ({ row }) => {
       const val: string = row.getValue("priority");

@@ -15,6 +15,8 @@ export default function HomePage() {
 
   const [dateTime, setDateTime] = useState(DateTime.now());
 
+  const [laserFloor, setLaserFloor] = useState<string>("");
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       setDateTime(DateTime.now());
@@ -28,6 +30,11 @@ export default function HomePage() {
 
   if (session.isLoading) {
     return <div></div>;
+  }
+
+  if (laserFloor == "") {
+    const choices = ["L2", "L1", "1", "2"];
+    setLaserFloor(choices[Math.floor(Math.random() * choices.length)]);
   }
 
   return (
@@ -108,7 +115,7 @@ export default function HomePage() {
             sameSpeed={true}
             delay={0.4}
             ease={false}
-            floor={"2"}
+            floor={laserFloor}
           />
           <div className="absolute w-full h-full flex flex-col justify-between items-center px-10 py-8 z-10">
             <div className="flex items-center justify-between w-full">
@@ -170,17 +177,30 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
-            <div
-              className="ml-auto flex gap-2 cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                session.loginWithRedirect().catch((e) => {
-                  console.error(e);
-                });
-              }}
-            >
-              <p className="ml-auto text-xl text-white">Sign In</p>
-              <ExternalLink color="#ffffff" />
+
+            <div className="flex flex-row w-full justify-center">
+              <div className="flex flex-row gap-x-10 absolute left-0 ml-10">
+                <Link to="/about">
+                  <p className="ml-auto text-xl text-white">About Us</p>
+                </Link>
+                <Link to="/credit">
+                  <p className="ml-auto text-xl text-white">Credits</p>
+                </Link>
+              </div>
+              <div
+                className="ml-auto flex gap-2 cursor-pointer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  session.loginWithRedirect().catch((e) => {
+                    console.error(e);
+                  });
+                }}
+              >
+                <div className="flex flex-row gap-x-1 right-0">
+                  <p className="ml-auto text-xl text-white">Sign In</p>
+                  <ExternalLink color="#ffffff" />
+                </div>
+              </div>
             </div>
           </div>
         </div>

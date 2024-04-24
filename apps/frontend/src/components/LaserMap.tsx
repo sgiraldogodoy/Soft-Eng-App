@@ -46,6 +46,9 @@ export default function LaserMap({
     case "3":
       imgSrc = "03_thethirdfloor.png";
       break;
+    default:
+      imgSrc = "02_thesecondfloor.png";
+      break;
   }
   const imgURL = imgSrc;
 
@@ -100,6 +103,9 @@ export default function LaserMap({
           nodes.filter((node) => node.building === "45 Francis"),
         );
         filteredNodes.push(nodes.filter((node) => node.building === "Tower"));
+        break;
+      default:
+        filteredNodes.push(nodes);
         break;
     }
     return filteredNodes;
@@ -180,15 +186,31 @@ export default function LaserMap({
     return nodeList[Math.floor(Math.random() * length)];
   }, []);
 
+  const randomBuilding = useCallback(() => {
+    let length = 0;
+    for (let i = 0; i < buildingNodes.length; i++) {
+      length += buildingNodes[i].length;
+    }
+    let pick = Math.floor(Math.random() * length);
+    let i;
+    for (i = 0; i < buildingNodes.length; i++) {
+      if (pick <= buildingNodes[i].length) {
+        break;
+      } else {
+        pick -= buildingNodes[i].length;
+      }
+    }
+    return buildingNodes[i];
+  }, [buildingNodes]);
+
   const getPathNodes = useCallback(() => {
-    const length = buildingNodes.length;
-    const building = buildingNodes[Math.floor(Math.random() * length)];
+    const building = randomBuilding();
     const filterNode = randomNode(building);
     setStartNode(filterNode);
     setEndNode(
       randomNode(building.filter((node) => node.id != filterNode?.id)),
     );
-  }, [buildingNodes, randomNode]);
+  }, [randomBuilding, randomNode]);
 
   const createLaser = useCallback(() => {
     getPathNodes();

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Nodes } from "./Nodes.tsx";
-import type { Node, Edge, Prisma } from "database";
+import type { Node, Edge } from "database";
 import { Lines } from "./Lines.tsx";
 import { Edges } from "../components/Edges.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -11,7 +11,10 @@ import {
 } from "@/utils/scaleCoordinate.ts";
 import { trpc } from "@/utils/trpc.ts";
 import { NewNodeDialog } from "@/components/NewNodeDialog.tsx";
-type NodeCreateInput = Prisma.NodeCreateInput;
+import { ZCreateNodeSchema as nodeSchema } from "common";
+import { z } from "zod";
+
+const newNodeSchema = nodeSchema.omit({ id: true });
 
 const origImageWidth = 5000;
 const origImageHeight = 3400;
@@ -193,7 +196,7 @@ export default function Map({
     typeEdit,
   ]);
 
-  const handleCreateNodeSubmit = (data: NodeCreateInput) => {
+  const handleCreateNodeSubmit = (data: z.infer<typeof newNodeSchema>) => {
     createNode.mutate(
       {
         data,
@@ -421,7 +424,7 @@ export default function Map({
             y={newNodeY}
             floor={floor}
             onSubmit={handleCreateNodeSubmit}
-            setDialogOpen={setOpenDialog}
+            setOpenDialog={setOpenDialog}
           />
         </div>
       )}

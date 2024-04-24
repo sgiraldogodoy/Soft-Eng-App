@@ -1,13 +1,18 @@
 import { protectedProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
-import { ZCreateBaseUserSchema, ZCreateUserWithAuth0 } from "common";
+import { ZCreateBaseUserSchema, ZCreateUserWithAuth0AndNested } from "common";
 import { TRPCError } from "@trpc/server";
 import { updateSchema } from "common/src/zod-utils.ts";
 
 export const userRouter = router({
   getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.user.findMany();
+    return ctx.db.user.findMany({
+      include: {
+        staff: true,
+        patient: true,
+      },
+    });
   }),
 
   getOne: protectedProcedure
@@ -17,11 +22,15 @@ export const userRouter = router({
         where: {
           id: input.id,
         },
+        include: {
+          staff: true,
+          patient: true,
+        },
       });
     }),
 
   createOne: protectedProcedure
-    .input(ZCreateUserWithAuth0)
+    .input(ZCreateUserWithAuth0AndNested)
     .mutation(async ({ input, ctx }) => {
       const { auth, ...rest } = input;
       let user;

@@ -27,7 +27,7 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input.tsx";
 import { trpc } from "@/utils/trpc";
 import { toast } from "sonner";
-import { Suspense } from "react";
+import { LinkIcon } from "lucide-react";
 
 const formSchema = z.object({
   email: z.string().optional(),
@@ -95,99 +95,128 @@ export default function UserEditDialog({
     }
   };
 
+  if (!user) {
+    return <div>User not found!</div>;
+  }
+
   return (
-    <Suspense>
-      <Dialog
-        open={!!editingId}
-        onOpenChange={() => {
-          setEditingId(null);
-        }}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit {user?.name}</DialogTitle>
-          </DialogHeader>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full flex flex-col justify-between items-stretch gap-3"
-            >
-              <div className="flex flex-row gap-2 items-stretch">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col h-full justify-between flex-1">
-                      <FormLabel>Email</FormLabel>
-                      <Input type="text" {...field} />
-                      <FormDescription>
-                        This is the user&apos;s email.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="role"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col flex-1">
-                      <FormLabel>Role</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a role" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="staff">Staff</SelectItem>
-                          <SelectItem value="admin">Admin</SelectItem>
-                          <SelectItem value="patient">Patient</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        This is the role of the user.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+    <Dialog
+      open={!!editingId}
+      onOpenChange={() => {
+        setEditingId(null);
+      }}
+    >
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Edit {user?.name}</DialogTitle>
+        </DialogHeader>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="w-full flex flex-col justify-between items-stretch gap-3"
+          >
+            <div className="flex flex-row gap-2 items-stretch">
               <FormField
                 control={form.control}
-                name="name"
+                name="email"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input type="text" {...field} />
-                    </FormControl>
-                    <FormDescription>Name of the user.</FormDescription>
+                  <FormItem className="flex flex-col h-full justify-between flex-1">
+                    <FormLabel>Email</FormLabel>
+                    <Input type="text" {...field} />
+                    <FormDescription>
+                      This is the user&apos;s email.
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <div className="flex gap-2">
-                <Button
-                  className="flex-1"
-                  variant="outline"
-                  onClick={() => {
-                    form.reset();
-                  }}
-                >
-                  Reset
-                </Button>
-                <Button className="flex-1 " type="submit">
-                  Save changes
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </DialogContent>
-      </Dialog>
-    </Suspense>
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col flex-1">
+                    <FormLabel>Role</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="staff">Staff</SelectItem>
+                        <SelectItem value="admin">Admin</SelectItem>
+                        <SelectItem value="patient">Patient</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      This is the role of the user.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input type="text" {...field} />
+                  </FormControl>
+                  <FormDescription>Name of the user.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {user.staff && (
+              <fieldset className="p-4 border rounded">
+                <legend className="flex flex-row gap-1 items-center px-1">
+                  <LinkIcon className="w-4 h-4" />
+                  <span className="ml-auto">Staff</span>
+                </legend>
+                <div className="flex flex-row items-center gap-2">
+                  <span className="text-nowrap">Job Title</span>
+                  <hr className="flex-1 border border-dashed" />
+                  <span>{user.staff.jobTitle}</span>
+                </div>
+              </fieldset>
+            )}
+            {user.patient && (
+              <fieldset className="p-4 border rounded">
+                <legend className="flex flex-row gap-1 items-center px-1">
+                  <LinkIcon className="w-4 h-4" />
+                  <span className="ml-auto">Patient</span>
+                </legend>
+                <div className="flex flex-row items-center gap-2">
+                  <span className="text-nowrap">Patient ID</span>
+                  <hr className="flex-1 border border-dashed" />
+                  <span>{user.patient.id}</span>
+                </div>
+              </fieldset>
+            )}
+            <div className="flex gap-2">
+              <Button
+                className="flex-1"
+                variant="outline"
+                onClick={() => {
+                  form.reset();
+                }}
+                type="button"
+              >
+                Reset
+              </Button>
+              <Button className="flex-1 " type="submit">
+                Save changes
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }

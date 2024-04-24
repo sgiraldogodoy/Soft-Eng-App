@@ -38,7 +38,7 @@ export function InspectDatabase() {
   return (
     <>
       <Tabs defaultValue="nodes" asChild>
-        <div className="relative h-full max-h-full p-6 flex flex-col gap-2 overflow-auto">
+        <div className="relative h-full min-h-full p-6 flex flex-col gap-2 overflow-auto">
           <div className="absolute bottom-0 left-0 w-full h-full">
             <img
               src="/wave.svg"
@@ -143,7 +143,7 @@ export function InspectDatabase() {
               Upload
             </Button>
           </div>
-          <Card className="relative max-h-full p-4 overflow-auto animate-in fade-in duration-400 zoom-in-105 delay-400 fill-mode-both bg-white/90 backdrop-blur-md">
+          <Card className="relative h-full max-h-full p-4 overflow-auto animate-in fade-in duration-500 zoom-in-105 delay-400 fill-mode-both bg-white/90 backdrop-blur-md">
             <TabsContent value="nodes">
               <NodesTable />
             </TabsContent>
@@ -180,7 +180,7 @@ export function InspectDatabase() {
                     ),
                     {
                       loading: "Adding nodes...",
-                      success: "Done N!",
+                      success: "Done!",
                       error: "An error occured.",
                     },
                   );
@@ -198,7 +198,7 @@ export function InspectDatabase() {
                     ),
                     {
                       loading: "Adding Edges...",
-                      success: "Done E!",
+                      success: "Done!",
                       error: "An error occured.",
                     },
                   );
@@ -216,7 +216,7 @@ export function InspectDatabase() {
                     ),
                     {
                       loading: "Adding Employees...",
-                      success: "Done Emp!",
+                      success: "Done!",
                       error: "An error occured.",
                     },
                   );

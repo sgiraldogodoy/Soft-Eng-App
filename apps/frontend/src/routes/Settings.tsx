@@ -14,6 +14,7 @@ import { CreateUserDialog } from "@/components/CreateUserDialog.tsx";
 import { UserTable } from "@/components/UserTable.tsx";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
 import { Route, useLocation } from "wouter";
+import BackgroundWave from "@/components/BackgroundWave";
 
 export function Settings() {
   const [tableFilter, setTableFilter] = useState("all");
@@ -35,6 +36,7 @@ export function Settings() {
 
   return (
     <>
+      <BackgroundWave />
       <Tabs value={tableFilter} onValueChange={setTableFilter} asChild>
         <div className="w-full h-full flex flex-col justify-center items-center p-6 gap-2">
           <div className="w-full flex">
@@ -55,7 +57,7 @@ export function Settings() {
               Create User
             </Button>
           </div>
-          <Card className="w-full h-full animate-in fade-in zoom-in-105 duration-500 delay-400">
+          <Card className="z-10 w-full h-full animate-in fade-in zoom-in-105 duration-500 delay-400">
             <CardHeader>
               <CardTitle>Users</CardTitle>
               <CardDescription>Create, edit, and view users.</CardDescription>

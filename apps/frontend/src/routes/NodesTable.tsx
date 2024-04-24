@@ -37,8 +37,8 @@ export function NodesTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data?.map((n) => (
-          <TableRow>
+        {data?.map((n, index) => (
+          <TableRow key={index}>
             <TableCell>{n.id}</TableCell>
             <TableCell>{n.x}</TableCell>
             <TableCell>{n.y}</TableCell>
