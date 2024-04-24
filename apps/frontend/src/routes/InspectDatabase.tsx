@@ -143,7 +143,7 @@ export function InspectDatabase() {
               Upload
             </Button>
           </div>
-          <Card className="relative max-h-full p-4 overflow-auto animate-in fade-in duration-400 zoom-in-105 delay-400 fill-mode-both bg-white/90 backdrop-blur-md">
+          <Card className="relative h-full max-h-full p-4 overflow-auto animate-in fade-in duration-500 zoom-in-105 delay-400 fill-mode-both bg-white/90 backdrop-blur-md">
             <TabsContent value="nodes">
               <NodesTable />
             </TabsContent>

@@ -24,6 +24,7 @@ import { motion } from "framer-motion";
 import { type ZCreateBaseServiceSchema } from "common";
 import { z } from "zod";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
+import { X } from "lucide-react";
 
 export default function RequestSummary() {
   const [rowSelectionState, setRowSelectionState] = useState<RowSelectionState>(
@@ -89,7 +90,20 @@ export default function RequestSummary() {
       {selectedRow && (
         <Card className="p-4 bg-white/90 backdrop-blur-md">
           <CardHeader>
-            <CardTitle>Details</CardTitle>
+            <CardTitle className="flex flex-row justify-between">
+              Details
+              <span>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  onClick={() => {
+                    setRowSelectionState({});
+                  }}
+                >
+                  <X />
+                </Button>
+              </span>
+            </CardTitle>
             <CardDescription>
               {selectedRow.type} requested by {selectedRow.login}
             </CardDescription>

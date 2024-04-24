@@ -206,6 +206,7 @@ export default function UserEditDialog({
                 onClick={() => {
                   form.reset();
                 }}
+                type="button"
               >
                 Reset
               </Button>
