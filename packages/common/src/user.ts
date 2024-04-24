@@ -10,29 +10,6 @@ export const ZCreateBaseUserSchema = z.object({
   role: z.enum(["patient", "staff", "admin"]).optional(),
 });
 
-export const ZCreateUserWithAuth0 = ZCreateBaseUserSchema.extend({
-  sub: z.undefined(),
-  auth: z.union([
-    z.object({
-      password: z
-        .string()
-        .regex(/(.*[A-Z].*)/, {
-          message: "Password must contain an uppercase letter.",
-        })
-        .regex(/(.*[a-z].*)/, {
-          message: "Password must contain a lowercase letter.",
-        })
-        .regex(/(.*[0-9].*)/, {
-          message: "Password must contain a number.",
-        })
-        .min(8, {
-          message: "Password must be at least 8 characters.",
-        }),
-    }),
-    z.string().describe("Auth0 Sub"),
-  ]),
-});
-
 export const ZCreateStaffSchema = z.object({
   user: nestSchema(ZCreateBaseUserSchema).optional(),
   name: z.string(),
@@ -77,3 +54,28 @@ export const ZCreateUserSchema = z.discriminatedUnion("role", [
   }),
   ZCreateBaseUserSchema.extend({ role: z.undefined() }),
 ]);
+
+export const ZCreateUserWithAuth0AndNested = ZCreateBaseUserSchema.extend({
+  sub: z.undefined(),
+  auth: z.union([
+    z.object({
+      password: z
+        .string()
+        .regex(/(.*[A-Z].*)/, {
+          message: "Password must contain an uppercase letter.",
+        })
+        .regex(/(.*[a-z].*)/, {
+          message: "Password must contain a lowercase letter.",
+        })
+        .regex(/(.*[0-9].*)/, {
+          message: "Password must contain a number.",
+        })
+        .min(8, {
+          message: "Password must be at least 8 characters.",
+        }),
+    }),
+    z.string().describe("Auth0 Sub"),
+  ]),
+  staff: nestSchema(ZCreateStaffSchema).optional(),
+  patient: nestSchema(ZCreatePatientSchema).optional(),
+});

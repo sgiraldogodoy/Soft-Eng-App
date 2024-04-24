@@ -33,8 +33,8 @@ export function StaffTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data?.map((n) => (
-          <TableRow>
+        {data?.map((n, index) => (
+          <TableRow key={index}>
             <TableCell>{n.id}</TableCell>
             <TableCell>{n.name}</TableCell>
             <TableCell>{n.jobTitle}</TableCell>

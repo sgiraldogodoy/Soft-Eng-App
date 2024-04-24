@@ -32,8 +32,8 @@ export function EdgesTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data?.map((n) => (
-          <TableRow>
+        {data?.map((n, index) => (
+          <TableRow key={index}>
             <TableCell>
               {n.startNodeId}_{n.endNodeId}
             </TableCell>

@@ -5,7 +5,7 @@ import {
   Move,
   Hand,
   SquareDashedMousePointer,
-  Settings,
+  Pencil,
 } from "lucide-react";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -66,7 +66,7 @@ export function MapEditTab({ onEditSelect }: MapEditTabProps) {
               aria-label="Edit"
               onClick={() => onEditSelect("Edit")}
             >
-              <Settings className="h-4 w-4" />
+              <Pencil className="h-4 w-4" />
             </ToggleGroupItem>
           </TooltipTrigger>
           <TooltipContent side="bottom">
