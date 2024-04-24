@@ -441,8 +441,6 @@ export default function InputForm({ variant }: Props) {
             {
               type: data.data.type,
               quality: data.data.quality,
-              startDate: data.data.startDate,
-              endDate: data.data.endDate,
               service: {
                 create: {
                   login: session.user?.email ?? "",

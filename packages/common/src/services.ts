@@ -75,8 +75,6 @@ export const ZCreateTransportSchema = z.object({
 export const ZCreateSanitationSchema = z.object({
   type: z.string(),
   quality: z.string(),
-  startDate: z.coerce.date().optional(),
-  endDate: z.coerce.date().optional(),
   service: nestSchema(ZCreateBaseServiceSchema),
 });
 
