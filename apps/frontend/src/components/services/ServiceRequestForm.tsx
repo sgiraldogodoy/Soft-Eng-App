@@ -201,13 +201,22 @@ interface Props {
 
 export default function InputForm({ variant }: Props) {
   const unfilteredQuery = trpc.node.getAll.useQuery();
+  const unfilteredStaffQuery = trpc.staff.getAll.useQuery();
   const unsortedQuery = unfilteredQuery.data
     ? unfilteredQuery.data?.filter((node) => !(node.type === "HALL"))
+    : [];
+  const unsortedStaffQuery = unfilteredStaffQuery.data
+    ? unfilteredStaffQuery.data
     : [];
   const nodesQuery = unsortedQuery.sort(function (a, b) {
     const nodeA = a.longName.toUpperCase();
     const nodeB = b.longName.toUpperCase();
     return nodeA < nodeB ? -1 : nodeA > nodeB ? 1 : 0;
+  });
+  const staffQuery = unsortedStaffQuery.sort(function (a, b) {
+    const staffA = a.name.toUpperCase();
+    const staffB = b.name.toUpperCase();
+    return staffA < staffB ? -1 : staffA > staffB ? 1 : 0;
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -237,8 +246,10 @@ export default function InputForm({ variant }: Props) {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     data.nodeId = nodesQuery.find((n) => data.nodeId === n.longName)?.id ?? "";
+
     switch (data.type) {
       case "flower":
+        console.log(data);
         toast.promise(
           createFlowerRequest.mutateAsync(
             {
@@ -680,6 +691,135 @@ export default function InputForm({ variant }: Props) {
                   )}
                 />
               </div>
+              <FormField
+                control={form.control}
+                name="staffId"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col h-full justify-between flex-1">
+                    <FormLabel>Assignee</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              "w-full justify-between",
+                              !field.value && "text-muted-foreground",
+                            )}
+                          >
+                            {field.value
+                              ? staffQuery.find(
+                                  (staff) => staff.id === field.value,
+                                )?.name
+                              : "Select Staff"}
+                            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[310px] max-h-[200px] overflow-scroll p-0">
+                        <Command>
+                          <CommandInput
+                            placeholder="Search employee..."
+                            className="h-9"
+                          />
+                          <CommandEmpty>No employee found.</CommandEmpty>
+                          <CommandGroup>
+                            {staffQuery.map((assignee) => (
+                              <CommandItem
+                                value={assignee.name}
+                                key={assignee.name}
+                                onSelect={() => {
+                                  form.setValue("staffId", assignee.id);
+                                  form.setValue("status", "ASSIGNED");
+                                }}
+                              >
+                                {assignee.name}
+                                <CheckIcon
+                                  className={cn(
+                                    "ml-auto h-4 w-4",
+                                    assignee.name === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0",
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <FormDescription>
+                      Who should be assigned the request?
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/*<FormField
+                    control={form.control}
+                    name="staffId"
+                    render={( cl{ field }) => (
+                        <FormItemassName="flex flex-col h-full justify-between flex-1">
+                            <FormLabel>Location</FormLabel>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <FormControl>
+                                        <Button
+                                            variant="outline"
+                                            role="combobox"
+                                            className={cn(
+                                                "w-full justify-between",
+                                                !field.value && "text-muted-foreground",
+                                            )}
+                                        >
+                                            {field.value
+                                                ? staffQuery.find(
+                                                    (staff) => staff.name === field.value,
+                                                )?.name
+                                                : "Select Staff"}
+                                            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                        </Button>
+                                    </FormControl>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-[310px] max-h-[200px] overflow-scroll p-0">
+                                    <Command>
+                                        <CommandInput
+                                            placeholder="Search employee..."
+                                            className="h-9"
+                                        />
+                                        <CommandEmpty>No employee found.</CommandEmpty>
+                                        <CommandGroup>
+                                            {staffQuery.map((assignee) => (
+                                                <CommandItem
+                                                    value={assignee.name}
+                                                    key={assignee.name}
+                                                    onSelect={() => {
+                                                        form.setValue("staffId", assignee.name);
+                                                    }}
+                                                >
+                                                    {assignee.name}
+                                                    <CheckIcon
+                                                        className={cn(
+                                                            "ml-auto h-4 w-4",
+                                                            assignee.name === field.value
+                                                                ? "opacity-100"
+                                                                : "opacity-0",
+                                                        )}
+                                                    />
+                                                </CommandItem>
+                                            ))}
+                                        </CommandGroup>
+                                    </Command>
+                                </PopoverContent>
+                            </Popover>
+                            <FormDescription>
+                                Who should be assigned the request?
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />*/}
               <FormField
                 control={form.control}
                 name="status"

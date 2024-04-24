@@ -1,4 +1,4 @@
-import { ZCreateBaseServiceSchema, ZCreateServiceSchema } from "common";
+import { ZCreateBaseServiceSchema } from "common";
 import { publicProcedure, protectedProcedure } from "../trpc";
 import { router } from "../trpc";
 import { z } from "zod";
@@ -69,6 +69,7 @@ export const serviceRouter = router({
         it: true,
         religious: true,
         interpreter: true,
+        assignee: true,
       },
     });
   }),
@@ -84,10 +85,28 @@ export const serviceRouter = router({
       });
     }),
   createOne: protectedProcedure
-    .input(ZCreateServiceSchema)
+    .input(ZCreateBaseServiceSchema)
     .mutation(async ({ input, ctx }) => {
       return ctx.db.service.create({
-        data: input,
+        data: {
+          ...input,
+        },
+      });
+    }),
+  connectToStaff: protectedProcedure
+    .input(z.object({ serviceId: z.string(), staffId: z.string() }))
+    .mutation(({ input, ctx }) => {
+      return ctx.db.service.update({
+        where: {
+          id: input.serviceId,
+        },
+        data: {
+          assignee: {
+            connect: {
+              id: input.staffId,
+            },
+          },
+        },
       });
     }),
 });

@@ -83,6 +83,8 @@ model Service {
   status      String
   type        ServiceType
   note        String
+  staffId     String?
+  assignee    Staff?       @relation(name: "ServiceStaff_Assignee", fields: [staffId], references: [id], onUpdate: Cascade, onDelete: SetNull)
   flower      Flower?      @relation(name: "FlowerToService")
   gift        Gift?        @relation(name: "GiftToService")
   room        Room?        @relation(name: "RoomToService")
@@ -295,6 +297,7 @@ model Staff {
   user        User?         @relation(name: "StaffUser", fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
   visitNotes  VisitNote[]   @relation(name: "VisitNoteToUser_Author")
   patients    Patient[]     @relation(name: "PatientStaff_PCP")
+  services    Service[]     @relation(name: "ServiceStaff_Assignee")
 }
 
 enum Role {

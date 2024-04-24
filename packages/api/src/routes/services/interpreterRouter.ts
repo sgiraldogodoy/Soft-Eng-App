@@ -9,7 +9,7 @@ export const InterpreterRouter = router({
     .input(ZCreateInterpreterSchema)
     .mutation(async ({ input, ctx }) => {
       console.log(input);
-      return await ctx.db.interpreter.create({
+      return ctx.db.interpreter.create({
         data: input,
       });
     }),

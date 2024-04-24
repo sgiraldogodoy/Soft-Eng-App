@@ -10,7 +10,9 @@ export const FlowerRouter = router({
     .mutation(async ({ input, ctx }) => {
       console.log(input);
       return ctx.db.flower.create({
-        data: input,
+        data: {
+          ...input,
+        },
       });
     }),
 
