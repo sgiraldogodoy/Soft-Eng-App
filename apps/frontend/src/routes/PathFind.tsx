@@ -146,7 +146,7 @@ export default function PathFind() {
           />
         </div>
 
-        <div className="flex backdrop-blur-[4px] bg-white/80 px-[10px] py-[10px] rounded-[80px] shadow-inner drop-shadow-md">
+        <div className="flex backdrop-blur-[4px] bg-white/90 px-[10px] py-[10px] rounded-[80px] shadow-inner drop-shadow-md">
           <Popover>
             <PopoverTrigger asChild>
               <Settings2 className="cursor-pointer" />
