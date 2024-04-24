@@ -11,6 +11,7 @@ export const patient = router({
       return ctx.db.patient.create({
         data: {
           ...input,
+          dateOfBirth: new Date(input.dateOfBirth).toISOString(),
         },
       });
     }),

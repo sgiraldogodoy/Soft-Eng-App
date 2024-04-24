@@ -41,7 +41,7 @@ export const ZCreateStaffSchema = z.object({
 
 export const ZCreatePatientSchema = z.object({
   SSN: z.coerce.number().optional(),
-  node: z.object({ connect: z.object({ id: z.string() }) }),
+  location: z.object({ connect: z.object({ id: z.string() }) }),
   entryDate: z.coerce.date().optional(),
   pcp: nestSchema(ZCreateStaffSchema).optional(),
   firstName: z.string(),

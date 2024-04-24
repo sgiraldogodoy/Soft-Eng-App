@@ -45,42 +45,46 @@ import { Input } from "@/components/ui/input.tsx";
 
 // Add your type-specific form schema to this array.
 const FormSchema = ZCreatePatientSchema.extend({
-  user: z
-    .object({})
-    .passthrough()
-    .pipe(
-      z.preprocess((user) => {
-        if (typeof user !== "object" || !user) {
-          return false;
+  user: z.preprocess(
+    (user) => {
+      if (typeof user !== "object" || !user) {
+        return undefined;
+      }
+      if ("connect" in user) {
+        if (typeof user.connect !== "object" || !user.connect) return undefined;
+        if (
+          "id" in user.connect &&
+          user.connect.id !== "" &&
+          user.connect.id !== undefined
+        ) {
+          return user;
         }
-        if ("connect" in user) {
-          if (typeof user.connect !== "object" || !user.connect) return false;
-          if ("id" in user.connect && user.connect.id !== "") {
-            return user;
-          }
-        }
+      }
 
-        return user;
-      }, ZCreatePatientSchema.shape.user),
-    ),
-  pcp: z
-    .object({})
-    .passthrough()
-    .pipe(
-      z.preprocess((pcp) => {
-        if (typeof pcp !== "object" || !pcp) {
-          return false;
+      return undefined;
+    },
+    z.object({ connect: z.object({ id: z.string() }) }).optional(),
+  ),
+  pcp: z.preprocess(
+    (pcp) => {
+      if (typeof pcp !== "object" || !pcp) {
+        return undefined;
+      }
+      if ("connect" in pcp) {
+        if (typeof pcp.connect !== "object" || !pcp.connect) return undefined;
+        if (
+          "id" in pcp.connect &&
+          pcp.connect.id !== "" &&
+          pcp.connect.id !== undefined
+        ) {
+          return pcp;
         }
-        if ("connect" in pcp) {
-          if (typeof pcp.connect !== "object" || !pcp.connect) return false;
-          if ("id" in pcp.connect && pcp.connect.id !== "") {
-            return pcp;
-          }
-        }
+      }
 
-        return pcp;
-      }, ZCreatePatientSchema.shape.pcp),
-    ),
+      return undefined;
+    },
+    z.object({ connect: z.object({ id: z.string() }) }),
+  ),
 });
 
 export default function InputForm() {
@@ -128,8 +132,8 @@ export default function InputForm() {
   const createPatientRequest = trpc.patient.createOne.useMutation();
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    data.node.connect.id =
-      nodesQuery.find((n) => data.node.connect.id === n.longName)?.id ?? "";
+    data.location.connect.id =
+      nodesQuery.find((n) => data.location.connect.id === n.longName)?.id ?? "";
 
     console.log(data);
     toast.promise(
@@ -223,7 +227,7 @@ export default function InputForm() {
                 />
                 <FormField
                   control={form.control}
-                  name="node.connect.id"
+                  name="location.connect.id"
                   render={({ field }) => (
                     <FormItem className="flex flex-col h-full justify-between flex-1">
                       <FormLabel>Location*</FormLabel>
@@ -261,7 +265,7 @@ export default function InputForm() {
                                   key={location.longName}
                                   onSelect={() => {
                                     form.setValue(
-                                      "node.connect.id",
+                                      "location.connect.id",
                                       location.longName,
                                     );
                                   }}
