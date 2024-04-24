@@ -166,14 +166,14 @@ export default function InputForm() {
       },
       {
         onSuccess: () => {
-          utils.service.getAll.invalidate();
+          utils.patient.getAll.invalidate();
         },
       },
     );
 
     toast.promise(createPatient, {
       success: "Successfully saved to the database.",
-      loading: "Saving flower request to the database.",
+      loading: "Saving patient request to the database.",
       error: "Error saving to database.",
     });
 

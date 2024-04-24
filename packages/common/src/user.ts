@@ -17,13 +17,13 @@ export const ZCreateStaffSchema = z.object({
 });
 
 export const ZCreatePatientSchema = z.object({
-  SSN: z.coerce.number().optional(),
+  SSN: z.coerce.number().safe().optional(),
   location: z.object({ connect: z.object({ id: z.string() }) }),
   entryDate: z.coerce.date().optional(),
   pcp: nestSchema(ZCreateStaffSchema).optional(),
-  firstName: z.string(),
+  firstName: z.string().min(2),
   middleName: z.string().optional(),
-  lastName: z.string(),
+  lastName: z.string().min(2),
   inTreatment: z.boolean().optional(),
   insurance: z.string().optional(),
   dateOfBirth: z.string().date(),
