@@ -28,7 +28,7 @@ interface editNodeDialogProps {
   open: boolean;
   onSubmit: (nodeData: NodeCreateInput, oldID: string) => void;
   handleDelete: (nodeData: Node) => void;
-  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const alpha = Array.from(Array(26)).map((e, i) => i + 65);
@@ -39,7 +39,7 @@ export function EditNodeDialog({
   onSubmit,
   handleDelete,
   open,
-  setDialogOpen,
+  setOpenDialog,
 }: editNodeDialogProps) {
   const [building, setBuilding] = useState(node.building);
   const [type, setType] = useState(node.type);
@@ -93,7 +93,7 @@ export function EditNodeDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setDialogOpen}>
+    <Dialog open={open} onOpenChange={setOpenDialog}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Edit Node</DialogTitle>

@@ -154,7 +154,6 @@ export function Nodes({
   const handleEditNode = () => {
     if (hoveredNode) {
       const editNode = nodes.find((node) => node.id === hoveredNode);
-
       if (editNode) {
         setNodeToEdit(editNode);
         setOpenDialog(true);
@@ -178,25 +177,33 @@ export function Nodes({
 
   const handleEditNodeSubmit = (nodeData: NodeCreateInput, oldID: string) => {
     // console.log("Node Data: ", nodeData);
-    nodeUpdate.mutate({
-      id: oldID,
-      data: {
-        id: nodeData.id,
-        x: nodeData.x,
-        y: nodeData.y,
-        floor: nodeData.floor,
-        building: nodeData.building,
-        type: nodeData.type,
-        longName: nodeData.longName,
-        shortName: nodeData.shortName,
+    nodeUpdate.mutate(
+      {
+        id: oldID,
+        data: {
+          id: nodeData.id,
+          x: nodeData.x,
+          y: nodeData.y,
+          floor: nodeData.floor,
+          building: nodeData.building,
+          type: nodeData.type,
+          longName: nodeData.longName,
+          shortName: nodeData.shortName,
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          utils.node.getAll.invalidate();
+        },
+      },
+    );
     setOpenDialog(false);
   };
 
   const handleRightClick = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
+    if (typeEdit === "aNode") return;
     e.preventDefault();
     if (onNodeDown) onNodeDown();
     if (!editable) return;
@@ -388,7 +395,10 @@ export function Nodes({
     filteredNodes = filteredNodes.filter((node) => node.type !== "HALL");
   if (path && path.length > 0) {
     filteredNodes = filteredNodes.filter(
-      (node) => !path.some((p) => p.id === node.id),
+      (node) =>
+        !path.some((p) => p.id === node.id) ||
+        node.id === goalNode ||
+        node.id === startNode,
     );
   }
 
@@ -504,7 +514,7 @@ export function Nodes({
             node={nodeToEdit}
             handleDelete={handleEditNodeDelete}
             onSubmit={handleEditNodeSubmit}
-            setDialogOpen={setOpenDialog}
+            setOpenDialog={setOpenDialog}
           />
         </div>
       )}
