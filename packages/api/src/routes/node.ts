@@ -85,8 +85,8 @@ export const Node = router({
       let number = "";
       if (input.id) {
         nodeId = input.id;
-      } else if (input.data.elevatorLetter) {
-        if (input.data.type === "ELEV") {
+      } else {
+        if (input.data.type === "ELEV" && input.data.elevatorLetter) {
           const pattern = /^[A-Z]*$/;
           if (!pattern.test(input.data.elevatorLetter)) {
             throw new TRPCError({
@@ -95,6 +95,11 @@ export const Node = router({
             });
           }
           number = "00" + input.data.elevatorLetter;
+        } else if (input.data.type === "ELEV") {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Elevators must have a letter",
+          });
         } else {
           const occurences = await ctx.db.node.findMany({
             where: {
@@ -111,11 +116,6 @@ export const Node = router({
         const prefixFloor = input.data.floor.length === 1 ? "0" : "";
         const floor = prefixFloor + input.data.floor;
         nodeId = "q" + input.data.type + number + floor;
-      } else {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Node must have a elevator number or an id",
-        });
       }
       const data = {
         id: nodeId,

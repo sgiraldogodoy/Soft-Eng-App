@@ -154,7 +154,6 @@ export function Nodes({
   const handleEditNode = () => {
     if (hoveredNode) {
       const editNode = nodes.find((node) => node.id === hoveredNode);
-
       if (editNode) {
         setNodeToEdit(editNode);
         setOpenDialog(true);
@@ -178,19 +177,26 @@ export function Nodes({
 
   const handleEditNodeSubmit = (nodeData: NodeCreateInput, oldID: string) => {
     // console.log("Node Data: ", nodeData);
-    nodeUpdate.mutate({
-      id: oldID,
-      data: {
-        id: nodeData.id,
-        x: nodeData.x,
-        y: nodeData.y,
-        floor: nodeData.floor,
-        building: nodeData.building,
-        type: nodeData.type,
-        longName: nodeData.longName,
-        shortName: nodeData.shortName,
+    nodeUpdate.mutate(
+      {
+        id: oldID,
+        data: {
+          id: nodeData.id,
+          x: nodeData.x,
+          y: nodeData.y,
+          floor: nodeData.floor,
+          building: nodeData.building,
+          type: nodeData.type,
+          longName: nodeData.longName,
+          shortName: nodeData.shortName,
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          utils.node.getAll.invalidate();
+        },
+      },
+    );
     setOpenDialog(false);
   };
 
@@ -507,7 +513,7 @@ export function Nodes({
             node={nodeToEdit}
             handleDelete={handleEditNodeDelete}
             onSubmit={handleEditNodeSubmit}
-            setDialogOpen={setOpenDialog}
+            setOpenDialog={setOpenDialog}
           />
         </div>
       )}
