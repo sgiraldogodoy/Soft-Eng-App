@@ -9,6 +9,7 @@ import ServiceRequestPage from "./ServiceRequestPage";
 import AboutPage from "./AboutPage";
 import PatientIntegration from "./PatientIntegration";
 import { Settings } from "@/routes/Settings.tsx";
+import CreditPage from "@/routes/CreditPage.tsx";
 import Music from "@/routes/MusicPlayerEasterEgg.tsx";
 
 export function AppRouter() {
@@ -20,6 +21,7 @@ export function AppRouter() {
       <Switch>
         <Route path="/" component={HomePage} />
         <Route path="/about" component={AboutPage} />
+        <Route path="/credit" component={CreditPage} />
         <DashboardLayout>
           <Route path="/pathfind">
             <PathFind />

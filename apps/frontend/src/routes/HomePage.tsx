@@ -183,7 +183,7 @@ export default function HomePage() {
                 <Link to="/about">
                   <p className="ml-auto text-xl text-white">About Us</p>
                 </Link>
-                <Link to="/">
+                <Link to="/credit">
                   <p className="ml-auto text-xl text-white">Credits</p>
                 </Link>
               </div>
