@@ -26,7 +26,7 @@ export function AppRouter() {
           <Route path="/pathfind">
             <PathFind />
           </Route>
-          <Route path="/database">
+          <Route path="/database" nest>
             <InspectDatabase />
             {isDefinitelyNotAuthed && <Redirect to="/" />}
           </Route>

@@ -19,8 +19,10 @@ import {
   CloudUpload,
   ContactRound,
   DownloadCloudIcon,
+  PlusIcon,
   Spline,
 } from "lucide-react";
+import { useLocation } from "wouter";
 
 export function InspectDatabase() {
   const uploadButton = useRef<HTMLInputElement>(null);
@@ -34,6 +36,8 @@ export function InspectDatabase() {
   const nodeMutation = trpc.node.csvUpload.useMutation();
   const edgeMutation = trpc.edge.csvUpload.useMutation();
   const staffMutation = trpc.staff.csvUpload.useMutation();
+
+  const [, setLocation] = useLocation();
 
   return (
     <>
@@ -142,6 +146,45 @@ export function InspectDatabase() {
               <CloudUpload className="h-4 w-4" />
               Upload
             </Button>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  size="sm"
+                  className="gap-1 animate-in fade-in zoom-in-105 duration-400 fill-mode-both"
+                >
+                  <PlusIcon className="h-4 w-4" />
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                    Create
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  className="flex justify-between items-center"
+                  onClick={() => {
+                    setLocation("/create/node");
+                  }}
+                >
+                  Nodes
+                  <CircleDotIcon
+                    color="hsla(var(--primary) / 0.5)"
+                    className="pl-1"
+                  />
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex justify-between items-center">
+                  Edges
+                  <Spline color="hsla(var(--primary) / 0.5)" className="pl-1" />
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex justify-between items-center">
+                  Employees
+                  <ContactRound
+                    color="hsla(var(--primary) / 0.5)"
+                    className="pl-1"
+                  />
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           <Card className="relative h-full max-h-full p-4 overflow-auto animate-in fade-in duration-500 zoom-in-105 delay-400 fill-mode-both bg-white/90 backdrop-blur-md">
             <TabsContent value="nodes">

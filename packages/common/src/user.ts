@@ -17,13 +17,22 @@ export const ZCreateStaffSchema = z.object({
 });
 
 export const ZCreatePatientSchema = z.object({
-  SSN: z.coerce.number().safe().optional(),
-  location: z.object({ connect: z.object({ id: z.string() }) }),
+  SSN: z
+    .string()
+    .regex(/^\d+$/, {
+      message: "SSN must contain only digits.",
+    })
+    .length(9, {
+      message: "SSN must be 9 digits.",
+    })
+    .optional()
+    .or(z.literal("")),
+  location: z.object({ connect: z.object({ id: z.string() }) }).optional(),
   entryDate: z.coerce.date().optional(),
   pcp: nestSchema(ZCreateStaffSchema).optional(),
-  firstName: z.string().min(2),
+  firstName: z.string().min(1),
   middleName: z.string().optional(),
-  lastName: z.string().min(2),
+  lastName: z.string().min(1),
   inTreatment: z.boolean().optional(),
   insurance: z.string().optional(),
   dateOfBirth: z.string().date(),

@@ -44,46 +44,36 @@ import { ZCreatePatientSchema } from "common";
 import { Input } from "@/components/ui/input.tsx";
 import { DateTime } from "luxon";
 
+const preprocessNested = (v: unknown) => {
+  if (typeof v !== "object" || !v) {
+    return undefined;
+  }
+  if (
+    "connect" in v &&
+    typeof v.connect === "object" &&
+    v.connect &&
+    "id" in v.connect &&
+    v.connect.id !== "" &&
+    v.connect.id !== undefined
+  ) {
+    return v;
+  }
+
+  return undefined;
+};
+
 // Add your type-specific form schema to this array.
 const FormSchema = ZCreatePatientSchema.extend({
   user: z.preprocess(
-    (user) => {
-      if (typeof user !== "object" || !user) {
-        return undefined;
-      }
-      if ("connect" in user) {
-        if (typeof user.connect !== "object" || !user.connect) return undefined;
-        if (
-          "id" in user.connect &&
-          user.connect.id !== "" &&
-          user.connect.id !== undefined
-        ) {
-          return user;
-        }
-      }
-
-      return undefined;
-    },
+    preprocessNested,
     z.object({ connect: z.object({ id: z.string() }) }).optional(),
   ),
   pcp: z.preprocess(
-    (pcp) => {
-      if (typeof pcp !== "object" || !pcp) {
-        return undefined;
-      }
-      if ("connect" in pcp) {
-        if (typeof pcp.connect !== "object" || !pcp.connect) return undefined;
-        if (
-          "id" in pcp.connect &&
-          pcp.connect.id !== "" &&
-          pcp.connect.id !== undefined
-        ) {
-          return pcp;
-        }
-      }
-
-      return undefined;
-    },
+    preprocessNested,
+    z.object({ connect: z.object({ id: z.string() }) }).optional(),
+  ),
+  location: z.preprocess(
+    preprocessNested,
     z.object({ connect: z.object({ id: z.string() }) }).optional(),
   ),
 });
@@ -129,7 +119,7 @@ export default function InputForm() {
       firstName: "",
       middleName: "",
       lastName: "",
-      SSN: 0,
+      SSN: "",
       dateOfBirth: DateTime.now().toISODate(),
       location: {
         connect: {
@@ -157,8 +147,10 @@ export default function InputForm() {
   const createPatientRequest = trpc.patient.createOne.useMutation();
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    data.location.connect.id =
-      nodesQuery.find((n) => data.location.connect.id === n.longName)?.id ?? "";
+    if (data.location)
+      data.location.connect.id =
+        nodesQuery.find((n) => data.location?.connect.id === n.longName)?.id ??
+        "";
 
     const createPatient = createPatientRequest.mutateAsync(
       {
@@ -274,7 +266,7 @@ export default function InputForm() {
                   name="location.connect.id"
                   render={({ field }) => (
                     <FormItem className="flex flex-col h-full justify-between flex-1">
-                      <FormLabel>Location*</FormLabel>
+                      <FormLabel>Location</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -330,7 +322,7 @@ export default function InputForm() {
                         </PopoverContent>
                       </Popover>
                       <FormDescription>
-                        Where should the request be serviced?
+                        Where is the patient located?
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -345,7 +337,7 @@ export default function InputForm() {
                     <FormItem className="flex-1">
                       <FormLabel>SSN</FormLabel>
                       <FormControl>
-                        <Input {...field} type="number" />
+                        <Input {...field} type="text" />
                       </FormControl>
                       <FormDescription>Only if you have one.</FormDescription>
                       <FormMessage />

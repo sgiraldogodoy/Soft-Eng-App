@@ -221,7 +221,7 @@ model Interpreter {
 
 model Patient {
   id           String        @id @default(uuid())
-  SSN          Int?          @unique
+  SSN          String?       @unique
   nodeId       String?
   location     Node?         @relation(name: "PatientToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: SetNull)
   pcpId        String?
