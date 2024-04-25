@@ -117,7 +117,7 @@ export function Nodes({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Delete") {
+      if (e.key === "Delete" || e.key === "Backspace") {
         if (selectedNodes && selectedNodes.length > 0) {
           deleteManyNodes.mutate(
             {
