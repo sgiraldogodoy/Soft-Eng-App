@@ -7,6 +7,11 @@ import {
 import { Button } from "@/components/ui/button.tsx";
 import { Link } from "wouter";
 import { ArrowLeft } from "lucide-react";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+} from "@/components/ui/dialog.tsx";
 
 export default function AboutPage() {
   return (
@@ -40,11 +45,20 @@ export default function AboutPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img
-                src={"/Wong.jpg"}
-                alt="Wilson Wong"
-                className="w-[300px] h-[300px] mb-2 rounded-lg"
-              />
+              <Dialog>
+                <DialogTrigger>
+                  <img
+                    src={"/Wong.jpg"}
+                    alt="Wilson Wong"
+                    className="w-[300px] h-[300px] mb-2 rounded-lg hover:scale-105"
+                  />
+                </DialogTrigger>
+                <DialogContent className="rounded-lg bg-slate-200">
+                  <div className="w-[317.5px] h-[125px] rounded-lg bg-slate-200">
+                    <p>I love Material UI</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Course Professor</p>
               </div>
@@ -281,7 +295,7 @@ export default function AboutPage() {
         <div className="flex flex-col items-center justify-center gap-5 w-1/2">
           <p className="text-2xl">
             And a thank you to Brigham and Women's Hospital and their
-            representative, Andrew Shinn.
+            representative and senior planner, Andrew Shinn.
           </p>
           <div className="flex flex-row gap-3 text-theme-blue">
             <svg
@@ -341,7 +355,7 @@ export default function AboutPage() {
           asChild
           size="icon"
           className="backdrop-blur-[4px] bg-white/90 shadow-inner drop-shadow-md"
-          variant="ghost"
+          variant="outline"
         >
           <Link to="/">
             <ArrowLeft color="#000000" />
