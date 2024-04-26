@@ -11,6 +11,7 @@ import PatientIntegration from "./PatientIntegration";
 import { Settings } from "@/routes/Settings.tsx";
 import CreditPage from "@/routes/CreditPage.tsx";
 import Music from "@/routes/MusicPlayerEasterEgg.tsx";
+import { PatientPortal } from "@/routes/PatientPortal.tsx";
 
 export function AppRouter() {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -22,6 +23,7 @@ export function AppRouter() {
         <Route path="/" component={HomePage} />
         <Route path="/about" component={AboutPage} />
         <Route path="/credit" component={CreditPage} />
+        <Route path="/portal" component={PatientPortal} />
         <DashboardLayout>
           <Route path="/pathfind">
             <PathFind />

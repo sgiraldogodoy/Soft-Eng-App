@@ -115,4 +115,19 @@ export const appointmentRouter = router({
         },
       });
     }),
+
+  sendReminder: protectedProcedure.mutation(async ({ ctx }) => {
+    const { data, error } = await ctx.resend.emails.send({
+      from: "no-reply@cs3733teamq.org",
+      to: ["matthew.m.franco@gmail.com"],
+      subject: "Hello World",
+      html: "<strong>It works!</strong>",
+    });
+
+    if (error) {
+      return console.error({ error });
+    }
+
+    console.log({ data });
+  }),
 });

@@ -9,10 +9,11 @@ import { trpc } from "@/utils/trpc.ts";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Card, CardContent } from "@/components/ui/card.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import { Suspense } from "react";
+import PatientName from "@/components/PatientName.tsx";
 
 export function PatientPortal() {
   const session = useAuth0();
-  const me = trpc.user.me.useQuery();
   const sendEmail = trpc.appointment.sendReminder.useMutation();
 
   return (
@@ -83,21 +84,25 @@ export function PatientPortal() {
           </DropdownMenu>
         </div>
       </div>
-      <Card className="bg-blue-100 w-full">
-        <CardContent className="flex justify-between px-4 items-center">
-          <div className="space-y-0.5">
-            <p className="text-xl">
-              Hello, <span className="font-semibold">{me.data?.name}!</span> 👋
-            </p>
-            <p className="text-lg font-light text-gray-600">
-              View and manage your appointments here
-            </p>
-          </div>
-          <Button className="bg-blue-600" onClick={() => sendEmail.mutate()}>
-            Schedule an appointment
-          </Button>
-        </CardContent>
-      </Card>
+      <Suspense>
+        <Card className="bg-blue-100 w-full">
+          <CardContent className="flex justify-between px-4 items-center">
+            <div className="space-y-0.5">
+              <div className="flex gap-1 text-xl">
+                <p>Hello, </p>
+                <PatientName />
+                <p>! 👋</p>
+              </div>
+              <p className="text-lg font-light text-gray-600">
+                View and manage your appointments here
+              </p>
+            </div>
+            <Button className="bg-blue-600" onClick={() => sendEmail.mutate()}>
+              Schedule an appointment
+            </Button>
+          </CardContent>
+        </Card>
+      </Suspense>
     </div>
   );
 }

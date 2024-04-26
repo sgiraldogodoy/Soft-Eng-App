@@ -5,6 +5,7 @@ import { ZodError } from "zod";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { verifyJwt } from "../utils/auth";
 import { ManagementClient } from "auth0";
+import { Resend } from "resend";
 
 export const createTRPCContext = async (
   opts: trpcExpress.CreateExpressContextOptions,
@@ -14,6 +15,8 @@ export const createTRPCContext = async (
     clientId: process.env.AUTH0_CLIENT_ID ?? "",
     clientSecret: process.env.AUTH0_CLIENT_SECRET ?? "",
   });
+
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   // dev-x61j30sgxmn7t3u3.us.auth0.com
   try {
@@ -26,6 +29,7 @@ export const createTRPCContext = async (
         auth0,
         db,
         token,
+        resend,
       };
     }
   } catch (e) {
@@ -36,6 +40,7 @@ export const createTRPCContext = async (
   return {
     auth0,
     db,
+    resend,
   };
 };
 
