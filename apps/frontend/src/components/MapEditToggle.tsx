@@ -24,7 +24,7 @@ export function MapEditTab({ onEditSelect }: MapEditTabProps) {
   return (
     <TooltipProvider delayDuration={0}>
       <ToggleGroup
-        variant="darker"
+        variant="outline"
         size={"lg"}
         type="single"
         defaultValue="Pan"

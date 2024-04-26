@@ -820,7 +820,7 @@ export default function InputForm({ variant }: Props) {
                 >
                   Reset
                 </Button>
-                <Button className="flex-1 " type="submit">
+                <Button variant="default" className="flex-1 " type="submit">
                   Submit
                 </Button>
               </div>

@@ -4850,15 +4850,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cmdk@npm:^0.2.0":
-  version: 0.2.1
-  resolution: "cmdk@npm:0.2.1"
+"cmdk@npm:0.2.0":
+  version: 0.2.0
+  resolution: "cmdk@npm:0.2.0"
   dependencies:
     "@radix-ui/react-dialog": "npm:1.0.0"
+    command-score: "npm:0.1.2"
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: f2f90cafa026d7905c76147a032caa202eeab28b267b90ac22d2e9a93fbbee92735e530eeac7cc5e5e1d0978424b0743264da144570e2646bf89f6ccf10e91c2
+  checksum: e178e3d3276e0b5fd158c9c99716c0405427871f48fa97c15c4be2de24be4a478cf0205ffa04244628dbe103dd8573a1bd1aa68f04f8b60633d4ffc04e5eee62
   languageName: node
   linkType: hard
 
@@ -4914,6 +4915,13 @@ __metadata:
   dependencies:
     delayed-stream: "npm:~1.0.0"
   checksum: 2e969e637d05d09fa50b02d74c83a1186f6914aae89e6653b62595cc75a221464f884f55f231b8f4df7a49537fba60bdc0427acd2bf324c09a1dbb84837e36e4
+  languageName: node
+  linkType: hard
+
+"command-score@npm:0.1.2":
+  version: 0.1.2
+  resolution: "command-score@npm:0.1.2"
+  checksum: 84f6a69e6b215d3fc8c9ed402d109587f511e4cc84cd5da10a7857b50fb1638953e32dcce8ed8f3549b0bfe499e82601fb7fb6891c9c71b48933d4bb8bac238a
   languageName: node
   linkType: hard
 
@@ -6691,7 +6699,7 @@ __metadata:
     axios: "npm:^1.4.0"
     class-variance-authority: "npm:^0.7.0"
     clsx: "npm:^2.1.0"
-    cmdk: "npm:^0.2.0"
+    cmdk: "npm:0.2.0"
     common: "workspace:^"
     database: "workspace:*"
     date-fns: "npm:^3.6.0"
@@ -6728,6 +6736,7 @@ __metadata:
     tailwind-merge: "npm:^2.2.2"
     tailwindcss: "npm:^3.4.1"
     tailwindcss-animate: "npm:^1.0.7"
+    tailwindcss-dotted-background: "npm:^1.1.0"
     toggle-group: "npm:^1.0.5"
     tsconfig-custom: "workspace:*"
     typescript: "npm:^5.0.2"
@@ -10894,6 +10903,15 @@ __metadata:
   peerDependencies:
     tailwindcss: "*"
   checksum: ef176fbb0bf9dca84178b35b6a9615cd756358ea80be9c575456d12ecd7f3c431e9e571915c7df72959dc798a730959e9a4739d59eab55d8cc6db390870ff0d2
+  languageName: node
+  linkType: hard
+
+"tailwindcss-dotted-background@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "tailwindcss-dotted-background@npm:1.1.0"
+  peerDependencies:
+    tailwindcss: ^3.0.0
+  checksum: 5b3559b876dc5443ece028e89d11295f704b5016b5adbcc0ef9bed9273efea3c82c353e626d3c0fd1d17766bebda3bcdac0369cf7d66e1b7f734bbd3c356f51c
   languageName: node
   linkType: hard
 

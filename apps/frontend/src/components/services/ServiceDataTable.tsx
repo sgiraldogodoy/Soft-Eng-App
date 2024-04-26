@@ -93,7 +93,7 @@ export function ServiceDataTable<TData extends { id: string }, TValue>({
   });
 
   return (
-    <div className="rounded-md border overflow-auto">
+    <div className="rounded-md overflow-auto">
       <div className="flex items-center py-4 px-3">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>

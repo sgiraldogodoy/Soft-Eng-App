@@ -1,7 +1,7 @@
 import { trpc } from "@/utils/trpc.ts";
 import Map from "@/components/Map.tsx";
 import FloorSelection from "@/components/FloorSelection.tsx";
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { MapEditTab } from "@/components/MapEditToggle.tsx";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
 
