@@ -44,7 +44,7 @@ export function AccordionTextNav({ directions }: AccordionTextNavProps) {
     return null;
   }
   return (
-    <div className="flex flex-col space-y-2 w-[23vw] overflow-auto">
+    <div className="flex flex-col space-y-2 w-[20vw] overflow-auto">
       {directions.map((direction, index) => {
         if (index === directions.length - 1 && shouldRemoveLast) {
           return null;

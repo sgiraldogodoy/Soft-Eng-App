@@ -14,9 +14,10 @@ const pixToFeet = 47 / 148;
 
 interface TextNavigationProps {
   nodes: Node[];
+  onFloorClick: (floor: string, url: string) => void;
 }
 
-export function TextNavigation({ nodes }: TextNavigationProps) {
+export function TextNavigation({ nodes, onFloorClick }: TextNavigationProps) {
   /**
    * Function to convert the pixel value to feet
    * @param pixelValue the pixel value to convert
@@ -232,21 +233,46 @@ export function TextNavigation({ nodes }: TextNavigationProps) {
   const directionsString = directions.map(([dir]) => dir).join(", ");
   const dirFloor = dirFilter(directions);
   //console.log(directions);
+  const handleClick = (floor: string) => {
+    switch (floor) {
+      case "1": {
+        onFloorClick("1", "/01_thefirstfloor.png");
+        break;
+      }
+      case "2": {
+        onFloorClick("2", "/02_thesecondfloor.png");
+        break;
+      }
+      case "3": {
+        onFloorClick("3", "/03_thethirdfloor.png");
+        break;
+      }
+      case "L1": {
+        onFloorClick("L1", "/00_thelowerlevel1.png");
+        break;
+      }
+      case "L2": {
+        onFloorClick("L2", "/00_thelowerlevel2.png");
+        break;
+      }
+    }
+  };
 
   return (
     <div>
       <Accordion
         type="single"
         collapsible
-        className="w-full max-h-[80vh] w-[30vw] pb-0.5"
+        className="w-full max-h-[80vh] pb-0.5"
       >
         {dirFloor.map((dir, index) => {
           return (
             <AccordionItem
               value={"Floor " + dir[0][1] + "-" + index}
               key={index}
+              onClick={() => handleClick(dir[0][1])}
             >
-              <AccordionTrigger className=" pl-2">
+              <AccordionTrigger className="pl-2">
                 Directions For Floor {dir[0][1]}
               </AccordionTrigger>
               <AccordionContent className="max-h-[55vh] overflow-y-auto pl-2">
