@@ -121,6 +121,7 @@ export default function InputForm() {
       lastName: "",
       SSN: "",
       dateOfBirth: DateTime.now().toISODate(),
+      sex: undefined,
       location: {
         connect: {
           id: "",
@@ -436,6 +437,31 @@ export default function InputForm() {
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="sex"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col flex-1">
+                      <FormLabel>Sex assigned at birth</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Patients Sex" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="male">Male</SelectItem>
+                          <SelectItem value="female">Female</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}

@@ -23,6 +23,7 @@ export const ZCreateAppointmentSchema = z.object({
 export const ZCreateVisitNoteSchema = z.object({
   type: z.string(),
   content: z.string(),
+  published: z.boolean().optional(),
   author: nestSchema(ZCreateStaffSchema).optional(),
   visit: nestSchema(ZCreateVisitSchema),
 });
