@@ -81,7 +81,7 @@ export default function ServiceRequestPage() {
   return (
     <>
       {/*<BackgroundGradientAnimation className="overflow-hidden -z-10" />*/}
-      <div className="absolute bottom-0 left-0 w-full h-full">
+      <div className="absolute bottom-0 left-0 w-full h-full bg-sky-100/70">
         <img src="/wave.svg" alt="Wave" className="absolute bottom-0 left-0 " />
       </div>
       <div className="absolute inset-0 flex flex-row h-[95%] w-[95%] gap-4 items-stretch justify-center pointer-events-auto mx-10 my-6 max-w-full max-h-full">

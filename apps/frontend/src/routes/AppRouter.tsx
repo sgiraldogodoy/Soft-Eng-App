@@ -11,6 +11,7 @@ import PatientIntegration from "./PatientIntegration";
 import { Settings } from "@/routes/Settings.tsx";
 import CreditPage from "@/routes/CreditPage.tsx";
 import Music from "@/routes/MusicPlayerEasterEgg.tsx";
+import PatientAppointments from "@/routes/PatientAppointments.tsx";
 
 export function AppRouter() {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -50,6 +51,10 @@ export function AppRouter() {
           </Route>
           <Route path="/music">
             <Music />
+            {isDefinitelyNotAuthed && <Redirect to="/" />}
+          </Route>
+          <Route path="/appointments">
+            <PatientAppointments />
             {isDefinitelyNotAuthed && <Redirect to="/" />}
           </Route>
         </DashboardLayout>
