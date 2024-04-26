@@ -6,7 +6,7 @@ import { Settings2 } from "lucide-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { ArrowLeft } from "lucide-react";
 import { EndNodeAutocomlete } from "@/components/EndNodeAutocomlete.tsx";
-import FloorSelection from "@/components/FloorSelection.tsx";
+import FloorSelection2 from "@/components/FloorSelection2.tsx";
 import {
   Popover,
   PopoverContent,
@@ -15,7 +15,7 @@ import {
 import PathfindSettings from "@/components/PathfindSettings.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { TextNavigation } from "@/components/TextNav.tsx";
-import MapKeyAccordion from "@/components/MapKeyAccordion.tsx";
+import MapKeyAccordion from "@/components/MapKeyPopover.tsx";
 
 import { Link } from "wouter";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
@@ -164,17 +164,19 @@ export default function PathFind() {
             </PopoverContent>
           </Popover>
         </div>
+        <div className="flex backdrop-blur-[4px] bg-white/90 px-[10px] py-[10px] shadow-inner drop-shadow-md rounded-[80px]">
+          <MapKeyAccordion />
+        </div>
       </div>
 
-      <div className="absolute flex items-center gap-[2px] text-xl font-bold bottom-10 right-8">
-        <FloorSelection onFloorClick={handleFloorClick} />
+      <div className="absolute flex items-center gap-[2px] text-xl font-bold bottom-14 right-8">
+        <FloorSelection2 onFloorClick={handleFloorClick} />
       </div>
       {pathData && pathData.length > 0 && (
-        <div className="absolute bottom-2 left-2 backdrop-blur-[4px] bg-white/80 rounded-[10px] shadown-inner drop-shadow-md">
-          <TextNavigation nodes={pathData} />
+        <div className="absolute bottom-2 left-2 backdrop-blur-[4px] bg-white/80 rounded-[10px] shadown-inner drop-shadow-md w-[22vw]">
+          <TextNavigation nodes={pathData} onFloorClick={handleFloorClick} />
         </div>
       )}
-      <MapKeyAccordion />
     </div>
   );
 }
