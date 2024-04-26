@@ -41,7 +41,7 @@ export default function AboutPage() {
           <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#2D83FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
-                Wilson Wong
+                <p className="text-xl">Wilson Wong</p>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
@@ -54,8 +54,14 @@ export default function AboutPage() {
                   />
                 </DialogTrigger>
                 <DialogContent className="rounded-lg bg-slate-200">
-                  <div className="w-[317.5px] h-[125px] rounded-lg bg-slate-200">
-                    <p>I love Material UI</p>
+                  <div className="flex flex-col justify-center items-center">
+                    <p className="font-bold mb-2 text-xl">
+                      Wilson Wong's Favorite Quote
+                    </p>
+                    <p className="text-lg">"I love Material UI."</p>
+                    <p className="italic mt-1 text-lg">
+                      by Wilson Wong, probably
+                    </p>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -69,15 +75,28 @@ export default function AboutPage() {
           <Card className="h-full bg-slate-100 drop-shadow-md shadow-inner backdrop-blur-md flex-1 flex flex-col border-0">
             <CardHeader className="bg-[#2D83FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
-                Ian Wright
+                <p className="text-xl">Ian Wright</p>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img
-                src={"/Ian.jpg"}
-                alt="Ian Wright"
-                className="w-[300px] h-[300px] mb-2 rounded-lg"
-              />
+              <Dialog>
+                <DialogTrigger>
+                  <img
+                    src={"/Ian.jpg"}
+                    alt="Ian Wright"
+                    className="w-[300px] h-[300px] mb-2 rounded-lg hover:scale-105"
+                  />
+                </DialogTrigger>
+                <DialogContent className="rounded-lg bg-slate-200">
+                  <div className="flex flex-col justify-center items-center">
+                    <p className="font-bold mb-2 text-xl">
+                      Ian's Favorite Quote
+                    </p>
+                    <p className="text-lg">"How's it going?"</p>
+                    <p className="italic mt-1 text-lg">by Ian, definitely</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Team Coach</p>
               </div>
@@ -91,12 +110,29 @@ export default function AboutPage() {
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 <div className="h-8 flex-col justify-center items-center content-center text-center">
-                  <p>Thomas Beattie (Ace)</p>
+                  <p className="text-xl">Thomas Beattie (Ace)</p>
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img src={"/Ace.jpg"} alt="Ace" className="mb-2 rounded-lg" />
+              <Dialog>
+                <DialogTrigger>
+                  <img
+                    src={"/Ace.jpg"}
+                    alt="Ace"
+                    className="mb-2 rounded-lg hover:scale-105"
+                  />
+                </DialogTrigger>
+                <DialogContent className="rounded-lg bg-slate-200">
+                  <div className="flex flex-col justify-center items-center">
+                    <p className="font-bold mb-2 text-xl">
+                      Ace's Favorite Quote
+                    </p>
+                    <p className="text-lg">"Put in whatever."</p>
+                    <p className="italic mt-1 text-lg">by Ace</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Lead Software Engineer</p>
               </div>
@@ -108,16 +144,29 @@ export default function AboutPage() {
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 <div className="h-8 flex-col justify-center items-center content-center text-center">
-                  <p>Matthew Franco</p>
+                  <p className="text-xl">Matthew Franco</p>
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img
-                src={"/Matt.jpg"}
-                alt="Matthew"
-                className="mb-2 rounded-lg"
-              />
+              <Dialog>
+                <DialogTrigger>
+                  <img
+                    src={"/Matt.jpg"}
+                    alt="Matthew"
+                    className="mb-2 rounded-lg hover:scale-105"
+                  />
+                </DialogTrigger>
+                <DialogContent className="rounded-lg bg-slate-200">
+                  <div className="flex flex-col justify-center items-center">
+                    <p className="font-bold mb-2 text-xl">
+                      Matthew's Favorite Quote
+                    </p>
+                    <p className="text-lg">"We are a unicellular organism!"</p>
+                    <p className="italic mt-1 text-lg">by someone</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Assistant Lead Software Engineer</p>
                 <p>Front-End and Feature Engineer</p>
@@ -130,16 +179,29 @@ export default function AboutPage() {
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 <div className="h-8 flex-col justify-center items-center content-center text-center">
-                  <p>Santiago Giraldo Godoy</p>
+                  <p className="text-xl">Santiago Giraldo Godoy</p>
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img
-                src={"/Santiago.png"}
-                alt="Santiago"
-                className="mb-2 rounded-lg"
-              />
+              <Dialog>
+                <DialogTrigger>
+                  <img
+                    src={"/Santiago.png"}
+                    alt="Santiago"
+                    className="mb-2 rounded-lg hover:scale-105"
+                  />
+                </DialogTrigger>
+                <DialogContent className="rounded-lg bg-slate-200">
+                  <div className="flex flex-col justify-center items-center">
+                    <p className="font-bold mb-2 text-xl">
+                      Santiago's Favorite Quote
+                    </p>
+                    <p className="text-lg">placeholder</p>
+                    <p className="italic mt-1 text-lg">by someone</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Algorithms and Feature Engineer</p>
                 <p>Back-End Database Engineer</p>
@@ -152,16 +214,29 @@ export default function AboutPage() {
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 <div className="h-8 flex-col justify-center items-center content-center text-center">
-                  <p>Parker Glispin</p>
+                  <p className="text-xl">Parker Glispin</p>
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img
-                src={"/Parker.jpg"}
-                alt="Parker"
-                className="mb-2 rounded-lg"
-              />
+              <Dialog>
+                <DialogTrigger>
+                  <img
+                    src={"/Parker.jpg"}
+                    alt="Parker"
+                    className="mb-2 rounded-lg hover:scale-105"
+                  />
+                </DialogTrigger>
+                <DialogContent className="rounded-lg bg-slate-200">
+                  <div className="flex flex-col justify-center items-center">
+                    <p className="font-bold mb-2 text-xl">
+                      Parker's Favorite Quote
+                    </p>
+                    <p className="text-lg">placeholder</p>
+                    <p className="italic mt-1 text-lg">by someone</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Product Owner</p>
                 <p>Algorithms and Feature Engineer</p>
@@ -174,16 +249,29 @@ export default function AboutPage() {
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 <div className="h-8 flex-col justify-center items-center content-center text-center">
-                  <p>Michael Lin</p>
+                  <p className="text-xl">Michael Lin</p>
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img
-                src={"/Michael.jpg"}
-                alt="Michael"
-                className="mb-2 rounded-lg"
-              />
+              <Dialog>
+                <DialogTrigger>
+                  <img
+                    src={"/Michael.jpg"}
+                    alt="Michael"
+                    className="mb-2 rounded-lg hover:scale-105"
+                  />
+                </DialogTrigger>
+                <DialogContent className="rounded-lg bg-slate-200">
+                  <div className="flex flex-col justify-center items-center">
+                    <p className="font-bold mb-2 text-xl">
+                      Michael's Favorite Quote
+                    </p>
+                    <p className="text-lg">placeholder</p>
+                    <p className="italic mt-1 text-lg">by someone</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Back-End Database Engineer</p>
               </div>
@@ -195,12 +283,29 @@ export default function AboutPage() {
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 <div className="h-8 flex-col justify-center items-center content-center text-center">
-                  <p>Kevin McCrudden</p>
+                  <p className="text-xl">Kevin McCrudden</p>
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img src={"/Kevin.jpg"} alt="Kevin" className="mb-2 rounded-lg" />
+              <Dialog>
+                <DialogTrigger>
+                  <img
+                    src={"/Kevin.jpg"}
+                    alt="Kevin"
+                    className="mb-2 rounded-lg hover:scale-105"
+                  />
+                </DialogTrigger>
+                <DialogContent className="rounded-lg bg-slate-200">
+                  <div className="flex flex-col justify-center items-center">
+                    <p className="font-bold mb-2 text-xl">
+                      Kevin's Favorite Quote
+                    </p>
+                    <p className="text-lg">LGTM!</p>
+                    <p className="italic mt-1 text-lg">by ChatGPT</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Project Manager</p>
                 <p>Scrum Master</p>
@@ -213,16 +318,29 @@ export default function AboutPage() {
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 <div className="h-8 flex-col justify-center items-center content-center text-center">
-                  <p>Keenan Porter</p>
+                  <p className="text-xl">Keenan Porter</p>
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img
-                src={"/Keenan.jpg"}
-                alt="Keenan"
-                className="mb-2 rounded-lg"
-              />
+              <Dialog>
+                <DialogTrigger>
+                  <img
+                    src={"/Keenan.jpg"}
+                    alt="Keenan"
+                    className="mb-2 rounded-lg hover:scale-105"
+                  />
+                </DialogTrigger>
+                <DialogContent className="rounded-lg bg-slate-200">
+                  <div className="flex flex-col justify-center items-center">
+                    <p className="font-bold mb-2 text-xl">
+                      Keenan's Favorite Quote
+                    </p>
+                    <p className="text-lg">placeholder</p>
+                    <p className="italic mt-1 text-lg">by someone</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Front-End and Feature Engineer</p>
                 <p>Documentation Analyst</p>
@@ -235,16 +353,29 @@ export default function AboutPage() {
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 <div className="h-8 flex-col justify-center items-center content-center text-center">
-                  <p>Daniel Reynolds</p>
+                  <p className="text-xl">Daniel Reynolds</p>
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img
-                src={"/Daniel.jpg"}
-                alt="Daniel"
-                className="mb-2 rounded-lg"
-              />
+              <Dialog>
+                <DialogTrigger>
+                  <img
+                    src={"/Daniel.jpg"}
+                    alt="Daniel"
+                    className="mb-2 rounded-lg hover:scale-105"
+                  />
+                </DialogTrigger>
+                <DialogContent className="rounded-lg bg-slate-200">
+                  <div className="flex flex-col justify-center items-center">
+                    <p className="font-bold mb-2 text-xl">
+                      Daniel's Favorite Quote
+                    </p>
+                    <p className="text-lg">"Have you ever heard of waifu2x"</p>
+                    <p className="italic mt-1 text-lg">by Daniel, very much</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Front-End and Feature Engineer</p>
               </div>
@@ -256,12 +387,32 @@ export default function AboutPage() {
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 <div className="h-8 flex-col justify-center items-center content-center text-center">
-                  <p>Cole Welcher</p>
+                  <p className="text-xl">Cole Welcher</p>
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img src={"/Cole.jpg"} alt="Pookie" className="mb-2 rounded-lg" />
+              <Dialog>
+                <DialogTrigger>
+                  <img
+                    src={"/Cole.jpg"}
+                    alt="Pookie"
+                    className="mb-2 rounded-lg hover:scale-105"
+                  />
+                </DialogTrigger>
+                <DialogContent className="rounded-lg bg-slate-200">
+                  <div className="flex flex-col justify-center items-center text-center">
+                    <p className="font-bold mb-2 text-xl">
+                      Cole's Favorite Quote
+                    </p>
+                    <p className="text-lg">
+                      "It takes considerable knowledge just to realize the
+                      extent of your own ignorance."
+                    </p>
+                    <p className="italic mt-1 text-lg">by someone</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Assistant Lead Software Engineer</p>
                 <p>Algorithms and Feature Engineer</p>
@@ -274,16 +425,29 @@ export default function AboutPage() {
             <CardHeader className="bg-[#9AC4FF] py-5 mb-8 rounded-t-lg">
               <CardTitle className="capitalize text-center">
                 <div className="h-8 flex-col justify-center items-center content-center text-center">
-                  <p>Justin Yip</p>
+                  <p className="text-xl">Justin Yip</p>
                 </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
-              <img
-                src={"/Justin.jpg"}
-                alt="Justin"
-                className="mb-2 rounded-lg"
-              />
+              <Dialog>
+                <DialogTrigger>
+                  <img
+                    src={"/Justin.jpg"}
+                    alt="Justin"
+                    className="mb-2 rounded-lg hover:scale-105"
+                  />
+                </DialogTrigger>
+                <DialogContent className="rounded-lg bg-slate-200">
+                  <div className="flex flex-col justify-center items-center">
+                    <p className="font-bold mb-2 text-xl">
+                      Justin's Favorite Quote
+                    </p>
+                    <p className="text-lg">placeholder</p>
+                    <p className="italic mt-1 text-lg">by someone</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
               <div className="h-8 flex-col justify-center items-center content-center text-center">
                 <p>Front-End and Feature Engineer</p>
               </div>
