@@ -280,7 +280,7 @@ model Visit {
 model VisitNote {
   id        String  @id @default(uuid())
   type      String
-  content   String
+  content   Json
   published Boolean @default(false)
   authorId  String?
   author    Staff?  @relation(name: "VisitNoteToUser_Author", fields: [authorId], references: [id], onUpdate: Cascade, onDelete: SetNull)
