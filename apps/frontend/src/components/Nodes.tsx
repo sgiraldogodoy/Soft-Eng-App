@@ -336,6 +336,7 @@ export function Nodes({
     target.style.position = "absolute";
     const offsetX = e.clientX - parseFloat(target.style.left || "0");
     const offsetY = e.clientY - parseFloat(target.style.top || "0");
+    console.log(offsetX, offsetY);
     let newX = 0;
     let newY = 0;
 
