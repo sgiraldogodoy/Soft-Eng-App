@@ -6,6 +6,11 @@ const TextToSpeech = ({ text }: { text: string }) => {
   const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(
     null,
   );
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [selectedVoice, setSelectedVoice] =
+    useState<SpeechSynthesisVoice | null>(null);
+  const [pitch, setPitch] = useState(1);
+  const [rate, setRate] = useState(1);
 
   useEffect(() => {
     const synth = window.speechSynthesis;
@@ -16,7 +21,11 @@ const TextToSpeech = ({ text }: { text: string }) => {
     return () => {
       synth.cancel();
     };
-  }, [text]);
+  }, [text, selectedVoice, pitch, rate]);
+
+  useEffect(() => {
+    setVoices(window.speechSynthesis.getVoices());
+  }, []);
 
   const handlePlay = () => {
     const synth = window.speechSynthesis;
@@ -28,6 +37,10 @@ const TextToSpeech = ({ text }: { text: string }) => {
     if (!utterance) {
       return;
     }
+
+    utterance.voice = selectedVoice;
+    utterance.pitch = pitch;
+    utterance.rate = rate;
 
     synth.speak(utterance);
 
@@ -63,6 +76,48 @@ const TextToSpeech = ({ text }: { text: string }) => {
         <button onClick={handleStop}>
           <StopCircle />
         </button>
+      </div>
+      <div className="flex flex-col">
+        <label>
+          Voice:
+          <select
+            value={selectedVoice ? selectedVoice.voiceURI : ""}
+            onChange={(e) =>
+              setSelectedVoice(
+                voices.find((voice) => voice.voiceURI === e.target.value) ||
+                  null,
+              )
+            }
+          >
+            {voices.map((voice) => (
+              <option key={voice.voiceURI} value={voice.voiceURI}>
+                {voice.name} ({voice.lang})
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Pitch:
+          <input
+            type="range"
+            min="0"
+            max="2"
+            step="0.1"
+            value={pitch}
+            onChange={(e) => setPitch(Number(e.target.value))}
+          />
+        </label>
+        <label>
+          Rate:
+          <input
+            type="range"
+            min="0.5"
+            max="2"
+            step="0.1"
+            value={rate}
+            onChange={(e) => setRate(Number(e.target.value))}
+          />
+        </label>
       </div>
     </div>
   );
