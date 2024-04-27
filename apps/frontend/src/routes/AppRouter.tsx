@@ -12,6 +12,7 @@ import { Settings } from "@/routes/Settings.tsx";
 import CreditPage from "@/routes/CreditPage.tsx";
 import Music from "@/routes/MusicPlayerEasterEgg.tsx";
 import PhoneTextToNav from "@/routes/PhoneTextToNav.tsx";
+import Analytics from "@/routes/Analytics.tsx";
 
 export function AppRouter() {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -44,6 +45,10 @@ export function AppRouter() {
           <Route path="/mapediting">
             {isDefinitelyNotAuthed && <Redirect to="/" />}
             <MapEdit />
+          </Route>
+          <Route path="/analytics">
+            {isDefinitelyNotAuthed && <Redirect to="/" />}
+            <Analytics />
           </Route>
           <Route path="/settings" nest>
             <Settings />
