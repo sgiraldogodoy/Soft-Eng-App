@@ -122,7 +122,6 @@ export default function InputForm() {
       firstName: "",
       middleName: "",
       lastName: "",
-
       dateOfBirth: DateTime.now().toISODate(),
       sex: "" as FormType["sex"],
       identity: {
@@ -194,8 +193,7 @@ export default function InputForm() {
           <CardTitle className="capitalize">Patient Creation</CardTitle>
         </CardHeader>
         <CardFooter className="text-muted-foreground text-xs ">
-          {" "}
-          * Required fields{" "}
+          * Required fields
         </CardFooter>
         <CardContent className="flex-1 flex flex-col justify-between items-center h-full gap-2 ">
           <Form {...form}>
@@ -347,7 +345,6 @@ export default function InputForm() {
                       <FormControl>
                         <Input {...field} type="text" />
                       </FormControl>
-                      {/*<FormDescription>Has to be either passport, SSN or driver licence.</FormDescription>*/}
                       <FormMessage />
                     </FormItem>
                   )}
