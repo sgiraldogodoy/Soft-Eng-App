@@ -4850,15 +4850,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cmdk@npm:^0.2.0":
-  version: 0.2.1
-  resolution: "cmdk@npm:0.2.1"
+"cmdk@npm:0.2.0":
+  version: 0.2.0
+  resolution: "cmdk@npm:0.2.0"
   dependencies:
     "@radix-ui/react-dialog": "npm:1.0.0"
+    command-score: "npm:0.1.2"
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: f2f90cafa026d7905c76147a032caa202eeab28b267b90ac22d2e9a93fbbee92735e530eeac7cc5e5e1d0978424b0743264da144570e2646bf89f6ccf10e91c2
+  checksum: e178e3d3276e0b5fd158c9c99716c0405427871f48fa97c15c4be2de24be4a478cf0205ffa04244628dbe103dd8573a1bd1aa68f04f8b60633d4ffc04e5eee62
   languageName: node
   linkType: hard
 
@@ -4914,6 +4915,13 @@ __metadata:
   dependencies:
     delayed-stream: "npm:~1.0.0"
   checksum: 2e969e637d05d09fa50b02d74c83a1186f6914aae89e6653b62595cc75a221464f884f55f231b8f4df7a49537fba60bdc0427acd2bf324c09a1dbb84837e36e4
+  languageName: node
+  linkType: hard
+
+"command-score@npm:0.1.2":
+  version: 0.1.2
+  resolution: "command-score@npm:0.1.2"
+  checksum: 84f6a69e6b215d3fc8c9ed402d109587f511e4cc84cd5da10a7857b50fb1638953e32dcce8ed8f3549b0bfe499e82601fb7fb6891c9c71b48933d4bb8bac238a
   languageName: node
   linkType: hard
 
@@ -6691,7 +6699,7 @@ __metadata:
     axios: "npm:^1.4.0"
     class-variance-authority: "npm:^0.7.0"
     clsx: "npm:^2.1.0"
-    cmdk: "npm:^0.2.0"
+    cmdk: "npm:0.2.0"
     common: "workspace:^"
     database: "workspace:*"
     date-fns: "npm:^3.6.0"
@@ -6716,6 +6724,8 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-hook-form: "npm:^7.51.3"
     react-hot-toast: "npm:^2.4.1"
+    react-qr-code: "npm:^2.0.12"
+    react-qrcode-logo: "npm:^2.10.0"
     react-router-bootstrap: "npm:^0.26.2"
     react-zoom-pan-pinch: "npm:^3.1.0"
     sass: "npm:^1.62.1"
@@ -6728,6 +6738,7 @@ __metadata:
     tailwind-merge: "npm:^2.2.2"
     tailwindcss: "npm:^3.4.1"
     tailwindcss-animate: "npm:^1.0.7"
+    tailwindcss-dotted-background: "npm:^1.1.0"
     toggle-group: "npm:^1.0.5"
     tsconfig-custom: "workspace:*"
     typescript: "npm:^5.0.2"
@@ -7923,6 +7934,13 @@ __metadata:
   version: 3.0.3
   resolution: "lodash.isboolean@npm:3.0.3"
   checksum: b70068b4a8b8837912b54052557b21fc4774174e3512ed3c5b94621e5aff5eb6c68089d0a386b7e801d679cd105d2e35417978a5e99071750aa2ed90bffd0250
+  languageName: node
+  linkType: hard
+
+"lodash.isequal@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "lodash.isequal@npm:4.5.0"
+  checksum: 82fc58a83a1555f8df34ca9a2cd300995ff94018ac12cc47c349655f0ae1d4d92ba346db4c19bbfc90510764e0c00ddcc985a358bdcd4b3b965abf8f2a48a214
   languageName: node
   linkType: hard
 
@@ -9548,6 +9566,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"qr.js@npm:0.0.0":
+  version: 0.0.0
+  resolution: "qr.js@npm:0.0.0"
+  checksum: a05943d13cbc478e48935de8669b72312fe02de05057c35ebfab59a574c084530a9afb9ee651d53c8c870a54f9ec93ea7b63231de202740ce16a71c797e37ce9
+  languageName: node
+  linkType: hard
+
+"qrcode-generator@npm:^1.4.1":
+  version: 1.4.4
+  resolution: "qrcode-generator@npm:1.4.4"
+  checksum: 65b2bba237d1f230eba0d08ae4267d04f326859c2265775ade99191be1b522158b623fcc0b613bbfc9d4edbbafb928fc41c66d61053b333f2eb0bcedb2ebadca
+  languageName: node
+  linkType: hard
+
 "qs@npm:6.11.0":
   version: 6.11.0
   resolution: "qs@npm:6.11.0"
@@ -9748,6 +9780,35 @@ __metadata:
   version: 3.0.4
   resolution: "react-lifecycles-compat@npm:3.0.4"
   checksum: c66b9c98c15cd6b0d0a4402df5f665e8cc7562fb7033c34508865bea51fd7b623f7139b5b7e708515d3cd665f264a6a9403e1fa7e6d61a05759066f5e9f07783
+  languageName: node
+  linkType: hard
+
+"react-qr-code@npm:^2.0.12":
+  version: 2.0.12
+  resolution: "react-qr-code@npm:2.0.12"
+  dependencies:
+    prop-types: "npm:^15.8.1"
+    qr.js: "npm:0.0.0"
+  peerDependencies:
+    react: ^16.x || ^17.x || ^18.x
+    react-native-svg: "*"
+  peerDependenciesMeta:
+    react-native-svg:
+      optional: true
+  checksum: b7bad40d7d5f04f7ff336ae499920dd5ea0e7616ed7fec5f849e54f8f26b5e4acd1ba8e69198be8617dc7fecdf36cf4302c99ff74885320b55bb95d19a09de7c
+  languageName: node
+  linkType: hard
+
+"react-qrcode-logo@npm:^2.10.0":
+  version: 2.10.0
+  resolution: "react-qrcode-logo@npm:2.10.0"
+  dependencies:
+    lodash.isequal: "npm:^4.5.0"
+    qrcode-generator: "npm:^1.4.1"
+  peerDependencies:
+    react: ">=16.4.1"
+    react-dom: ">=16.4.1"
+  checksum: b4b693013acbac77515d4131992599afd0bc08da3734cb8bc2619b4ce9ea8562bdc973b66a56b34311450392e6de92db92bb8abe20862a52e1009d5372e46c8b
   languageName: node
   linkType: hard
 
@@ -10894,6 +10955,15 @@ __metadata:
   peerDependencies:
     tailwindcss: "*"
   checksum: ef176fbb0bf9dca84178b35b6a9615cd756358ea80be9c575456d12ecd7f3c431e9e571915c7df72959dc798a730959e9a4739d59eab55d8cc6db390870ff0d2
+  languageName: node
+  linkType: hard
+
+"tailwindcss-dotted-background@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "tailwindcss-dotted-background@npm:1.1.0"
+  peerDependencies:
+    tailwindcss: ^3.0.0
+  checksum: 5b3559b876dc5443ece028e89d11295f704b5016b5adbcc0ef9bed9273efea3c82c353e626d3c0fd1d17766bebda3bcdac0369cf7d66e1b7f734bbd3c356f51c
   languageName: node
   linkType: hard
 

@@ -19,7 +19,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../ui/select";*/
-import { motion } from "framer-motion";
 /*import { type ZCreatePatientSchema } from "common";
 import { z } from "zod";*/
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
@@ -67,12 +66,7 @@ export default function RequestSummary() {
   console.log(rowSelectionState);
 
   return (
-    <motion.div
-      initial={{ x: -50, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ duration: 1, type: "easeOut" }}
-      className="w-full flex flex-col gap-4 flex-1 max-h-full"
-    >
+    <div className="w-full flex flex-col gap-4 flex-1 max-h-full animate-in zoom-in-105 fade-in duration-500">
       <Card className="flex flex-col flex-1 overflow-auto bg-white/90 backdrop-blur-md">
         <CardHeader>
           <CardTitle>Patients</CardTitle>
@@ -186,7 +180,7 @@ export default function RequestSummary() {
                     </CardFooter>
                 </Card>
             )}*/}
-    </motion.div>
+    </div>
   );
 }
 

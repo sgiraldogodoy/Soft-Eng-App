@@ -1,6 +1,6 @@
 import { trpc } from "@/utils/trpc.ts";
 import Map from "@/components/Map.tsx";
-import FloorSelection from "@/components/FloorSelection.tsx";
+import FloorSelection2 from "@/components/FloorSelection2.tsx";
 import React, { useCallback, useState } from "react";
 import { MapEditTab } from "@/components/MapEditToggle.tsx";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
@@ -46,8 +46,8 @@ export default function MapEdit() {
       <div className="absolute top-0 left-1/2 transform -translate-x-1/2 mt-4">
         <MapEditTab onEditSelect={handleEditselect} />
       </div>
-      <div className="absolute flex items-center gap-[2px] text-xl font-bold bottom-10 right-8">
-        <FloorSelection onFloorClick={handleFloorClick} />
+      <div className="absolute flex items-center gap-[2px] text-xl font-bold bottom-14 right-8">
+        <FloorSelection2 onFloorClick={handleFloorClick} />
       </div>
     </div>
   );
