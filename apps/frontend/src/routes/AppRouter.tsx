@@ -23,7 +23,7 @@ export function AppRouter() {
         <Route path="/" component={HomePage} />
         <Route path="/about" component={AboutPage} />
         <Route path="/credit" component={CreditPage} />
-        <Route path="/portal" component={PatientPortal} />
+        <Route path="/portal" component={PatientPortal} nest />
         <DashboardLayout>
           <Route path="/pathfind">
             <PathFind />

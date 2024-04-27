@@ -119,7 +119,7 @@ export const appointmentRouter = router({
   sendReminder: protectedProcedure.mutation(async ({ ctx }) => {
     const { data, error } = await ctx.resend.emails.send({
       from: "no-reply@cs3733teamq.org",
-      to: ["matthew.m.franco@gmail.com"],
+      to: ["g.nazareth017@gmail.com"],
       subject: "Hello World",
       html: "<strong>It works!</strong>",
     });
