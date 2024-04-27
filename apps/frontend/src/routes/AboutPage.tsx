@@ -92,7 +92,7 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Ian's Favorite Quote
                     </p>
-                    <p className="text-lg">"How's it going?"</p>
+                    <p className="text-lg">"How's it going? 😜"</p>
                     <p className="italic mt-1 text-lg">by Ian, definitely</p>
                   </div>
                 </DialogContent>
@@ -336,8 +336,8 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Keenan's Favorite Quote
                     </p>
-                    <p className="text-lg">placeholder</p>
-                    <p className="italic mt-1 text-lg">by someone</p>
+                    <p className="text-lg">I love league of legends</p>
+                    <p className="italic mt-1 text-lg">by himself</p>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -406,10 +406,9 @@ export default function AboutPage() {
                       Cole's Favorite Quote
                     </p>
                     <p className="text-lg">
-                      "It takes considerable knowledge just to realize the
-                      extent of your own ignorance."
+                      "I'm not a cat, I'm a pookie flower!"
                     </p>
-                    <p className="italic mt-1 text-lg">by someone</p>
+                    <p className="italic mt-1 text-lg">by Copilot</p>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -443,8 +442,10 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Justin's Favorite Quote
                     </p>
-                    <p className="text-lg">placeholder</p>
-                    <p className="italic mt-1 text-lg">by someone</p>
+                    <p className="text-lg">
+                      Im giving cole my chic-fil-a sauce
+                    </p>
+                    <p className="italic mt-1 text-lg">by himself</p>
                   </div>
                 </DialogContent>
               </Dialog>
