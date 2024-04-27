@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Play, Pause, StopCircle } from "lucide-react";
+import translateText from "./GoogleTranslate";
 
 const TextToSpeech = ({ text }: { text: string }) => {
   const [isPaused, setIsPaused] = useState(false);
@@ -11,27 +12,27 @@ const TextToSpeech = ({ text }: { text: string }) => {
     useState<SpeechSynthesisVoice | null>(null);
   const [pitch, setPitch] = useState(1);
   const [rate, setRate] = useState(1);
+  const [targetLanguage, setTargetLanguage] = useState("en");
+
+  const handleTranslate = useCallback(async () => {
+    if (text) {
+      const translatedText = await translateText(text, targetLanguage);
+      const u = new SpeechSynthesisUtterance(translatedText);
+      setUtterance(u);
+    }
+  }, [text, targetLanguage]);
 
   useEffect(() => {
-    const synth = window.speechSynthesis;
-    const u = new SpeechSynthesisUtterance(text);
-
-    setUtterance(u);
-
-    return () => {
-      synth.cancel();
-    };
-  }, [text, selectedVoice, pitch, rate]);
+    handleTranslate();
+  }, [handleTranslate]);
 
   useEffect(() => {
     setVoices(window.speechSynthesis.getVoices());
   }, []);
 
   const handlePlay = () => {
-    const synth = window.speechSynthesis;
-
     if (isPaused) {
-      synth.resume();
+      window.speechSynthesis.resume();
     }
 
     if (!utterance) {
@@ -42,23 +43,19 @@ const TextToSpeech = ({ text }: { text: string }) => {
     utterance.pitch = pitch;
     utterance.rate = rate;
 
-    synth.speak(utterance);
+    window.speechSynthesis.speak(utterance);
 
     setIsPaused(false);
   };
 
   const handlePause = () => {
-    const synth = window.speechSynthesis;
-
-    synth.pause();
+    window.speechSynthesis.pause();
 
     setIsPaused(true);
   };
 
   const handleStop = () => {
-    const synth = window.speechSynthesis;
-
-    synth.cancel();
+    window.speechSynthesis.cancel();
 
     setIsPaused(false);
   };
@@ -78,6 +75,24 @@ const TextToSpeech = ({ text }: { text: string }) => {
         </button>
       </div>
       <div className="flex flex-col">
+        <label>
+          Language:
+          <select
+            value={targetLanguage}
+            onChange={(e) => setTargetLanguage(e.target.value)}
+          >
+            <option value="en">English</option>
+            <option value="pt">Portuguese</option>
+            <option value="ru">Russian</option>
+            <option value="zh">Chinese</option>
+            <option value="ar">Arabic</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="it">Italian</option>
+            <option value="ja">Japanese</option>
+          </select>
+        </label>
         <label>
           Voice:
           <select
