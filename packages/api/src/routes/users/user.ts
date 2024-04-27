@@ -125,6 +125,9 @@ export const userRouter = router({
       where: {
         sub: ctx.token.payload.sub as string,
       },
+      include: {
+        staff: true,
+      },
     });
 
     if (user) {

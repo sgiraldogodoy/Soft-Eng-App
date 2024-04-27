@@ -17,6 +17,9 @@ export const visitRouter = router({
         where: {
           id: input.id,
         },
+        include: {
+          patient: true,
+        },
       });
     }),
 
