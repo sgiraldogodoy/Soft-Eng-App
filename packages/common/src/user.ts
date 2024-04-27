@@ -16,17 +16,13 @@ export const ZCreateStaffSchema = z.object({
   jobTitle: z.string(),
 });
 
+export const ZCreateIdentificationSchema = z.object({
+  idType: z.enum(["ssn", "driverLicense", "passport"]),
+  idNumber: z.string().or(z.literal("")),
+});
+
 export const ZCreatePatientSchema = z.object({
-  SSN: z
-    .string()
-    .regex(/^\d+$/, {
-      message: "SSN must contain only digits.",
-    })
-    .length(9, {
-      message: "SSN must be 9 digits.",
-    })
-    .optional()
-    .or(z.literal("")),
+  identity: z.object({ create: ZCreateIdentificationSchema }),
   location: z.object({ connect: z.object({ id: z.string() }) }).optional(),
   entryDate: z.coerce.date().optional(),
   pcp: nestSchema(ZCreateStaffSchema).optional(),
@@ -42,7 +38,9 @@ export const ZCreatePatientSchema = z.object({
   dateOfBirth: z.string().date(),
   phoneNumber: z.string().optional(),
   user: nestSchema(ZCreateBaseUserSchema).optional(),
+  notes: z.string().optional(),
 });
+
 export const ZCreateUserSchema = z.discriminatedUnion("role", [
   ZCreateBaseUserSchema.extend({
     staff: z.union([

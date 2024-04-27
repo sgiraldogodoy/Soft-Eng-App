@@ -221,7 +221,8 @@ model Interpreter {
 
 model Patient {
   id           String        @id @default(uuid())
-  SSN          String?       @unique
+  idNumber     String        @unique @default(cuid())
+  identity     Identity      @relation(name: "PatientToIdentity", fields: [idNumber], references: [idNumber], onUpdate: Cascade, onDelete: Cascade)
   nodeId       String?
   location     Node?         @relation(name: "PatientToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: SetNull)
   pcpId        String?
@@ -236,6 +237,7 @@ model Patient {
   height       Float?
   bloodType    String?
   sex          sex
+  notes        String?
   inTreatment  Boolean       @default(false)
   insurance    String?
   visits       Visit[]       @relation(name: "VisitPatient")
@@ -248,6 +250,19 @@ enum sex {
   male
   female
   other
+}
+
+model Identity {
+  id       String    @id @default(uuid())
+  idType   IDTypes
+  idNumber String    @unique
+  patients Patient[] @relation(name: "PatientToIdentity")
+}
+
+enum IDTypes {
+  ssn
+  passport
+  driverLicense
 }
 
 model Appointment {

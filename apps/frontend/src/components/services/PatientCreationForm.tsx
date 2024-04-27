@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,6 +25,7 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
+  CardFooter,
 } from "@/components/ui/card.tsx";
 import { trpc } from "@/utils/trpc";
 import { cn } from "@/lib/utils";
@@ -43,6 +43,7 @@ import { CheckIcon } from "lucide-react";
 import { ZCreatePatientSchema } from "common";
 import { Input } from "@/components/ui/input.tsx";
 import { DateTime } from "luxon";
+import { Textarea } from "@/components/ui/textarea.tsx";
 
 const preprocessNested = (v: unknown) => {
   if (typeof v !== "object" || !v) {
@@ -77,6 +78,8 @@ const FormSchema = ZCreatePatientSchema.extend({
     z.object({ connect: z.object({ id: z.string() }) }).optional(),
   ),
 });
+
+type FormType = z.infer<typeof FormSchema>;
 
 export default function InputForm() {
   const unfilteredQuery = trpc.node.getAll.useQuery();
@@ -119,9 +122,15 @@ export default function InputForm() {
       firstName: "",
       middleName: "",
       lastName: "",
-      SSN: "",
+
       dateOfBirth: DateTime.now().toISODate(),
-      sex: undefined,
+      sex: "" as FormType["sex"],
+      identity: {
+        create: {
+          idNumber: "",
+          idType: "" as FormType["identity"]["create"]["idType"],
+        },
+      },
       location: {
         connect: {
           id: "",
@@ -133,7 +142,7 @@ export default function InputForm() {
           id: "",
         },
       },
-      phoneNumber: undefined,
+      phoneNumber: "",
       user: {
         connect: {
           id: "",
@@ -180,15 +189,19 @@ export default function InputForm() {
 
   return (
     <>
-      <Card className="h-full backdrop-blur-md flex-1 flex flex-col overflow-auto z-0 bg-white/90">
+      <Card className="h-full backdrop-blur-md flex-1 flex flex-col overflow-auto z-0 bg-white/90 ">
         <CardHeader>
           <CardTitle className="capitalize">Patient Creation</CardTitle>
         </CardHeader>
-        <CardContent className="flex-1 flex flex-col justify-center items-center gap-2">
+        <CardFooter className="text-muted-foreground text-xs ">
+          {" "}
+          * Required fields{" "}
+        </CardFooter>
+        <CardContent className="flex-1 flex flex-col justify-between items-center h-full gap-2 ">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full flex flex-col justify-between items-stretch gap-3"
+              className="w-full h-full flex flex-col justify-between items-stretch gap-4"
             >
               <div className="flex flex-row gap-2 items-stretch">
                 <FormField
@@ -255,9 +268,6 @@ export default function InputForm() {
                           <SelectItem value="Blue Cross">Blue Cross</SelectItem>
                         </SelectContent>
                       </Select>
-                      <FormDescription>
-                        This is the insurance provider of the patient.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -322,9 +332,6 @@ export default function InputForm() {
                           </Command>
                         </PopoverContent>
                       </Popover>
-                      <FormDescription>
-                        Where is the patient located?
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -333,14 +340,41 @@ export default function InputForm() {
               <div className="flex flex-row gap-2 items-stretch">
                 <FormField
                   control={form.control}
-                  name="SSN"
+                  name="identity.create.idNumber"
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>SSN</FormLabel>
+                      <FormLabel>ID*</FormLabel>
                       <FormControl>
                         <Input {...field} type="text" />
                       </FormControl>
-                      <FormDescription>Only if you have one.</FormDescription>
+                      {/*<FormDescription>Has to be either passport, SSN or driver licence.</FormDescription>*/}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="identity.create.idType"
+                  render={({ field }) => (
+                    <FormItem className="flex-1 ">
+                      <FormLabel>Type of ID*</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a insurance provider" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="ssn">SSN</SelectItem>
+                          <SelectItem value="passport">Passport</SelectItem>
+                          <SelectItem value="driverLicense">
+                            Driver License
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -349,7 +383,7 @@ export default function InputForm() {
                   control={form.control}
                   name="pcp.connect.id"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col h-full justify-between flex-1">
+                    <FormItem className="flex-1">
                       <FormLabel>Primary Care Provider</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
@@ -405,9 +439,6 @@ export default function InputForm() {
                           </Command>
                         </PopoverContent>
                       </Popover>
-                      <FormDescription>
-                        Who is your care provider?
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -419,11 +450,10 @@ export default function InputForm() {
                   name="dateOfBirth"
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>Date of Birth</FormLabel>
+                      <FormLabel>Date of Birth*</FormLabel>
                       <FormControl>
                         <Input type="date" {...field} />
                       </FormControl>
-                      <FormDescription>When were you born?</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -445,8 +475,8 @@ export default function InputForm() {
                   control={form.control}
                   name="sex"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col flex-1">
-                      <FormLabel>Sex assigned at birth</FormLabel>
+                    <FormItem className="flex-1">
+                      <FormLabel>Sex assigned at birth*</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
@@ -471,7 +501,7 @@ export default function InputForm() {
                 control={form.control}
                 name="user.connect.id"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col h-full justify-between flex-1">
+                  <FormItem>
                     <FormLabel>Link user email</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
@@ -524,7 +554,19 @@ export default function InputForm() {
                         </Command>
                       </PopoverContent>
                     </Popover>
-                    <FormDescription>what is your user email?</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="notes"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col flex-1">
+                    <FormLabel>Notes</FormLabel>
+                    <FormControl>
+                      <Textarea className="flex-1" {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

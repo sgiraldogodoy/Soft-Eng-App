@@ -5341,6 +5341,7 @@ const RAW_RUNTIME_STATE =
           ["@trpc/server", "npm:11.0.0-next.327"],\
           ["@types/express", "npm:4.17.21"],\
           ["@types/jsonwebtoken", "npm:9.0.6"],\
+          ["@types/luxon", "npm:3.4.2"],\
           ["@types/node", "npm:20.12.2"],\
           ["@types/priorityqueuejs", "npm:1.0.4"],\
           ["auth0", "npm:4.3.1"],\
@@ -5351,6 +5352,7 @@ const RAW_RUNTIME_STATE =
           ["express", "npm:4.19.2"],\
           ["jsonwebtoken", "npm:9.0.2"],\
           ["jwks-rsa", "npm:3.1.0"],\
+          ["luxon", "npm:3.4.4"],\
           ["prettier", "npm:3.2.4"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
           ["priorityqueuejs", "npm:2.0.0"],\
