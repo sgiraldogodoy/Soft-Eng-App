@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Nodes } from "./Nodes.tsx";
 import type { Node, Edge } from "database";
 import { Lines } from "./Lines.tsx";
@@ -77,10 +77,11 @@ export default function Map({
   }
 
   const nodeDown = useCallback(() => {
-    if (dragging) {
-      setDragging(false);
-    }
-  }, [dragging]);
+    // if (dragging) {
+    //   console.log("Setting drag to false");
+    setDragging(false);
+    // }
+  }, []);
 
   useEffect(() => {
     if (typeEdit === "Sele") {
