@@ -195,6 +195,36 @@ const testimonialsCommunication = [
       "Slack is a proprietary business communication platform developed by Slack Technologies.",
     extraInfo: "",
   },
+  {
+    name: (
+      <a href="https://discord.com/">
+        <button className="hover:bg-sky-300 text-black">Discord</button>
+      </a>
+    ),
+    description:
+      "Discord is a proprietary freeware VoIP application and digital distribution platform designed for creating communities ranging from gamers to education and businesses.",
+    extraInfo: "",
+  },
+  {
+    name: (
+      <a href="https://canvas.wpi.edu/">
+        <button className="hover:bg-sky-300 text-black">Canvas</button>
+      </a>
+    ),
+    description:
+      "Canvas is a learning management system that allows teachers to provide instructional support, class calendars, assignments, and resources for students in a safe online environment.",
+    extraInfo: "",
+  },
+  {
+    name: (
+      <a href="https://support.apple.com/messages">
+        <button className="hover:bg-sky-300 text-black">iMessage</button>
+      </a>
+    ),
+    description:
+      "iMessage is an instant messaging service developed by Apple Inc. that allows users to send texts, documents, photos, videos, contact information, and group messages over Wi-Fi, mobile phone internet access, or other forms of internet access to other iOS or macOS users.",
+    extraInfo: "",
+  },
 ];
 export default function CreditPage() {
   return (
