@@ -11,9 +11,37 @@ import {
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button.tsx";
 import React from "react";
+import { useLocation } from "wouter";
 
 export default function SearchCommand() {
+  const [, setLocation] = useLocation();
+
   const [open, setOpen] = React.useState(false);
+
+  const mapedit = () => {
+    setLocation("/mapediting");
+    setOpen(!open);
+  };
+
+  const services = () => {
+    setLocation("/services");
+    setOpen(!open);
+  };
+
+  const database = () => {
+    setLocation("/database");
+    setOpen(!open);
+  };
+
+  const patients = () => {
+    setLocation("/patients");
+    setOpen(!open);
+  };
+
+  const map = () => {
+    setLocation("/pathfind");
+    setOpen(!open);
+  };
 
   const buttonchange = () => {
     setOpen((open) => !open);
@@ -54,6 +82,23 @@ export default function SearchCommand() {
         <CommandInput placeholder="Type a command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Map">
+            <CommandItem onSelect={map}>Hospital Map</CommandItem>
+          </CommandGroup>
+          <CommandGroup heading="Map Edit">
+            <CommandItem onSelect={mapedit}>Create Node</CommandItem>
+            <CommandItem onSelect={mapedit}>Create Edge</CommandItem>
+            <CommandItem onSelect={mapedit}>Edit Node</CommandItem>
+          </CommandGroup>
+          <CommandGroup heading="Services">
+            <CommandItem onSelect={services}>Manage Services</CommandItem>
+          </CommandGroup>
+          <CommandGroup heading="Patients">
+            <CommandItem onSelect={patients}>Manage Patients</CommandItem>
+          </CommandGroup>
+          <CommandGroup heading="Database">
+            <CommandItem onSelect={database}>Manage database</CommandItem>
+          </CommandGroup>
         </CommandList>
       </CommandDialog>
     </>
