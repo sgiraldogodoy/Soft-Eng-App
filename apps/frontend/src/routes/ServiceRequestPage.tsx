@@ -5,7 +5,6 @@ import ServiceRequestForm, {
 // import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React, { useState } from "react";
 // import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation.tsx";
-import { motion } from "framer-motion";
 import { Check, ChevronsUpDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -176,15 +175,12 @@ export default function ServiceRequestPage() {
           {/*    </TabsTrigger>*/}
           {/*  </TabsList>*/}
           {/*</Tabs>*/}
-          <motion.div
+          <div
             key={variant}
-            initial={{ x: 50, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1, type: "easeOut" }}
-            className="pointer-events-auto overflow-auto flex-1"
+            className="animate-in zoom-in-105 fade-in duration-500 fill-mode-both delay-100 pointer-events-auto overflow-auto flex-1"
           >
             <ServiceRequestForm variant={variant} />
-          </motion.div>
+          </div>
         </div>
       </div>
     </>
