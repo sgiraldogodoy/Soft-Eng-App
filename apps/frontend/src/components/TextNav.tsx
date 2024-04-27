@@ -14,10 +14,15 @@ const pixToFeet = 47 / 148;
 
 interface TextNavigationProps {
   nodes: Node[];
-  onFloorClick: (floor: string, url: string) => void;
+  onFloorClick?: (floor: string, url: string) => void;
+  onPhone?: boolean;
 }
 
-export function TextNavigation({ nodes, onFloorClick }: TextNavigationProps) {
+export function TextNavigation({
+  nodes,
+  onFloorClick,
+  onPhone,
+}: TextNavigationProps) {
   /**
    * Function to convert the pixel value to feet
    * @param pixelValue the pixel value to convert
@@ -69,11 +74,11 @@ export function TextNavigation({ nodes, onFloorClick }: TextNavigationProps) {
   }
 
   function getStart(node1: Node, node2: Node): string {
-    if (node1.floor !== node2.floor) {
-      if (node1.type === "STAI")
-        return "Take the stairs to floor " + node2.floor;
-      else return "Take the elevator to floor " + node2.floor;
-    }
+    // if (node1.floor !== node2.floor) {
+    //   if (node1.type === "STAI")
+    //     return "Take the stairs to floor " + node2.floor;
+    //   else return "Take the elevator to floor " + node2.floor;
+    // }
 
     return "Turn till facing " + getCardinalDirection(node1, node2);
   }
@@ -234,26 +239,28 @@ export function TextNavigation({ nodes, onFloorClick }: TextNavigationProps) {
   const dirFloor = dirFilter(directions);
   //console.log(directions);
   const handleClick = (floor: string) => {
-    switch (floor) {
-      case "1": {
-        onFloorClick("1", "/01_thefirstfloor.png");
-        break;
-      }
-      case "2": {
-        onFloorClick("2", "/02_thesecondfloor.png");
-        break;
-      }
-      case "3": {
-        onFloorClick("3", "/03_thethirdfloor.png");
-        break;
-      }
-      case "L1": {
-        onFloorClick("L1", "/00_thelowerlevel1.png");
-        break;
-      }
-      case "L2": {
-        onFloorClick("L2", "/00_thelowerlevel2.png");
-        break;
+    if (onFloorClick) {
+      switch (floor) {
+        case "1": {
+          onFloorClick("1", "/01_thefirstfloor.png");
+          break;
+        }
+        case "2": {
+          onFloorClick("2", "/02_thesecondfloor.png");
+          break;
+        }
+        case "3": {
+          onFloorClick("3", "/03_thethirdfloor.png");
+          break;
+        }
+        case "L1": {
+          onFloorClick("L1", "/00_thelowerlevel1.png");
+          break;
+        }
+        case "L2": {
+          onFloorClick("L2", "/00_thelowerlevel2.png");
+          break;
+        }
       }
     }
   };
@@ -262,8 +269,8 @@ export function TextNavigation({ nodes, onFloorClick }: TextNavigationProps) {
     <div>
       <Accordion
         type="single"
-        collapsible
-        className="w-full max-h-[80vh] pb-0.5"
+        className="w-full xs:h-full md:max-h-[80vh] pb-0.5"
+        defaultValue={"Floor " + dirFloor[0][0][1] + "-0"}
       >
         {dirFloor.map((dir, index) => {
           return (
@@ -275,9 +282,9 @@ export function TextNavigation({ nodes, onFloorClick }: TextNavigationProps) {
               <AccordionTrigger className="pl-2">
                 Directions For Floor {dir[0][1]}
               </AccordionTrigger>
-              <AccordionContent className="max-h-[55vh] overflow-y-auto pl-2">
+              <AccordionContent className="${onPhone? 'h-full' : 'max-h-[55vh]'} overflow-y-auto pl-2">
                 <TextToSpeech text={directionsString} />
-                <AccordionTextNav directions={dir} />
+                <AccordionTextNav directions={dir} onPhone={onPhone} />
               </AccordionContent>
             </AccordionItem>
           );

@@ -16,6 +16,8 @@ import PathfindSettings from "@/components/PathfindSettings.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { TextNavigation } from "@/components/TextNav.tsx";
 import MapKeyAccordion from "@/components/MapKeyPopover.tsx";
+import { QRCode } from "react-qrcode-logo";
+import smartPhoneLogo from "../../public/smartphone.png";
 
 import { Link } from "wouter";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
@@ -173,9 +175,24 @@ export default function PathFind() {
         <FloorSelection2 onFloorClick={handleFloorClick} />
       </div>
       {pathData && pathData.length > 0 && (
-        <div className="absolute bottom-2 left-2 backdrop-blur-[4px] bg-white/80 rounded-[10px] shadown-inner drop-shadow-md w-[22vw]">
-          <TextNavigation nodes={pathData} onFloorClick={handleFloorClick} />
-        </div>
+        <>
+          <div className="absolute bottom-2 left-2 backdrop-blur-[4px] bg-white/80 rounded-[10px] shadown-inner drop-shadow-md w-[22vw]">
+            <TextNavigation
+              nodes={pathData}
+              onFloorClick={handleFloorClick}
+              onPhone={false}
+            />
+          </div>
+          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white/80 p-1 rounded-[10px]">
+            <QRCode
+              value={`http://localhost:3000/phonenav/${startNode}/${goalNode}/${algorithm}/${wheelchair}`}
+              size={100}
+              logoImage={smartPhoneLogo}
+              removeQrCodeBehindLogo={true}
+              logoPadding={2}
+            />
+          </div>
+        </>
       )}
     </div>
   );
