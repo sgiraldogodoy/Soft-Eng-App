@@ -197,8 +197,8 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Santiago's Favorite Quote
                     </p>
-                    <p className="text-lg">placeholder</p>
-                    <p className="italic mt-1 text-lg">by someone</p>
+                    <p className="text-lg">Would you like a pookie flower?</p>
+                    <p className="italic mt-1 text-lg">by himself</p>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -232,8 +232,8 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Parker's Favorite Quote
                     </p>
-                    <p className="text-lg">placeholder</p>
-                    <p className="italic mt-1 text-lg">by someone</p>
+                    <p className="text-lg">I hate my laptop</p>
+                    <p className="italic mt-1 text-lg">by himself</p>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -267,8 +267,8 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Michael's Favorite Quote
                     </p>
-                    <p className="text-lg">placeholder</p>
-                    <p className="italic mt-1 text-lg">by someone</p>
+                    <p className="text-lg">Sorry I was sleeping</p>
+                    <p className="italic mt-1 text-lg">by himself</p>
                   </div>
                 </DialogContent>
               </Dialog>
