@@ -181,14 +181,18 @@ export default function HomePage() {
             <div className="flex flex-row w-full justify-center">
               <div className="flex flex-row gap-x-10 absolute left-0 ml-10">
                 <Link to="/about">
-                  <p className="ml-auto text-xl text-white">About Us</p>
+                  <p className="ml-auto text-xl text-white hover:scale-105">
+                    About Us
+                  </p>
                 </Link>
                 <Link to="/credit">
-                  <p className="ml-auto text-xl text-white">Credits</p>
+                  <p className="ml-auto text-xl text-white hover:scale-105">
+                    Credits
+                  </p>
                 </Link>
               </div>
               <div
-                className="ml-auto flex gap-2 cursor-pointer"
+                className="ml-auto flex gap-2 cursor-pointer hover:scale-105"
                 onClick={(e) => {
                   e.preventDefault();
                   session.loginWithRedirect().catch((e) => {

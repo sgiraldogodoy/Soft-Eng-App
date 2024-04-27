@@ -22,7 +22,7 @@ export default function CreditPage() {
             <ArrowLeft color="#000000" />
           </Link>
         </Button>
-        <h1 className="text-center pb-16 text-2xl">Credit For</h1>
+        <h1 className="text-center pb-16 text-2xl">Credit For Software Used</h1>
 
         <div className="container m-auto grid grid-cols-4 gap-2">
           <Card>

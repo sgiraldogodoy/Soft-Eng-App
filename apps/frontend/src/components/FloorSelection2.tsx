@@ -31,7 +31,7 @@ export default function FloorSelection2({ onFloorClick }: FloorSelectionProps) {
           </ToggleGroupItem>
           <ToggleGroupItem
             value="Floor 1"
-            onClick={() => onFloorClick("3", "/01_thefirstfloor.png")}
+            onClick={() => onFloorClick("1", "/01_thefirstfloor.png")}
             className="w-14 h-14"
           >
             <span className="text-3xl">1</span>
