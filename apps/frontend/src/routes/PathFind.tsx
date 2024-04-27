@@ -185,7 +185,7 @@ export default function PathFind() {
           </div>
           <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white/80 p-1 rounded-[10px]">
             <QRCode
-              value={`http://localhost:3000/phonenav/${startNode}/${goalNode}/${algorithm}/${wheelchair}`}
+              value={`${import.meta.env.PROD ? "https://cs3733teamq.org" : "http://localhost:3000"}/phonenav/${startNode}/${goalNode}/${algorithm}/${wheelchair}`}
               size={100}
               logoImage={smartPhoneLogo}
               removeQrCodeBehindLogo={true}
