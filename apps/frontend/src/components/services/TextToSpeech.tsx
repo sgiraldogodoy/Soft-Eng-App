@@ -7,17 +7,15 @@ const TextToSpeech = ({ text }: { text: string }) => {
   const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(
     null,
   );
-  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
-  const [selectedVoice, setSelectedVoice] =
-    useState<SpeechSynthesisVoice | null>(null);
-  const [pitch, setPitch] = useState(1);
-  const [rate, setRate] = useState(1);
+  const [rate, setRate] = useState(0.7);
   const [targetLanguage, setTargetLanguage] = useState("en");
 
   const handleTranslate = useCallback(async () => {
     if (text) {
       const translatedText = await translateText(text, targetLanguage);
       const u = new SpeechSynthesisUtterance(translatedText);
+      u.lang = targetLanguage;
+
       setUtterance(u);
     }
   }, [text, targetLanguage]);
@@ -25,10 +23,6 @@ const TextToSpeech = ({ text }: { text: string }) => {
   useEffect(() => {
     handleTranslate();
   }, [handleTranslate]);
-
-  useEffect(() => {
-    setVoices(window.speechSynthesis.getVoices());
-  }, []);
 
   const handlePlay = () => {
     if (isPaused) {
@@ -39,8 +33,6 @@ const TextToSpeech = ({ text }: { text: string }) => {
       return;
     }
 
-    utterance.voice = selectedVoice;
-    utterance.pitch = pitch;
     utterance.rate = rate;
 
     window.speechSynthesis.speak(utterance);
@@ -81,46 +73,17 @@ const TextToSpeech = ({ text }: { text: string }) => {
             value={targetLanguage}
             onChange={(e) => setTargetLanguage(e.target.value)}
           >
-            <option value="en">English</option>
-            <option value="pt">Portuguese</option>
-            <option value="ru">Russian</option>
-            <option value="zh">Chinese</option>
-            <option value="ar">Arabic</option>
-            <option value="es">Spanish</option>
-            <option value="fr">French</option>
-            <option value="de">German</option>
-            <option value="it">Italian</option>
-            <option value="ja">Japanese</option>
+            <option value="en-US">English</option>
+            <option value="pt-BR">Portuguese</option>
+            <option value="ru-RU">Russian</option>
+            <option value="zh-CN">Chinese</option>
+            <option value="ar-SA">Arabic</option>
+            <option value="es-ES">Spanish</option>
+            <option value="fr-FR">French</option>
+            <option value="de-DE">German</option>
+            <option value="it-IT">Italian</option>
+            <option value="ja-JP">Japanese</option>
           </select>
-        </label>
-        <label>
-          Voice:
-          <select
-            value={selectedVoice ? selectedVoice.voiceURI : ""}
-            onChange={(e) =>
-              setSelectedVoice(
-                voices.find((voice) => voice.voiceURI === e.target.value) ||
-                  null,
-              )
-            }
-          >
-            {voices.map((voice) => (
-              <option key={voice.voiceURI} value={voice.voiceURI}>
-                {voice.name} ({voice.lang})
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Pitch:
-          <input
-            type="range"
-            min="0"
-            max="2"
-            step="0.1"
-            value={pitch}
-            onChange={(e) => setPitch(Number(e.target.value))}
-          />
         </label>
         <label>
           Rate:
