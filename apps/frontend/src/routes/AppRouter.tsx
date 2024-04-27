@@ -9,7 +9,7 @@ import ServiceRequestPage from "./ServiceRequestPage";
 import AboutPage from "./AboutPage";
 import PatientIntegration from "./PatientIntegration";
 import { Settings } from "@/routes/Settings.tsx";
-import CreditPage from "@/routes/CreditPage2.tsx";
+import CreditPage from "@/routes/CreditPage.tsx";
 import Music from "@/routes/MusicPlayerEasterEgg.tsx";
 import PhoneTextToNav from "@/routes/PhoneTextToNav.tsx";
 
