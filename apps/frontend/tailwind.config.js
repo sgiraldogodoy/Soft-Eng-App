@@ -1,5 +1,6 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
 import tailwindAnimate from "tailwindcss-animate";
+import tailwindDottedBackground from "tailwindcss-dotted-background";
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -123,5 +124,5 @@ export default {
       },
     },
   },
-  plugins: [tailwindAnimate],
+  plugins: [tailwindAnimate, tailwindDottedBackground],
 };
