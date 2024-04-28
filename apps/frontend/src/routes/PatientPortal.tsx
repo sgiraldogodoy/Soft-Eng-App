@@ -15,6 +15,7 @@ import { LoadingSpinner } from "@/components/ui/loader.tsx";
 import { Route, useLocation } from "wouter";
 import { ScheduleAppointmentDialogue } from "@/components/ScheduleAppointmentDialogue.tsx";
 import { CareTeam } from "@/components/CareTeam.tsx";
+
 // import {ScheduleAppointmentDialogue} from "@/components/ScheduleAppointmentDialogue.tsx";
 
 export function PatientPortal() {
@@ -91,29 +92,31 @@ export function PatientPortal() {
             </DropdownMenu>
           </div>
         </div>
-        <Suspense fallback={<LoadingSpinner />}>
-          <Card className="bg-blue-100 w-full">
-            <CardContent className="flex justify-between px-4 items-center">
-              <div className="space-y-0.5">
-                <div className="flex gap-1 text-xl">
-                  <p>Hello, </p>
-                  <PatientName />
-                  <p>! 👋</p>
+        <div className="relative w-full px-12 py-6">
+          <Suspense fallback={<LoadingSpinner />}>
+            <Card className="bg-blue-100 w-full">
+              <CardContent className="flex justify-between px-4 items-center">
+                <div className="space-y-0.5">
+                  <div className="flex gap-1 text-2xl">
+                    <p>Hello, </p>
+                    <PatientName />
+                    <p>! 👋</p>
+                  </div>
+                  <p className="text-lg font-light text-gray-600">
+                    View and manage your appointments here
+                  </p>
                 </div>
-                <p className="text-lg font-light text-gray-600">
-                  View and manage your appointments here
-                </p>
-              </div>
-              <Button
-                className="bg-blue-600"
-                onClick={() => setLocation("/schedule")}
-              >
-                Schedule an appointment
-              </Button>
-            </CardContent>
-          </Card>
-          <CareTeam />
-        </Suspense>
+                <Button
+                  className="bg-blue-600"
+                  onClick={() => setLocation("/schedule")}
+                >
+                  Schedule an appointment
+                </Button>
+              </CardContent>
+            </Card>
+            <CareTeam />
+          </Suspense>
+        </div>
         <Route path="/schedule" nest>
           <ScheduleAppointmentDialogue
             open={true}

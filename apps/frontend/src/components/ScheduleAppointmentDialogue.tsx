@@ -32,7 +32,7 @@ import {
   CommandItem,
 } from "@/components/ui/command.tsx";
 import { CalendarIcon, CheckIcon } from "lucide-react";
-import { useState } from "react";
+// import { useState } from "react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar.tsx";
 
@@ -52,7 +52,7 @@ export function ScheduleAppointmentDialogue({
   // const createAppointmentMutation = trpc.appointment.createOne.useMutation();
   // const [, setLocation] = useLocation();
 
-  const [staffId, setStaffId] = useState<string | null>(null);
+  // const [staffId, setStaffId] = useState<string | null>(null);
   const unfilteredStaffQuery = trpc.staff.getAll.useQuery();
   const unsortedStaffQuery = unfilteredStaffQuery.data
     ? unfilteredStaffQuery.data
@@ -80,7 +80,7 @@ export function ScheduleAppointmentDialogue({
           >
             <FormField
               control={form.control}
-              name="staff"
+              name="staff.connect.id"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Select a doctor</FormLabel>
@@ -96,8 +96,9 @@ export function ScheduleAppointmentDialogue({
                           )}
                         >
                           {field.value
-                            ? staffQuery.find((staff) => staff.id === staffId)
-                                ?.name
+                            ? staffQuery.find(
+                                (staff) => staff.id === field.value,
+                              )?.name
                             : "Select staff"}
                           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
@@ -116,18 +117,14 @@ export function ScheduleAppointmentDialogue({
                               value={staff.name}
                               key={staff.name}
                               onSelect={() => {
-                                setStaffId(
-                                  staff.id === staffId ? null : staff.id,
-                                );
-                                console.log(staffId);
-                                console.log(field.value);
+                                form.setValue("staff.connect.id", staff.id);
                               }}
                             >
                               {staff.name}
                               <CheckIcon
                                 className={cn(
                                   "ml-auto h-4 w-4",
-                                  staff.name === staffId
+                                  staff.id === field.value
                                     ? "opacity-100"
                                     : "opacity-0",
                                 )}
