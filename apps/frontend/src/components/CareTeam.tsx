@@ -11,7 +11,7 @@ export function CareTeam() {
   return (
     <div className="flex flex-col gap-3">
       <p className="text-xl">Contact your care team</p>
-      <Card className="w-80">
+      <Card className="w-1/3">
         <CardContent>
           <div className="flex justify-between items-center">
             <div className="flex justify-center items-center gap-6">
@@ -21,7 +21,7 @@ export function CareTeam() {
               />
               <div className="space-y-0.5">
                 <div className="text-lg font-bold">
-                  {me?.patient?.pcp?.name}
+                  Dr. {me?.patient?.pcp?.name}
                 </div>
                 <div className="text-gray-600">
                   {me?.patient?.pcp?.jobTitle}

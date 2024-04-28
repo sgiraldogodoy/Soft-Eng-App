@@ -128,6 +128,22 @@ export const userRouter = router({
       include: {
         patient: {
           include: {
+            appointments: {
+              include: {
+                staff: true,
+                location: true,
+              },
+              where: {
+                appointmentTime: {
+                  gt: new Date(),
+                },
+              },
+              orderBy: [
+                {
+                  appointmentTime: "asc",
+                },
+              ],
+            },
             pcp: {
               include: {
                 user: true,

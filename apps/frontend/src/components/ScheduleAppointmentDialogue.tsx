@@ -31,15 +31,42 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command.tsx";
-import { CalendarIcon, CheckIcon } from "lucide-react";
+import { CheckIcon } from "lucide-react";
 // import { useState } from "react";
-import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar.tsx";
+import { Textarea } from "@/components/ui/textarea.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { toast } from "sonner";
+import { useLocation } from "wouter";
 
-type TCreateAppointmentSchema = z.infer<typeof ZCreateAppointmentSchema>;
+const preprocessNested = (v: unknown) => {
+  if (typeof v !== "object" || !v) {
+    return undefined;
+  }
+  if (
+    "connect" in v &&
+    typeof v.connect === "object" &&
+    v.connect &&
+    "id" in v.connect &&
+    v.connect.id !== "" &&
+    v.connect.id !== undefined
+  ) {
+    return v;
+  }
+
+  return undefined;
+};
+
+const FormSchema = ZCreateAppointmentSchema.extend({
+  patient: z.undefined(),
+  staff: z.preprocess(
+    preprocessNested,
+    z.object({ connect: z.object({ id: z.string() }) }),
+  ),
+});
+
+// type TCreateAppointmentSchema = z.infer<typeof ZCreateAppointmentSchema>;
 
 interface ScheduleAppointmentDialogueProps {
-  // onSubmit: (data: TCreateAppointmentSchema) => void;
   open: boolean;
   setOpen: (open: boolean) => void;
 }
@@ -48,11 +75,6 @@ export function ScheduleAppointmentDialogue({
   open,
   setOpen,
 }: ScheduleAppointmentDialogueProps) {
-  // const utils = trpc.useUtils();
-  // const createAppointmentMutation = trpc.appointment.createOne.useMutation();
-  // const [, setLocation] = useLocation();
-
-  // const [staffId, setStaffId] = useState<string | null>(null);
   const unfilteredStaffQuery = trpc.staff.getAll.useQuery();
   const unsortedStaffQuery = unfilteredStaffQuery.data
     ? unfilteredStaffQuery.data
@@ -62,10 +84,58 @@ export function ScheduleAppointmentDialogue({
     const staffB = b.name.toUpperCase();
     return staffA < staffB ? -1 : staffA > staffB ? 1 : 0;
   });
+  const me = trpc.user.me.useQuery();
+  const [, setLocation] = useLocation();
 
-  const form = useForm<TCreateAppointmentSchema>({
-    resolver: zodResolver(ZCreateAppointmentSchema),
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    shouldUnregister: true,
+    defaultValues: {
+      notes: "",
+      staff: {
+        connect: {
+          id: "",
+        },
+      },
+    },
   });
+
+  const utils = trpc.useUtils();
+  const createAppointmentMutation = trpc.appointment.createOne.useMutation();
+
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log("hi");
+    const createAppointment = createAppointmentMutation.mutateAsync(
+      {
+        ...data,
+        patient: {
+          connect: {
+            id: me!.data!.patient!.id,
+          },
+        },
+        appointmentTime: data.appointmentTime ?? "",
+      },
+      {
+        onSuccess: () => {
+          utils.appointment.getAll.invalidate();
+          setLocation("~/portal");
+        },
+      },
+    );
+
+    toast.promise(createAppointment, {
+      success: "Successfully scheduled your appointment.",
+      loading: "Scheduling appointment...",
+      error: "Error scheduling your appointment.",
+    });
+
+    try {
+      await createAppointment;
+      form.reset();
+    } catch {
+      console.error("Error :(");
+    }
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -75,7 +145,7 @@ export function ScheduleAppointmentDialogue({
         </DialogHeader>
         <Form {...form}>
           <form
-            // onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(onSubmit)}
             className="w-full flex flex-col justify-between items-stretch gap-4"
           >
             <FormField
@@ -149,47 +219,31 @@ export function ScheduleAppointmentDialogue({
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Select a date</FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-[240px] pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground",
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-auto p-0 bg-white rounded-lg"
-                      side="bottom"
-                      align="center"
-                    >
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date < new Date() || date < new Date("1900-01-01")
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <Input type="datetime-local" {...field} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="notes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Notes</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Tell the doctor something about your visit before you come in"
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className="flex gap-2">
               <Button
+                type="button"
                 className="flex-1"
                 variant="outline"
                 onClick={() => {

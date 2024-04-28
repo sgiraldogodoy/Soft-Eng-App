@@ -15,12 +15,12 @@ import { LoadingSpinner } from "@/components/ui/loader.tsx";
 import { Route, useLocation } from "wouter";
 import { ScheduleAppointmentDialogue } from "@/components/ScheduleAppointmentDialogue.tsx";
 import { CareTeam } from "@/components/CareTeam.tsx";
+import { NextAppointment } from "@/components/NextAppointment.tsx";
 
 // import {ScheduleAppointmentDialogue} from "@/components/ScheduleAppointmentDialogue.tsx";
 
 export function PatientPortal() {
   const session = useAuth0();
-  // const sendEmail = trpc.appointment.sendReminder.useMutation();
   const [, setLocation] = useLocation();
 
   return (
@@ -114,6 +114,7 @@ export function PatientPortal() {
                 </Button>
               </CardContent>
             </Card>
+            <NextAppointment />
             <CareTeam />
           </Suspense>
         </div>
