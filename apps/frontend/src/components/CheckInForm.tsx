@@ -32,6 +32,11 @@ export default function CheckInForm({ onOpenChange }: Props) {
   const utils = trpc.useUtils();
   const form = useForm<z.input<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      fullName: "",
+      dob: DateTime.now().toISODate(),
+      documentIdNumber: "",
+    },
   });
 
   const onSubmit = useCallback(
@@ -56,8 +61,10 @@ export default function CheckInForm({ onOpenChange }: Props) {
         loading: "Checking In.",
         error: "Error checking in.",
       });
+
+      form.reset();
     },
-    [updateCheckIn, utils],
+    [updateCheckIn, utils, form],
   );
 
   return (
