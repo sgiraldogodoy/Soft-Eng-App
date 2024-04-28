@@ -125,6 +125,17 @@ export const userRouter = router({
       where: {
         sub: ctx.token.payload.sub as string,
       },
+      include: {
+        patient: {
+          include: {
+            pcp: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (user) {

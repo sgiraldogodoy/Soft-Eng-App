@@ -14,6 +14,7 @@ import PatientName from "@/components/PatientName.tsx";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
 import { Route, useLocation } from "wouter";
 import { ScheduleAppointmentDialogue } from "@/components/ScheduleAppointmentDialogue.tsx";
+import { CareTeam } from "@/components/CareTeam.tsx";
 // import {ScheduleAppointmentDialogue} from "@/components/ScheduleAppointmentDialogue.tsx";
 
 export function PatientPortal() {
@@ -111,6 +112,7 @@ export function PatientPortal() {
               </Button>
             </CardContent>
           </Card>
+          <CareTeam />
         </Suspense>
         <Route path="/schedule" nest>
           <ScheduleAppointmentDialogue

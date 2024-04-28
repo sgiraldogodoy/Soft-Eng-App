@@ -42,6 +42,11 @@ export const patient = router({
         where: {
           id: input.id,
         },
+        include: {
+          pcp: true,
+          appointments: true,
+          visits: true,
+        },
       });
     }),
 
