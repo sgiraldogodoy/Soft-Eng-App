@@ -97,6 +97,8 @@ model Service {
   it          IT?          @relation(name: "ITToService")
   religious   Religious?   @relation(name: "ReligiousToService")
   interpreter Interpreter? @relation(name: "InterpreterToService")
+  equipment   Equipment?   @relation(name: "EquipmentToService")
+  food        Food?        @relation(name: "FoodToService")
 }
 
 enum ServiceType {
@@ -112,6 +114,8 @@ enum ServiceType {
   it
   religious
   interpreter
+  equipment
+  food
 }
 
 model Flower {
@@ -216,6 +220,24 @@ model Interpreter {
   service       Service  @relation(name: "InterpreterToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   recipientName String
   type          String
+  dateTime      DateTime
+}
+
+model Equipment {
+  id            String   @id @default(uuid())
+  serviceId     String   @unique
+  service       Service  @relation(name: "EquipmentToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  recipientName String
+  type          String
+  dateTime      DateTime
+}
+
+model Food {
+  id            String   @id @default(uuid())
+  serviceId     String   @unique
+  service       Service  @relation(name: "FoodToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  recipientName String
+  order         String
   dateTime      DateTime
 }
 
