@@ -3,6 +3,7 @@ import { router } from "../../trpc.ts";
 import { z } from "zod";
 import { ZCreateAppointmentSchema, ZCreateStaffSchema } from "common";
 import { updateSchema } from "common/src/zod-utils.ts";
+import { DateTime } from "luxon";
 
 export const appointmentRouter = router({
   createOne: protectedProcedure
@@ -23,6 +24,46 @@ export const appointmentRouter = router({
       return ctx.db.appointment.findUnique({
         where: {
           id: input.id,
+        },
+      });
+    }),
+
+  getByCheckIn: publicProcedure
+    .input(
+      z.object({
+        documentId: z.string(),
+        dob: z.string().date(),
+        name: z.string(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const patient = await ctx.db.patient.findUnique({
+        where: {
+          idNumber: input.documentId,
+        },
+        include: {
+          appointments: true,
+        },
+      });
+      const fullName =
+        patient?.firstName +
+        " " +
+        patient?.middleName +
+        " " +
+        patient?.lastName;
+      const dob = DateTime.fromJSDate(
+        patient?.dateOfBirth ?? new Date(),
+      ).toLocaleString(DateTime.DATE_SHORT);
+      const inputDob = DateTime.fromISO(input.dob).toLocaleString(
+        DateTime.DATE_SHORT,
+      );
+      let patientId;
+      if (patient && dob === inputDob && fullName === input.name) {
+        patientId = patient.id;
+      }
+      return ctx.db.appointment.findMany({
+        where: {
+          patientId: patientId,
         },
       });
     }),

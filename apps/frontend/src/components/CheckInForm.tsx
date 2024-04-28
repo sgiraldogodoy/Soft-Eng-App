@@ -13,16 +13,12 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input.tsx";
 import { Link } from "wouter";
+import { trpc } from "@/utils/trpc.ts";
+import { toast } from "sonner";
 
 const formSchema = z.object({
-  fullName: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
-  dob: z.string().pipe(
-    z.coerce.date().max(new Date(), {
-      message: "Date must be in the past.",
-    }),
-  ),
+  fullName: z.string(),
+  dob: z.string().date(),
   documentIdNumber: z.string(),
 });
 
@@ -31,13 +27,72 @@ interface Props {
 }
 
 export default function CheckInForm({ onOpenChange }: Props) {
+  const appointmentQuery = trpc.appointment.getByCheckIn;
+  const checkIn = trpc.appointment.updateOne.useMutation();
+  const utils = trpc.useUtils();
   const form = useForm<z.input<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit = useCallback((data: z.input<typeof formSchema>) => {
-    console.log(data);
-  }, []);
+  const onSubmit = useCallback(
+    async (data: z.input<typeof formSchema>) => {
+      const appointments = await appointmentQuery.useQuery({
+        documentId: data.documentIdNumber,
+        dob: data.dob,
+        name: data.fullName,
+      });
+
+      const today = new Date();
+      if (appointments.data) {
+        const appointment = appointments.data.filter((appointment) => {
+          return (
+            new Date(appointment.appointmentTime) >= today &&
+            !appointment.checkedIn
+          );
+        });
+        if (appointment.length > 1) {
+          //get earliest appointment
+          appointment.sort(
+            (a, b) =>
+              new Date(a.appointmentTime).getTime() -
+              new Date(b.appointmentTime).getTime(),
+          );
+          const appointmentId = appointment[0].id;
+          const checkInToAppointment = checkIn.mutateAsync(
+            {
+              id: appointmentId,
+              data: {
+                checkedIn: true,
+              },
+            },
+            {
+              onSuccess: () => {
+                utils.appointment.getAll.invalidate();
+              },
+            },
+          );
+
+          toast.promise(checkInToAppointment, {
+            success: "Successfully saved to the database.",
+            loading: "Saving patient request to the database.",
+            error: "Error saving to database.",
+          });
+
+          try {
+            await checkInToAppointment;
+            form.reset();
+          } catch {
+            console.error("Error :(");
+          }
+        } else {
+          console.error("No appointments found.");
+        }
+      }
+
+      console.log(data);
+    },
+    [appointmentQuery, checkIn, utils, form],
+  );
 
   return (
     <Form {...form}>
@@ -52,12 +107,7 @@ export default function CheckInForm({ onOpenChange }: Props) {
             render={({ field }) => (
               <FormItem className="w-full flex flex-col h-full justify-between flex-1">
                 <FormLabel>Full Name</FormLabel>
-                <Input
-                  className="w-full"
-                  placeholder="John Appleseed"
-                  type="text"
-                  {...field}
-                />
+                <Input className="w-full" type="text" {...field} />
                 <FormDescription>Enter your full legal name</FormDescription>
                 <FormMessage />
               </FormItem>
@@ -81,9 +131,9 @@ export default function CheckInForm({ onOpenChange }: Props) {
             render={({ field }) => (
               <FormItem className="flex flex-col h-full justify-between flex-1">
                 <FormLabel>ID Number</FormLabel>
-                <Input placeholder="123456789" type="text" {...field} />
+                <Input placeholder="" type="text" {...field} />
                 <FormDescription>
-                  Enter your driver&apos;s license or passport number
+                  Enter your driver&apos;s license, SSN or passport number
                 </FormDescription>
                 <FormMessage />
               </FormItem>
