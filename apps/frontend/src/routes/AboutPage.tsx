@@ -92,7 +92,7 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Ian's Favorite Quote
                     </p>
-                    <p className="text-lg">"How's it going?"</p>
+                    <p className="text-lg">"How's it going? 😜"</p>
                     <p className="italic mt-1 text-lg">by Ian, definitely</p>
                   </div>
                 </DialogContent>
@@ -197,8 +197,8 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Santiago's Favorite Quote
                     </p>
-                    <p className="text-lg">placeholder</p>
-                    <p className="italic mt-1 text-lg">by someone</p>
+                    <p className="text-lg">Would you like a pookie flower?</p>
+                    <p className="italic mt-1 text-lg">by himself</p>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -232,8 +232,8 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Parker's Favorite Quote
                     </p>
-                    <p className="text-lg">placeholder</p>
-                    <p className="italic mt-1 text-lg">by someone</p>
+                    <p className="text-lg">I hate my laptop</p>
+                    <p className="italic mt-1 text-lg">by himself</p>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -267,8 +267,8 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Michael's Favorite Quote
                     </p>
-                    <p className="text-lg">placeholder</p>
-                    <p className="italic mt-1 text-lg">by someone</p>
+                    <p className="text-lg">Sorry I was sleeping</p>
+                    <p className="italic mt-1 text-lg">by himself</p>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -336,8 +336,13 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Keenan's Favorite Quote
                     </p>
-                    <p className="text-lg">placeholder</p>
-                    <p className="italic mt-1 text-lg">by someone</p>
+                    <p className="text-lg">
+                      "The rewards for work well done is the opportunity to do
+                      more."
+                    </p>
+                    <p className="italic mt-1 text-lg">
+                      found on BuzzFeed Worst Motivational Quotes
+                    </p>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -406,10 +411,9 @@ export default function AboutPage() {
                       Cole's Favorite Quote
                     </p>
                     <p className="text-lg">
-                      "It takes considerable knowledge just to realize the
-                      extent of your own ignorance."
+                      "I'm not a cat, I'm a pookie flower!"
                     </p>
-                    <p className="italic mt-1 text-lg">by someone</p>
+                    <p className="italic mt-1 text-lg">by Copilot</p>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -443,8 +447,8 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Justin's Favorite Quote
                     </p>
-                    <p className="text-lg">placeholder</p>
-                    <p className="italic mt-1 text-lg">by someone</p>
+                    <p className="text-lg">Can WebStorm not melt my laptop please?</p>
+                    <p className="italic mt-1 text-lg">by himself</p>
                   </div>
                 </DialogContent>
               </Dialog>

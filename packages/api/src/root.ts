@@ -21,6 +21,8 @@ import { appointmentRouter } from "./routes/appointments/appointment.ts";
 import { visitRouter } from "./routes/appointments/visit.ts";
 import { recordRouter } from "./routes/appointments/record.ts";
 import { vitalsRouter } from "./routes/appointments/vitals.ts";
+import { EquipmentRouter } from "./routes/services/equipmentRouter.ts";
+import { FoodRouter } from "./routes/services/foodRouter.ts";
 
 export const appRouter = router({
   //user routers
@@ -42,6 +44,8 @@ export const appRouter = router({
   religious: religiousRequestRouter,
   interpreter: InterpreterRouter,
   room: RoomRouter,
+  equipment: EquipmentRouter,
+  food: FoodRouter,
 
   //appointment routers
   appointment: appointmentRouter,

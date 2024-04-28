@@ -1,7 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { RouterOutput } from "@/utils/trpc";
-import { DateTime } from "luxon";
 import { DataTableColumnHeader } from "../ui/dt-sortable";
+import { Button } from "@/components/ui/button.tsx";
+import { ReceiptText } from "lucide-react";
+import { DateTime } from "luxon";
 
 export const patientColumns: ColumnDef<RouterOutput["patient"]["getAll"][0]>[] =
   [
@@ -19,24 +21,11 @@ export const patientColumns: ColumnDef<RouterOutput["patient"]["getAll"][0]>[] =
       accessorKey: "lastName",
     },
     {
-      accessorKey: "location.shortName",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Location" />
+        <DataTableColumnHeader column={column} title="Sex" />
       ),
+      accessorKey: "sex",
     },
-    {
-      accessorKey: "SSN",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="SSN" />
-      ),
-    },
-    {
-      accessorKey: "pcp.name",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="PCP" />
-      ),
-    },
-
     {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="DoB" />
@@ -48,15 +37,37 @@ export const patientColumns: ColumnDef<RouterOutput["patient"]["getAll"][0]>[] =
       id: "dob",
     },
     {
+      accessorKey: "location.shortName",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Location" />
+      ),
+    },
+    {
+      accessorKey: "pcp.name",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="PCP" />
+      ),
+    },
+    {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Insurance" />
       ),
       accessorKey: "insurance",
     },
     {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Email" />
-      ),
-      accessorKey: "user.email",
+      id: "select",
+      size: 40,
+      cell: ({ row }) => {
+        return (
+          <Button
+            disabled={row.getIsSelected()}
+            onClick={() => row.toggleSelected()}
+            variant="ghost"
+            size="icon"
+          >
+            <ReceiptText />
+          </Button>
+        );
+      },
     },
   ];

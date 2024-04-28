@@ -97,6 +97,8 @@ model Service {
   it          IT?          @relation(name: "ITToService")
   religious   Religious?   @relation(name: "ReligiousToService")
   interpreter Interpreter? @relation(name: "InterpreterToService")
+  equipment   Equipment?   @relation(name: "EquipmentToService")
+  food        Food?        @relation(name: "FoodToService")
 }
 
 enum ServiceType {
@@ -112,6 +114,8 @@ enum ServiceType {
   it
   religious
   interpreter
+  equipment
+  food
 }
 
 model Flower {
@@ -219,9 +223,28 @@ model Interpreter {
   dateTime      DateTime
 }
 
+model Equipment {
+  id            String   @id @default(uuid())
+  serviceId     String   @unique
+  service       Service  @relation(name: "EquipmentToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  recipientName String
+  type          String
+  dateTime      DateTime
+}
+
+model Food {
+  id            String   @id @default(uuid())
+  serviceId     String   @unique
+  service       Service  @relation(name: "FoodToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  recipientName String
+  order         String
+  dateTime      DateTime
+}
+
 model Patient {
   id           String        @id @default(uuid())
-  SSN          String?       @unique
+  idNumber     String        @unique @default(cuid())
+  identity     Identity      @relation(name: "PatientToIdentity", fields: [idNumber], references: [idNumber], onUpdate: Cascade, onDelete: Cascade)
   nodeId       String?
   location     Node?         @relation(name: "PatientToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: SetNull)
   pcpId        String?
@@ -232,12 +255,36 @@ model Patient {
   lastName     String
   dateOfBirth  DateTime
   phoneNumber  String?
+  weight       Float?
+  height       Float?
+  bloodType    String?
+  sex          sex
+  notes        String?
   inTreatment  Boolean       @default(false)
   insurance    String?
   visits       Visit[]       @relation(name: "VisitPatient")
   appointments Appointment[] @relation(name: "AppointmentToPatient")
   userId       String?       @unique
   user         User?         @relation(name: "PatientUser", fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+}
+
+enum sex {
+  male
+  female
+  other
+}
+
+model Identity {
+  id       String    @id @default(uuid())
+  idType   IDTypes
+  idNumber String    @unique
+  patients Patient[] @relation(name: "PatientToIdentity")
+}
+
+enum IDTypes {
+  ssn
+  passport
+  driverLicense
 }
 
 model Appointment {
@@ -301,7 +348,7 @@ model Vitals {
 model User {
   id      String   @id @default(uuid())
   sub     String?  @unique
-  email   String?
+  email   String   @unique
   role    Role?
   name    String
   patient Patient? @relation(name: "PatientUser")
