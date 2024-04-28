@@ -27,11 +27,13 @@ import { ZCreateNodeSchema as nodeSchema } from "common";
 import { z } from "zod";
 import { CreateNodeDialog } from "@/components/CreateNodeDialog.tsx";
 import { CreateEdgeDialog } from "@/components/CreateEdgeDialog.tsx";
+import { CreateStaffDialog } from "@/components/CreateStaffDialog.tsx";
 const newNodeSchema = nodeSchema.omit({ id: true });
 
 export function InspectDatabase() {
   const createNode = trpc.node.createOne.useMutation();
   const createEdge = trpc.edge.createOne.useMutation();
+  const createStaff = trpc.staff.createOne.useMutation();
   const uploadButton = useRef<HTMLInputElement>(null);
 
   const downloadNodes = trpc.node.csvExport.useQuery();
@@ -68,6 +70,20 @@ export function InspectDatabase() {
       {
         onSuccess: () => {
           utils.edge.getAll.invalidate();
+        },
+      },
+    );
+  };
+
+  const handleCreateEmployeeSubmit = (name: string, jobTitle: string) => {
+    createStaff.mutate(
+      {
+        name,
+        jobTitle,
+      },
+      {
+        onSuccess: () => {
+          utils.staff.getAll.invalidate();
         },
       },
     );
@@ -328,6 +344,13 @@ export function InspectDatabase() {
           open={true}
           onOpenChange={() => setLocation("/")}
           onSubmit={handleCreateEdgeSubmit}
+        />
+      </Route>
+      <Route path="/create/employee" nest>
+        <CreateStaffDialog
+          open={true}
+          onOpenChange={() => setLocation("/")}
+          onSubmit={handleCreateEmployeeSubmit}
         />
       </Route>
     </>
