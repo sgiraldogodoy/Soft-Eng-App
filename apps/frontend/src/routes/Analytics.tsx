@@ -16,7 +16,7 @@ export default function Analytics() {
     setFullScreen(null);
   };
 
-  console.log(fullScreen);
+  // console.log(fullScreen);
 
   return (
     <div className="h-full overflow-auto relative">
@@ -50,7 +50,7 @@ export default function Analytics() {
               handleClick("G3");
             }}
           >
-            3
+            <StatisticsCard selected={false} typeStatistics="Node Pie Chart" />
           </div>
           <div
             className="grid-item"
@@ -58,7 +58,10 @@ export default function Analytics() {
               handleClick("G4");
             }}
           >
-            4
+            <StatisticsCard
+              selected={false}
+              typeStatistics="Filter Node Bar Chart"
+            />
           </div>
         </div>
       )}
@@ -81,23 +84,21 @@ export default function Analytics() {
         </div>
       )}
       {fullScreen === "G3" && (
-        <div
-          className="h-full w-full"
-          onClick={() => {
-            setFullScreen(null);
-          }}
-        >
-          3
+        <div className="h-full w-full overflow-auto">
+          <StatisticsCard
+            selected={true}
+            close={handleClose}
+            typeStatistics="Node Pie Chart"
+          />
         </div>
       )}
       {fullScreen === "G4" && (
-        <div
-          className="h-full w-full"
-          onClick={() => {
-            setFullScreen(null);
-          }}
-        >
-          4
+        <div className="h-full w-full">
+          <StatisticsCard
+            selected={true}
+            close={handleClose}
+            typeStatistics="Filter Node Bar Chart"
+          />
         </div>
       )}
     </div>

@@ -2,6 +2,8 @@ import React from "react";
 import { X } from "lucide-react";
 import PieChartSR from "./PieChartSR.tsx";
 import FilterBarChartSR from "./FilterBarChartSR.tsx";
+import PieChartNodes from "./PieChartNodes.tsx";
+import FilterBarChartNodes from "./FilterBarChartNodes.tsx";
 
 interface StatisticsCardProps {
   selected: boolean;
@@ -20,9 +22,18 @@ export default function StatisticsCard({
     >
       <div className="bg-white/90 w-full h-full flex flex-col items-center rounded-xl overflow-auto">
         <h1>{typeStatistics}</h1>
-        {typeStatistics.includes("Pie") && <PieChartSR selected={selected} />}
-        {typeStatistics.includes("Bar") && (
-          <FilterBarChartSR selected={selected} />
+        {typeStatistics.includes("Service Request") && (
+          <PieChartSR selected={selected} />
+        )}
+        {typeStatistics.includes("Bar") &&
+          typeStatistics.includes("Request") && (
+            <FilterBarChartSR selected={selected} />
+          )}
+        {typeStatistics.includes("Node") && typeStatistics.includes("Pie") && (
+          <PieChartNodes selected={selected} />
+        )}
+        {typeStatistics.includes("Node") && typeStatistics.includes("Bar") && (
+          <FilterBarChartNodes selected={selected} />
         )}
       </div>
       {selected && close && (

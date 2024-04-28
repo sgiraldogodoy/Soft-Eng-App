@@ -10,9 +10,9 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { UserComboBox } from "../services/userComboBox";
-import { StatusComboBox } from "../services/statusComboBox.tsx";
-import { PriorityComboBox } from "../services/priorityComboBox.tsx";
+import { UserComboBox } from "./comboboxs/userComboBox.tsx";
+import { StatusComboBox } from "./comboboxs/statusComboBox.tsx";
+import { PriorityComboBox } from "./comboboxs/priorityComboBox.tsx";
 
 interface FilterBarChartSRProps {
   selected: boolean;
