@@ -22,9 +22,16 @@ import {
   PlusIcon,
   Spline,
 } from "lucide-react";
-import { useLocation } from "wouter";
+import { Route, useLocation } from "wouter";
+import { ZCreateNodeSchema as nodeSchema } from "common";
+import { z } from "zod";
+import { CreateNodeDialog } from "@/components/CreateNodeDialog.tsx";
+import { CreateEdgeDialog } from "@/components/CreateEdgeDialog.tsx";
+const newNodeSchema = nodeSchema.omit({ id: true });
 
 export function InspectDatabase() {
+  const createNode = trpc.node.createOne.useMutation();
+  const createEdge = trpc.edge.createOne.useMutation();
   const uploadButton = useRef<HTMLInputElement>(null);
 
   const downloadNodes = trpc.node.csvExport.useQuery();
@@ -38,6 +45,33 @@ export function InspectDatabase() {
   const staffMutation = trpc.staff.csvUpload.useMutation();
 
   const [, setLocation] = useLocation();
+
+  const handleCreateNodeSubmit = (data: z.infer<typeof newNodeSchema>) => {
+    createNode.mutate(
+      {
+        data,
+      },
+      {
+        onSuccess: () => {
+          utils.node.getAll.invalidate();
+        },
+      },
+    );
+  };
+
+  const handleCreateEdgeSubmit = (startNodeId: string, endNodeId: string) => {
+    createEdge.mutate(
+      {
+        startNodeId,
+        endNodeId,
+      },
+      {
+        onSuccess: () => {
+          utils.edge.getAll.invalidate();
+        },
+      },
+    );
+  };
 
   return (
     <>
@@ -172,11 +206,21 @@ export function InspectDatabase() {
                     className="pl-1"
                   />
                 </DropdownMenuItem>
-                <DropdownMenuItem className="flex justify-between items-center">
+                <DropdownMenuItem
+                  className="flex justify-between items-center"
+                  onClick={() => {
+                    setLocation("/create/edge");
+                  }}
+                >
                   Edges
                   <Spline color="hsla(var(--primary) / 0.5)" className="pl-1" />
                 </DropdownMenuItem>
-                <DropdownMenuItem className="flex justify-between items-center">
+                <DropdownMenuItem
+                  className="flex justify-between items-center"
+                  onClick={() => {
+                    setLocation("/create/employee");
+                  }}
+                >
                   Employees
                   <ContactRound
                     color="hsla(var(--primary) / 0.5)"
@@ -272,6 +316,20 @@ export function InspectDatabase() {
           </Card>
         </div>
       </Tabs>
+      <Route path="/create/node" nest>
+        <CreateNodeDialog
+          open={true}
+          onOpenChange={() => setLocation("/")}
+          onSubmit={handleCreateNodeSubmit}
+        />
+      </Route>
+      <Route path="/create/edge" nest>
+        <CreateEdgeDialog
+          open={true}
+          onOpenChange={() => setLocation("/")}
+          onSubmit={handleCreateEdgeSubmit}
+        />
+      </Route>
     </>
   );
 }
