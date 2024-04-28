@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input.tsx";
 import { Link } from "wouter";
 import { trpc } from "@/utils/trpc.ts";
 import { toast } from "sonner";
+import { DateTime } from "luxon";
 
 const formSchema = z.object({
   fullName: z.string(),
@@ -27,71 +28,36 @@ interface Props {
 }
 
 export default function CheckInForm({ onOpenChange }: Props) {
-  const appointmentQuery = trpc.appointment.getByCheckIn;
-  const checkIn = trpc.appointment.updateOne.useMutation();
+  const updateCheckIn = trpc.appointment.updateCheckIn.useMutation();
   const utils = trpc.useUtils();
   const form = useForm<z.input<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
   const onSubmit = useCallback(
+    //(data: z.input<typeof formSchema>) => {console.log(data);}, []);
     async (data: z.input<typeof formSchema>) => {
-      const appointments = await appointmentQuery.useQuery({
-        documentId: data.documentIdNumber,
-        dob: data.dob,
-        name: data.fullName,
+      const checkInToAppointment = updateCheckIn.mutateAsync(
+        {
+          documentId: data.documentIdNumber,
+          dob: data.dob,
+          name: data.fullName,
+        },
+        {
+          onSuccess: () => {
+            utils.appointment.getAll.invalidate();
+          },
+        },
+      );
+
+      toast.promise(checkInToAppointment, {
+        success: (d) =>
+          `Checked In to your appointment at: ${DateTime.fromJSDate(d.appointmentTime).toLocaleString(DateTime.TIME_SIMPLE)}`,
+        loading: "Checking In.",
+        error: "Error checking in.",
       });
-
-      const today = new Date();
-      if (appointments.data) {
-        const appointment = appointments.data.filter((appointment) => {
-          return (
-            new Date(appointment.appointmentTime) >= today &&
-            !appointment.checkedIn
-          );
-        });
-        if (appointment.length > 1) {
-          //get earliest appointment
-          appointment.sort(
-            (a, b) =>
-              new Date(a.appointmentTime).getTime() -
-              new Date(b.appointmentTime).getTime(),
-          );
-          const appointmentId = appointment[0].id;
-          const checkInToAppointment = checkIn.mutateAsync(
-            {
-              id: appointmentId,
-              data: {
-                checkedIn: true,
-              },
-            },
-            {
-              onSuccess: () => {
-                utils.appointment.getAll.invalidate();
-              },
-            },
-          );
-
-          toast.promise(checkInToAppointment, {
-            success: "Successfully saved to the database.",
-            loading: "Saving patient request to the database.",
-            error: "Error saving to database.",
-          });
-
-          try {
-            await checkInToAppointment;
-            form.reset();
-          } catch {
-            console.error("Error :(");
-          }
-        } else {
-          console.error("No appointments found.");
-        }
-      }
-
-      console.log(data);
     },
-    [appointmentQuery, checkIn, utils, form],
+    [updateCheckIn, utils],
   );
 
   return (
