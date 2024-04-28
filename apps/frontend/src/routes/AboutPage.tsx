@@ -92,7 +92,7 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Ian's Favorite Quote
                     </p>
-                    <p className="text-lg">"How's it going?"</p>
+                    <p className="text-lg">"How's it going? 😜"</p>
                     <p className="italic mt-1 text-lg">by Ian, definitely</p>
                   </div>
                 </DialogContent>
@@ -411,10 +411,9 @@ export default function AboutPage() {
                       Cole's Favorite Quote
                     </p>
                     <p className="text-lg">
-                      "It takes considerable knowledge just to realize the
-                      extent of your own ignorance."
+                      "I'm not a cat, I'm a pookie flower!"
                     </p>
-                    <p className="italic mt-1 text-lg">by someone</p>
+                    <p className="italic mt-1 text-lg">by Copilot</p>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -448,10 +447,8 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Justin's Favorite Quote
                     </p>
-                    <p className="text-lg">
-                      "Can WebStorm not melt my laptop please?"
-                    </p>
-                    <p className="italic mt-1 text-lg">by Justin</p>
+                    <p className="text-lg">Can WebStorm not melt my laptop please?</p>
+                    <p className="italic mt-1 text-lg">by himself</p>
                   </div>
                 </DialogContent>
               </Dialog>
