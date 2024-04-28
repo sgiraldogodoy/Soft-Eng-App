@@ -75,6 +75,14 @@ export default function ServiceRequestPage() {
       value: "interpreter",
       label: "Request Interpreter",
     },
+    {
+      value: "equipment",
+      label: "Request Equipment",
+    },
+    {
+      value: "food",
+      label: "Request Food",
+    },
   ];
 
   return (
