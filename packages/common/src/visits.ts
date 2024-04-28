@@ -25,3 +25,32 @@ export const ZCreateRecordSchema = z.object({
   author: nestSchema(ZCreateStaffSchema),
   visit: nestSchema(ZCreateVisitSchema),
 });
+
+const numlike = z.union([z.string(), z.number()]);
+export const ZUpdateVitalsSchema = z.object({
+  heartRate: numlike
+    .pipe(z.coerce.number({ message: "Heart rate must be a number." }))
+    .optional(),
+  bodyTemp: numlike
+    .pipe(
+      z.coerce.number({
+        message: "Body temperature must be a number.",
+      }),
+    )
+    .optional(),
+  respRate: numlike
+    .pipe(
+      z.coerce.number({
+        message: "Respiration rate must be a number.",
+      }),
+    )
+    .optional(),
+  bloodPressure: numlike
+    .pipe(
+      z.coerce.number({
+        message: "Blood pressure must be a number.",
+      }),
+    )
+    .optional(),
+});
+export type TCreateVitalsSchema = z.infer<typeof ZUpdateVitalsSchema>;

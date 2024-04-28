@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import { DateTime } from "luxon";
+import { RecordVitals } from "./RecordVitals";
 
 export function RecordEdit({ recordId }: { recordId: string }) {
   const [record] = trpc.record.getOne.useSuspenseQuery({
@@ -28,7 +29,9 @@ export function RecordEdit({ recordId }: { recordId: string }) {
           )}
         </CardDescription>
       </CardHeader>
-      <CardContent></CardContent>
+      <CardContent>
+        <RecordVitals recordId={record.id} />
+      </CardContent>
     </Card>
   );
 }

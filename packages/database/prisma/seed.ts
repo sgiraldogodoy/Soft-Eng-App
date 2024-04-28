@@ -91,6 +91,71 @@ async function main() {
       },
     });
   }
+
+  const userQuery = await prisma.user.findUnique({
+    where: {
+      sub: "auth0|660c562536035d020765b37c",
+    },
+    include: {
+      staff: true,
+    },
+  });
+  const user = userQuery
+    ? userQuery
+    : await prisma.user.create({
+        data: {
+          name: "Ace Beattie",
+          sub: "auth0|660c562536035d020765b37c",
+          role: "staff",
+          staff: {
+            create: {
+              name: "Ace Beattie",
+              jobTitle: "Doctor",
+            },
+          },
+        },
+        include: {
+          staff: true,
+        },
+      });
+
+  const patient = await prisma.patient.create({
+    data: {
+      firstName: "Cole",
+      lastName: "Welcher",
+      dateOfBirth: new Date(),
+    },
+  });
+
+  await prisma.visit.create({
+    data: {
+      visitTime: new Date(),
+      staff: user.staff
+        ? {
+            connect: {
+              id: user.staff.id,
+            },
+          }
+        : undefined,
+      patient: {
+        connect: {
+          id: patient.id,
+        },
+      },
+      appointment: {
+        create: {
+          notes: "",
+          checkedIn: true,
+          appointmentTime: new Date(),
+          patient: {
+            connect: {
+              id: patient.id,
+            },
+          },
+        },
+      },
+    },
+  });
 }
 
 main()

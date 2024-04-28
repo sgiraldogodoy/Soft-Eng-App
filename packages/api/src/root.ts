@@ -20,6 +20,7 @@ import { staffRouter } from "./routes/users/staff.ts";
 import { appointmentRouter } from "./routes/appointments/appointment.ts";
 import { visitRouter } from "./routes/appointments/visit.ts";
 import { recordRouter } from "./routes/appointments/record.ts";
+import { vitalsRouter } from "./routes/appointments/vitals.ts";
 
 export const appRouter = router({
   //user routers
@@ -46,6 +47,7 @@ export const appRouter = router({
   appointment: appointmentRouter,
   visit: visitRouter,
   record: recordRouter,
+  vitals: vitalsRouter,
 
   //node and edge routers
   node: Node,

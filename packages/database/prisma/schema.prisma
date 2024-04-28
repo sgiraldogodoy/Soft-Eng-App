@@ -292,10 +292,10 @@ model Vitals {
   id            String @id @default(uuid())
   recordId      String @unique
   record        Record @relation(name: "RecordVitals", fields: [recordId], references: [id])
-  heartRate     Float
-  bodyTemp      Float
-  respRate      Float
-  bloodPressure Float
+  heartRate     Float?
+  bodyTemp      Float?
+  respRate      Float?
+  bloodPressure Float?
 }
 
 model User {

@@ -39,15 +39,21 @@ export const recordRouter = router({
   updateOne: protectedProcedure
     .input(updateSchema(ZCreateRecordSchema))
     .mutation(async ({ input, ctx }) => {
-      const { data } = input;
-      return ctx.db.record.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          ...data,
-        },
-      });
+      try {
+        console.log(input);
+        const { data } = input;
+        console.log(data);
+        return await ctx.db.record.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            ...data,
+          },
+        });
+      } catch (e) {
+        console.error(e);
+      }
     }),
 
   updateMany: protectedProcedure
