@@ -193,7 +193,7 @@ const testimonialsCommunication = [
       </a>
     ),
     description:
-      "Confluence is a team workspace where knowledge and collaboration meet. Dynamic pages give your team a place to create, capture, and collaborate on any project or idea.",
+      "Zoom is a proprietary video teleconferencing software program developed by Zoom Video Communications. The free plan allows up to 100 participants.",
     extraInfo: "",
   },
   {
