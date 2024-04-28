@@ -336,8 +336,13 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Keenan's Favorite Quote
                     </p>
-                    <p className="text-lg">I love league of legends</p>
-                    <p className="italic mt-1 text-lg">by himself</p>
+                    <p className="text-lg">
+                      "The rewards for work well done is the opportunity to do
+                      more."
+                    </p>
+                    <p className="italic mt-1 text-lg">
+                      found on BuzzFeed Worst Motivational Quotes
+                    </p>
                   </div>
                 </DialogContent>
               </Dialog>
@@ -442,9 +447,7 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Justin's Favorite Quote
                     </p>
-                    <p className="text-lg">
-                      Im giving cole my chic-fil-a sauce
-                    </p>
+                    <p className="text-lg">Can WebStorm not melt my laptop please?</p>
                     <p className="italic mt-1 text-lg">by himself</p>
                   </div>
                 </DialogContent>
