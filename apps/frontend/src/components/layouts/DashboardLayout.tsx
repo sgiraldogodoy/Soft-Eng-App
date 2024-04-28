@@ -17,6 +17,7 @@ import {
 } from "../ui/dropdown-menu";
 import { SidebarButton } from "@/components/SidebarButton.tsx";
 import { trpc } from "@/utils/trpc.ts";
+import SearchCommand from "@/components/ui/searchcommand.tsx";
 
 export default function DashboardLayout({ children }: React.PropsWithChildren) {
   const session = useAuth0();
@@ -78,6 +79,7 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
             Brigham and Women&apos;s Hospital
           </p>
           <div className="flex-1" />
+          <SearchCommand />
           <p className="text-lg">
             Welcome,{" "}
             <span className="font-semibold">

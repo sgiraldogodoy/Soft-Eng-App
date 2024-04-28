@@ -7,6 +7,8 @@ import { Toaster } from "./components/ui/sonner.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppRouter } from "@/routes/AppRouter.tsx";
 import { TooltipProvider } from "@/components/ui/tooltip.tsx";
+import { TimeoutProvider } from "@/components/providers/timeout-provider.tsx";
+import { WarningProvider } from "@/components/providers/warning-provider.tsx";
 
 export default function App() {
   const session = useAuth0();
@@ -38,13 +40,17 @@ export default function App() {
   );
 
   return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <Toaster />
-        <TooltipProvider>
-          <AppRouter />
-        </TooltipProvider>
-      </QueryClientProvider>
-    </trpc.Provider>
+    <TimeoutProvider>
+      <WarningProvider>
+        <trpc.Provider client={trpcClient} queryClient={queryClient}>
+          <QueryClientProvider client={queryClient}>
+            <Toaster />
+            <TooltipProvider>
+              <AppRouter />
+            </TooltipProvider>
+          </QueryClientProvider>
+        </trpc.Provider>
+      </WarningProvider>
+    </TimeoutProvider>
   );
 }

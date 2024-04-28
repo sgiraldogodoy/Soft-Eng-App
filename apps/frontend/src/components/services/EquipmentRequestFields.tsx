@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select.tsx";
 
-const Interpreter = () => {
+const Equipment = () => {
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -39,28 +39,22 @@ const Interpreter = () => {
           name="data.type"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Language Required</FormLabel>
+              <FormLabel>Equipment Required</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a Language" />
+                    <SelectValue placeholder="Select an Equipment type" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="French">French</SelectItem>
-                  <SelectItem value="German">German</SelectItem>
-                  <SelectItem value="Spanish">Spanish</SelectItem>
-                  <SelectItem value="Russian">Russian</SelectItem>
-                  <SelectItem value="Ukrainian">Ukrainian</SelectItem>
-                  <SelectItem value="Mandarin">Mandarin</SelectItem>
-                  <SelectItem value="Haitain">Haitian</SelectItem>
-                  <SelectItem value="Vietnamese">Vietnamese</SelectItem>
-                  <SelectItem value="Hindi">Hindi</SelectItem>
-                  <SelectItem value="Italian">Italian</SelectItem>
-                  <SelectItem value="Portuguese">Portuguese</SelectItem>
+                  <SelectItem value="Testing">Testing</SelectItem>
+                  <SelectItem value="Surgical">Surgical</SelectItem>
+                  <SelectItem value="Anesthetic">Anesthetic</SelectItem>
+                  <SelectItem value="Sanitation">Sanitation</SelectItem>
+                  <SelectItem value="Office">Office</SelectItem>
                 </SelectContent>
               </Select>
-              <FormDescription>What language is Required?</FormDescription>
+              <FormDescription>What Equipment is Required?</FormDescription>
             </FormItem>
           )}
         />
@@ -84,4 +78,4 @@ const Interpreter = () => {
   );
 };
 
-export default Interpreter;
+export default Equipment;
