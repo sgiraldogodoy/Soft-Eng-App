@@ -289,19 +289,34 @@ const CreateBaseUser = ({
   const form = useForm<BaseUser>({
     resolver: zodResolver(ZCreateBaseUserSchemaWithoutSub),
     defaultValues,
+    shouldUnregister: true,
   });
+
+  const patientQuery = trpc.patient.getAll.useQuery();
+  const patientData = patientQuery?.data?.filter((p) => !p.user);
 
   const watchName = form.watch("name");
   const watchRole = form.watch("role");
 
   const [staffCreateMode, setStaffCreateMode] = useState("create");
   const [staffId, setStaffId] = useState<string | null>(null);
+  const [patientCreateMode, setPatientCreateMode] = useState("search");
+  const [patientId, setPatientId] = useState<string | null>(null);
 
   if (staffCreateMode === "create")
     form.setValue("staff.create.name", watchName);
 
   if (staffId && staffCreateMode === "search")
     form.setValue("staff.connect.id", staffId);
+
+  if (patientId && patientCreateMode === "search")
+    form.setValue("patient.connect.id", patientId);
+
+  if (watchRole === "patient") {
+    form.setValue("staff", undefined);
+  } else if (watchRole === "admin" || watchRole === "staff") {
+    form.setValue("patient", undefined);
+  }
 
   const staffQuery = trpc.staff.getAll.useQuery();
 
@@ -444,7 +459,50 @@ const CreateBaseUser = ({
             </fieldset>
           </Tabs>
         )}
-        {watchRole === "patient" && <></>}
+        {watchRole === "patient" && (
+          <Tabs value={patientCreateMode} onValueChange={setPatientCreateMode}>
+            <fieldset className="border p-4 rounded">
+              <legend className="text-sm text-slate-600">
+                Attach a patient.
+              </legend>
+              <TabsList className="w-full">
+                <TabsTrigger value="search" className="flex-1">
+                  Search
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent className="space-y-2" value="search">
+                {patientData?.map((p) => (
+                  <button
+                    className={cn(
+                      p.id === patientId && "border-green-500 bg-muted",
+                      "w-full p-2 border rounded group flex items-center justify-between transition-colors hover:border-green-500",
+                    )}
+                    type="button"
+                    onClick={() => {
+                      setPatientId(p.id === patientId ? null : p.id);
+                    }}
+                  >
+                    {p.firstName + " " + p.middleName + " " + p.lastName}
+                    <LinkIcon
+                      className={cn(
+                        p.id === patientId &&
+                          "group-hover:stroke-red-400 stroke-green-500",
+                        p.id !== patientId && "group-hover:stroke-green-500",
+                        "h-4 w-4 transition-colors",
+                      )}
+                    />
+                  </button>
+                ))}
+                <input
+                  type="hidden"
+                  {...form.register("patient.connect.id", {
+                    shouldUnregister: true,
+                  })}
+                />
+              </TabsContent>
+            </fieldset>
+          </Tabs>
+        )}
         <div className="flex gap-2">
           <Button
             className="flex-1"
