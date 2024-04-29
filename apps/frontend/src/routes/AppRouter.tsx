@@ -9,10 +9,11 @@ import ServiceRequestPage from "./ServiceRequestPage";
 import AboutPage from "./AboutPage";
 import PatientIntegration from "./PatientIntegration";
 import { Settings } from "@/routes/Settings.tsx";
-import CreditPage from "@/routes/CreditPage.tsx";
+//import CreditPage from "@/routes/CreditPage.tsx";
 import Music from "@/routes/MusicPlayerEasterEgg.tsx";
 import PhoneTextToNav from "@/routes/PhoneTextToNav.tsx";
 import Analytics from "@/routes/Analytics.tsx";
+import PDF from "@/components/PDFMaker.tsx";
 
 export function AppRouter() {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -23,7 +24,7 @@ export function AppRouter() {
       <Switch>
         <Route path="/" component={HomePage} />
         <Route path="/about" component={AboutPage} />
-        <Route path="/credit" component={CreditPage} />
+        <Route path="/credit" component={PDF} />
         <Route
           path="/phonenav/:startNodeId/:endNodeId/:algorithm/:wheelchair"
           component={PhoneTextToNav}
