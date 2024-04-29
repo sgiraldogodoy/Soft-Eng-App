@@ -144,10 +144,16 @@ export const userRouter = router({
       },
     });
 
-    if (!user || !user.rfid) {
+    if (!user) {
       throw new TRPCError({
         code: "BAD_REQUEST",
-        message: "Can't lock a user without an RFID key",
+        message: "Can't lock an account without a connected user.",
+      });
+    }
+    if (!user.rfid) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Can't lock a user without an RFID key.",
       });
     }
 

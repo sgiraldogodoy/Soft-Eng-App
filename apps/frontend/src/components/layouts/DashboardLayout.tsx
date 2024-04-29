@@ -23,6 +23,7 @@ import { LockClosedIcon } from "@radix-ui/react-icons";
 import { Button } from "../ui/button";
 import ConnectRfidDialog from "../ConnectRfidDialog";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function DashboardLayout({ children }: React.PropsWithChildren) {
   const session = useAuth0();
@@ -39,7 +40,11 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
     lock.mutate(undefined, {
       onError: (e) => {
         if (e.data?.code === "BAD_REQUEST") {
-          setConnectingRfid(true);
+          if (e.message === "Can't lock a user without an RFID key.") {
+            setConnectingRfid(true);
+          } else {
+            toast.error(e.message);
+          }
         }
       },
     });
