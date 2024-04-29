@@ -10,17 +10,35 @@ export function NextAppointment() {
   const appointments = me?.patient?.appointments;
   const session = useAuth0();
 
-  if (!appointments) {
-    return <p>You have no scheduled appointments</p>;
+  console.log(me?.patient?.appointments);
+
+  if (appointments?.length === 0) {
+    return (
+      <div className="flex flex-col gap-3">
+        <p className="text-xl">Upcoming appointments</p>
+        <Card className="w-1/3">
+          <CardContent className="pt-6">
+            <div className="text-lg font-semibold">
+              You have no upcoming appointments
+            </div>
+            <div className="text-gray-600">
+              If you would like to schedule an appointment, you can click the
+              button above.
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
-
-  const nextAppointment = appointments[0];
-
+  let nextAppointment;
+  if (appointments) {
+    nextAppointment = appointments[0];
+  }
   return (
-    <div>
+    <div className="flex-1 flex flex-col gap-3">
       <p className="text-xl">Next Appointment</p>
-      <Card className="w-1/3">
-        <CardContent className="flex flex-col gap-4 w-full ">
+      <Card className="">
+        <CardContent className="flex flex-col gap-4 w-full pt-6">
           <div className="flex justify-between items-start w-full">
             <div className="flex justify-center items-center gap-6 w-full">
               <div className="space-y-0.5 w-full">
@@ -31,24 +49,24 @@ export function NextAppointment() {
                   />
                   <div className="space-y-0.5">
                     <div className="text-lg font-bold">
-                      Dr. {nextAppointment.staff?.name}
+                      Dr. {nextAppointment?.staff?.name}
                     </div>
-                    <div>{nextAppointment.staff?.jobTitle}</div>
+                    <div>{nextAppointment?.staff?.jobTitle}</div>
                   </div>
                 </div>
                 <div className="text-gray-600">
                   Location:{" "}
-                  {nextAppointment.location?.shortName ?? "No room assigned"}
+                  {nextAppointment?.location?.shortName ?? "No room assigned"}
                 </div>
                 <div className="flex justify-between text-gray-600 w-full">
                   <div>
-                    {nextAppointment.appointmentTime.toLocaleTimeString([], {
+                    {nextAppointment?.appointmentTime.toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
                     })}
                   </div>
                   <div>
-                    {nextAppointment.appointmentTime.toLocaleDateString()}
+                    {nextAppointment?.appointmentTime.toLocaleDateString()}
                   </div>
                 </div>
               </div>

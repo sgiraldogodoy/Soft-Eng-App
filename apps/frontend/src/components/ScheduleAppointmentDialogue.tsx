@@ -104,7 +104,6 @@ export function ScheduleAppointmentDialogue({
   const createAppointmentMutation = trpc.appointment.createOne.useMutation();
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("hi");
     const createAppointment = createAppointmentMutation.mutateAsync(
       {
         ...data,
@@ -118,6 +117,7 @@ export function ScheduleAppointmentDialogue({
       {
         onSuccess: () => {
           utils.appointment.getAll.invalidate();
+          utils.user.me.invalidate();
           setLocation("~/portal");
         },
       },

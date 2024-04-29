@@ -16,6 +16,7 @@ import { Route, useLocation } from "wouter";
 import { ScheduleAppointmentDialogue } from "@/components/ScheduleAppointmentDialogue.tsx";
 import { CareTeam } from "@/components/CareTeam.tsx";
 import { NextAppointment } from "@/components/NextAppointment.tsx";
+import UpcomingAppointmentsList from "@/components/UpcomingAppointmentsList.tsx";
 
 // import {ScheduleAppointmentDialogue} from "@/components/ScheduleAppointmentDialogue.tsx";
 
@@ -92,10 +93,10 @@ export function PatientPortal() {
             </DropdownMenu>
           </div>
         </div>
-        <div className="relative w-full px-12 py-6">
+        <div className="flex-1 overflow-auto relative w-full px-12 py-6 flex flex-col gap-2">
           <Suspense fallback={<LoadingSpinner />}>
             <Card className="bg-blue-100 w-full">
-              <CardContent className="flex justify-between px-4 items-center">
+              <CardContent className="flex justify-between px-4 items-center pt-6">
                 <div className="space-y-0.5">
                   <div className="flex gap-1 text-2xl">
                     <p>Hello, </p>
@@ -114,8 +115,16 @@ export function PatientPortal() {
                 </Button>
               </CardContent>
             </Card>
-            <NextAppointment />
-            <CareTeam />
+            <div className="flex max-h-full overflow-auto gap-6">
+              <div className="shrink-0 flex flex-col max-h-full overflow-auto gap-4">
+                <div className="flex gap-4">
+                  <NextAppointment />
+                  <CareTeam />
+                </div>
+                <UpcomingAppointmentsList />
+              </div>
+              <Card className="flex-1">Here Records</Card>
+            </div>
           </Suspense>
         </div>
         <Route path="/schedule" nest>
