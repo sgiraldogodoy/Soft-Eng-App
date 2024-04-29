@@ -13,14 +13,32 @@ import {
 } from "@/components/ui/accordion";
 import HelpCommand from "@/components/HelpCommandDialog.tsx";
 import React from "react";
-import { Route, useLocation } from "wouter";
+import { Route, Redirect, useLocation } from "wouter";
 import { Button } from "@/components/ui/button.tsx";
+import { useAuth0 } from "@auth0/auth0-react";
+import PatientGuidePage from "@/routes/PatientGuidePage.tsx";
+import StaffGuidePage from "@/routes/StaffGuidePage.tsx";
+import AdminGuidePage from "@/routes/AdminGuidePage.tsx";
 
 export default function HelpMenu() {
+  const { isAuthenticated, isLoading } = useAuth0();
+  const isDefinitelyNotAuthed = !isAuthenticated && !isLoading;
   const [, setLocation] = useLocation();
 
   const goback = () => {
     setLocation("/pathfind");
+  };
+
+  const goPatient = () => {
+    setLocation("/patientguide");
+  };
+
+  const goStaff = () => {
+    setLocation("/staffguide");
+  };
+
+  const goAdmin = () => {
+    setLocation("/adminguide");
   };
 
   return (
@@ -30,6 +48,9 @@ export default function HelpMenu() {
           <CardTitle className="text-2xl flex justify-center">
             User Manual
           </CardTitle>
+          <Button variant="secondary" onClick={goback}>
+            Back
+          </Button>
           <div className="flex justify-center">
             <HelpCommand />
           </div>
@@ -49,7 +70,11 @@ export default function HelpMenu() {
               </AccordionItem>
             </Accordion>
 
-            <Button variant="ghost" onClick={goback} className="h-auto w-full">
+            <Button
+              variant="ghost"
+              onClick={goPatient}
+              className="h-auto w-full"
+            >
               <Card className="w-full h-fit shadow-md">
                 <CardHeader>
                   <CardTitle>Patient</CardTitle>
@@ -67,7 +92,7 @@ export default function HelpMenu() {
               </Card>
             </Button>
 
-            <Button variant="ghost" onClick={goback} className="h-auto w-full">
+            <Button variant="ghost" onClick={goStaff} className="h-auto w-full">
               <Card className="w-full h-fit shadow-md">
                 <CardHeader>
                   <CardTitle>Staff</CardTitle>
@@ -85,7 +110,7 @@ export default function HelpMenu() {
               </Card>
             </Button>
 
-            <Button variant="ghost" onClick={goback} className="h-auto w-full">
+            <Button variant="ghost" onClick={goAdmin} className="h-auto w-full">
               <Card className="w-full h-fit shadow-md">
                 <CardHeader>
                   <CardTitle>Admin</CardTitle>
@@ -105,9 +130,18 @@ export default function HelpMenu() {
           </CardDescription>
         </CardContent>
       </Card>
-      <Route path="/patientguide"></Route>
-      <Route path="/staffguide"></Route>
-      <Route path="/adminguide"></Route>
+      <Route path="/patientguide">
+        <PatientGuidePage />
+        {isDefinitelyNotAuthed && <Redirect to="/" />}
+      </Route>
+      <Route path="/staffguide">
+        <StaffGuidePage />
+        {isDefinitelyNotAuthed && <Redirect to="/" />}
+      </Route>
+      <Route path="/adminguide">
+        <AdminGuidePage />
+        {isDefinitelyNotAuthed && <Redirect to="/" />}
+      </Route>
     </>
   );
 }
