@@ -21,6 +21,8 @@ export const ZCreateBaseServiceSchema = z.object({
     "it",
     "religious",
     "interpreter",
+    "equipment",
+    "food",
   ]),
   note: z.string(),
   staffId: z.string().optional(),
@@ -118,6 +120,20 @@ export const ZCreateInterpreterSchema = z.object({
   service: nestSchema(ZCreateBaseServiceSchema),
 });
 
+export const ZCreateEquipmentSchema = z.object({
+  recipientName: z.string(),
+  type: z.enum(["Testing", "Surgical", "Anesthetic", "Sanitation", "Office"]),
+  dateTime: z.coerce.date(),
+  service: nestSchema(ZCreateBaseServiceSchema),
+});
+
+export const ZCreateFoodSchema = z.object({
+  recipientName: z.string(),
+  dateTime: z.coerce.date(),
+  order: z.string(),
+  service: nestSchema(ZCreateBaseServiceSchema),
+});
+
 export const ZCreateServiceSchema = z.discriminatedUnion("type", [
   ZCreateBaseServiceSchema.extend({
     data: ZCreateAvSchema,
@@ -166,5 +182,13 @@ export const ZCreateServiceSchema = z.discriminatedUnion("type", [
   ZCreateBaseServiceSchema.extend({
     data: ZCreateInterpreterSchema,
     type: z.literal("interpreter"),
+  }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateEquipmentSchema,
+    type: z.literal("equipment"),
+  }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateFoodSchema,
+    type: z.literal("food"),
   }),
 ]);

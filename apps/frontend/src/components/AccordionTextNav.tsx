@@ -13,6 +13,7 @@ import {
 
 interface AccordionTextNavProps {
   directions: [string, string][];
+  onPhone?: boolean;
 }
 
 const pickIcon = (direction: string) => {
@@ -37,14 +38,21 @@ const pickIcon = (direction: string) => {
   } else return <SeparatorHorizontal className="h-8 w-8" />;
 };
 
-export function AccordionTextNav({ directions }: AccordionTextNavProps) {
+export function AccordionTextNav({
+  directions,
+  onPhone,
+}: AccordionTextNavProps) {
   const lastDirection = directions[directions.length - 1];
   const shouldRemoveLast = lastDirection && lastDirection.includes("When Back");
   if (shouldRemoveLast && directions.length === 1) {
     return null;
   }
+
+  console.log(onPhone);
   return (
-    <div className="flex flex-col space-y-2 w-[20vw] overflow-auto">
+    <div
+      className={`flex flex-col space-y-2 ${onPhone ? "w-full" : "w-[20vw]"} overflow-auto`}
+    >
       {directions.map((direction, index) => {
         if (index === directions.length - 1 && shouldRemoveLast) {
           return null;

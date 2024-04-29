@@ -3,6 +3,7 @@ import { router } from "../../trpc.ts";
 import { z } from "zod";
 import { ZCreatePatientSchema } from "common";
 import { manySchema, updateSchema } from "common/src/zod-utils.ts";
+import { DateTime } from "luxon";
 
 export const patient = router({
   createOne: protectedProcedure
@@ -11,7 +12,8 @@ export const patient = router({
       return ctx.db.patient.create({
         data: {
           ...input,
-          dateOfBirth: new Date(input.dateOfBirth).toISOString(),
+          dateOfBirth:
+            DateTime.fromISO(input.dateOfBirth).setZone("local").toISO() ?? "",
         },
       });
     }),
@@ -43,7 +45,9 @@ export const patient = router({
           id: input.id,
         },
         include: {
+          location: true,
           pcp: true,
+          user: true,
           appointments: true,
           visits: true,
         },

@@ -42,6 +42,8 @@ import VisitorRequestFields from "./VisitorRequestFields.tsx";
 import ITRequestFields from "./ITRequestFields";
 import ReligiousRequestFields from "./ReligiousRequestFields";
 import InterpreterRequestFields from "./InterpreterRequestFields";
+import EquipmentRequestFields from "./EquipmentRequestFields.tsx";
+import FoodRequestFields from "./FoodRequestFields.tsx";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
 import {
@@ -69,6 +71,8 @@ import {
   ZCreateInterpreterSchema,
   ZCreateVisitorSchema,
   ZCreateItSchema,
+  ZCreateEquipmentSchema,
+  ZCreateFoodSchema,
 } from "common";
 
 // Add your type-specific form schema to this array.
@@ -120,6 +124,14 @@ const FormSchema = z.discriminatedUnion("type", [
   ZCreateBaseServiceSchema.extend({
     data: ZCreateVisitorSchema.omit({ service: true }),
     type: z.literal("visitor"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateEquipmentSchema.omit({ service: true }),
+    type: z.literal("equipment"),
+  }).omit({ login: true }),
+  ZCreateBaseServiceSchema.extend({
+    data: ZCreateFoodSchema.omit({ service: true }),
+    type: z.literal("food"),
   }).omit({ login: true }),
 ]);
 
@@ -193,6 +205,14 @@ const FORMTYPE_RECORD: Record<
     longName: "Request Interpreter",
     formFields: InterpreterRequestFields,
   },
+  equipment: {
+    longName: "Request Medical Equipment",
+    formFields: EquipmentRequestFields,
+  },
+  food: {
+    longName: "Request Internal Transfer",
+    formFields: FoodRequestFields,
+  },
 };
 
 interface Props {
@@ -239,6 +259,8 @@ export default function InputForm({ variant }: Props) {
   const createITRequest = trpc.it.createOne.useMutation();
   const createReligiousRequest = trpc.religious.createOne.useMutation();
   const createInterpreterRequest = trpc.interpreter.createOne.useMutation();
+  const createEquipmentRequest = trpc.equipment.createOne.useMutation();
+  const createFoodRequest = trpc.food.createOne.useMutation();
 
   const ActiveFormFields = FORMTYPE_RECORD[variant].formFields as FormComponent<
     z.infer<typeof FormSchema>
@@ -567,6 +589,60 @@ export default function InputForm({ variant }: Props) {
           },
         );
         break;
+      case "equipment":
+        toast.promise(
+          createEquipmentRequest.mutateAsync(
+            {
+              recipientName: data.data.recipientName,
+              type: data.data.type,
+              dateTime: data.data.dateTime,
+              service: {
+                create: {
+                  login: session.user?.email ?? "",
+                  ...data,
+                },
+              },
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving interpreter request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
+      case "food":
+        toast.promise(
+          createFoodRequest.mutateAsync(
+            {
+              recipientName: data.data.recipientName,
+              order: data.data.order,
+              dateTime: data.data.dateTime,
+              service: {
+                create: {
+                  login: session.user?.email ?? "",
+                  ...data,
+                },
+              },
+            },
+            {
+              onSuccess: () => {
+                utils.service.getAll.invalidate();
+              },
+            },
+          ),
+          {
+            success: "Successfully saved to the database.",
+            loading: "Saving interpreter request to the database.",
+            error: "Error saving to database.",
+          },
+        );
+        break;
       default:
         toast.error("An error occured.");
     }
@@ -819,7 +895,7 @@ export default function InputForm({ variant }: Props) {
                 >
                   Reset
                 </Button>
-                <Button className="flex-1 " type="submit">
+                <Button variant="default" className="flex-1 " type="submit">
                   Submit
                 </Button>
               </div>

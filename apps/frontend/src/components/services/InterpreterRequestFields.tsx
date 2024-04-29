@@ -73,7 +73,7 @@ const Interpreter = () => {
                 <Input type="datetime-local" {...field} />
               </FormControl>
               <FormDescription>
-                What date does is the request needed for?
+                What date is the request needed for?
               </FormDescription>
               <FormMessage />
             </FormItem>
