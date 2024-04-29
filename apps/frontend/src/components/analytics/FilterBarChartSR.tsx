@@ -232,8 +232,8 @@ export default function FilterBarChartSR({ selected }: FilterBarChartSRProps) {
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="Unassigned" stackId="a" fill="#87CEEB" />
-          <Bar dataKey="Assigned" stackId="a" fill="#FFD700" />
+          <Bar dataKey="Unassigned" stackId="a" fill="#808080" />
+          <Bar dataKey="Assigned" stackId="a" fill="#007FFF" />
           <Bar dataKey="InProgress" stackId="a" fill="#FFA500" />
           <Bar dataKey="Completed" stackId="a" fill="#008000" />
         </BarChart>
