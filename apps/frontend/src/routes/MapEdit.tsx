@@ -46,7 +46,7 @@ export default function MapEdit() {
       <div className="absolute top-0 left-1/2 transform -translate-x-1/2 mt-4">
         <MapEditTab onEditSelect={handleEditselect} />
       </div>
-      <div className="absolute flex items-center gap-[2px] text-xl font-bold bottom-14 right-8">
+      <div className="absolute flex items-center gap-[2px] text-xl font-bold bottom-8 right-8">
         <FloorSelection2 onFloorClick={handleFloorClick} />
       </div>
     </div>
