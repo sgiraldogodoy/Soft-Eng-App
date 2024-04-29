@@ -6,7 +6,18 @@ import { updateSchema } from "common/src/zod-utils.ts";
 
 export const recordRouter = router({
   getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.record.findMany();
+    return ctx.db.record.findMany({
+      include: {
+        author: true,
+        vitals: true,
+        diagnoses: true,
+        visit: {
+          include: {
+            patient: true,
+          },
+        },
+      },
+    });
   }),
 
   getOne: protectedProcedure
@@ -20,6 +31,11 @@ export const recordRouter = router({
           author: true,
           vitals: true,
           diagnoses: true,
+          visit: {
+            include: {
+              patient: true,
+            },
+          },
         },
       });
     }),

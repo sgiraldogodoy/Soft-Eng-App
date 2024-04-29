@@ -14,6 +14,7 @@ import { trpc } from "@/utils/trpc";
 import {
   GaugeIcon,
   HeartPulseIcon,
+  LoaderCircle,
   PlusIcon,
   ThermometerIcon,
   WindIcon,
@@ -21,12 +22,12 @@ import {
 import { z } from "zod";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
+import { useRecord } from "./RecordEdit";
 
-export function RecordVitals({ recordId }: { recordId: string }) {
+export function RecordVitals() {
+  const record = useRecord();
+
   const utils = trpc.useUtils();
-  const [record] = trpc.record.getOne.useSuspenseQuery({
-    id: recordId,
-  });
   const createVitals = trpc.vitals.create.useMutation();
   const updateVitals = trpc.vitals.update.useMutation();
 
@@ -72,8 +73,8 @@ export function RecordVitals({ recordId }: { recordId: string }) {
   return (
     <>
       {record.vitals && (
-        <fieldset className="p-4 border rounded">
-          <legend className="px-2 text-sm">Vitals</legend>
+        <fieldset className="p-4 border rounded flex-1">
+          <legend className="px-2 text-sm font-bold">Vitals</legend>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <div className="flex gap-2 items-start">
@@ -138,8 +139,15 @@ export function RecordVitals({ recordId }: { recordId: string }) {
                   )}
                 />
               </div>
-              <Button type="submit" variant="secondary" className="w-full">
-                Update
+              <Button
+                disabled={updateVitals.isPending}
+                type="submit"
+                className="w-full"
+              >
+                {updateVitals.isPending && (
+                  <LoaderCircle className="animate-spin mr-2" />
+                )}
+                Save
               </Button>
             </form>
           </Form>
@@ -147,7 +155,7 @@ export function RecordVitals({ recordId }: { recordId: string }) {
       )}
       {!record.vitals && (
         <button
-          className="w-full p-4 border bg-muted flex gap-2 items-center justify-center rounded"
+          className="flex-1 p-4 border bg-muted flex gap-2 items-center justify-center rounded"
           aria-label="create vitals"
           onClick={() => {
             console.log("hello");
@@ -158,6 +166,7 @@ export function RecordVitals({ recordId }: { recordId: string }) {
                     id: record.id,
                   },
                 },
+                bloodPressure: "",
               },
               {
                 onSuccess: () => {
@@ -168,7 +177,7 @@ export function RecordVitals({ recordId }: { recordId: string }) {
             );
           }}
         >
-          <div>This record does not have vitals attached. Create them?</div>
+          <div>Attach Vitals</div>
           <PlusIcon className="w-4 h-4" />
         </button>
       )}

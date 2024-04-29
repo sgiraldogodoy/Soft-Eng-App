@@ -24,6 +24,7 @@ export const ZCreateRecordSchema = z.object({
   type: z.string(),
   author: nestSchema(ZCreateStaffSchema),
   visit: nestSchema(ZCreateVisitSchema),
+  notes: z.string().default(""),
 });
 
 const numlike = z.union([z.string(), z.number()]);
@@ -45,12 +46,8 @@ export const ZUpdateVitalsSchema = z.object({
       }),
     )
     .optional(),
-  bloodPressure: numlike
-    .pipe(
-      z.coerce.number({
-        message: "Blood pressure must be a number.",
-      }),
-    )
-    .optional(),
+  bloodPressure: z.string().regex(/(^[0-9]+\/[0-9]+$)|(^$)/, {
+    message: "Blood pressure must be a fraction, i.e. 120/80",
+  }),
 });
 export type TCreateVitalsSchema = z.infer<typeof ZUpdateVitalsSchema>;

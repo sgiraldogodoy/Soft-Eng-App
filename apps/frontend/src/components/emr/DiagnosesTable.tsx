@@ -14,8 +14,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { z } from "zod";
-import { RecordModel } from "database/zod";
 import { DataTableColumnHeader } from "@/components/ui/dt-sortable.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import {
@@ -42,26 +40,33 @@ import {
 import { trpc } from "@/utils/trpc.ts";
 import { useLocation } from "wouter";
 import { DateTime } from "luxon";
-import { PencilIcon } from "lucide-react";
+import type { Diagnosis } from "database";
+import { RouterRecord } from "./record-type";
 // import {trpc} from "@/utils/trpc.ts";
 // import {skipToken} from "@tanstack/react-query";
 
-export function RecordTable() {
-  const [data] = trpc.record.getAll.useSuspenseQuery();
+export function DiagnosesTable({ record }: { record: RouterRecord }) {
+  const data = record.diagnoses;
 
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const [, setLocation] = useLocation();
 
-  const deleteMutation = trpc.record.deleteOne.useMutation();
+  const deleteMutation = trpc.diagnosis.delete.useMutation();
   const utils = trpc.useUtils();
 
-  const columns: ColumnDef<z.infer<typeof RecordModel>>[] = [
+  const columns: ColumnDef<Diagnosis>[] = [
     {
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Type" />
+        <DataTableColumnHeader column={column} title="Illness" />
       ),
-      accessorKey: "type",
+      accessorKey: "illness",
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Advice" />
+      ),
+      accessorKey: "advice",
     },
     {
       header: ({ column }) => (
@@ -72,29 +77,10 @@ export function RecordTable() {
       id: "creationTime",
     },
     {
-      id: "edit",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const record = row.original;
-
-        return (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => {
-              setLocation(`/record/${record.id}`);
-            }}
-          >
-            <PencilIcon className="h-4 w-4" />
-          </Button>
-        );
-      },
-    },
-    {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const record = row.original;
+        const diagnosis = row.original;
 
         return (
           <DropdownMenu>
@@ -108,29 +94,29 @@ export function RecordTable() {
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
                 onSelect={() =>
-                  toast.promise(navigator.clipboard.writeText(record.id), {
-                    success: "Record ID copied to clipboard",
-                    loading: "Copying record ID...",
-                    error: "Failed to record ID",
+                  toast.promise(navigator.clipboard.writeText(diagnosis.id), {
+                    success: "Diagnosis ID copied to clipboard",
+                    loading: "Copying diagnosis ID...",
+                    error: "Failed to copy ID",
                   })
                 }
               >
-                Copy record ID
+                Copy diagnosis ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onSelect={() => {
-                  setLocation(`/record/${record.id}`);
+                  setLocation(`/diagnosis/${diagnosis.id}`);
                 }}
               >
-                Edit record
+                Edit diagnosis
               </DropdownMenuItem>
               <DropdownMenuItem
                 onSelect={() => {
-                  setDeletingId(record.id);
+                  setDeletingId(diagnosis.id);
                 }}
               >
-                Delete record
+                Delete diagnosis
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -144,18 +130,10 @@ export function RecordTable() {
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    initialState: {
-      sorting: [
-        {
-          id: "creationTime",
-          desc: true,
-        },
-      ],
-    },
   });
 
   return (
-    <div className="rounded-md border overflow-auto relative">
+    <div className="rounded-md border h-full">
       <AlertDialog
         open={!!deletingId}
         onOpenChange={(v) => {
@@ -167,7 +145,7 @@ export function RecordTable() {
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete this
-              record and remove the data from our servers.
+              diagnosis and remove the data from our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -189,9 +167,9 @@ export function RecordTable() {
                 );
 
                 toast.promise(deletion, {
-                  success: "Record successfully deleted",
-                  loading: "Attempting to delete user",
-                  error: "Failed to delete user",
+                  success: "Diagnosis successfully deleted",
+                  loading: "Attempting to delete diagnosis",
+                  error: "Failed to delete diagnosis",
                 });
                 await deletion;
                 setDeletingId(null);
@@ -203,8 +181,8 @@ export function RecordTable() {
         </AlertDialogContent>
       </AlertDialog>
 
-      <Table className="overflow-auto">
-        <TableHeader className="sticky top-0">
+      <Table className="h-full">
+        <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -222,7 +200,7 @@ export function RecordTable() {
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody className="overflow-auto">
+        <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow

@@ -325,24 +325,48 @@ model Record {
   author       Staff       @relation(name: "VisitNoteToUser_Author", fields: [authorId], references: [id], onUpdate: Cascade, onDelete: SetNull)
   visitId      String
   visit        Visit       @relation(name: "VisitNoteToVisit", fields: [visitId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  notes        String      @default("")
 }
 
 model Diagnosis {
-  id       String @id @default(uuid())
-  recordId String
-  record   Record @relation(name: "RecordDiagnosis", fields: [recordId], references: [id])
-  illness  String
-  advice   String
+  id            String         @id @default(uuid())
+  recordId      String
+  record        Record         @relation(name: "RecordDiagnosis", fields: [recordId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  illness       String
+  creationTime  DateTime       @default(now())
+  advice        String
+  notes         String
+  prescriptions Prescription[] @relation(name: "PrescriptionDiagnosis")
+}
+
+model Prescription {
+  id            String    @id @default(uuid())
+  drug          String
+  dosage        String
+  frequency     String
+  refillAllowed Boolean
+  diagnosisId   String
+  issued        DateTime  @default(now())
+  diagnosis     Diagnosis @relation(name: "PrescriptionDiagnosis", fields: [diagnosisId], references: [id])
+  pharmacyId    String
+  pharmacy      Pharmacy  @relation(name: "PrescriptionPharmacy", fields: [pharmacyId], references: [id])
+}
+
+model Pharmacy {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  name          String
+  prescriptions Prescription[] @relation(name: "PrescriptionPharmacy")
 }
 
 model Vitals {
-  id            String @id @default(uuid())
-  recordId      String @unique
-  record        Record @relation(name: "RecordVitals", fields: [recordId], references: [id])
+  id            String  @id @default(uuid())
+  recordId      String  @unique
+  record        Record  @relation(name: "RecordVitals", fields: [recordId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   heartRate     Float?
   bodyTemp      Float?
   respRate      Float?
-  bloodPressure Float?
+  bloodPressure String?
 }
 
 model User {

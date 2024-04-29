@@ -106,6 +106,7 @@ async function main() {
         data: {
           name: "Ace Beattie",
           sub: "auth0|660c562536035d020765b37c",
+          email: "acebeattie@gmail.com",
           role: "staff",
           staff: {
             create: {
@@ -124,6 +125,13 @@ async function main() {
       firstName: "Cole",
       lastName: "Welcher",
       dateOfBirth: new Date(),
+      sex: "male",
+      identity: {
+        create: {
+          idType: "ssn",
+          idNumber: "123456789",
+        },
+      },
     },
   });
 

@@ -8,28 +8,23 @@ import {
 } from "../ui/card";
 import { DateTime } from "luxon";
 import { RecordTable } from "./RecordsTable";
-import { Suspense } from "react";
+import { Suspense, createContext, useContext } from "react";
 import { Button } from "../ui/button";
 import { PlusIcon } from "lucide-react";
 import BackgroundWave from "../BackgroundWave";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "../ui/breadcrumb";
-import { Link, Route, Switch, useLocation, useParams } from "wouter";
+import { Route, Switch } from "wouter";
 import { toast } from "sonner";
 import { RecordEdit } from "./RecordEdit";
+import { EmrBreadcrumbs } from "./EmrBreadcrumbs";
+import type { Patient, Visit } from "database";
+
+const VisitContext = createContext<(Visit & { patient: Patient }) | null>(null);
+export const useMaybeVisit = () => useContext(VisitContext);
 
 export function EmrVisit({ visitId }: { visitId: string }) {
   const [visit] = trpc.visit.getOne.useSuspenseQuery({
     id: visitId,
   });
-
-  const [location] = useLocation();
-  const params = useParams();
 
   const [me] = trpc.user.me.useSuspenseQuery();
 
@@ -53,25 +48,6 @@ export function EmrVisit({ visitId }: { visitId: string }) {
     <>
       <BackgroundWave />
       <div className="w-full h-full flex flex-col gap-2 p-4">
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbLink asChild>
-              <Link to="~/emr">Visits</Link>
-            </BreadcrumbLink>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>{visit.id}</BreadcrumbItem>
-            {location.includes("record") && (
-              <>
-                <BreadcrumbSeparator />
-                <BreadcrumbLink asChild>
-                  <Link to="/">Records</Link>
-                </BreadcrumbLink>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>{params.id}</BreadcrumbItem>
-              </>
-            )}
-          </BreadcrumbList>
-        </Breadcrumb>
         <Card className="animate-in fade-in zoom-in-105 duration-500">
           <CardHeader>
             <CardTitle>
@@ -92,18 +68,21 @@ export function EmrVisit({ visitId }: { visitId: string }) {
             </CardDescription>
           </CardHeader>
         </Card>
-        <Switch>
-          <Route path="/record/:id">
-            {({ id }) => <RecordEdit recordId={id} />}
-          </Route>
-          <Route path="/">
-            <Card className="flex-1 overflow-auto animate-in fade-in zoom-in-105 duration-500 delay-200 fill-mode-both">
-              <CardHeader>
-                <CardTitle>Records</CardTitle>
-                <CardDescription>
-                  View and create records for this visit.
-                </CardDescription>
-                <CardContent className="flex flex-col gap-2">
+        <VisitContext.Provider value={visit}>
+          <Switch>
+            <Route path="/record/:id" nest>
+              {({ id }) => <RecordEdit recordId={id} />}
+            </Route>
+            <Route path="/">
+              <Card className="flex-1 overflow-auto animate-in fade-in zoom-in-105 duration-500 delay-200 fill-mode-both flex flex-col">
+                <CardHeader>
+                  <EmrBreadcrumbs />
+                  <CardTitle>Records</CardTitle>
+                  <CardDescription>
+                    View and create records for this visit.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-2 overflow-auto">
                   <Button
                     onClick={async () => {
                       const creation = createRecord.mutateAsync({
@@ -126,7 +105,7 @@ export function EmrVisit({ visitId }: { visitId: string }) {
                         error: "Error creating record.",
                       });
                     }}
-                    className="ml-auto"
+                    className="ml-auto shrink-0"
                     size="sm"
                   >
                     <PlusIcon className="w-4 h-4" />
@@ -136,10 +115,10 @@ export function EmrVisit({ visitId }: { visitId: string }) {
                     <RecordTable />
                   </Suspense>
                 </CardContent>
-              </CardHeader>
-            </Card>
-          </Route>
-        </Switch>
+              </Card>
+            </Route>
+          </Switch>
+        </VisitContext.Provider>
       </div>
     </>
   );

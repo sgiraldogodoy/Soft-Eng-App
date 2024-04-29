@@ -447,7 +447,9 @@ export default function AboutPage() {
                     <p className="font-bold mb-2 text-xl">
                       Justin's Favorite Quote
                     </p>
-                    <p className="text-lg">Can WebStorm not melt my laptop please?</p>
+                    <p className="text-lg">
+                      Can WebStorm not melt my laptop please?
+                    </p>
                     <p className="italic mt-1 text-lg">by himself</p>
                   </div>
                 </DialogContent>
