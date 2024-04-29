@@ -58,7 +58,7 @@ export function AppRouter() {
             <Music />
             {isDefinitelyNotAuthed && <Redirect to="/" />}
           </Route>
-          <Route path="/help">
+          <Route path="/help" nest>
             <HelpMenu />
             {isDefinitelyNotAuthed && <Redirect to="/" />}
           </Route>

@@ -130,15 +130,15 @@ export default function HelpMenu() {
           </CardDescription>
         </CardContent>
       </Card>
-      <Route path="/patientguide">
+      <Route path="/patientguide" nest>
         <PatientGuidePage />
         {isDefinitelyNotAuthed && <Redirect to="/" />}
       </Route>
-      <Route path="/staffguide">
+      <Route path="/staffguide" nest>
         <StaffGuidePage />
         {isDefinitelyNotAuthed && <Redirect to="/" />}
       </Route>
-      <Route path="/adminguide">
+      <Route path="/adminguide" nest>
         <AdminGuidePage />
         {isDefinitelyNotAuthed && <Redirect to="/" />}
       </Route>
