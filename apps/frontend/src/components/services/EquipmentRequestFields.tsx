@@ -38,7 +38,7 @@ const Equipment = () => {
         <FormField
           name="data.type"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="w-full">
               <FormLabel>Equipment Required</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>

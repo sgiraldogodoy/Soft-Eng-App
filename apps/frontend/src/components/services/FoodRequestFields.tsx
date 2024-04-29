@@ -31,7 +31,7 @@ const Food = () => {
         <FormField
           name="data.order"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="w-full">
               <FormLabel>Order</FormLabel>
               <FormControl>
                 <Input {...field} />
