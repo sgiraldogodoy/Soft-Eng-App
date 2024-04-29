@@ -1,4 +1,4 @@
-import { protectedProcedure, publicProcedure } from "../../trpc.ts";
+import { protectedProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
 import { ZCreatePatientSchema } from "common";
@@ -27,7 +27,7 @@ export const patient = router({
       });
     }),
 
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.patient.findMany({
       include: {
         location: true,
@@ -37,7 +37,7 @@ export const patient = router({
     });
   }),
 
-  getOne: publicProcedure
+  getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       return ctx.db.patient.findUnique({

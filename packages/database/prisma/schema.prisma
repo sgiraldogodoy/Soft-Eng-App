@@ -375,8 +375,16 @@ model User {
   email   String   @unique
   role    Role?
   name    String
+  locked  Boolean  @default(false)
+  rfid    Rfid?    @relation(name: "UserRfid")
   patient Patient? @relation(name: "PatientUser")
   staff   Staff?   @relation(name: "StaffUser")
+}
+
+model Rfid {
+  hash   String
+  userId String @unique
+  user   User   @relation(name: "UserRfid", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Staff {

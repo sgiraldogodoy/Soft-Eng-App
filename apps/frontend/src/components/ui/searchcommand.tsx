@@ -81,7 +81,7 @@ export default function SearchCommand() {
 
   return (
     <>
-      <Button variant="ghost" onClick={buttonchange}>
+      <Button size="icon" variant="ghost" onClick={buttonchange}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="18"

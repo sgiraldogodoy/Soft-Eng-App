@@ -19,10 +19,37 @@ import {
 import { SidebarButton } from "@/components/SidebarButton.tsx";
 import { trpc } from "@/utils/trpc.ts";
 import SearchCommand from "@/components/ui/searchcommand.tsx";
+import { LockScreen } from "../LockScreen";
+import { LockClosedIcon } from "@radix-ui/react-icons";
+import { Button } from "../ui/button";
+import ConnectRfidDialog from "../ConnectRfidDialog";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function DashboardLayout({ children }: React.PropsWithChildren) {
   const session = useAuth0();
+  const utils = trpc.useUtils();
   const me = trpc.user.me.useQuery();
+  const lock = trpc.user.lockMe.useMutation({
+    onSuccess: () => {
+      utils.user.me.invalidate();
+    },
+  });
+  const [connectingRfid, setConnectingRfid] = useState(false);
+
+  const lockMe = async () => {
+    lock.mutate(undefined, {
+      onError: (e) => {
+        if (e.data?.code === "BAD_REQUEST") {
+          if (e.message === "Can't lock a user without an RFID key.") {
+            setConnectingRfid(true);
+          } else {
+            toast.error(e.message);
+          }
+        }
+      },
+    });
+  };
 
   if (!session.isAuthenticated) {
     return (
@@ -34,6 +61,11 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
 
   return (
     <div className="flex flex-col bg-background min-h-screen max-h-screen overflow-auto">
+      {me.data?.locked && <LockScreen />}
+      <ConnectRfidDialog
+        open={connectingRfid}
+        onOpenChange={setConnectingRfid}
+      />
       <div className="flex h-14 border-b items-center flex-none">
         <div className="relative w-14 flex-none border-r h-full flex items-center justify-center">
           <svg
@@ -81,6 +113,15 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
           </p>
           <div className="flex-1" />
           <SearchCommand />
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => {
+              lockMe();
+            }}
+          >
+            <LockClosedIcon className="w-4 h-4" />
+          </Button>
           <p className="text-lg">
             Welcome,{" "}
             <span className="font-semibold">
