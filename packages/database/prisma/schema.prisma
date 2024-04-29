@@ -347,7 +347,7 @@ model Prescription {
   refillAllowed Boolean
   diagnosisId   String
   issued        DateTime  @default(now())
-  diagnosis     Diagnosis @relation(name: "PrescriptionDiagnosis", fields: [diagnosisId], references: [id])
+  diagnosis     Diagnosis @relation(name: "PrescriptionDiagnosis", fields: [diagnosisId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   pharmacyId    String
   pharmacy      Pharmacy  @relation(name: "PrescriptionPharmacy", fields: [pharmacyId], references: [id])
 }
