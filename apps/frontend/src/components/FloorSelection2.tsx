@@ -14,6 +14,7 @@ export default function FloorSelection2({ onFloorClick }: FloorSelectionProps) {
           orientation="vertical"
           className="flex flex-col"
           variant="outlinefilledfloor"
+          defaultValue="Floor 2"
         >
           <ToggleGroupItem
             value="Floor 3"
