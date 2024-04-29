@@ -1,20 +1,18 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button.tsx";
 import { ArrowLeft } from "lucide-react";
-//import { PDFDownloadLink } from "@react-pdf/renderer";
-//import {PatientIntoPDF} from "@/components/PDFMaker.tsx";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { PatientIntoPDF } from "@/components/PDFMaker.tsx";
 
-// const patientData = {
-//     name: "John Doe",
-//     age: 30,
-//     gender: "Male",
-//     address: "123 Main Street, City, Country",
-// };
-// const PDF = () =>{
-//     PatientIntoPDF {...patientData};
-//     );
-// };
-
+const patientData = {
+  name: "John Doe",
+  age: 30,
+  gender: "Male",
+  address: "123 Main Street, City, Country",
+};
+export function PDF() {
+  return PatientIntoPDF(patientData);
+}
 export function TestPDF() {
   return (
     <div className="flex flex-col w-full justify-center content-center items-center bg-slate-50">
@@ -27,13 +25,11 @@ export function TestPDF() {
         </div>
       </div>
       <div className="flex justify-center mt-4">
-        {/*<div>*/}
-        {/*  <PDFDownloadLink document={<PDF />} fileName="somename.pdf">*/}
-        {/*    {({ loading }) =>*/}
-        {/*      loading ? "Loading document..." : "Download now!"*/}
-        {/*    }*/}
-        {/*  </PDFDownloadLink>*/}
-        {/*</div>*/}
+        <div>
+          <PDFDownloadLink document={<PDF />} fileName="somename.pdf">
+            {({ loading }) => (loading ? "Loading document..." : "Save as PDF")}
+          </PDFDownloadLink>
+        </div>
       </div>
       <div className="fixed top-0 right-0 mt-4 mr-4 border-2 rounded-lg border-black">
         <Button
