@@ -66,7 +66,7 @@ export function PrescriptionTable() {
     initialState: {
       sorting: [
         {
-          id: "creationTime",
+          id: "issued",
           desc: true,
         },
       ],
