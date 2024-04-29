@@ -12,6 +12,7 @@ import { Settings } from "@/routes/Settings.tsx";
 import CreditPage from "@/routes/CreditPage.tsx";
 import Music from "@/routes/MusicPlayerEasterEgg.tsx";
 import PhoneTextToNav from "@/routes/PhoneTextToNav.tsx";
+import { EmrEntry } from "@/components/emr/EmrEntry";
 import Analytics from "@/routes/Analytics.tsx";
 
 export function AppRouter() {
@@ -61,6 +62,9 @@ export function AppRouter() {
           <Route path="/music">
             <Music />
             {isDefinitelyNotAuthed && <Redirect to="/" />}
+          </Route>
+          <Route path="/emr" nest>
+            <EmrEntry />
           </Route>
         </DashboardLayout>
       </Switch>

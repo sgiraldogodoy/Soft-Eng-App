@@ -16,7 +16,11 @@ export const appointmentRouter = router({
     }),
 
   getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.appointment.findMany();
+    return ctx.db.appointment.findMany({
+      include: {
+        visit: true,
+      },
+    });
   }),
 
   getOne: publicProcedure
@@ -25,6 +29,11 @@ export const appointmentRouter = router({
       return ctx.db.appointment.findUnique({
         where: {
           id: input.id,
+        },
+        include: {
+          patient: true,
+          location: true,
+          visit: true,
         },
       });
     }),

@@ -6,6 +6,7 @@ import {
   LogOut,
   MapIcon,
   PencilRuler,
+  StethoscopeIcon,
   UserCog,
   AreaChart,
 } from "lucide-react";
@@ -162,6 +163,9 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
             <SidebarButton link="/patients" name="Patients">
               <BookHeart />
             </SidebarButton>
+            <SidebarButton link="/emr" name="EMR">
+              <StethoscopeIcon />
+            </SidebarButton>
             <SidebarButton link="/database" name="Database">
               <DatabaseIcon />
             </SidebarButton>
@@ -176,7 +180,7 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
           </nav>
         </aside>
 
-        <div className="flex-1 w-full overflow-auto relative bg-sky-100">
+        <div className="flex-1 w-full overflow-auto relative z-0 bg-sky-100">
           {children}
         </div>
       </div>

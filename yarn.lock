@@ -7592,6 +7592,7 @@ __metadata:
     react-hot-toast: "npm:^2.4.1"
     react-qr-code: "npm:^2.0.12"
     react-qrcode-logo: "npm:^2.10.0"
+    react-resizable-panels: "npm:^2.0.18"
     react-router-bootstrap: "npm:^0.26.2"
     react-zoom-pan-pinch: "npm:^3.1.0"
     rechart: "npm:^0.0.1"
@@ -11319,6 +11320,16 @@ __metadata:
     "@types/react":
       optional: true
   checksum: f0646ac384ce3852d1f41e30a9f9e251b11cf3b430d1d114c937c8fa7f90a895c06378d0d6b6ff0b2d00cbccf15e845921944fd6074ae67a0fb347a718106d88
+  languageName: node
+  linkType: hard
+
+"react-resizable-panels@npm:^2.0.18":
+  version: 2.0.18
+  resolution: "react-resizable-panels@npm:2.0.18"
+  peerDependencies:
+    react: ^16.14.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.14.0 || ^17.0.0 || ^18.0.0
+  checksum: cbb26426fc2b0083b6f65122ccb75365ed83b009b9816b4f1bcd0b3895a3e842679b734c3ae3bf403f9205321d3d3d54c2f021b5cd3453d9bcc345299ba42461
   languageName: node
   linkType: hard
 

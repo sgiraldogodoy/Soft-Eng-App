@@ -19,8 +19,11 @@ import { patient } from "./routes/users/patient.ts";
 import { staffRouter } from "./routes/users/staff.ts";
 import { appointmentRouter } from "./routes/appointments/appointment.ts";
 import { visitRouter } from "./routes/appointments/visit.ts";
+import { recordRouter } from "./routes/appointments/record.ts";
+import { vitalsRouter } from "./routes/appointments/vitals.ts";
 import { EquipmentRouter } from "./routes/services/equipmentRouter.ts";
 import { FoodRouter } from "./routes/services/foodRouter.ts";
+import { diagnosisRouter } from "./routes/appointments/diagnosis.ts";
 import { rfidRouter } from "./routes/users/rfid.ts";
 
 export const appRouter = router({
@@ -50,7 +53,9 @@ export const appRouter = router({
   //appointment routers
   appointment: appointmentRouter,
   visit: visitRouter,
-  //visitNote: visitNoteRouter,
+  record: recordRouter,
+  vitals: vitalsRouter,
+  diagnosis: diagnosisRouter,
 
   //node and edge routers
   node: Node,

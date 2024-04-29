@@ -4,7 +4,7 @@ export default function BackgroundWave() {
       <img
         src="/wave.svg"
         alt="Wave"
-        className="z-0 absolute bottom-0 left-0"
+        className="-z-10 absolute bottom-0 left-0"
       />
     </>
   );
