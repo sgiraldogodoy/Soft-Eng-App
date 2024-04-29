@@ -25,7 +25,7 @@ export default function HelpMenu() {
 
   return (
     <>
-      <Card className="bg-white/90 w-auto h-[95%] m-2 rounded-lg shadow-md">
+      <Card className="bg-white/60 w-auto h-[95%] m-2 rounded-lg shadow-md">
         <CardHeader>
           <CardTitle className="text-2xl flex justify-center">
             User Manual
@@ -35,7 +35,7 @@ export default function HelpMenu() {
           </div>
         </CardHeader>
         <CardContent>
-          <CardDescription className="flex w-full grid grid-cols-3 gap-4">
+          <CardDescription className="flex w-full grid grid-cols-3 gap-y-4">
             <Accordion
               type="single"
               collapsible
@@ -50,11 +50,11 @@ export default function HelpMenu() {
             </Accordion>
 
             <Button variant="ghost" onClick={goback} className="h-auto w-full">
-              <Card className="w-full h-fit p-2 m-2 shadow-md">
+              <Card className="w-full h-fit shadow-md">
                 <CardHeader>
                   <CardTitle>Patient</CardTitle>
                 </CardHeader>
-                <CardContent className="flex justify-items-start">
+                <CardContent className="text-left">
                   <CardDescription>
                     Patients Features:
                     <ul className="ps-5 list-disc">
@@ -67,36 +67,41 @@ export default function HelpMenu() {
               </Card>
             </Button>
 
-            <Card className="w-full h-fit p-2 m-2 shadow-md">
-              <CardHeader>
-                <CardTitle>Staff</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Staff Features:
-                  <ul className="ps-5 list-disc">
-                    <li>Create Service Requests</li>
-                    <li>Patient Management</li>
-                    <li>Create Patients and Staff</li>
-                  </ul>
-                </CardDescription>
-              </CardContent>
-            </Card>
-            <Card className="w-full h-fit p-2 m-2 shadow-md">
-              <CardHeader>
-                <CardTitle>Admin</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription>
-                  Admin Features:
-                  <ul className="ps-5 list-disc">
-                    <li>Map Editing</li>
-                    <li>Database Management</li>
-                    <li>Create Users</li>
-                  </ul>
-                </CardDescription>
-              </CardContent>
-            </Card>
+            <Button variant="ghost" onClick={goback} className="h-auto w-full">
+              <Card className="w-full h-fit shadow-md">
+                <CardHeader>
+                  <CardTitle>Staff</CardTitle>
+                </CardHeader>
+                <CardContent className="text-left">
+                  <CardDescription>
+                    Staff Features:
+                    <ul className="ps-5 list-disc">
+                      <li>Create Service Requests</li>
+                      <li>Patient Management</li>
+                      <li>Create Patients and Staff</li>
+                    </ul>
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </Button>
+
+            <Button variant="ghost" onClick={goback} className="h-auto w-full">
+              <Card className="w-full h-fit shadow-md">
+                <CardHeader>
+                  <CardTitle>Admin</CardTitle>
+                </CardHeader>
+                <CardContent className="text-left">
+                  <CardDescription>
+                    Admin Features:
+                    <ul className="ps-5 list-disc">
+                      <li>Map Editing</li>
+                      <li>Database Management</li>
+                      <li>Create Users</li>
+                    </ul>
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            </Button>
           </CardDescription>
         </CardContent>
       </Card>
