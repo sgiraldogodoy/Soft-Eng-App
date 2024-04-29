@@ -50,6 +50,8 @@ export const serviceRouter = router({
           it: true,
           religious: true,
           interpreter: true,
+          equipment: true,
+          food: true,
         },
       });
     }),
@@ -70,6 +72,8 @@ export const serviceRouter = router({
         religious: true,
         interpreter: true,
         assignee: true,
+        equipment: true,
+        food: true,
       },
     });
   }),

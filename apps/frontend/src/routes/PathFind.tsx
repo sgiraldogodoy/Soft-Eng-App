@@ -6,7 +6,7 @@ import { Settings2 } from "lucide-react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { ArrowLeft } from "lucide-react";
 import { EndNodeAutocomlete } from "@/components/EndNodeAutocomlete.tsx";
-import FloorSelection from "@/components/FloorSelection.tsx";
+import FloorSelection2 from "@/components/FloorSelection2.tsx";
 import {
   Popover,
   PopoverContent,
@@ -15,7 +15,9 @@ import {
 import PathfindSettings from "@/components/PathfindSettings.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { TextNavigation } from "@/components/TextNav.tsx";
-import MapKeyAccordion from "@/components/MapKeyAccordion.tsx";
+import MapKeyAccordion from "@/components/MapKeyPopover.tsx";
+import { QRCode } from "react-qrcode-logo";
+import smartPhoneLogo from "../../public/smartphone.png";
 
 import { Link } from "wouter";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
@@ -164,17 +166,34 @@ export default function PathFind() {
             </PopoverContent>
           </Popover>
         </div>
+        <div className="flex backdrop-blur-[4px] bg-white/90 px-[10px] py-[10px] shadow-inner drop-shadow-md rounded-[80px]">
+          <MapKeyAccordion />
+        </div>
       </div>
 
-      <div className="absolute flex items-center gap-[2px] text-xl font-bold bottom-10 right-8">
-        <FloorSelection onFloorClick={handleFloorClick} />
+      <div className="absolute flex items-center gap-[2px] text-xl font-bold bottom-8 right-8">
+        <FloorSelection2 onFloorClick={handleFloorClick} />
       </div>
       {pathData && pathData.length > 0 && (
-        <div className="absolute bottom-2 left-2 backdrop-blur-[4px] bg-white/80 rounded-[10px] shadown-inner drop-shadow-md">
-          <TextNavigation nodes={pathData} />
-        </div>
+        <>
+          <div className="absolute bottom-2 left-2 backdrop-blur-[4px] bg-white/80 rounded-[10px] shadown-inner drop-shadow-md w-[22vw]">
+            <TextNavigation
+              nodes={pathData}
+              onFloorClick={handleFloorClick}
+              onPhone={false}
+            />
+          </div>
+          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white/80 p-1 rounded-[10px]">
+            <QRCode
+              value={`${import.meta.env.PROD ? "https://cs3733teamq.org" : "http://localhost:3000"}/phonenav/${startNode}/${goalNode}/${algorithm}/${wheelchair}`}
+              size={100}
+              logoImage={smartPhoneLogo}
+              removeQrCodeBehindLogo={true}
+              logoPadding={2}
+            />
+          </div>
+        </>
       )}
-      <MapKeyAccordion />
     </div>
   );
 }

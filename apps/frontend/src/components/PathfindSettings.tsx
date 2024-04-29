@@ -91,6 +91,7 @@ export default function PathfindSettings({
       <div className="flex flex-col gap-3">
         <div className="flex flex-row gap-2 items-center ">
           <p> Wheelchair Accesible? ({toggleWheelchar})</p>
+
           <Toggle
             variant="outlinefilledacc"
             onClick={() => {

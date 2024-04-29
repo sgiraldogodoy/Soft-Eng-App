@@ -13,16 +13,13 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input.tsx";
 import { Link } from "wouter";
+import { trpc } from "@/utils/trpc.ts";
+import { toast } from "sonner";
+import { DateTime } from "luxon";
 
 const formSchema = z.object({
-  fullName: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
-  dob: z.string().pipe(
-    z.coerce.date().max(new Date(), {
-      message: "Date must be in the past.",
-    }),
-  ),
+  fullName: z.string(),
+  dob: z.string().date(),
   documentIdNumber: z.string(),
 });
 
@@ -31,13 +28,44 @@ interface Props {
 }
 
 export default function CheckInForm({ onOpenChange }: Props) {
+  const updateCheckIn = trpc.appointment.updateCheckIn.useMutation();
+  const utils = trpc.useUtils();
   const form = useForm<z.input<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      fullName: "",
+      dob: DateTime.now().toISODate(),
+      documentIdNumber: "",
+    },
   });
 
-  const onSubmit = useCallback((data: z.input<typeof formSchema>) => {
-    console.log(data);
-  }, []);
+  const onSubmit = useCallback(
+    //(data: z.input<typeof formSchema>) => {console.log(data);}, []);
+    async (data: z.input<typeof formSchema>) => {
+      const checkInToAppointment = updateCheckIn.mutateAsync(
+        {
+          documentId: data.documentIdNumber,
+          dob: data.dob,
+          name: data.fullName,
+        },
+        {
+          onSuccess: () => {
+            utils.appointment.getAll.invalidate();
+          },
+        },
+      );
+
+      toast.promise(checkInToAppointment, {
+        success: (d) =>
+          `Checked In to your appointment at: ${DateTime.fromJSDate(d.appointmentTime).toLocaleString(DateTime.TIME_SIMPLE)}`,
+        loading: "Checking In.",
+        error: "Error checking in.",
+      });
+
+      form.reset();
+    },
+    [updateCheckIn, utils, form],
+  );
 
   return (
     <Form {...form}>
@@ -52,12 +80,7 @@ export default function CheckInForm({ onOpenChange }: Props) {
             render={({ field }) => (
               <FormItem className="w-full flex flex-col h-full justify-between flex-1">
                 <FormLabel>Full Name</FormLabel>
-                <Input
-                  className="w-full"
-                  placeholder="John Appleseed"
-                  type="text"
-                  {...field}
-                />
+                <Input className="w-full" type="text" {...field} />
                 <FormDescription>Enter your full legal name</FormDescription>
                 <FormMessage />
               </FormItem>
@@ -81,9 +104,9 @@ export default function CheckInForm({ onOpenChange }: Props) {
             render={({ field }) => (
               <FormItem className="flex flex-col h-full justify-between flex-1">
                 <FormLabel>ID Number</FormLabel>
-                <Input placeholder="123456789" type="text" {...field} />
+                <Input placeholder="" type="text" {...field} />
                 <FormDescription>
-                  Enter your driver&apos;s license or passport number
+                  Enter your driver&apos;s license, SSN or passport number
                 </FormDescription>
                 <FormMessage />
               </FormItem>
