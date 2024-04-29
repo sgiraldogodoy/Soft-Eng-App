@@ -1,51 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Play, Pause, StopCircle } from "lucide-react";
+import translateText from "./GoogleTranslate";
 
 const TextToSpeech = ({ text }: { text: string }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(
     null,
   );
+  const [rate, setRate] = useState(0.7);
+  const [targetLanguage, setTargetLanguage] = useState("en");
+
+  const handleTranslate = useCallback(async () => {
+    if (text) {
+      const translatedText = await translateText(text, targetLanguage);
+      const u = new SpeechSynthesisUtterance(translatedText);
+      u.lang = targetLanguage;
+
+      setUtterance(u);
+    }
+  }, [text, targetLanguage]);
 
   useEffect(() => {
-    const synth = window.speechSynthesis;
-    const u = new SpeechSynthesisUtterance(text);
-
-    setUtterance(u);
-
-    return () => {
-      synth.cancel();
-    };
-  }, [text]);
+    handleTranslate();
+  }, [handleTranslate]);
 
   const handlePlay = () => {
-    const synth = window.speechSynthesis;
-
     if (isPaused) {
-      synth.resume();
+      window.speechSynthesis.resume();
     }
 
     if (!utterance) {
       return;
     }
 
-    synth.speak(utterance);
+    utterance.rate = rate;
+
+    window.speechSynthesis.speak(utterance);
 
     setIsPaused(false);
   };
 
   const handlePause = () => {
-    const synth = window.speechSynthesis;
-
-    synth.pause();
+    window.speechSynthesis.pause();
 
     setIsPaused(true);
   };
 
   const handleStop = () => {
-    const synth = window.speechSynthesis;
-
-    synth.cancel();
+    window.speechSynthesis.cancel();
 
     setIsPaused(false);
   };
@@ -63,6 +65,37 @@ const TextToSpeech = ({ text }: { text: string }) => {
         <button onClick={handleStop}>
           <StopCircle />
         </button>
+      </div>
+      <div className="flex flex-col">
+        <label>
+          Language:
+          <select
+            value={targetLanguage}
+            onChange={(e) => setTargetLanguage(e.target.value)}
+          >
+            <option value="en-US">English</option>
+            <option value="pt-BR">Portuguese</option>
+            <option value="ru-RU">Russian</option>
+            <option value="zh-CN">Chinese</option>
+            <option value="ar-SA">Arabic</option>
+            <option value="es-ES">Spanish</option>
+            <option value="fr-FR">French</option>
+            <option value="de-DE">German</option>
+            <option value="it-IT">Italian</option>
+            <option value="ja-JP">Japanese</option>
+          </select>
+        </label>
+        <label>
+          Rate:
+          <input
+            type="range"
+            min="0.5"
+            max="2"
+            step="0.1"
+            value={rate}
+            onChange={(e) => setRate(Number(e.target.value))}
+          />
+        </label>
       </div>
     </div>
   );
