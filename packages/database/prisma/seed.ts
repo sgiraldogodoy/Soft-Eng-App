@@ -8,6 +8,21 @@ const prisma = new PrismaClient();
 async function main() {
   const nodes: NodeCreateManyInput[] = [];
 
+  function randomStatus(number: number): string {
+    switch (number % 4) {
+      case 0:
+        return "UNASSIGNED";
+      case 1:
+        return "ASSIGNED";
+      case 2:
+        return "IN_PROGRESS";
+      case 3:
+        return "COMPLETED";
+      default:
+        return "UNASSIGNED";
+    }
+  }
+
   // Parse nodes CSV
   const nodeStream = readline.createInterface({
     input: fs.createReadStream("prisma/nodes.csv"),
@@ -74,6 +89,7 @@ async function main() {
 
   await prisma.flower.deleteMany();
   for (let i = 0; i < 10; i++) {
+    const status = randomStatus(i);
     await prisma.flower.create({
       data: {
         flower: "Pretty Flower",
@@ -83,7 +99,7 @@ async function main() {
             type: "flower",
             login: "Ace",
             priority: "HIGH",
-            status: "UNASSIGNED",
+            status: status,
             note: "Note",
           },
         },

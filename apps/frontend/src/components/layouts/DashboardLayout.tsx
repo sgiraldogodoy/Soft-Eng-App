@@ -8,6 +8,7 @@ import {
   PencilRuler,
   StethoscopeIcon,
   UserCog,
+  AreaChart,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -126,6 +127,9 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
             </SidebarButton>
             <SidebarButton link="/database" name="Database">
               <DatabaseIcon />
+            </SidebarButton>
+            <SidebarButton link="/analytics" name="Analytics">
+              <AreaChart />
             </SidebarButton>
           </nav>
           <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
