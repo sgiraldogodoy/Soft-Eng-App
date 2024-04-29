@@ -1,46 +1,21 @@
-import React, { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button.tsx";
 import { ArrowLeft } from "lucide-react";
-import { PatientInfoPDF } from "@/components/PDFMaker.tsx";
-import { renderToString } from "react-dom/server";
+//import { PDFDownloadLink } from "@react-pdf/renderer";
+//import {PatientIntoPDF} from "@/components/PDFMaker.tsx";
 
-const patientData = {
-  name: "John Doe",
-  age: 30,
-  gender: "Male",
-  address: "123 Main Street, City, Country",
-};
+// const patientData = {
+//     name: "John Doe",
+//     age: 30,
+//     gender: "Male",
+//     address: "123 Main Street, City, Country",
+// };
+// const PDF = () =>{
+//     PatientIntoPDF {...patientData};
+//     );
+// };
 
-export default function PDFTest() {
-  const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
-
-  const generatePdf = () => {
-    // Render the PatientInfoPDF component into a string
-    const pdfContent = renderToString(<PatientInfoPDF patient={patientData} />);
-
-    // Create a new Blob containing the PDF data
-    const blob = new Blob([pdfContent], { type: "application/pdf" });
-    setPdfBlob(blob);
-  };
-
-  const downloadPdf = () => {
-    if (pdfBlob) {
-      // Create a URL for the Blob
-      const url = URL.createObjectURL(pdfBlob);
-
-      // Create a temporary <a> element to trigger the download
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "patient_info.pdf";
-      document.body.appendChild(a);
-      a.click();
-
-      // Remove the temporary <a> element
-      document.body.removeChild(a);
-    }
-  };
-
+export function TestPDF() {
   return (
     <div className="flex flex-col w-full justify-center content-center items-center bg-slate-50">
       <img src={"/cut-corridor.jpeg"} alt="BHW Corridor" className="" />
@@ -51,15 +26,14 @@ export default function PDFTest() {
           </h1>
         </div>
       </div>
-      <div>
-        {/* Render the PatientInfoPDF component with the patient data */}
-        <PatientInfoPDF patient={patientData} />
-      </div>
       <div className="flex justify-center mt-4">
-        <Button onClick={generatePdf} className="mr-2">
-          Generate PDF
-        </Button>
-        <Button onClick={downloadPdf}>Download PDF</Button>
+        {/*<div>*/}
+        {/*  <PDFDownloadLink document={<PDF />} fileName="somename.pdf">*/}
+        {/*    {({ loading }) =>*/}
+        {/*      loading ? "Loading document..." : "Download now!"*/}
+        {/*    }*/}
+        {/*  </PDFDownloadLink>*/}
+        {/*</div>*/}
       </div>
       <div className="fixed top-0 right-0 mt-4 mr-4 border-2 rounded-lg border-black">
         <Button

@@ -3435,6 +3435,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/file-saver@npm:^2":
+  version: 2.0.7
+  resolution: "@types/file-saver@npm:2.0.7"
+  checksum: c3d1cd80eab1214767922cabac97681f3fb688e82b74890450d70deaca49537949bbc96d80d363d91e8f0a4752c7164909cc8902d9721c5c4809baafc42a3801
+  languageName: node
+  linkType: hard
+
 "@types/http-cache-semantics@npm:*":
   version: 4.0.4
   resolution: "@types/http-cache-semantics@npm:4.0.4"
@@ -7076,6 +7083,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"file-saver@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "file-saver@npm:2.0.5"
+  checksum: fbba443d9b682fec0be6676c048a7ac688b9bd33b105c02e8e1a1cb3e354ed441198dc1f15dcbc137fa044bea73f8a7549f2617e3a952fa7d96390356d54a7c3
+  languageName: node
+  linkType: hard
+
 "fill-range@npm:^7.0.1":
   version: 7.0.1
   resolution: "fill-range@npm:7.0.1"
@@ -7295,6 +7309,7 @@ __metadata:
     "@trpc/client": "npm:11.0.0-next.327"
     "@trpc/react-query": "npm:11.0.0-next.327"
     "@trpc/server": "npm:11.0.0-next.327"
+    "@types/file-saver": "npm:^2"
     "@types/luxon": "npm:^3"
     "@types/node": "npm:^20.2.5"
     "@types/pako": "npm:^2"
@@ -7320,6 +7335,7 @@ __metadata:
     eslint-config-custom: "workspace:*"
     eslint-plugin-react-hooks: "npm:^4.6.0"
     eslint-plugin-react-refresh: "npm:^0.4.1"
+    file-saver: "npm:^2.0.5"
     framer-motion: "npm:^11.0.28"
     localforage: "npm:^1.10.0"
     lucide-react: "npm:^0.363.0"

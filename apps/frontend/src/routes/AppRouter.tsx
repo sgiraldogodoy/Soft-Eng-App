@@ -10,7 +10,7 @@ import AboutPage from "./AboutPage";
 import PatientIntegration from "./PatientIntegration";
 import { Settings } from "@/routes/Settings.tsx";
 //import CreditPage from "@/routes/CreditPage.tsx";
-import PDFTest from "@/components/PDFTest.tsx";
+import { TestPDF } from "@/components/PDFTest.tsx";
 import Music from "@/routes/MusicPlayerEasterEgg.tsx";
 import PhoneTextToNav from "@/routes/PhoneTextToNav.tsx";
 import Analytics from "@/routes/Analytics.tsx";
@@ -24,7 +24,7 @@ export function AppRouter() {
       <Switch>
         <Route path="/" component={HomePage} />
         <Route path="/about" component={AboutPage} />
-        <Route path="/credit" component={PDFTest} />
+        <Route path="/credit" component={TestPDF} />
         <Route
           path="/phonenav/:startNodeId/:endNodeId/:algorithm/:wheelchair"
           component={PhoneTextToNav}

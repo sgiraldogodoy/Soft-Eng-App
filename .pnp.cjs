@@ -4563,6 +4563,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/file-saver", [\
+      ["npm:2.0.7", {\
+        "packageLocation": "./.yarn/cache/@types-file-saver-npm-2.0.7-39f33a4b39-c3d1cd80ea.zip/node_modules/@types/file-saver/",\
+        "packageDependencies": [\
+          ["@types/file-saver", "npm:2.0.7"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/http-cache-semantics", [\
       ["npm:4.0.4", {\
         "packageLocation": "./.yarn/cache/@types-http-cache-semantics-npm-4.0.4-6d4f413ddd-a59566cff6.zip/node_modules/@types/http-cache-semantics/",\
@@ -8740,6 +8749,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["file-saver", [\
+      ["npm:2.0.5", {\
+        "packageLocation": "./.yarn/cache/file-saver-npm-2.0.5-2c3bc40d53-fbba443d9b.zip/node_modules/file-saver/",\
+        "packageDependencies": [\
+          ["file-saver", "npm:2.0.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["fill-range", [\
       ["npm:7.0.1", {\
         "packageLocation": "./.yarn/cache/fill-range-npm-7.0.1-b8b1817caa-e260f7592f.zip/node_modules/fill-range/",\
@@ -8998,6 +9016,7 @@ const RAW_RUNTIME_STATE =
           ["@trpc/client", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:11.0.0-next.327"],\
           ["@trpc/react-query", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:11.0.0-next.327"],\
           ["@trpc/server", "npm:11.0.0-next.327"],\
+          ["@types/file-saver", "npm:2.0.7"],\
           ["@types/luxon", "npm:3.4.2"],\
           ["@types/node", "npm:20.11.5"],\
           ["@types/pako", "npm:2.0.3"],\
@@ -9023,6 +9042,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["eslint-plugin-react-hooks", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:4.6.0"],\
           ["eslint-plugin-react-refresh", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.4.5"],\
+          ["file-saver", "npm:2.0.5"],\
           ["framer-motion", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:11.0.28"],\
           ["localforage", "npm:1.10.0"],\
           ["lucide-react", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.363.0"],\

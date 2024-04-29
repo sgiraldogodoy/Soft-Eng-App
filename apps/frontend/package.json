@@ -53,6 +53,7 @@
     "date-fns": "^3.6.0",
     "dropdown-menu": "^0.1.1",
     "embla-carousel-react": "^8.0.0",
+    "file-saver": "^2.0.5",
     "framer-motion": "^11.0.28",
     "localforage": "^1.10.0",
     "lucide-react": "^0.363.0",
@@ -88,6 +89,7 @@
     "zod": "^3.23.4"
   },
   "devDependencies": {
+    "@types/file-saver": "^2",
     "@types/luxon": "^3",
     "@types/node": "^20.2.5",
     "@types/pako": "^2",

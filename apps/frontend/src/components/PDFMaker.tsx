@@ -29,26 +29,30 @@ const styles = StyleSheet.create({
   },
 });
 
-interface Patient {
+export const PatientIntoPDF = ({
+  name,
+  age,
+  gender,
+  address,
+}: {
   name: string;
   age: number;
   gender: string;
   address: string;
-}
-export const PatientInfoPDF: React.FC<{ patient: Patient }> = ({ patient }) => (
-  <PDFViewer style={{ width: "100%", height: "100vh" }}>
-    <Document>
-      <Page size="A4" style={styles.page}>
-        <View style={styles.section}>
-          <Text style={styles.heading}>Patient Information</Text>
-          <Text style={styles.text}>Name: {patient.name}</Text>
-          <Text style={styles.text}>Age: {patient.age}</Text>
-          <Text style={styles.text}>Gender: {patient.gender}</Text>
-          <Text style={styles.text}>Address: {patient.address}</Text>
-        </View>
-      </Page>
-    </Document>
-  </PDFViewer>
-);
-
-export default PatientInfoPDF;
+}) => {
+  return (
+    <PDFViewer style={{ width: "100%", height: "100vh" }}>
+      <Document>
+        <Page size="A4" style={styles.page}>
+          <View style={styles.section}>
+            <Text style={styles.heading}>Patient Information</Text>
+            <Text style={styles.text}>Name: {name}</Text>
+            <Text style={styles.text}>Age: {age}</Text>
+            <Text style={styles.text}>Gender: {gender}</Text>
+            <Text style={styles.text}>Address: {address}</Text>
+          </View>
+        </Page>
+      </Document>
+    </PDFViewer>
+  );
+};
