@@ -21,12 +21,14 @@ import { appointmentRouter } from "./routes/appointments/appointment.ts";
 import { visitRouter } from "./routes/appointments/visit.ts";
 import { EquipmentRouter } from "./routes/services/equipmentRouter.ts";
 import { FoodRouter } from "./routes/services/foodRouter.ts";
+import { rfidRouter } from "./routes/users/rfid.ts";
 
 export const appRouter = router({
   //user routers
   user: userRouter,
   patient: patient,
   staff: staffRouter,
+  rfid: rfidRouter,
 
   //service routers
   service: serviceRouter,
