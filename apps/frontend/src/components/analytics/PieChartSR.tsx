@@ -21,6 +21,8 @@ export default function PieChartSR({ selected }: PieChartSRProps) {
   const SecurityRequest = allRequest?.filter((r) => r.security);
   const TransportRequest = allRequest?.filter((r) => r.transport);
   const VisitorRequest = allRequest?.filter((r) => r.visitor);
+  const FoodRequest = allRequest?.filter((r) => r.food);
+  const EquipmentRequest = allRequest?.filter((r) => r.equipment);
 
   const COLORS = [
     "#FF5733",
@@ -37,6 +39,8 @@ export default function PieChartSR({ selected }: PieChartSRProps) {
     "#33FF66",
     "#FF33A8",
     "#3366FF",
+    "#DE87E5",
+    "#8B00E6",
   ];
   const STATUSCOLORS = ["#87CEEB", "#FFD700", "#FFA500", "#008000"];
 
@@ -60,6 +64,8 @@ export default function PieChartSR({ selected }: PieChartSRProps) {
     { name: "Security Request", value: SecurityRequest?.length },
     { name: "Transport Request", value: TransportRequest?.length },
     { name: "Visitor Request", value: VisitorRequest?.length },
+    { name: "Food Request", value: FoodRequest?.length },
+    { name: "Equipment Request", value: EquipmentRequest?.length },
   ];
   let data02 = [
     {
@@ -258,6 +264,38 @@ export default function PieChartSR({ selected }: PieChartSRProps) {
     {
       name: "Visitor Request Completed",
       value: VisitorRequest?.filter((r) => r.status === "COMPLETED").length,
+    },
+    {
+      name: "Food Request Unassigned",
+      value: FoodRequest?.filter((r) => r.status === "UNASSIGNED").length,
+    },
+    {
+      name: "Food Request Assigned",
+      value: FoodRequest?.filter((r) => r.status === "ASSIGNED").length,
+    },
+    {
+      name: "Food Request In Progress",
+      value: FoodRequest?.filter((r) => r.status === "IN_PROGRESS").length,
+    },
+    {
+      name: "Food Request Completed",
+      value: FoodRequest?.filter((r) => r.status === "COMPLETED").length,
+    },
+    {
+      name: "Equipment Request Unassigned",
+      value: EquipmentRequest?.filter((r) => r.status === "UNASSIGNED").length,
+    },
+    {
+      name: "Equipment Request Assigned",
+      value: EquipmentRequest?.filter((r) => r.status === "ASSIGNED").length,
+    },
+    {
+      name: "Equipment Request In Progress",
+      value: EquipmentRequest?.filter((r) => r.status === "IN_PROGRESS").length,
+    },
+    {
+      name: "Equipment Request Completed",
+      value: EquipmentRequest?.filter((r) => r.status === "COMPLETED").length,
     },
   ];
 

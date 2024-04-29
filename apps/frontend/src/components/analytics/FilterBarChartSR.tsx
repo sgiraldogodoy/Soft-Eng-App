@@ -59,6 +59,8 @@ export default function FilterBarChartSR({ selected }: FilterBarChartSRProps) {
   const SecurityRequest = allRequest?.filter((r) => r.security);
   const TransportRequest = allRequest?.filter((r) => r.transport);
   const VisitorRequest = allRequest?.filter((r) => r.visitor);
+  const FoodRequest = allRequest?.filter((r) => r.food);
+  const EquipmentRequest = allRequest?.filter((r) => r.equipment);
 
   let data = [
     {
@@ -169,6 +171,23 @@ export default function FilterBarChartSR({ selected }: FilterBarChartSRProps) {
       InProgress: VisitorRequest?.filter((r) => r.status === "IN_PROGRESS")
         .length,
       Completed: VisitorRequest?.filter((r) => r.status === "COMPLETED").length,
+    },
+    {
+      name: "Food Request",
+      Unassigned: FoodRequest?.filter((r) => r.status === "UNASSIGNED").length,
+      Assigned: FoodRequest?.filter((r) => r.status === "ASSIGNED").length,
+      InProgress: FoodRequest?.filter((r) => r.status === "IN_PROGRESS").length,
+      Completed: FoodRequest?.filter((r) => r.status === "COMPLETED").length,
+    },
+    {
+      name: "Equipment Request",
+      Unassigned: EquipmentRequest?.filter((r) => r.status === "UNASSIGNED")
+        .length,
+      Assigned: EquipmentRequest?.filter((r) => r.status === "ASSIGNED").length,
+      InProgress: EquipmentRequest?.filter((r) => r.status === "IN_PROGRESS")
+        .length,
+      Completed: EquipmentRequest?.filter((r) => r.status === "COMPLETED")
+        .length,
     },
   ];
 
