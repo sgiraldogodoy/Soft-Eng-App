@@ -351,9 +351,11 @@ export default function PieChartSR({ selected }: PieChartSRProps) {
           </Pie>
         </PieChart>
       </ResponsiveContainer>
-      <div className="absolute top-6 right-6">
-        <ul className="list-none p-0">{legendItems}</ul>
-      </div>
+      {selected && (
+        <div className="absolute top-6 right-6">
+          <ul className="list-none p-0">{legendItems}</ul>
+        </div>
+      )}
     </>
   );
 }
