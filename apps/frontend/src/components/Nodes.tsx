@@ -400,7 +400,8 @@ export function Nodes({
       (node) =>
         !path.some((p) => p.id === node.id) ||
         node.id === goalNode ||
-        node.id === startNode,
+        node.id === startNode ||
+        node.type === "ELEV",
     );
   }
 

@@ -6,6 +6,15 @@ import { ArrowDown, MapPin } from "lucide-react";
 const origImageWidth = 5000;
 const origImageHeight = 3400;
 
+type Floor = "L1" | "L2" | "1" | "2" | "3";
+const FLOOR_URLS: Record<Floor, string> = {
+  L2: "/00_thelowerlevel2.png",
+  L1: "/00_thelowerlevel1.png",
+  "1": "/01_thefirstfloor.png",
+  "2": "/02_thesecondfloor.png",
+  "3": "/03_thethirdfloor.png",
+};
+
 interface LineProps {
   path: Node[];
   nodes: Node[];
@@ -14,6 +23,7 @@ interface LineProps {
   dragOffset: { x: number; y: number };
   scale: number;
   floor: string;
+  onElevClick?: (floor: string, imgUrl: string) => void;
 }
 
 const floorColors = [
@@ -56,6 +66,7 @@ export function Lines({
   floor,
   scale,
   dragOffset,
+  onElevClick,
 }: LineProps) {
   const pathColor = useMemo(() => {
     return getFloorColor(floor);
@@ -180,7 +191,7 @@ export function Lines({
           scale,
         );
 
-        let floorString;
+        let floorString = "";
         if (index % 2 === 0) {
           floorString = `${elevatorPoints[index + 1].floor}`;
         } else floorString = `${elevatorPoints[index - 1].floor}`;
@@ -211,6 +222,10 @@ export function Lines({
                 left: scaledX - 10 * scale,
               }}
               className=""
+              onClick={() => {
+                if (onElevClick)
+                  onElevClick(floorString, FLOOR_URLS[floorString as Floor]);
+              }}
             >
               <circle
                 cx={10 * scale}
