@@ -1,4 +1,4 @@
-// import { Button } from "@/components/ui/button.tsx";
+// import { ButtonExample } from "@/components/ui/button.tsx";
 // import React from "react";
 // import type { FlowerFormFields } from "@/routes/FlowerRequest.tsx";
 //
@@ -60,13 +60,13 @@
 //             Enter your message to the patient here
 //           </p>
 //         </label>
-//         <Button
+//         <ButtonExample
 //           className="mt-5 w-24 bg-gradient-to-r from-yellow-300 to-yellow-400 text-theme-dark hover:bg-gradient-to-l shadow-lg shadow-theme-yellow/30"
 //           disabled={Object.values(flowerState).some((v) => v === "")}
 //         >
 //           {" "}
 //           Submit <input type={"submit"} value={""} />{" "}
-//         </Button>
+//         </ButtonExample>
 //       </form>
 //     </div>
 //   );
