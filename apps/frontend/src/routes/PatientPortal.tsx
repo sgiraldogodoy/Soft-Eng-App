@@ -17,6 +17,7 @@ import { ScheduleAppointmentDialogue } from "@/components/ScheduleAppointmentDia
 import { CareTeam } from "@/components/CareTeam.tsx";
 import { NextAppointment } from "@/components/NextAppointment.tsx";
 import UpcomingAppointmentsList from "@/components/UpcomingAppointmentsList.tsx";
+import MyRecordsList from "@/components/MyRecordsList";
 
 // import {ScheduleAppointmentDialogue} from "@/components/ScheduleAppointmentDialogue.tsx";
 
@@ -124,7 +125,7 @@ export function PatientPortal() {
                 <UpcomingAppointmentsList />
               </div>
 
-              <Card className="flex-1">Here Records</Card>
+              <MyRecordsList />
             </div>
           </Suspense>
         </div>
