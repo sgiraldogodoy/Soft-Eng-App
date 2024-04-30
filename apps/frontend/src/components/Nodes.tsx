@@ -23,6 +23,7 @@ interface NodesProps {
   floor: string;
   filter?: boolean;
   dragOffset: { x: number; y: number };
+  setDragOffset: (x: number, y: number) => void;
   scale: number;
   editable?: boolean;
   typeEdit?: string;
@@ -43,6 +44,7 @@ export function Nodes({
   floor,
   filter,
   dragOffset,
+  setDragOffset,
   scale,
   editable,
   typeEdit,
@@ -454,11 +456,19 @@ export function Nodes({
       nodePan.y = -limitY - dragOffset.y;
     }
 
-    dragOffset.x += nodePan.x;
-    dragOffset.y += nodePan.y;
+    setDragOffset(dragOffset.x + nodePan.x, dragOffset.y + nodePan.y);
 
     panRef.current = requestAnimationFrame(moveMap);
-  }, [doPan, dragOffset, imgHeight, imgWidth, nodePan, scale]);
+  }, [
+    doPan,
+    dragOffset.x,
+    dragOffset.y,
+    imgHeight,
+    imgWidth,
+    nodePan,
+    scale,
+    setDragOffset,
+  ]);
 
   useEffect(() => {
     if (doPan) {
