@@ -30,7 +30,7 @@ export default function HelpMenu() {
 
   return (
     <>
-      <Card className="bg-white/60 w-auto h-[95%] m-2 rounded-lg shadow-md">
+      <Card className="bg-white/60 w-auto h-auto m-2 rounded-lg shadow-md">
         <CardHeader>
           <CardTitle className="text-2xl flex justify-center">
             User Manual
