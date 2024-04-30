@@ -404,14 +404,14 @@ export function Nodes({
     const mouseY = e.clientY;
 
     if (mouseX <= rect.left + marginX) {
-      dragOffset.x += 10;
+      dragOffset.x += 10 * ((marginX - (mouseX - rect.left)) / marginX);
     } else if (mouseX >= rect.right - marginX) {
-      dragOffset.x -= 10;
+      dragOffset.x -= 10 * ((marginX - (rect.right - mouseX)) / marginX);
     }
     if (mouseY <= rect.top + marginY) {
-      dragOffset.y += 10;
+      dragOffset.y += 10 * ((marginY - (mouseY - rect.top)) / marginY);
     } else if (mouseY >= rect.bottom - marginY) {
-      dragOffset.y -= 10;
+      dragOffset.y -= 10 * ((marginY - (rect.bottom - mouseY)) / marginY);
     }
   };
 
