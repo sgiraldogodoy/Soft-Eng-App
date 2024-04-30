@@ -38,7 +38,7 @@ const Interpreter = () => {
         <FormField
           name="data.type"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="w-full">
               <FormLabel>Language Required</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>

@@ -57,14 +57,48 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 
 export const router = t.router;
 export const publicProcedure = t.procedure;
+export const loggedInProcedure = t.procedure.use(async function isAuthed(opts) {
+  const { ctx } = opts;
+  if (!ctx.token) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  return opts.next({
+    ctx: {
+      token: ctx.token,
+    },
+  });
+});
 export const protectedProcedure = t.procedure.use(
   async function isAuthed(opts) {
     const { ctx } = opts;
     if (!ctx.token) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
+    // const user = await ctx.db.user.findUnique({
+    //   where: {
+    //     sub: ctx.token.payload.sub as string,
+    //   },
+    // });
+    //
+    // if (!user) {
+    //   throw new TRPCError({
+    //     code: "UNAUTHORIZED",
+    //     message: "User not found.",
+    //   });
+    // }
+    //
+    // if (user.locked) {
+    //   throw new TRPCError({
+    //     code: "UNAUTHORIZED",
+    //     message: "User is locked. Scan RFID badge to unlock",
+    //   });
+    // }
+    //
+    // console.log(user);
     return opts.next({
       ctx: {
+        // user,
         token: ctx.token,
       },
     });

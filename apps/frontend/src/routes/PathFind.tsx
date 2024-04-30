@@ -171,7 +171,7 @@ export default function PathFind() {
         </div>
       </div>
 
-      <div className="absolute flex items-center gap-[2px] text-xl font-bold bottom-14 right-8">
+      <div className="absolute flex items-center gap-[2px] text-xl font-bold bottom-8 right-8">
         <FloorSelection2 onFloorClick={handleFloorClick} />
       </div>
       {pathData && pathData.length > 0 && (

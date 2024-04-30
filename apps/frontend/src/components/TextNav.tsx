@@ -282,7 +282,7 @@ export function TextNavigation({
               <AccordionTrigger className="pl-2">
                 Directions For Floor {dir[0][1]}
               </AccordionTrigger>
-              <AccordionContent className="${onPhone? 'h-full' : 'max-h-[55vh]'} overflow-y-auto pl-2">
+              <AccordionContent className="xs:'h-full' md:max-h-[55vh] overflow-y-auto pl-2">
                 <TextToSpeech text={directionsString} />
                 <AccordionTextNav directions={dir} onPhone={onPhone} />
               </AccordionContent>

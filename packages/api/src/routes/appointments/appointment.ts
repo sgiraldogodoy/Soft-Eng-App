@@ -18,9 +18,27 @@ export const appointmentRouter = router({
       });
     }),
 
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.appointment.findMany();
-  }),
+  getAll: publicProcedure
+    .input(
+      z
+        .object({ onlyUpcoming: z.boolean().default(false) })
+        .optional()
+        .default({}),
+    )
+    .query(async ({ input, ctx }) => {
+      return ctx.db.appointment.findMany({
+        where: input?.onlyUpcoming
+          ? {
+              visit: {
+                closed: false,
+              },
+            }
+          : undefined,
+        include: {
+          visit: true,
+        },
+      });
+    }),
 
   getOne: publicProcedure
     .input(z.object({ id: z.string() }))
@@ -28,6 +46,11 @@ export const appointmentRouter = router({
       return ctx.db.appointment.findUnique({
         where: {
           id: input.id,
+        },
+        include: {
+          patient: true,
+          location: true,
+          visit: true,
         },
       });
     }),

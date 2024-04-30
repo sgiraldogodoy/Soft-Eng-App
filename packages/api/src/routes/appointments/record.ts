@@ -1,55 +1,105 @@
 import { protectedProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
-import { ZCreateVisitNoteSchema } from "common";
+import { ZCreateRecordSchema } from "common";
 import { updateSchema } from "common/src/zod-utils.ts";
 
-export const visitNoteRouter = router({
-  getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.visitNote.findMany();
-  }),
+export const recordRouter = router({
+  getAll: protectedProcedure
+    .input(
+      z.object({
+        byVisit: z.string().optional(),
+        byNotVisit: z.string().optional(),
+      }),
+    )
+    .query(({ input, ctx }) => {
+      return ctx.db.record.findMany({
+        where: {
+          AND: [
+            {
+              visitId: {
+                not: input.byNotVisit,
+              },
+            },
+            {
+              visitId: input.byVisit,
+            },
+          ],
+        },
+        include: {
+          author: true,
+          vitals: true,
+          diagnoses: true,
+          visit: {
+            include: {
+              patient: true,
+            },
+          },
+        },
+      });
+    }),
 
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
-      return ctx.db.visitNote.findUnique({
+      return ctx.db.record.findUnique({
         where: {
           id: input.id,
+        },
+        include: {
+          author: true,
+          vitals: true,
+          diagnoses: true,
+          visit: {
+            include: {
+              patient: true,
+            },
+          },
         },
       });
     }),
 
   createOne: protectedProcedure
-    .input(ZCreateVisitNoteSchema)
+    .input(ZCreateRecordSchema)
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.visitNote.create({
-        data: input,
-      });
+      try {
+        return await ctx.db.record.create({
+          data: input,
+        });
+      } catch (e) {
+        console.error(e);
+      }
     }),
 
   updateOne: protectedProcedure
-    .input(updateSchema(ZCreateVisitNoteSchema))
+    .input(updateSchema(ZCreateRecordSchema))
     .mutation(async ({ input, ctx }) => {
-      const { data } = input;
-      return ctx.db.visitNote.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          ...data,
-        },
-      });
+      try {
+        console.log(input);
+        const { data } = input;
+        console.log(data);
+        return await ctx.db.record.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            ...data,
+          },
+        });
+      } catch (e) {
+        console.error(e);
+      }
     }),
 
   updateMany: protectedProcedure
     .input(
       z.object({
         ids: z.array(z.string()),
-        data: ZCreateVisitNoteSchema.partial(),
+        data: ZCreateRecordSchema.partial(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.visitNote.updateMany({
+      return ctx.db.record.updateMany({
         where: {
           id: {
             in: input.ids,
@@ -62,7 +112,7 @@ export const visitNoteRouter = router({
   deleteOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(({ input, ctx }) => {
-      return ctx.db.visitNote.delete({
+      return ctx.db.record.delete({
         where: {
           id: input.id,
         },
@@ -72,7 +122,7 @@ export const visitNoteRouter = router({
   deleteMany: protectedProcedure
     .input(z.object({ ids: z.array(z.string()) }))
     .mutation(async ({ input, ctx }) => {
-      return ctx.db.visitNote.deleteMany({
+      return ctx.db.record.deleteMany({
         where: {
           id: {
             in: input.ids,
@@ -82,13 +132,13 @@ export const visitNoteRouter = router({
     }),
 
   deleteAll: protectedProcedure.mutation(async ({ ctx }) => {
-    return ctx.db.visitNote.deleteMany();
+    return ctx.db.record.deleteMany();
   }),
 
   connectToVisit: protectedProcedure
     .input(z.object({ visitNoteId: z.string(), visitId: z.string() }))
     .mutation(({ input, ctx }) => {
-      return ctx.db.visitNote.update({
+      return ctx.db.record.update({
         where: {
           id: input.visitNoteId,
         },
@@ -105,7 +155,7 @@ export const visitNoteRouter = router({
   connectToStaff: protectedProcedure
     .input(z.object({ visitNoteId: z.string(), authorId: z.string() }))
     .mutation(({ input, ctx }) => {
-      return ctx.db.visitNote.update({
+      return ctx.db.record.update({
         where: {
           id: input.visitNoteId,
         },

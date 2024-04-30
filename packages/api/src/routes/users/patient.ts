@@ -1,4 +1,4 @@
-import { protectedProcedure, publicProcedure } from "../../trpc.ts";
+import { protectedProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
 import { ZCreatePatientSchema } from "common";
@@ -27,7 +27,7 @@ export const patient = router({
       });
     }),
 
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.patient.findMany({
       include: {
         location: true,
@@ -37,7 +37,7 @@ export const patient = router({
     });
   }),
 
-  getOne: publicProcedure
+  getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       return ctx.db.patient.findUnique({
@@ -137,6 +137,52 @@ export const patient = router({
           pcp: {
             connect: {
               id: input.staffId,
+            },
+          },
+        },
+      });
+    }),
+
+  diagnoses: protectedProcedure
+    .input(z.object({ patientId: z.string() }))
+    .query(({ input, ctx }) => {
+      return ctx.db.diagnosis.findMany({
+        where: {
+          record: {
+            visit: {
+              patientId: input.patientId,
+            },
+          },
+        },
+        include: {
+          record: true,
+        },
+      });
+    }),
+
+  prescriptions: protectedProcedure
+    .input(z.object({ patientId: z.string() }))
+    .query(({ input, ctx }) => {
+      return ctx.db.prescription.findMany({
+        where: {
+          diagnosis: {
+            record: {
+              visit: {
+                patientId: input.patientId,
+              },
+            },
+          },
+        },
+        include: {
+          diagnosis: {
+            include: {
+              record: {
+                include: {
+                  visit: {
+                    include: { patient: true },
+                  },
+                },
+              },
             },
           },
         },

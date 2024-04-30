@@ -23,6 +23,11 @@ export default function SearchCommand() {
     setOpen(!open);
   };
 
+  const nodec = () => {
+    setLocation("/database/create/node");
+    setOpen(!open);
+  };
+
   const services = () => {
     setLocation("/services");
     setOpen(!open);
@@ -38,8 +43,23 @@ export default function SearchCommand() {
     setOpen(!open);
   };
 
+  const cuser = () => {
+    setLocation("/settings/create");
+    setOpen(!open);
+  };
+
+  const muser = () => {
+    setLocation("/settings");
+    setOpen(!open);
+  };
+
   const map = () => {
     setLocation("/pathfind");
+    setOpen(!open);
+  };
+
+  const emr = () => {
+    setLocation("/emr");
     setOpen(!open);
   };
 
@@ -61,7 +81,7 @@ export default function SearchCommand() {
 
   return (
     <>
-      <Button variant="ghost" onClick={buttonchange}>
+      <Button size="icon" variant="ghost" onClick={buttonchange}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="18"
@@ -86,7 +106,7 @@ export default function SearchCommand() {
             <CommandItem onSelect={map}>Hospital Map</CommandItem>
           </CommandGroup>
           <CommandGroup heading="Map Edit">
-            <CommandItem onSelect={mapedit}>Create Node</CommandItem>
+            <CommandItem onSelect={nodec}>Create Node</CommandItem>
             <CommandItem onSelect={mapedit}>Create Edge</CommandItem>
             <CommandItem onSelect={mapedit}>Edit Node</CommandItem>
           </CommandGroup>
@@ -95,9 +115,17 @@ export default function SearchCommand() {
           </CommandGroup>
           <CommandGroup heading="Patients">
             <CommandItem onSelect={patients}>Manage Patients</CommandItem>
+            <CommandItem onSelect={patients}>Create Patients</CommandItem>
           </CommandGroup>
           <CommandGroup heading="Database">
             <CommandItem onSelect={database}>Manage database</CommandItem>
+          </CommandGroup>
+          <CommandGroup heading="Users">
+            <CommandItem onSelect={muser}>Manage Users</CommandItem>
+            <CommandItem onSelect={cuser}>Create Users</CommandItem>
+          </CommandGroup>
+          <CommandGroup>
+            <CommandItem onSelect={emr}>EMR</CommandItem>
           </CommandGroup>
         </CommandList>
       </CommandDialog>

@@ -115,7 +115,7 @@ export const Node = router({
         }
         const prefixFloor = input.data.floor.length === 1 ? "0" : "";
         const floor = prefixFloor + input.data.floor;
-        nodeId = "q" + input.data.type + number + floor;
+        nodeId = "Q" + input.data.type + number + floor;
       }
       const data = {
         id: nodeId,

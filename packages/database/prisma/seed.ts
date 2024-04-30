@@ -8,6 +8,21 @@ const prisma = new PrismaClient();
 async function main() {
   const nodes: NodeCreateManyInput[] = [];
 
+  function randomStatus(number: number): string {
+    switch (number % 4) {
+      case 0:
+        return "UNASSIGNED";
+      case 1:
+        return "ASSIGNED";
+      case 2:
+        return "IN_PROGRESS";
+      case 3:
+        return "COMPLETED";
+      default:
+        return "UNASSIGNED";
+    }
+  }
+
   // Parse nodes CSV
   const nodeStream = readline.createInterface({
     input: fs.createReadStream("prisma/nodes.csv"),
@@ -74,6 +89,7 @@ async function main() {
 
   await prisma.flower.deleteMany();
   for (let i = 0; i < 10; i++) {
+    const status = randomStatus(i);
     await prisma.flower.create({
       data: {
         flower: "Pretty Flower",
@@ -83,7 +99,7 @@ async function main() {
             type: "flower",
             login: "Ace",
             priority: "HIGH",
-            status: "UNASSIGNED",
+            status: status,
             note: "Note",
           },
         },
@@ -91,6 +107,79 @@ async function main() {
       },
     });
   }
+
+  const userQuery = await prisma.user.findUnique({
+    where: {
+      sub: "auth0|660c562536035d020765b37c",
+    },
+    include: {
+      staff: true,
+    },
+  });
+  const user = userQuery
+    ? userQuery
+    : await prisma.user.create({
+        data: {
+          name: "Ace Beattie",
+          sub: "auth0|660c562536035d020765b37c",
+          email: "acebeattie@gmail.com",
+          role: "staff",
+          staff: {
+            create: {
+              name: "Ace Beattie",
+              jobTitle: "Doctor",
+            },
+          },
+        },
+        include: {
+          staff: true,
+        },
+      });
+
+  const patient = await prisma.patient.create({
+    data: {
+      firstName: "Cole",
+      lastName: "Welcher",
+      dateOfBirth: new Date(),
+      sex: "male",
+      identity: {
+        create: {
+          idType: "ssn",
+          idNumber: "123456789",
+        },
+      },
+    },
+  });
+
+  await prisma.visit.create({
+    data: {
+      visitTime: new Date(),
+      staff: user.staff
+        ? {
+            connect: {
+              id: user.staff.id,
+            },
+          }
+        : undefined,
+      patient: {
+        connect: {
+          id: patient.id,
+        },
+      },
+      appointment: {
+        create: {
+          notes: "",
+          checkedIn: true,
+          appointmentTime: new Date(),
+          patient: {
+            connect: {
+              id: patient.id,
+            },
+          },
+        },
+      },
+    },
+  });
 }
 
 main()

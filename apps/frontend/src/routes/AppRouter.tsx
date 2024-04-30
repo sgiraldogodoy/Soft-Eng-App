@@ -13,6 +13,8 @@ import CreditPage from "@/routes/CreditPage.tsx";
 import Music from "@/routes/MusicPlayerEasterEgg.tsx";
 import { PatientPortal } from "@/routes/PatientPortal.tsx";
 import PhoneTextToNav from "@/routes/PhoneTextToNav.tsx";
+import { EmrEntry } from "@/components/emr/EmrEntry";
+import Analytics from "@/routes/Analytics.tsx";
 
 export function AppRouter() {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -47,6 +49,10 @@ export function AppRouter() {
             {isDefinitelyNotAuthed && <Redirect to="/" />}
             <MapEdit />
           </Route>
+          <Route path="/analytics">
+            {isDefinitelyNotAuthed && <Redirect to="/" />}
+            <Analytics />
+          </Route>
           <Route path="/settings" nest>
             <Settings />
             {isDefinitelyNotAuthed && <Redirect to="/" />}
@@ -58,6 +64,9 @@ export function AppRouter() {
           <Route path="/music">
             <Music />
             {isDefinitelyNotAuthed && <Redirect to="/" />}
+          </Route>
+          <Route path="/emr" nest>
+            <EmrEntry />
           </Route>
         </DashboardLayout>
       </Switch>
