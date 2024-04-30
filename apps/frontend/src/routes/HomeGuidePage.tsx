@@ -335,6 +335,35 @@ export default function HomeGuidePage() {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+            <br />
+            <p className="text-md font-semibold text-black">
+              Degrees of Access
+            </p>
+            <br />
+            <p>
+              &emsp;&emsp;There are different levels of access available in the
+              application. Each increasing level unlocks additional features
+              that allow for a greater control over the operations of kiosks.
+              Also, with each level of access, it also inherits the same
+              features as the previous level. This means that all features
+              mentioned in patient and staff are available to the admin level
+              access. The specific rankings of clearance is as follows:
+            </p>
+            <br />
+            <ul className="list-disc ps-12">
+              <li>
+                No Account: only able to access the very base features of the
+                kiosk
+              </li>
+              <li>Patients</li>
+              <li>Staff</li>
+              <li>Admin</li>
+            </ul>
+            <br />
+            <p>
+              &emsp;&emsp;Each level and what features are available to each is
+              detailed below along with how to properly utilize each feature.
+            </p>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
