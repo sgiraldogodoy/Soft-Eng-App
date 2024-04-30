@@ -48,9 +48,7 @@ export default function HomeGuidePage() {
               contained within the website. This also means that the higher
               levels of access inherit all of the actions that the level of
               access that previous level has.
-            </p>
-            <br />
-            <p>
+              <br />
               &emsp;&emsp;With our current structure to security on our website,
               we have some basic features that are constant across the different
               levels of access that are described below.
