@@ -1,7 +1,7 @@
 import { protectedProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
-import {ZCreatePatientSchema, ZUpdatePatientSchema} from "common";
+import { ZCreatePatientSchema, ZUpdatePatientSchema } from "common";
 import { manySchema, updateSchema } from "common/src/zod-utils.ts";
 import { DateTime } from "luxon";
 
@@ -92,52 +92,91 @@ export const patient = router({
       });
     }),
 
-    updatePatient: protectedProcedure
-        .input(z.object({
-            basePatient: updateSchema(ZUpdatePatientSchema),
-            locationId: z.string().optional(),
-            identity: z.object({
-                idNumber: z.string(),
-                idType: z.enum(["ssn", "driverLicense", "passport"])
-            }).optional(),
-            pcpId: z.string().optional(),
-            userId: z.string().optional(),
-        }))
-        .mutation(async ({input, ctx}) => {
-            return ctx.db.patient.update({
+  updatePatient: protectedProcedure
+    .input(
+      z.object({
+        basePatient: updateSchema(ZUpdatePatientSchema),
+        locationId: z.string().optional(),
+        identity: z
+          .object({
+            idNumber: z.string().optional(),
+            idType: z.enum(["ssn", "driverLicense", "passport"]).optional(),
+          })
+          .optional(),
+        pcpId: z.string().optional(),
+        userId: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      if (input?.identity?.idType && input?.identity?.idNumber) {
+        return ctx.db.patient.update({
+          where: {
+            id: input.basePatient.id,
+          },
+          data: {
+            ...input.basePatient.data,
+            dateOfBirth:
+              DateTime.fromISO(input.basePatient.data.dateOfBirth)
+                .setZone("local")
+                .toISO() ?? undefined,
+            location: {
+              connect: {
+                id: input.locationId,
+              },
+            },
+            pcp: {
+              connect: {
+                id: input.pcpId,
+              },
+            },
+            user: {
+              connect: {
+                id: input.userId,
+              },
+            },
+            identity: {
+              connectOrCreate: {
                 where: {
-                    id: input.basePatient.id,
+                  idNumber: input?.identity?.idNumber,
                 },
-                data: {
-                    ...input.basePatient.data,
-                    location: {
-                        connect: {
-                            id: input.locationId,
-                        },
-                    },
-                    pcp: {
-                        connect: {
-                            id: input.pcpId,
-                        },
-                    },
-                    user: {
-                        connect: {
-                            id: input.userId,
-                        },
-                    },
-                    identity: {
-                        connectOrCreate: {
-                            where: {
-                                idNumber: input?.identity?.idNumber,
-                            },
-                            create: {
-                                ...input?.identity!,
-                            },
-                        },
-                    },
+                create: {
+                  idType: input?.identity?.idType,
+                  idNumber: input?.identity?.idNumber,
                 },
-            });
-        }),
+              },
+            },
+          },
+        });
+      } else {
+        return ctx.db.patient.update({
+          where: {
+            id: input.basePatient.id,
+          },
+          data: {
+            ...input.basePatient.data,
+            dateOfBirth:
+              DateTime.fromISO(input.basePatient.data.dateOfBirth)
+                .setZone("local")
+                .toISO() ?? undefined,
+            location: {
+              connect: {
+                id: input.locationId,
+              },
+            },
+            pcp: {
+              connect: {
+                id: input.pcpId,
+              },
+            },
+            user: {
+              connect: {
+                id: input.userId,
+              },
+            },
+          },
+        });
+      }
+    }),
 
   updateMany: protectedProcedure
     .input(

@@ -39,44 +39,26 @@ import {
 } from "@/components/ui/command";
 import { PopoverContent } from "@/components/ui/popover";
 import { CheckIcon } from "lucide-react";
-import {ZCreatePatientSchema, ZUpdatePatientSchema} from "common";
+import { ZUpdatePatientSchema } from "common";
 import { Input } from "@/components/ui/input.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
+import { DateTime } from "luxon";
+import { updateSchema } from "common/src/zod-utils.ts";
 import { useLocation } from "wouter";
-import {DateTime} from "luxon";
-import {updateSchema} from "common/src/zod-utils.ts";
-
-const preprocessNested = (v: unknown) => {
-  if (typeof v !== "object" || !v) {
-    return undefined;
-  }
-  if (
-    "connect" in v &&
-    typeof v.connect === "object" &&
-    v.connect &&
-    "id" in v.connect &&
-    v.connect.id !== "" &&
-    v.connect.id !== undefined
-  ) {
-    return v;
-  }
-
-  return undefined;
-};
 
 // Add your type-specific form schema to this array.
 const FormSchema = z.object({
-    basePatient: updateSchema(ZUpdatePatientSchema),
-    locationId: z.string().optional(),
-    identity: z.object({
-        idNumber: z.string(),
-        idType: z.enum(["ssn", "driverLicense", "passport"])
-    }).optional(),
-    pcpId: z.string().optional(),
-    userId: z.string().optional(),
+  basePatient: updateSchema(ZUpdatePatientSchema),
+  locationId: z.string().optional(),
+  identity: z
+    .object({
+      idNumber: z.string(),
+      idType: z.enum(["ssn", "driverLicense", "passport"]),
+    })
+    .optional(),
+  pcpId: z.string().optional(),
+  userId: z.string().optional(),
 });
-
-type FormType = z.infer<typeof FormSchema>;
 
 interface EditPatientProps {
   patientId: string;
@@ -85,7 +67,7 @@ interface EditPatientProps {
 export default function EditPatient({ patientId }: EditPatientProps) {
   const [patient] = trpc.patient.getOne.useSuspenseQuery({ id: patientId });
 
-    const [, setLocation] = useLocation();
+  const [, setLocation] = useLocation();
   const unfilteredQuery = trpc.node.getAll.useQuery();
   const unfilteredStaffQuery = trpc.staff.getAll.useQuery();
   const unfilteredUserQuery = trpc.user.getAll.useQuery();
@@ -123,53 +105,54 @@ export default function EditPatient({ patientId }: EditPatientProps) {
     resolver: zodResolver(FormSchema),
     shouldUnregister: true,
     defaultValues: {
-      firstName: patient!.firstName,
-      middleName: patient!.middleName ?? "",
-      lastName: patient!.lastName,
-      dateOfBirth: DateTime.fromJSDate(patient!.dateOfBirth).toISODate() ?? "",
-      sex: patient!.sex as FormType["sex"],
+      basePatient: {
+        data: {
+          firstName: patient!.firstName,
+          middleName: patient!.middleName ?? "",
+          lastName: patient!.lastName,
+          dateOfBirth:
+            DateTime.fromJSDate(
+              patient!.dateOfBirth ?? new Date(),
+            ).toISODate() ?? "",
+          sex: patient!.sex,
+          insurance: patient!.insurance ?? "",
+          phoneNumber: patient!.phoneNumber ?? "",
+        },
+      },
       identity: {
-        connectOrCreate: {
-          idNumber: patient!.idNumber,
-          idType: patient!.identity
-            ?.idType as FormType["identity"]["create"]["idType"],
-        },
+        idNumber: patient!.idNumber,
+        idType: patient!.identity?.idType,
       },
-      location: {
-        connect: {
-          id: patient!.location?.id ?? "",
-        },
-      },
-      insurance: patient!.insurance ?? "",
-      pcp: {
-        connect: {
-          id: patient!.pcp?.id ?? "",
-        },
-      },
-      phoneNumber: patient!.phoneNumber ?? "",
-      user: {
-        connect: {
-          id: patient!.user?.id ?? "",
-        },
-      },
+      locationId: patient!.location?.id,
+      pcpId: patient!.pcp?.id,
+      userId: patient!.user?.id,
     },
   });
 
   const utils = trpc.useUtils();
-  const updatePatientRequest = trpc.patient.updateOne.useMutation();
+  const updatePatientRequest = trpc.patient.updatePatient.useMutation();
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    if (data.location)
-      data.location.connect.id =
-        nodesQuery.find((n) => data.location?.connect.id === n.longName)?.id ??
-        "";
+    console.log(data);
+    if (data.locationId)
+      data.locationId =
+        nodesQuery.find((n) => data.locationId === n.longName)?.id ?? "";
 
     const updatePatient = updatePatientRequest.mutateAsync(
       {
-        id: patient!.id,
-        data: {
-          ...data,
+        basePatient: {
+          id: patientId,
+          data: {
+            ...data.basePatient.data,
+          },
         },
+        locationId: data.locationId,
+        identity: {
+          idNumber: data?.identity?.idNumber ?? undefined,
+          idType: data?.identity?.idType ?? undefined,
+        },
+        pcpId: data?.pcpId,
+        userId: data?.userId,
       },
       {
         onSuccess: () => {
@@ -191,7 +174,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
       console.error("Error :(");
     }
 
-      setLocation("/patients");
+    setLocation("/patients");
   }
 
   if (!patient) {
@@ -216,7 +199,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
               <div className="flex flex-row gap-2 items-stretch">
                 <FormField
                   control={form.control}
-                  name="firstName"
+                  name="basePatient.data.firstName"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>First Name*</FormLabel>
@@ -229,7 +212,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
                 />
                 <FormField
                   control={form.control}
-                  name="middleName"
+                  name="basePatient.data.middleName"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>Middle Name</FormLabel>
@@ -242,7 +225,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
                 />
                 <FormField
                   control={form.control}
-                  name="lastName"
+                  name="basePatient.data.lastName"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>Last Name*</FormLabel>
@@ -257,7 +240,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
               <div className="flex flex-row gap-2 items-stretch">
                 <FormField
                   control={form.control}
-                  name="insurance"
+                  name="basePatient.data.insurance"
                   render={({ field }) => (
                     <FormItem className="flex flex-col flex-1">
                       <FormLabel>Patient's Insurance</FormLabel>
@@ -284,7 +267,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
                 />
                 <FormField
                   control={form.control}
-                  name="location.connect.id"
+                  name="locationId"
                   render={({ field }) => (
                     <FormItem className="flex flex-col h-full justify-between flex-1">
                       <FormLabel>Location</FormLabel>
@@ -322,7 +305,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
                                   key={location.longName}
                                   onSelect={() => {
                                     form.setValue(
-                                      "location.connect.id",
+                                      "locationId",
                                       location.longName,
                                     );
                                   }}
@@ -350,7 +333,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
               <div className="flex flex-row gap-2 items-stretch">
                 <FormField
                   control={form.control}
-                  name="identity.connectOrCreate.idNumber"
+                  name="identity.idNumber"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>ID*</FormLabel>
@@ -363,7 +346,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
                 />
                 <FormField
                   control={form.control}
-                  name="identity.connectOrCreate.idType"
+                  name="identity.idType"
                   render={({ field }) => (
                     <FormItem className="flex-1 ">
                       <FormLabel>Type of ID*</FormLabel>
@@ -390,7 +373,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
                 />
                 <FormField
                   control={form.control}
-                  name="pcp.connect.id"
+                  name="pcpId"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>Primary Care Provider</FormLabel>
@@ -427,10 +410,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
                                   value={assignee.name}
                                   key={assignee.name}
                                   onSelect={() => {
-                                    form.setValue(
-                                      "pcp.connect.id",
-                                      assignee.id,
-                                    );
+                                    form.setValue("pcpId", assignee.id);
                                   }}
                                 >
                                   {assignee.name}
@@ -456,7 +436,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
               <div className="flex flex-row gap-2 items-stretch">
                 <FormField
                   control={form.control}
-                  name="dateOfBirth"
+                  name="basePatient.data.dateOfBirth"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>Date of Birth*</FormLabel>
@@ -469,7 +449,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
                 />
                 <FormField
                   control={form.control}
-                  name="phoneNumber"
+                  name="basePatient.data.phoneNumber"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>Primary Phone Number</FormLabel>
@@ -482,7 +462,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
                 />
                 <FormField
                   control={form.control}
-                  name="sex"
+                  name="basePatient.data.sex"
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormLabel>Sex assigned at birth*</FormLabel>
@@ -508,7 +488,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
               </div>
               <FormField
                 control={form.control}
-                name="user.connect.id"
+                name="userId"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Link user email</FormLabel>
@@ -545,7 +525,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
                                 value={user.email ?? ""}
                                 key={user.email}
                                 onSelect={() => {
-                                  form.setValue("user.connect.id", user.id);
+                                  form.setValue("userId", user.id);
                                 }}
                               >
                                 {user.email}
@@ -569,7 +549,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
               />
               <FormField
                 control={form.control}
-                name="notes"
+                name="basePatient.data.notes"
                 render={({ field }) => (
                   <FormItem className="flex flex-col flex-1">
                     <FormLabel>Notes</FormLabel>
@@ -591,7 +571,13 @@ export default function EditPatient({ patientId }: EditPatientProps) {
                 >
                   Reset
                 </Button>
-                <Button className="flex-1 " type="submit">
+                <Button
+                  className="flex-1 "
+                  type="button"
+                  onClick={() => {
+                    onSubmit(form.getValues());
+                  }}
+                >
                   Submit
                 </Button>
               </div>
