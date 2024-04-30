@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import type { Node, Prisma } from "database";
 import {
   scaleCoordinate,
@@ -63,6 +63,13 @@ export function Nodes({
   const deleteNode = trpc.node.deleteOne.useMutation();
   const createEdge = trpc.edge.createOne.useMutation();
   const deleteManyNodes = trpc.node.deleteMany.useMutation();
+
+  const [nodePan, setNodePan] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+  const [doPan, setDoPan] = useState<boolean>(false);
+  const panRef = useRef<number>(0);
 
   const { firstNode, setNode, clearNodes } = useSelectNodes();
 
@@ -403,17 +410,66 @@ export function Nodes({
     const mouseX = e.clientX;
     const mouseY = e.clientY;
 
+    let panX = 0;
+    let panY = 0;
+
+    setDoPan(false);
+
     if (mouseX <= rect.left + marginX) {
-      dragOffset.x += 10 * ((marginX - (mouseX - rect.left)) / marginX);
+      panX = 10 * ((marginX - (mouseX - rect.left)) / marginX);
     } else if (mouseX >= rect.right - marginX) {
-      dragOffset.x -= 10 * ((marginX - (rect.right - mouseX)) / marginX);
+      panX = -10 * ((marginX - (rect.right - mouseX)) / marginX);
     }
     if (mouseY <= rect.top + marginY) {
-      dragOffset.y += 10 * ((marginY - (mouseY - rect.top)) / marginY);
+      panY = 10 * ((marginY - (mouseY - rect.top)) / marginY);
     } else if (mouseY >= rect.bottom - marginY) {
-      dragOffset.y -= 10 * ((marginY - (rect.bottom - mouseY)) / marginY);
+      panY = -10 * ((marginY - (rect.bottom - mouseY)) / marginY);
     }
+    if (panX != 0 || panY != 0) {
+      setDoPan(true);
+    }
+    setNodePan({ x: panX, y: panY });
   };
+
+  const moveMap = useCallback(() => {
+    if (!doPan) {
+      return;
+    }
+
+    const limitX: number = ((imgWidth * scale) / 2 - imgWidth / 2) / scale;
+    const limitY: number = ((imgHeight * scale) / 2 - imgHeight / 2) / scale;
+
+    if (dragOffset.x + nodePan.x > limitX) {
+      nodePan.x = limitX - dragOffset.x;
+    } else if (dragOffset.x + nodePan.x < -limitX) {
+      nodePan.x = -limitX - dragOffset.x;
+    }
+
+    if (dragOffset.y + nodePan.y > limitY) {
+      nodePan.y = limitY - dragOffset.y;
+    } else if (dragOffset.y + nodePan.y < -limitY) {
+      nodePan.y = -limitY - dragOffset.y;
+    }
+
+    dragOffset.x += nodePan.x;
+    dragOffset.y += nodePan.y;
+
+    panRef.current = requestAnimationFrame(moveMap);
+  }, [doPan, dragOffset, imgHeight, imgWidth, nodePan, scale]);
+
+  useEffect(() => {
+    if (doPan) {
+      panRef.current = requestAnimationFrame(moveMap);
+    } else {
+      if (panRef.current) {
+        cancelAnimationFrame(panRef.current);
+      }
+    }
+
+    return () => {
+      cancelAnimationFrame(panRef.current);
+    };
+  }, [doPan, moveMap]);
 
   let filteredNodes = nodes.filter((node) => node.floor === floor);
   if (!filter)
