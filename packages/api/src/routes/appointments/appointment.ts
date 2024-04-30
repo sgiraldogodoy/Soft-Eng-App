@@ -36,6 +36,7 @@ export const appointmentRouter = router({
           : undefined,
         include: {
           visit: true,
+          patient: true,
         },
       });
     }),
