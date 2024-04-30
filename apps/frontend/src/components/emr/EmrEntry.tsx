@@ -76,7 +76,9 @@ const AppointmentCard = ({ appointmentId }: { appointmentId: string }) => {
 };
 
 export function EmrEntry() {
-  const appointmentsQuery = trpc.appointment.getAll.useQuery();
+  const appointmentsQuery = trpc.appointment.getAll.useQuery({
+    onlyUpcoming: false,
+  });
 
   const upcoming = useMemo(() => {
     return appointmentsQuery.data

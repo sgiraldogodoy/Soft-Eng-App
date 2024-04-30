@@ -182,7 +182,7 @@ export function DiagnosesTable({ record }: { record: RouterRecord }) {
       </AlertDialog>
 
       <Table className="h-full">
-        <TableHeader>
+        <TableHeader className="bg-orange-100">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {

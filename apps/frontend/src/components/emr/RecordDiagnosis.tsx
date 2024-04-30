@@ -86,10 +86,13 @@ export function RecordDiagnosis({ diagnosisId }: RecordDiagnosisProps) {
 
   return (
     <DiagnosisContext.Provider value={diagnosis}>
-      <Card className="flex-1 overflow-auto flex flex-col">
+      <Card className="flex-1 overflow-auto flex flex-col border-orange-300">
         <CardHeader>
           <EmrBreadcrumbs />
-          <CardTitle>Diagnosis</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-orange-400 rounded-full" />
+            Diagnosis
+          </CardTitle>
         </CardHeader>
         <CardContent className="flex-1 flex flex-col overflow-auto gap-2">
           <Form {...form}>

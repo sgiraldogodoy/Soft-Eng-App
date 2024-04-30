@@ -5,20 +5,39 @@ import { ZCreateRecordSchema } from "common";
 import { updateSchema } from "common/src/zod-utils.ts";
 
 export const recordRouter = router({
-  getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.record.findMany({
-      include: {
-        author: true,
-        vitals: true,
-        diagnoses: true,
-        visit: {
-          include: {
-            patient: true,
+  getAll: protectedProcedure
+    .input(
+      z.object({
+        byVisit: z.string().optional(),
+        byNotVisit: z.string().optional(),
+      }),
+    )
+    .query(({ input, ctx }) => {
+      return ctx.db.record.findMany({
+        where: {
+          AND: [
+            {
+              visitId: {
+                not: input.byNotVisit,
+              },
+            },
+            {
+              visitId: input.byVisit,
+            },
+          ],
+        },
+        include: {
+          author: true,
+          vitals: true,
+          diagnoses: true,
+          visit: {
+            include: {
+              patient: true,
+            },
           },
         },
-      },
-    });
-  }),
+      });
+    }),
 
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))

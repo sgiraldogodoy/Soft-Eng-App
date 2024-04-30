@@ -122,4 +122,17 @@ export const visitRouter = router({
         },
       });
     }),
+
+  close: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(({ input, ctx }) => {
+      return ctx.db.visit.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          closed: true,
+        },
+      });
+    }),
 });
