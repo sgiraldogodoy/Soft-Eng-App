@@ -291,7 +291,7 @@ model Appointment {
   id              String   @id @default(uuid())
   createdTime     DateTime @default(now())
   appointmentTime DateTime
-  checkedIn       Boolean
+  checkedIn       Boolean  @default(false)
   nodeId          String?
   location        Node?    @relation(name: "AppointmentToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: SetNull)
   patientId       String

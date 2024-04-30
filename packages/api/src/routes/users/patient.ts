@@ -48,6 +48,8 @@ export const patient = router({
           location: true,
           pcp: true,
           user: true,
+          appointments: true,
+          visits: true,
         },
       });
     }),

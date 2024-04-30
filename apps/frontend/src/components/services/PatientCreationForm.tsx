@@ -425,7 +425,7 @@ export default function InputForm() {
                                   <CheckIcon
                                     className={cn(
                                       "ml-auto h-4 w-4",
-                                      assignee.name === field.value
+                                      assignee.id === field.value
                                         ? "opacity-100"
                                         : "opacity-0",
                                     )}

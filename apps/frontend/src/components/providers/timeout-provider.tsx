@@ -16,7 +16,7 @@ export function TimeoutProvider({ children }: { children: ReactNode }) {
 
       timeoutRef.current = setTimeout(() => {
         logout();
-      }, 180000);
+      }, 600000);
     };
 
     window.addEventListener("mousemove", handleWindowEvents);

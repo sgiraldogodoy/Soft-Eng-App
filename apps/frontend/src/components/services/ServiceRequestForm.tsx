@@ -271,7 +271,6 @@ export default function InputForm({ variant }: Props) {
 
     switch (data.type) {
       case "flower":
-        console.log(data);
         toast.promise(
           createFlowerRequest.mutateAsync(
             {

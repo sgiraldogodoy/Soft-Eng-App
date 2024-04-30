@@ -11,7 +11,10 @@ export const appointmentRouter = router({
     .input(ZCreateAppointmentSchema)
     .mutation(async ({ input, ctx }) => {
       return ctx.db.appointment.create({
-        data: input,
+        data: {
+          ...input,
+          appointmentTime: input.appointmentTime ?? new Date(),
+        },
       });
     }),
 
@@ -224,5 +227,22 @@ export const appointmentRouter = router({
           },
         },
       });
+    }),
+
+  sendReminder: protectedProcedure
+    .input(z.object({ email: z.string().email() }))
+    .mutation(async ({ input, ctx }) => {
+      const { data, error } = await ctx.resend.emails.send({
+        from: "no-reply@cs3733teamq.org",
+        to: input.email,
+        subject: "Hello World",
+        html: "<strong>It works!</strong>",
+      });
+
+      if (error) {
+        return console.error({ error });
+      }
+
+      console.log({ data });
     }),
 });
