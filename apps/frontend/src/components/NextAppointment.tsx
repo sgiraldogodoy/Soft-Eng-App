@@ -6,24 +6,22 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 export function NextAppointment() {
   const [me] = trpc.user.me.useSuspenseQuery();
-  // const sendEmail = trpc.appointment.sendReminder.useMutation();
+  const sendEmail = trpc.appointment.sendReminder.useMutation();
   const appointments = me?.patient?.appointments;
   const session = useAuth0();
 
-  console.log(me?.patient?.appointments);
-
   if (appointments?.length === 0) {
     return (
-      <div className="flex flex-col gap-3">
-        <p className="text-xl">Upcoming appointments</p>
-        <Card className="w-1/3">
-          <CardContent className="pt-6">
+      <div className="flex flex-col gap-3 w-1/2">
+        <p className="text-xl">Next appointment</p>
+        <Card className="w-auto h-full">
+          <CardContent className="pt-6 w-auto">
             <div className="text-lg font-semibold">
-              You have no upcoming appointments
+              You don't have a next appointment
             </div>
             <div className="text-gray-600">
-              If you would like to schedule an appointment, you can click the
-              button above.
+              If you would like to schedule an appointment, contact your care
+              team.
             </div>
           </CardContent>
         </Card>
@@ -35,7 +33,7 @@ export function NextAppointment() {
     nextAppointment = appointments[0];
   }
   return (
-    <div className="flex-1 flex flex-col gap-3">
+    <div className="flex flex-col gap-3 w-1/2">
       <p className="text-xl">Next Appointment</p>
       <Card className="">
         <CardContent className="flex flex-col gap-4 w-full pt-6">
@@ -74,7 +72,7 @@ export function NextAppointment() {
           </div>
           <Button
             className="flex gap-2 w-full justify-center items-center bg-blue-600"
-            // onClick={() => sendEmail.mutate({email: me?.email})}
+            onClick={() => sendEmail.mutate({ email: me?.email ?? "" })}
           >
             <Bell />
             Set a reminder

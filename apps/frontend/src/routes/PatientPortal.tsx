@@ -115,14 +115,15 @@ export function PatientPortal() {
                 </Button>
               </CardContent>
             </Card>
-            <div className="flex max-h-full overflow-auto gap-6">
-              <div className="shrink-0 flex flex-col max-h-full overflow-auto gap-4">
-                <div className="flex gap-4">
+            <div className="flex flex-1 h-full overflow-y-hidden gap-6 py-6">
+              <div className="shrink-0 flex flex-col overflow-auto gap-4">
+                <div className="flex gap-4 max-w-[66vw]">
                   <NextAppointment />
                   <CareTeam />
                 </div>
                 <UpcomingAppointmentsList />
               </div>
+
               <Card className="flex-1">Here Records</Card>
             </div>
           </Suspense>

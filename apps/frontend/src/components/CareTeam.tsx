@@ -10,10 +10,10 @@ export function CareTeam() {
 
   if (!me || !me.patient || !me.patient.pcp) {
     return (
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 w-1/2">
         <p className="text-xl">Contact your primary care provider</p>
-        <Card className="w-1/3">
-          <CardContent className="pt-6">
+        <Card className="w-1/2">
+          <CardContent className="pt-6 w-1/2">
             <div className="text-lg font-semibold">No PCP Assigned</div>
             <div className="text-gray-600">
               Please contact your healthcare provider to assign a PCP.
@@ -25,31 +25,31 @@ export function CareTeam() {
   }
 
   return (
-    <div className="flex-1 flex flex-col gap-3">
+    <div className="flex-1 flex flex-col gap-3 w-full">
       <p className="text-xl">Contact your PCP</p>
       <Card className="w-full h-full">
-        <CardContent className="pt-6 h-full flex items-center">
-          <div className="flex justify-center items-center">
-            <div className="flex justify-center items-center gap-6">
-              <img // Change for pcp's Auth0 profile picture
-                className="h-14 rounded-full object-contain hover:border border-slate-500 cursor-pointer"
-                src={session.user?.picture}
-              />
-              <div className="space-y-0.5">
-                <div className="text-lg font-bold">
-                  Dr. {me?.patient?.pcp?.name}
-                </div>
-                <div className="text-gray-600">
-                  {me?.patient?.pcp?.jobTitle}
+        <CardContent className="pt-6 h-full flex items-center w-full justify-between">
+          <div className="flex justify-start items-center w-full">
+            <div className="flex justify-between items-center gap-6 w-full">
+              <div className="flex gap-6">
+                <img // Change for pcp's Auth0 profile picture
+                  className="h-14 rounded-full object-contain hover:border border-slate-500 cursor-pointer"
+                  src={session.user?.picture}
+                />
+                <div className="space-y-0.5">
+                  <p className="text-lg font-bold">
+                    Dr. {me?.patient?.pcp?.name}
+                  </p>
+                  <p className="text-gray-600">{me?.patient?.pcp?.jobTitle}</p>
                 </div>
               </div>
+              <Mail
+                className="cursor-pointer"
+                size={36}
+                color="#2563eb"
+                onClick={() => (window.location.href = `mailto:${pcpEmail}`)}
+              />
             </div>
-            <Mail
-              className="cursor-pointer"
-              size={36}
-              color="#2563eb"
-              onClick={() => (window.location.href = `mailto:${pcpEmail}`)}
-            />
           </div>
         </CardContent>
       </Card>
