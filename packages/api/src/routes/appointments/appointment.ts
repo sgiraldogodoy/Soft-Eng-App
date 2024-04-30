@@ -15,13 +15,27 @@ export const appointmentRouter = router({
       });
     }),
 
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.appointment.findMany({
-      include: {
-        visit: true,
-      },
-    });
-  }),
+  getAll: publicProcedure
+    .input(
+      z
+        .object({ onlyUpcoming: z.boolean().default(false) })
+        .optional()
+        .default({}),
+    )
+    .query(async ({ input, ctx }) => {
+      return ctx.db.appointment.findMany({
+        where: input?.onlyUpcoming
+          ? {
+              visit: {
+                closed: false,
+              },
+            }
+          : undefined,
+        include: {
+          visit: true,
+        },
+      });
+    }),
 
   getOne: publicProcedure
     .input(z.object({ id: z.string() }))

@@ -304,6 +304,7 @@ model Appointment {
 
 model Visit {
   id        String   @id @default(uuid())
+  closed    Boolean  @default(false)
   records   Record[] @relation(name: "VisitNoteToVisit")
   staffId   String?
   staff     Staff?   @relation(name: "VisitStaff", fields: [staffId], references: [id], onUpdate: Cascade, onDelete: SetNull)

@@ -43,11 +43,23 @@ import { trpc } from "@/utils/trpc.ts";
 import { useLocation } from "wouter";
 import { DateTime } from "luxon";
 import { PencilIcon } from "lucide-react";
+import { useVisit } from "./EmrVisit";
+import { cn } from "@/lib/utils";
 // import {trpc} from "@/utils/trpc.ts";
 // import {skipToken} from "@tanstack/react-query";
 
-export function RecordTable() {
-  const [data] = trpc.record.getAll.useSuspenseQuery();
+export function RecordTable({
+  thisVisit,
+  className,
+}: {
+  thisVisit?: boolean;
+  className?: string;
+}) {
+  const visit = useVisit();
+  const [data] = trpc.record.getAll.useSuspenseQuery({
+    byVisit: thisVisit ? visit.id : undefined,
+    byNotVisit: !thisVisit ? visit.id : undefined,
+  });
 
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
@@ -69,6 +81,12 @@ export function RecordTable() {
       ),
       accessorFn: ({ creationTime }) =>
         DateTime.fromJSDate(creationTime).toLocaleString(DateTime.DATETIME_MED),
+      sortingFn: (rowA, rowB) => {
+        return (
+          rowA.original.creationTime.valueOf() -
+          rowB.original.creationTime.valueOf()
+        );
+      },
       id: "creationTime",
     },
     {
@@ -155,7 +173,9 @@ export function RecordTable() {
   });
 
   return (
-    <div className="rounded-md border overflow-auto relative">
+    <div
+      className={cn("shadow-md rounded-md overflow-auto relative", className)}
+    >
       <AlertDialog
         open={!!deletingId}
         onOpenChange={(v) => {
@@ -204,7 +224,7 @@ export function RecordTable() {
       </AlertDialog>
 
       <Table className="overflow-auto">
-        <TableHeader className="sticky top-0">
+        <TableHeader className="sticky top-0 bg-pink-100">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {

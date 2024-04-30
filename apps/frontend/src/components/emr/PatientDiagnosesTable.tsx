@@ -16,45 +16,55 @@ import {
 } from "@/components/ui/table";
 import { DataTableColumnHeader } from "@/components/ui/dt-sortable.tsx";
 import { DateTime } from "luxon";
-import { useDiagnosis } from "./RecordDiagnosis";
-import type { Prescription } from "database";
+import { RouterOutput, trpc } from "@/utils/trpc";
+import { useVisit } from "./EmrVisit";
+import { Button } from "../ui/button";
+import { EyeIcon } from "lucide-react";
+import { useLocation } from "wouter";
 
-export function PrescriptionTable() {
-  const diagnosis = useDiagnosis();
-  const data = diagnosis.prescriptions;
+export function PatientDiagnosesTable() {
+  const visit = useVisit();
 
-  const columns: ColumnDef<Prescription>[] = [
+  const [data] = trpc.patient.diagnoses.useSuspenseQuery({
+    patientId: visit.patientId,
+  });
+
+  const [, setLocation] = useLocation();
+
+  const columns: ColumnDef<RouterOutput["patient"]["diagnoses"][0]>[] = [
     {
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Drug" />
+        <DataTableColumnHeader column={column} title="Illness" />
       ),
-      accessorKey: "drug",
+      accessorKey: "illness",
     },
     {
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Dosage" />
+        <DataTableColumnHeader column={column} title="Created" />
       ),
-      accessorKey: "dosage",
+      accessorFn: ({ creationTime }) =>
+        DateTime.fromJSDate(creationTime).toLocaleString(DateTime.DATETIME_MED),
+      id: "created",
     },
     {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Frequency" />
-      ),
-      accessorKey: "frequency",
-    },
-    {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Pharmacy" />
-      ),
-      accessorKey: "pharmacy.name",
-    },
-    {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Issued" />
-      ),
-      accessorFn: ({ issued }) =>
-        DateTime.fromJSDate(issued).toLocaleString(DateTime.DATETIME_MED),
-      id: "issued",
+      id: "actions",
+      cell: ({ row }) => {
+        const diagnosis = row.original;
+
+        return (
+          <Button
+            onClick={() => {
+              setLocation(
+                `/record/${diagnosis.record.id}/diagnosis/${diagnosis.id}`,
+              );
+            }}
+            size="icon"
+            variant="ghost"
+          >
+            <EyeIcon />
+          </Button>
+        );
+      },
     },
   ];
 
@@ -76,7 +86,7 @@ export function PrescriptionTable() {
   return (
     <div className="h-full rounded-md border overflow-auto relative flex-1 shadow-lg flex flex-col">
       <Table className="h-full">
-        <TableHeader className="sticky top-0 bg-lime-100">
+        <TableHeader className="sticky top-0 bg-orange-100">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
