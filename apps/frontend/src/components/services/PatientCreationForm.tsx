@@ -255,7 +255,7 @@ export default function InputForm() {
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a insurance provider" />
+                            <SelectValue placeholder="Select an insurance provider" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -361,7 +361,7 @@ export default function InputForm() {
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a insurance provider" />
+                            <SelectValue placeholder="Select a type of ID" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -425,7 +425,7 @@ export default function InputForm() {
                                   <CheckIcon
                                     className={cn(
                                       "ml-auto h-4 w-4",
-                                      assignee.name === field.value
+                                      assignee.id === field.value
                                         ? "opacity-100"
                                         : "opacity-0",
                                     )}

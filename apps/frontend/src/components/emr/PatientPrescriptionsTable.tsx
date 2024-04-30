@@ -16,14 +16,22 @@ import {
 } from "@/components/ui/table";
 import { DataTableColumnHeader } from "@/components/ui/dt-sortable.tsx";
 import { DateTime } from "luxon";
-import { useDiagnosis } from "./RecordDiagnosis";
-import type { Prescription } from "database";
+import { RouterOutput, trpc } from "@/utils/trpc";
+import { useVisit } from "./EmrVisit";
+import { Button } from "../ui/button";
+import { EyeIcon } from "lucide-react";
+import { useLocation } from "wouter";
 
-export function PrescriptionTable() {
-  const diagnosis = useDiagnosis();
-  const data = diagnosis.prescriptions;
+export function PatientPrescriptionTable() {
+  const visit = useVisit();
 
-  const columns: ColumnDef<Prescription>[] = [
+  const [data] = trpc.patient.prescriptions.useSuspenseQuery({
+    patientId: visit.patientId,
+  });
+
+  const [, setLocation] = useLocation();
+
+  const columns: ColumnDef<RouterOutput["patient"]["prescriptions"][0]>[] = [
     {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Drug" />
@@ -32,29 +40,31 @@ export function PrescriptionTable() {
     },
     {
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Dosage" />
-      ),
-      accessorKey: "dosage",
-    },
-    {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Frequency" />
-      ),
-      accessorKey: "frequency",
-    },
-    {
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Pharmacy" />
-      ),
-      accessorKey: "pharmacy.name",
-    },
-    {
-      header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Issued" />
       ),
       accessorFn: ({ issued }) =>
         DateTime.fromJSDate(issued).toLocaleString(DateTime.DATETIME_MED),
       id: "issued",
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        const prescription = row.original;
+
+        return (
+          <Button
+            onClick={() => {
+              setLocation(
+                `/record/${prescription.diagnosis.record.id}/diagnosis/${prescription.diagnosis.id}`,
+              );
+            }}
+            size="icon"
+            variant="ghost"
+          >
+            <EyeIcon />
+          </Button>
+        );
+      },
     },
   ];
 

@@ -290,25 +290,25 @@ export default function CreditPage() {
       <div className="pt-6 pb-2 text-center">
         <p>Software</p>
       </div>
-      <div className="">
+      <div className="w-full overflow-x-hidden">
         <InfiniteMovingCardsCreditProjectSoftware />
       </div>
       <div className="pt-6 pb-2 text-center">
         <p>Project</p>
       </div>
-      <div className="">
+      <div className="w-full overflow-x-hidden">
         <InfiniteMovingCardsCreditProject />
       </div>
       <div className="pt-6 pb-2 text-center">
         <p>Communication</p>
       </div>
-      <div className="">
+      <div className="w-full overflow-x-hidden">
         <InfiniteMovingCardsCreditCommunication />
       </div>
       <div className="pt-6 pb-2 text-center">
         <p>Libraries Used</p>
       </div>
-      <div className="">
+      <div className="w-full overflow-x-hidden">
         <InfiniteMovingCardsCreditLibraries />
       </div>
       <div className="fixed top-0 right-0 mt-4 mr-4 border-2 rounded-lg border-black">

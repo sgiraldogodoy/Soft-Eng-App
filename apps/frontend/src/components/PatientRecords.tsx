@@ -43,22 +43,19 @@ import { trpc } from "@/utils/trpc.ts";
 import { useLocation } from "wouter";
 import { DateTime } from "luxon";
 import { PencilIcon } from "lucide-react";
-import { useVisit } from "./EmrVisit";
 import { cn } from "@/lib/utils";
 // import {trpc} from "@/utils/trpc.ts";
 // import {skipToken} from "@tanstack/react-query";
 
-export function RecordTable({
-  thisVisit,
+export function PatientRecords({
+  patientId,
   className,
 }: {
-  thisVisit?: boolean;
+  patientId: string;
   className?: string;
 }) {
-  const visit = useVisit();
   const [data] = trpc.record.getAll.useSuspenseQuery({
-    byVisit: thisVisit ? visit.id : undefined,
-    byNotVisit: !thisVisit ? visit.id : undefined,
+    byPatient: patientId,
   });
 
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -100,7 +97,7 @@ export function RecordTable({
             variant="ghost"
             size="icon"
             onClick={() => {
-              setLocation(`/record/${record.id}`);
+              setLocation(`/emr/visit/${record.visitId}/record/${record.id}`);
             }}
           >
             <PencilIcon className="h-4 w-4" />
@@ -138,7 +135,9 @@ export function RecordTable({
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onSelect={() => {
-                  setLocation(`/record/${record.id}`);
+                  setLocation(
+                    `/emr/visit/${record.visitId}/record/${record.id}`,
+                  );
                 }}
               >
                 Edit record
@@ -173,9 +172,7 @@ export function RecordTable({
   });
 
   return (
-    <div
-      className={cn("shadow-md rounded-md overflow-auto relative", className)}
-    >
+    <div className={cn("rounded-md overflow-auto relative", className)}>
       <AlertDialog
         open={!!deletingId}
         onOpenChange={(v) => {
@@ -224,7 +221,7 @@ export function RecordTable({
       </AlertDialog>
 
       <Table className="overflow-auto">
-        <TableHeader className="sticky top-0 bg-pink-100">
+        <TableHeader className="sticky top-0">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {

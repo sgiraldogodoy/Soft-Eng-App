@@ -275,10 +275,13 @@ enum sex {
 }
 
 model Identity {
-  id       String    @id @default(uuid())
+  id String @unique @default(uuid())
+
   idType   IDTypes
   idNumber String    @unique
   patients Patient[] @relation(name: "PatientToIdentity")
+
+  @@id(name: "uniqueId", [idType, idNumber])
 }
 
 enum IDTypes {
@@ -291,7 +294,7 @@ model Appointment {
   id              String   @id @default(uuid())
   createdTime     DateTime @default(now())
   appointmentTime DateTime
-  checkedIn       Boolean
+  checkedIn       Boolean  @default(false)
   nodeId          String?
   location        Node?    @relation(name: "AppointmentToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: SetNull)
   patientId       String
@@ -304,6 +307,7 @@ model Appointment {
 
 model Visit {
   id        String   @id @default(uuid())
+  closed    Boolean  @default(false)
   records   Record[] @relation(name: "VisitNoteToVisit")
   staffId   String?
   staff     Staff?   @relation(name: "VisitStaff", fields: [staffId], references: [id], onUpdate: Cascade, onDelete: SetNull)

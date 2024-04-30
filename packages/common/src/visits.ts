@@ -4,9 +4,36 @@ import { ZCreatePatientSchema, ZCreateStaffSchema } from "./user.ts";
 import { z } from "zod";
 
 export const ZCreateAppointmentSchema = z.object({
-  createdTime: z.coerce.date(),
-  appointmentTime: z.coerce.date(),
-  checkedIn: z.boolean(),
+  appointmentTime: z.string().transform((val, ctx) => {
+    const { success: isDatetime } = z
+      .string()
+      .datetime({
+        offset: true,
+      })
+      .safeParse(val);
+
+    if (isDatetime) return val;
+
+    console.log(val + ":00-4:00");
+    const { data, success } = z
+      .string()
+      .datetime({
+        offset: true,
+      })
+      .safeParse(val + ":00-04:00");
+
+    if (!success) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Invalid date.",
+        path: ["appointmentTime"],
+      });
+      return z.NEVER;
+    }
+
+    return data;
+  }),
+  checkedIn: z.boolean().default(false),
   staff: nestSchema(ZCreateStaffSchema),
   patient: nestSchema(ZCreatePatientSchema),
   notes: z.string(),

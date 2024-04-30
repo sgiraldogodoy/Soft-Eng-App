@@ -44,9 +44,9 @@ export function PrescriptionForm() {
     });
 
     toast.promise(prescription, {
-      success: "Created a new subscription",
-      loading: "Creating a new subscription...",
-      error: "Error creating subscription",
+      success: "Created a new prescription",
+      loading: "Creating a new prescription...",
+      error: "Error creating prescription",
     });
   };
 

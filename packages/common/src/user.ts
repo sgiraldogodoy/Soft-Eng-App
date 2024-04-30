@@ -41,6 +41,22 @@ export const ZCreatePatientSchema = z.object({
   notes: z.string().optional(),
 });
 
+export const ZUpdatePatientSchema = z.object({
+  entryDate: z.coerce.date().optional(),
+  firstName: z.string().min(1).optional(),
+  middleName: z.string().optional(),
+  lastName: z.string().min(1).optional(),
+  inTreatment: z.boolean().optional(),
+  weight: z.number().optional(),
+  height: z.number().optional(),
+  bloodType: z.string().optional(),
+  sex: z.enum(["male", "female", "other"]).optional(),
+  insurance: z.string().optional(),
+  dateOfBirth: z.string().date().optional(),
+  phoneNumber: z.string().optional(),
+  notes: z.string().optional(),
+});
+
 export const ZCreateUserSchema = z.discriminatedUnion("role", [
   ZCreateBaseUserSchema.extend({
     staff: z.union([

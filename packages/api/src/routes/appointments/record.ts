@@ -1,24 +1,51 @@
-import { protectedProcedure } from "../../trpc.ts";
+import { loggedInProcedure, protectedProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
 import { ZCreateRecordSchema } from "common";
 import { updateSchema } from "common/src/zod-utils.ts";
 
 export const recordRouter = router({
-  getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.record.findMany({
-      include: {
-        author: true,
-        vitals: true,
-        diagnoses: true,
-        visit: {
-          include: {
-            patient: true,
+  getAll: protectedProcedure
+    .input(
+      z.object({
+        byVisit: z.string().optional(),
+        byNotVisit: z.string().optional(),
+        byPatient: z.string().optional(),
+      }),
+    )
+    .query(({ input, ctx }) => {
+      return ctx.db.record.findMany({
+        where: {
+          AND: [
+            {
+              visitId: {
+                not: input.byNotVisit,
+              },
+            },
+            {
+              visitId: input.byVisit,
+            },
+            input.byPatient
+              ? {
+                  visit: {
+                    patientId: input.byPatient,
+                  },
+                }
+              : {},
+          ],
+        },
+        include: {
+          author: true,
+          vitals: true,
+          diagnoses: true,
+          visit: {
+            include: {
+              patient: true,
+            },
           },
         },
-      },
-    });
-  }),
+      });
+    }),
 
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
@@ -149,4 +176,31 @@ export const recordRouter = router({
         },
       });
     }),
+
+  myRecords: loggedInProcedure.query(({ ctx }) => {
+    return ctx.db.record.findMany({
+      where: {
+        visit: {
+          patient: {
+            user: {
+              sub: ctx.token.payload.sub as string,
+            },
+          },
+        },
+      },
+      include: {
+        vitals: true,
+        author: true,
+        diagnoses: {
+          include: {
+            prescriptions: {
+              include: {
+                pharmacy: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }),
 });

@@ -1,7 +1,7 @@
 import { protectedProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
-import { ZCreatePatientSchema } from "common";
+import { ZCreatePatientSchema, ZUpdatePatientSchema } from "common";
 import { manySchema, updateSchema } from "common/src/zod-utils.ts";
 import { DateTime } from "luxon";
 
@@ -48,6 +48,9 @@ export const patient = router({
           location: true,
           pcp: true,
           user: true,
+          appointments: true,
+          visits: true,
+          identity: true,
         },
       });
     }),
@@ -87,6 +90,64 @@ export const patient = router({
         },
         data: input.data,
       });
+    }),
+
+  updatePatient: protectedProcedure
+    .input(
+      z.object({
+        basePatient: updateSchema(ZUpdatePatientSchema),
+        locationId: z.string().optional(),
+        identity: z
+          .object({
+            idNumber: z.string().optional(),
+            idType: z.enum(["ssn", "driverLicense", "passport"]).optional(),
+          })
+          .optional(),
+        pcpId: z.string().optional(),
+        userId: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { identity, basePatient } = input;
+      if (identity?.idType && identity?.idNumber) {
+        return ctx.db.patient.update({
+          where: {
+            id: basePatient.id,
+          },
+          data: {
+            ...basePatient.data,
+            dateOfBirth:
+              DateTime.fromISO(input.basePatient.data.dateOfBirth)
+                .setZone("local")
+                .toISO() ?? undefined,
+            identity: {
+              upsert: {
+                create: {
+                  idType: identity?.idType,
+                  idNumber: identity?.idNumber,
+                },
+                update: {
+                  idType: identity?.idType,
+                  idNumber: identity?.idNumber,
+                },
+              },
+            },
+          },
+        });
+      } else {
+        return ctx.db.patient.update({
+          where: {
+            id: basePatient.id,
+          },
+          data: {
+            ...basePatient.data,
+            dateOfBirth:
+              DateTime.fromISO(input.basePatient.data.dateOfBirth)
+                .setZone("local")
+                .toISO() ?? undefined,
+          },
+        });
+      }
     }),
 
   updateMany: protectedProcedure
@@ -135,6 +196,52 @@ export const patient = router({
           pcp: {
             connect: {
               id: input.staffId,
+            },
+          },
+        },
+      });
+    }),
+
+  diagnoses: protectedProcedure
+    .input(z.object({ patientId: z.string() }))
+    .query(({ input, ctx }) => {
+      return ctx.db.diagnosis.findMany({
+        where: {
+          record: {
+            visit: {
+              patientId: input.patientId,
+            },
+          },
+        },
+        include: {
+          record: true,
+        },
+      });
+    }),
+
+  prescriptions: protectedProcedure
+    .input(z.object({ patientId: z.string() }))
+    .query(({ input, ctx }) => {
+      return ctx.db.prescription.findMany({
+        where: {
+          diagnosis: {
+            record: {
+              visit: {
+                patientId: input.patientId,
+              },
+            },
+          },
+        },
+        include: {
+          diagnosis: {
+            include: {
+              record: {
+                include: {
+                  visit: {
+                    include: { patient: true },
+                  },
+                },
+              },
             },
           },
         },

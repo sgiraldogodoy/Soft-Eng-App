@@ -11,9 +11,13 @@ import PatientIntegration from "./PatientIntegration";
 import { Settings } from "@/routes/Settings.tsx";
 import CreditPage from "@/routes/CreditPage.tsx";
 import Music from "@/routes/MusicPlayerEasterEgg.tsx";
+import { PatientPortal } from "@/routes/PatientPortal.tsx";
 import PhoneTextToNav from "@/routes/PhoneTextToNav.tsx";
 import { EmrEntry } from "@/components/emr/EmrEntry";
 import Analytics from "@/routes/Analytics.tsx";
+import EditPatient from "@/routes/EditPatient.tsx";
+import { LoadingSpinner } from "@/components/ui/loader.tsx";
+import { Suspense } from "react";
 
 export function AppRouter() {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -25,6 +29,7 @@ export function AppRouter() {
         <Route path="/" component={HomePage} />
         <Route path="/about" component={AboutPage} />
         <Route path="/credit" component={CreditPage} />
+        <Route path="/portal" component={PatientPortal} nest />
         <Route
           path="/phonenav/:startNodeId/:endNodeId/:algorithm/:wheelchair"
           component={PhoneTextToNav}
@@ -54,6 +59,16 @@ export function AppRouter() {
           <Route path="/settings" nest>
             <Settings />
             {isDefinitelyNotAuthed && <Redirect to="/" />}
+          </Route>
+          <Route path="/patient/:id">
+            {({ id }) => (
+              <>
+                <Suspense fallback={<LoadingSpinner />}>
+                  <EditPatient patientId={id} />
+                </Suspense>
+                {isDefinitelyNotAuthed && <Redirect to="/" />}
+              </>
+            )}
           </Route>
           <Route path="/patients">
             <PatientIntegration />

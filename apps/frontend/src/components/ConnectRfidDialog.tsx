@@ -70,7 +70,7 @@ export default function ConnectRfidDialog({ open, onOpenChange }: Props) {
         <DialogHeader>
           <DialogTitle>Scan your badge!</DialogTitle>
         </DialogHeader>
-        <p>Pressing keys our your keyboard may interfere with this process.</p>
+        <p>Pressing keys on your keyboard may interfere with this process.</p>
       </DialogContent>
     </Dialog>
   );

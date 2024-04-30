@@ -127,6 +127,31 @@ export const userRouter = router({
       },
       include: {
         staff: true,
+        patient: {
+          include: {
+            appointments: {
+              include: {
+                staff: true,
+                location: true,
+              },
+              where: {
+                appointmentTime: {
+                  gt: new Date(),
+                },
+              },
+              orderBy: [
+                {
+                  appointmentTime: "asc",
+                },
+              ],
+            },
+            pcp: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
       },
     });
 
