@@ -24,9 +24,21 @@ export default function PatientGuidePage() {
         kiosk for the very idea of reducing stress in patients.
       </p>
       <Accordion type="single" collapsible className="w-auto col-span-3 mx-10">
-        <AccordionItem value="Intro">
+        <AccordionItem value="checkin">
           <AccordionTrigger className="text-black">
-            Patient Features
+            Appointment Check-in
+          </AccordionTrigger>
+          <AccordionContent>*Put Intro Here*</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="aman">
+          <AccordionTrigger className="text-black">
+            Appointment Management
+          </AccordionTrigger>
+          <AccordionContent>*Put Intro Here*</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="asched">
+          <AccordionTrigger className="text-black">
+            Appointment Scheduling
           </AccordionTrigger>
           <AccordionContent>*Put Intro Here*</AccordionContent>
         </AccordionItem>
