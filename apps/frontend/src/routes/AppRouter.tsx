@@ -11,7 +11,9 @@ import PatientIntegration from "./PatientIntegration";
 import { Settings } from "@/routes/Settings.tsx";
 //import CreditPage from "@/routes/CreditPage.tsx";
 import Music from "@/routes/MusicPlayerEasterEgg.tsx";
+import { PatientPortal } from "@/routes/PatientPortal.tsx";
 import PhoneTextToNav from "@/routes/PhoneTextToNav.tsx";
+import { EmrEntry } from "@/components/emr/EmrEntry";
 import Analytics from "@/routes/Analytics.tsx";
 import PDF from "@/components/PDFMaker.tsx";
 
@@ -25,6 +27,7 @@ export function AppRouter() {
         <Route path="/" component={HomePage} />
         <Route path="/about" component={AboutPage} />
         <Route path="/credit" component={PDF} />
+        <Route path="/portal" component={PatientPortal} nest />
         <Route
           path="/phonenav/:startNodeId/:endNodeId/:algorithm/:wheelchair"
           component={PhoneTextToNav}
@@ -62,6 +65,9 @@ export function AppRouter() {
           <Route path="/music">
             <Music />
             {isDefinitelyNotAuthed && <Redirect to="/" />}
+          </Route>
+          <Route path="/emr" nest>
+            <EmrEntry />
           </Route>
         </DashboardLayout>
       </Switch>

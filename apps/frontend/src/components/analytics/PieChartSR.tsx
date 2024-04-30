@@ -42,7 +42,7 @@ export default function PieChartSR({ selected }: PieChartSRProps) {
     "#DE87E5",
     "#8B00E6",
   ];
-  const STATUSCOLORS = ["#87CEEB", "#FFD700", "#FFA500", "#008000"];
+  const STATUSCOLORS = ["#808080", "#007FFF", "#FFA500", "#008000"];
 
   function handleColor(name: string): string {
     if (name.includes("Unassigned")) return STATUSCOLORS[0];
@@ -351,9 +351,11 @@ export default function PieChartSR({ selected }: PieChartSRProps) {
           </Pie>
         </PieChart>
       </ResponsiveContainer>
-      <div className="absolute top-6 right-6">
-        <ul className="list-none p-0">{legendItems}</ul>
-      </div>
+      {selected && (
+        <div className="absolute top-6 right-6">
+          <ul className="list-none p-0">{legendItems}</ul>
+        </div>
+      )}
     </>
   );
 }

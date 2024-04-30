@@ -48,6 +48,8 @@ export const patient = router({
           location: true,
           pcp: true,
           user: true,
+          appointments: true,
+          visits: true,
         },
       });
     }),
@@ -135,6 +137,52 @@ export const patient = router({
           pcp: {
             connect: {
               id: input.staffId,
+            },
+          },
+        },
+      });
+    }),
+
+  diagnoses: protectedProcedure
+    .input(z.object({ patientId: z.string() }))
+    .query(({ input, ctx }) => {
+      return ctx.db.diagnosis.findMany({
+        where: {
+          record: {
+            visit: {
+              patientId: input.patientId,
+            },
+          },
+        },
+        include: {
+          record: true,
+        },
+      });
+    }),
+
+  prescriptions: protectedProcedure
+    .input(z.object({ patientId: z.string() }))
+    .query(({ input, ctx }) => {
+      return ctx.db.prescription.findMany({
+        where: {
+          diagnosis: {
+            record: {
+              visit: {
+                patientId: input.patientId,
+              },
+            },
+          },
+        },
+        include: {
+          diagnosis: {
+            include: {
+              record: {
+                include: {
+                  visit: {
+                    include: { patient: true },
+                  },
+                },
+              },
             },
           },
         },

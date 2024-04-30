@@ -11,13 +11,34 @@ export const appointmentRouter = router({
     .input(ZCreateAppointmentSchema)
     .mutation(async ({ input, ctx }) => {
       return ctx.db.appointment.create({
-        data: input,
+        data: {
+          ...input,
+          appointmentTime: input.appointmentTime ?? new Date(),
+        },
       });
     }),
 
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.appointment.findMany();
-  }),
+  getAll: publicProcedure
+    .input(
+      z
+        .object({ onlyUpcoming: z.boolean().default(false) })
+        .optional()
+        .default({}),
+    )
+    .query(async ({ input, ctx }) => {
+      return ctx.db.appointment.findMany({
+        where: input?.onlyUpcoming
+          ? {
+              visit: {
+                closed: false,
+              },
+            }
+          : undefined,
+        include: {
+          visit: true,
+        },
+      });
+    }),
 
   getOne: publicProcedure
     .input(z.object({ id: z.string() }))
@@ -25,6 +46,11 @@ export const appointmentRouter = router({
       return ctx.db.appointment.findUnique({
         where: {
           id: input.id,
+        },
+        include: {
+          patient: true,
+          location: true,
+          visit: true,
         },
       });
     }),
@@ -201,5 +227,22 @@ export const appointmentRouter = router({
           },
         },
       });
+    }),
+
+  sendReminder: protectedProcedure
+    .input(z.object({ email: z.string().email() }))
+    .mutation(async ({ input, ctx }) => {
+      const { data, error } = await ctx.resend.emails.send({
+        from: "no-reply@cs3733teamq.org",
+        to: input.email,
+        subject: "Hello World",
+        html: "<strong>It works!</strong>",
+      });
+
+      if (error) {
+        return console.error({ error });
+      }
+
+      console.log({ data });
     }),
 });

@@ -125,6 +125,34 @@ export const userRouter = router({
       where: {
         sub: ctx.token.payload.sub as string,
       },
+      include: {
+        staff: true,
+        patient: {
+          include: {
+            appointments: {
+              include: {
+                staff: true,
+                location: true,
+              },
+              where: {
+                appointmentTime: {
+                  gt: new Date(),
+                },
+              },
+              orderBy: [
+                {
+                  appointmentTime: "asc",
+                },
+              ],
+            },
+            pcp: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     if (user) {

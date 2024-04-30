@@ -1,6 +1,7 @@
 import React from "react";
 import generatePDF, { Resolution, Margin, Options } from "react-to-pdf";
 import { Button } from "@/components/ui/button.tsx";
+//import {EmrVisit} from "@/components/emr/EmrVisit.tsx";
 
 const options: Options = {
   filename: "advanced-example.pdf",
@@ -38,35 +39,6 @@ const options: Options = {
   },
 };
 
-type ContainerProps = {
-  children: React.ReactNode;
-};
-
-export const Container = ({ children }: ContainerProps) => {
-  return <div className="container bg-slate-50">{children}</div>;
-};
-
-interface CardProps {
-  title?: string;
-}
-
-export const Card = ({
-  title = "Welcome to Our Sample Component",
-}: CardProps) => {
-  return (
-    <div className="card-container bg-slate-50">
-      <img src={"/cut-corridor.jpeg"} alt="BHW Corridor" className="" />
-      <h2 className="card-title bg-slate-50">{title}</h2>
-      <p className="flex flex-col w-full justify-center content-center items-center bg-slate-50">
-        HI
-      </p>
-      <p className="flex flex-col w-full justify-center content-center items-center bg-slate-50">
-        Pookie
-      </p>
-    </div>
-  );
-};
-
 // you can also use a function to return the target element besides using React refs
 const getTargetElement = () => document.getElementById("container");
 
@@ -74,12 +46,10 @@ const downloadPdf = () => generatePDF(getTargetElement, options);
 
 const PDF = () => {
   return (
-    <Container>
+    <div>
       <Button onClick={downloadPdf}>Download PDF</Button>
-      <div id="container">
-        <Card title="Using advanced example" />
-      </div>
-    </Container>
+      <div id="container"></div>
+    </div>
   );
 };
 
