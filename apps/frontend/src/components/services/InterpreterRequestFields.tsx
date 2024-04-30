@@ -38,7 +38,7 @@ const Interpreter = () => {
         <FormField
           name="data.type"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="w-full">
               <FormLabel>Language Required</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
@@ -73,7 +73,7 @@ const Interpreter = () => {
                 <Input type="datetime-local" {...field} />
               </FormControl>
               <FormDescription>
-                What date does is the request needed for?
+                What date is the request needed for?
               </FormDescription>
               <FormMessage />
             </FormItem>

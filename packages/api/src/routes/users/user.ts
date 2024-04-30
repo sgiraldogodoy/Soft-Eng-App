@@ -1,4 +1,4 @@
-import { protectedProcedure } from "../../trpc.ts";
+import { loggedInProcedure, protectedProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
 import { ZCreateBaseUserSchema, ZCreateUserWithAuth0AndNested } from "common";
@@ -120,11 +120,74 @@ export const userRouter = router({
       });
     }),
 
-  me: protectedProcedure.query(async ({ ctx }) => {
+  me: loggedInProcedure.query(async ({ ctx }) => {
     const user = await ctx.db.user.findUnique({
       where: {
         sub: ctx.token.payload.sub as string,
       },
+      include: {
+        staff: true,
+        patient: {
+          include: {
+            appointments: {
+              include: {
+                staff: true,
+                location: true,
+              },
+              where: {
+                appointmentTime: {
+                  gt: new Date(),
+                },
+              },
+              orderBy: [
+                {
+                  appointmentTime: "asc",
+                },
+              ],
+            },
+            pcp: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (user) {
+      return user;
+    } else {
+      return null;
+    }
+  }),
+
+  lockMe: protectedProcedure.mutation(async ({ ctx }) => {
+    const user = await ctx.db.user.findUnique({
+      where: {
+        sub: ctx.token.payload.sub as string,
+      },
+      include: {
+        rfid: true,
+      },
+    });
+
+    if (!user) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Can't lock an account without a connected user.",
+      });
+    }
+    if (!user.rfid) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Can't lock a user without an RFID key.",
+      });
+    }
+
+    await ctx.db.user.update({
+      where: { sub: ctx.token.payload.sub as string },
+      data: { locked: true },
     });
 
     if (user) {

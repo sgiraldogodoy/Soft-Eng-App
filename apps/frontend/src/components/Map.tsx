@@ -371,9 +371,6 @@ export default function Map({
           "max-h-screen overflow-auto": !isAuthenticated,
         })}
       />
-      <div className="absolute text-black font-bold text-2xl bottom-6 right-8">
-        <p> Level {floor}</p>
-      </div>
       {edges && (
         <Edges
           imgWidth={imgWidth}

@@ -17,6 +17,9 @@ export const visitRouter = router({
         where: {
           id: input.id,
         },
+        include: {
+          patient: true,
+        },
       });
     }),
 
@@ -116,6 +119,19 @@ export const visitRouter = router({
               id: input.staffId,
             },
           },
+        },
+      });
+    }),
+
+  close: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(({ input, ctx }) => {
+      return ctx.db.visit.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          closed: true,
         },
       });
     }),

@@ -97,6 +97,8 @@ model Service {
   it          IT?          @relation(name: "ITToService")
   religious   Religious?   @relation(name: "ReligiousToService")
   interpreter Interpreter? @relation(name: "InterpreterToService")
+  equipment   Equipment?   @relation(name: "EquipmentToService")
+  food        Food?        @relation(name: "FoodToService")
 }
 
 enum ServiceType {
@@ -112,6 +114,8 @@ enum ServiceType {
   it
   religious
   interpreter
+  equipment
+  food
 }
 
 model Flower {
@@ -219,6 +223,24 @@ model Interpreter {
   dateTime      DateTime
 }
 
+model Equipment {
+  id            String   @id @default(uuid())
+  serviceId     String   @unique
+  service       Service  @relation(name: "EquipmentToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  recipientName String
+  type          String
+  dateTime      DateTime
+}
+
+model Food {
+  id            String   @id @default(uuid())
+  serviceId     String   @unique
+  service       Service  @relation(name: "FoodToService", fields: [serviceId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  recipientName String
+  order         String
+  dateTime      DateTime
+}
+
 model Patient {
   id           String        @id @default(uuid())
   idNumber     String        @unique @default(cuid())
@@ -269,38 +291,83 @@ model Appointment {
   id              String   @id @default(uuid())
   createdTime     DateTime @default(now())
   appointmentTime DateTime
-  checkedIn       Boolean
+  checkedIn       Boolean  @default(false)
   nodeId          String?
   location        Node?    @relation(name: "AppointmentToNode", fields: [nodeId], references: [id], onUpdate: Cascade, onDelete: SetNull)
   patientId       String
   patient         Patient  @relation(name: "AppointmentToPatient", fields: [patientId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   staffId         String?
   staff           Staff?   @relation(name: "AppointmentToStaff", fields: [staffId], references: [id], onUpdate: Cascade, onDelete: SetNull)
-  visitId         String?  @unique
-  visit           Visit?   @relation(name: "AppointmentVisit", fields: [visitId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  visit           Visit?   @relation(name: "AppointmentVisit")
   notes           String
 }
 
 model Visit {
-  id          String       @id @default(uuid())
-  notes       VisitNote[]  @relation(name: "VisitNoteToVisit")
-  staffId     String?
-  staff       Staff?       @relation(name: "VisitStaff", fields: [staffId], references: [id], onUpdate: Cascade, onDelete: SetNull)
-  patientId   String
-  patient     Patient      @relation(name: "VisitPatient", fields: [patientId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  visitTime   DateTime
-  appointment Appointment? @relation(name: "AppointmentVisit")
+  id        String   @id @default(uuid())
+  closed    Boolean  @default(false)
+  records   Record[] @relation(name: "VisitNoteToVisit")
+  staffId   String?
+  staff     Staff?   @relation(name: "VisitStaff", fields: [staffId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  patientId String
+  patient   Patient  @relation(name: "VisitPatient", fields: [patientId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  visitTime DateTime
+
+  appointmentId String      @unique
+  appointment   Appointment @relation(name: "AppointmentVisit", fields: [appointmentId], references: [id], onUpdate: Cascade, onDelete: SetNull)
 }
 
-model VisitNote {
-  id        String  @id @default(uuid())
-  type      String
-  content   Json
-  published Boolean @default(false)
-  authorId  String?
-  author    Staff?  @relation(name: "VisitNoteToUser_Author", fields: [authorId], references: [id], onUpdate: Cascade, onDelete: SetNull)
-  visitId   String
-  visit     Visit   @relation(name: "VisitNoteToVisit", fields: [visitId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+model Record {
+  id           String      @id @default(uuid())
+  creationTime DateTime    @default(now())
+  type         String
+  vitals       Vitals?     @relation(name: "RecordVitals")
+  diagnoses    Diagnosis[] @relation(name: "RecordDiagnosis")
+  authorId     String
+  author       Staff       @relation(name: "VisitNoteToUser_Author", fields: [authorId], references: [id], onUpdate: Cascade, onDelete: SetNull)
+  visitId      String
+  visit        Visit       @relation(name: "VisitNoteToVisit", fields: [visitId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  notes        String      @default("")
+}
+
+model Diagnosis {
+  id            String         @id @default(uuid())
+  recordId      String
+  record        Record         @relation(name: "RecordDiagnosis", fields: [recordId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  illness       String
+  creationTime  DateTime       @default(now())
+  advice        String
+  notes         String
+  prescriptions Prescription[] @relation(name: "PrescriptionDiagnosis")
+}
+
+model Prescription {
+  id            String    @id @default(uuid())
+  drug          String
+  dosage        String
+  frequency     String
+  refillAllowed Boolean
+  diagnosisId   String
+  issued        DateTime  @default(now())
+  diagnosis     Diagnosis @relation(name: "PrescriptionDiagnosis", fields: [diagnosisId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  pharmacyId    String
+  pharmacy      Pharmacy  @relation(name: "PrescriptionPharmacy", fields: [pharmacyId], references: [id])
+}
+
+model Pharmacy {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  name          String
+  prescriptions Prescription[] @relation(name: "PrescriptionPharmacy")
+}
+
+model Vitals {
+  id            String  @id @default(uuid())
+  recordId      String  @unique
+  record        Record  @relation(name: "RecordVitals", fields: [recordId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  heartRate     Float?
+  bodyTemp      Float?
+  respRate      Float?
+  bloodPressure String?
 }
 
 model User {
@@ -309,8 +376,16 @@ model User {
   email   String   @unique
   role    Role?
   name    String
+  locked  Boolean  @default(false)
+  rfid    Rfid?    @relation(name: "UserRfid")
   patient Patient? @relation(name: "PatientUser")
   staff   Staff?   @relation(name: "StaffUser")
+}
+
+model Rfid {
+  hash   String
+  userId String @unique
+  user   User   @relation(name: "UserRfid", fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Staff {
@@ -321,7 +396,7 @@ model Staff {
   visit       Visit[]       @relation(name: "VisitStaff")
   userId      String?       @unique
   user        User?         @relation(name: "StaffUser", fields: [userId], references: [id], onUpdate: Cascade, onDelete: SetNull)
-  visitNotes  VisitNote[]   @relation(name: "VisitNoteToUser_Author")
+  records     Record[]      @relation(name: "VisitNoteToUser_Author")
   patients    Patient[]     @relation(name: "PatientStaff_PCP")
   services    Service[]     @relation(name: "ServiceStaff_Assignee")
 }
