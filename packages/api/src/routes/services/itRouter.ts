@@ -1,4 +1,4 @@
-import { publicProcedure, protectedProcedure } from "../../trpc";
+import { protectedProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
 import { ZCreateBaseServiceSchema, ZCreateItSchema } from "common";
@@ -71,7 +71,7 @@ export const itRequestRouter = router({
       });
     }),
 
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.iT.findMany({
       include: {
         service: true,
@@ -79,7 +79,7 @@ export const itRequestRouter = router({
     });
   }),
 
-  getOne: publicProcedure
+  getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       return ctx.db.iT.findUnique({

@@ -1,4 +1,4 @@
-import { protectedProcedure, publicProcedure } from "../../trpc";
+import { protectedProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
 import { ZCreateBaseServiceSchema, ZCreateRoomSchema } from "common";
@@ -14,7 +14,7 @@ export const RoomRouter = router({
         data: input,
       });
     }),
-  getOne: publicProcedure
+  getOne: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -32,7 +32,7 @@ export const RoomRouter = router({
         },
       });
     }),
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }) => {
     // get all room requests
     return ctx.db.room.findMany({
       include: {

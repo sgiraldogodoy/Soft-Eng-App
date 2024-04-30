@@ -1,4 +1,4 @@
-import { protectedProcedure, publicProcedure } from "../../trpc.ts";
+import { protectedProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
@@ -52,11 +52,11 @@ export const staffRouter = router({
       });
     }),
 
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.staff.findMany();
   }),
 
-  getOne: publicProcedure
+  getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       return ctx.db.staff.findUnique({

@@ -1,4 +1,4 @@
-import { protectedProcedure, publicProcedure } from "../../trpc.ts";
+import { protectedProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
 import { ZCreateAppointmentSchema, ZCreateStaffSchema } from "common";
@@ -15,7 +15,7 @@ export const appointmentRouter = router({
       });
     }),
 
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db.appointment.findMany({
       include: {
         visit: true,
@@ -23,7 +23,7 @@ export const appointmentRouter = router({
     });
   }),
 
-  getOne: publicProcedure
+  getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       return ctx.db.appointment.findUnique({
@@ -38,7 +38,7 @@ export const appointmentRouter = router({
       });
     }),
 
-  updateCheckIn: publicProcedure
+  updateCheckIn: protectedProcedure
     .input(
       z.object({
         documentId: z.string(),

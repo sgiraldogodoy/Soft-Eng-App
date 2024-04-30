@@ -1,4 +1,4 @@
-import { protectedProcedure, publicProcedure } from "../../trpc";
+import { protectedProcedure } from "../../trpc";
 import { router } from "../../trpc";
 import { z } from "zod";
 import { ZCreateBaseServiceSchema, ZCreateSecuritySchema } from "common";
@@ -14,7 +14,7 @@ export const SecurityRouter = router({
         data: input,
       });
     }),
-  getOne: publicProcedure
+  getOne: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -32,7 +32,7 @@ export const SecurityRouter = router({
         },
       });
     }),
-  getAll: publicProcedure.query(async ({ ctx }) => {
+  getAll: protectedProcedure.query(async ({ ctx }) => {
     // get all security requests
     return ctx.db.security.findMany({
       include: {
