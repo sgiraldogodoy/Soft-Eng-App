@@ -338,6 +338,7 @@ export default function Map({
     <div
       className="relative h-full"
       ref={containerRef}
+      id={"mapDiv"}
       style={{
         position: "relative",
         overflow: "hidden",
@@ -402,6 +403,7 @@ export default function Map({
         path={path}
         selectedNodes={selectedMultiNodes}
         setSelectedNodes={handleEscape}
+        map={document.getElementById("mapDiv") as HTMLElement}
       />
       {path && (
         <Lines

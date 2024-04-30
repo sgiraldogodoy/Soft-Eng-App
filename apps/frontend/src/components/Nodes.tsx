@@ -29,6 +29,7 @@ interface NodesProps {
   selectedNodes?: Node[];
   setSelectedNodes?: () => void;
   path?: Node[];
+  map: HTMLElement;
 }
 
 export function Nodes({
@@ -48,6 +49,7 @@ export function Nodes({
   selectedNodes,
   setSelectedNodes,
   path,
+  map,
 }: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [hoveredNodeString, setHoveredNodeString] = useState<string | null>(
@@ -360,6 +362,7 @@ export function Nodes({
         scale,
       );
       handleDragMove(newX, newY, hoveredNode);
+      handlePan(e);
     };
 
     const handleDragEnd = () => {
@@ -390,6 +393,26 @@ export function Nodes({
       id: nodeId,
       data: { x: Math.floor(newX), y: Math.floor(newY) },
     });
+  };
+
+  const handlePan = (e: MouseEvent) => {
+    const rect = map.getBoundingClientRect();
+    const marginX = rect.width * 0.2;
+    const marginY = rect.height * 0.2;
+
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+
+    if (mouseX <= rect.left + marginX) {
+      dragOffset.x += 10;
+    } else if (mouseX >= rect.right - marginX) {
+      dragOffset.x -= 10;
+    }
+    if (mouseY <= rect.top + marginY) {
+      dragOffset.y += 10;
+    } else if (mouseY >= rect.bottom - marginY) {
+      dragOffset.y -= 10;
+    }
   };
 
   let filteredNodes = nodes.filter((node) => node.floor === floor);
