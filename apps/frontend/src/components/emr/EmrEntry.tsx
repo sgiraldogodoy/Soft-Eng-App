@@ -5,6 +5,7 @@ import { DateTime } from "luxon";
 import { Button } from "../ui/button";
 import { Route, Switch, useLocation } from "wouter";
 import { EmrVisit } from "./EmrVisit";
+import { AppointmentsTable } from "./AppointmentsTable";
 
 const AppointmentCard = ({ appointmentId }: { appointmentId: string }) => {
   const [appointment] = trpc.appointment.getOne.useSuspenseQuery({
@@ -98,7 +99,7 @@ export function EmrEntry() {
         )}
       </Route>
       <Route path="/">
-        <div className="w-full h-full p-4">
+        <div className="flex flex-col gap-4 w-full h-full p-4">
           <div className="flex flex-row items-center gap-2">
             {upcoming?.map((a) => (
               <Suspense key={a.id}>
@@ -106,6 +107,9 @@ export function EmrEntry() {
               </Suspense>
             ))}
           </div>
+          <Suspense>
+            <AppointmentsTable />
+          </Suspense>
         </div>
       </Route>
     </Switch>

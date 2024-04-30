@@ -12,7 +12,7 @@ import { Suspense, createContext, useContext } from "react";
 import { Button } from "../ui/button";
 import { CircleAlert, FolderX, PlusIcon } from "lucide-react";
 import BackgroundWave from "../BackgroundWave";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import { toast } from "sonner";
 import { RecordEdit } from "./RecordEdit";
 import { EmrBreadcrumbs } from "./EmrBreadcrumbs";
@@ -36,6 +36,8 @@ export function EmrVisit({ visitId }: { visitId: string }) {
   const [visit] = trpc.visit.getOne.useSuspenseQuery({
     id: visitId,
   });
+
+  const [, setLocation] = useLocation();
 
   const closeVisit = trpc.visit.close.useMutation({
     onSuccess: () => {
@@ -149,6 +151,10 @@ export function EmrVisit({ visitId }: { visitId: string }) {
                           loading: "Creating record...",
                           error: "Error creating record.",
                         });
+
+                        const newRecord = await creation;
+
+                        setLocation(`/record/${newRecord?.id}`);
                       }}
                       className="ml-auto shrink-0 gap-2"
                       size="sm"
