@@ -66,7 +66,14 @@ export default function PathFind() {
       setStartNode(clickedNode);
     } else if (!goalNode) {
       setGoalNode(clickedNode);
-      // }
+      const nodesData = nodesQuery?.data;
+      if (nodesData) {
+        const startNodeFloor = nodesData.find(
+          (node) => node.id === startNode,
+        )?.floor;
+        setFloor(startNodeFloor as Floor);
+        setImgUrl(FLOOR_URLS[startNodeFloor as Floor]);
+      }
     }
   };
 
@@ -107,6 +114,7 @@ export default function PathFind() {
     <div className="relative h-full">
       <Map
         onNodeClick={handleNodeClickInApp}
+        onElevClick={handleFloorClick}
         nodes={nodesQuery.data}
         path={pathData}
         startNode={startNode}
