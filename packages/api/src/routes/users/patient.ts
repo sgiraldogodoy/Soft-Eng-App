@@ -1,7 +1,7 @@
 import { protectedProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
-import { ZCreatePatientSchema } from "common";
+import {ZCreatePatientSchema, ZUpdatePatientSchema} from "common";
 import { manySchema, updateSchema } from "common/src/zod-utils.ts";
 import { DateTime } from "luxon";
 
@@ -50,6 +50,7 @@ export const patient = router({
           user: true,
           appointments: true,
           visits: true,
+          identity: true,
         },
       });
     }),
@@ -90,6 +91,53 @@ export const patient = router({
         data: input.data,
       });
     }),
+
+    updatePatient: protectedProcedure
+        .input(z.object({
+            basePatient: updateSchema(ZUpdatePatientSchema),
+            locationId: z.string().optional(),
+            identity: z.object({
+                idNumber: z.string(),
+                idType: z.enum(["ssn", "driverLicense", "passport"])
+            }).optional(),
+            pcpId: z.string().optional(),
+            userId: z.string().optional(),
+        }))
+        .mutation(async ({input, ctx}) => {
+            return ctx.db.patient.update({
+                where: {
+                    id: input.basePatient.id,
+                },
+                data: {
+                    ...input.basePatient.data,
+                    location: {
+                        connect: {
+                            id: input.locationId,
+                        },
+                    },
+                    pcp: {
+                        connect: {
+                            id: input.pcpId,
+                        },
+                    },
+                    user: {
+                        connect: {
+                            id: input.userId,
+                        },
+                    },
+                    identity: {
+                        connectOrCreate: {
+                            where: {
+                                idNumber: input?.identity?.idNumber,
+                            },
+                            create: {
+                                ...input?.identity!,
+                            },
+                        },
+                    },
+                },
+            });
+        }),
 
   updateMany: protectedProcedure
     .input(

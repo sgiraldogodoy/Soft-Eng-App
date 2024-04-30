@@ -16,6 +16,7 @@ import { LoadingSpinner } from "@/components/ui/loader.tsx";
 import RequestPatientTable from "@/components/services/RequestPatientTable.tsx";
 import { X } from "lucide-react";
 import { DateTime } from "luxon";
+import { useLocation } from "wouter";
 
 export default function RequestSummary() {
   const [rowSelectionState, setRowSelectionState] = useState<RowSelectionState>(
@@ -23,6 +24,7 @@ export default function RequestSummary() {
   );
 
   const utils = trpc.useUtils();
+  const [, setLocation] = useLocation();
 
   const patientQuery = trpc.patient.getAll.useQuery();
   const patientDeleteMutation = trpc.patient.deleteOne.useMutation();
@@ -135,8 +137,16 @@ export default function RequestSummary() {
           <CardFooter>
             <div className="flex items-center justify-stretch w-full self-center gap-4">
               <Button
+                className="flex-1"
+                onClick={() => {
+                  setLocation(`/patient/${selectedRow.id}`);
+                }}
+              >
+                Edit
+              </Button>
+              <Button
                 variant="destructive"
-                className="w-full"
+                className="flex-1"
                 onClick={() => {
                   toast.promise(
                     patientDeleteMutation.mutateAsync(
