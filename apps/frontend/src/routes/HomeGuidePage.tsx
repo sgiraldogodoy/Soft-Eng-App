@@ -168,12 +168,61 @@ export default function HomeGuidePage() {
                     />
                   </div>
                   <p>
-                    While any user can access pathfinding without logging in,
-                    logged in users are also able to access the page. Logged in
-                    users will automatically be directed to the same page, but
-                    will gain the additional feature of a navigation bar which
-                    grants them access to features that are otherwise
-                    restricted.
+                    &emsp;&emsp;While any user can access pathfinding without
+                    logging in, logged in users are also able to access the
+                    page. Logged in users will automatically be directed to the
+                    same page, but will gain the additional feature of a
+                    navigation bar which grants them access to features that are
+                    otherwise restricted.
+                  </p>
+                  <div className="w-full flex justify-center">
+                    <img
+                      src="./helpmenucaptures/Pathfind0.PNG"
+                      alt="homescreen"
+                      className="object-scale-down w-[50%] h-auto rounded-md m-2"
+                    />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="Loggingin">
+                <AccordionTrigger className="text-black">
+                  Logging in/out
+                </AccordionTrigger>
+                <AccordionContent>
+                  <p>
+                    &emsp;&emsp;To access the full website, users can log in by
+                    selecting the Sign In button on the bottom right of the
+                    screen.
+                  </p>
+                  <div className="w-full flex justify-center">
+                    <img
+                      src="./helpmenucaptures/Pathfind0.PNG"
+                      alt="homescreen"
+                      className="object-scale-down w-[50%] h-auto rounded-md m-2"
+                    />
+                  </div>
+                  <p>
+                    &emsp;&emsp;After which, they are redirected to a login
+                    screen (hosted by Auth0 to ensure the safety of the website
+                    and its critical contents). Once the user correctly fills in
+                    their credentials and selects the continue button, they will
+                    be redirected to the map page, where they can access the
+                    other features.
+                  </p>
+                  <div className="w-full flex justify-center">
+                    <img
+                      src="./helpmenucaptures/Pathfind0.PNG"
+                      alt="homescreen"
+                      className="object-scale-down w-[50%] h-auto rounded-md m-2"
+                    />
+                  </div>
+                  <p>
+                    &emsp;&emsp;Inversely, to sign out, users can select their
+                    profile picture displayed in the top right. They then can
+                    select the Log Out button in the dropdown. This will then
+                    redirect the user to the splash page of the kiosk and log
+                    them out, which would require them to then log back in again
+                    to access the certain features of the kiosk.
                   </p>
                   <div className="w-full flex justify-center">
                     <img
