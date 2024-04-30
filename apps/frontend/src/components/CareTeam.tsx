@@ -10,10 +10,10 @@ export function CareTeam() {
 
   if (!me || !me.patient || !me.patient.pcp) {
     return (
-      <div className="flex flex-col gap-3 w-1/2">
+      <div className="flex-1 flex flex-col gap-3">
         <p className="text-xl">Contact your primary care provider</p>
-        <Card className="w-1/2">
-          <CardContent className="pt-6 w-1/2">
+        <Card className="flex-1">
+          <CardContent className="pt-6">
             <div className="text-lg font-semibold">No PCP Assigned</div>
             <div className="text-gray-600">
               Please contact your healthcare provider to assign a PCP.

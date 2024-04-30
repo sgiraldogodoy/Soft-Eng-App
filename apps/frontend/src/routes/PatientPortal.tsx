@@ -116,8 +116,8 @@ export function PatientPortal() {
               </CardContent>
             </Card>
             <div className="flex flex-1 h-full overflow-y-hidden gap-6 py-6">
-              <div className="shrink-0 flex flex-col overflow-auto gap-4">
-                <div className="flex gap-4 max-w-[66vw]">
+              <div className="shrink-0 flex flex-col overflow-auto gap-4 basis-2/3">
+                <div className="flex gap-4">
                   <NextAppointment />
                   <CareTeam />
                 </div>
