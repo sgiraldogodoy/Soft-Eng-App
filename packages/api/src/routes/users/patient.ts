@@ -108,40 +108,27 @@ export const patient = router({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      if (input?.identity?.idType && input?.identity?.idNumber) {
+      const { identity, basePatient } = input;
+      if (identity?.idType && identity?.idNumber) {
         return ctx.db.patient.update({
           where: {
-            id: input.basePatient.id,
+            id: basePatient.id,
           },
           data: {
-            ...input.basePatient.data,
+            ...basePatient.data,
             dateOfBirth:
               DateTime.fromISO(input.basePatient.data.dateOfBirth)
                 .setZone("local")
                 .toISO() ?? undefined,
-            location: {
-              connect: {
-                id: input.locationId,
-              },
-            },
-            pcp: {
-              connect: {
-                id: input.pcpId,
-              },
-            },
-            user: {
-              connect: {
-                id: input.userId,
-              },
-            },
             identity: {
-              connectOrCreate: {
-                where: {
-                  idNumber: input?.identity?.idNumber,
-                },
+              upsert: {
                 create: {
-                  idType: input?.identity?.idType,
-                  idNumber: input?.identity?.idNumber,
+                  idType: identity?.idType,
+                  idNumber: identity?.idNumber,
+                },
+                update: {
+                  idType: identity?.idType,
+                  idNumber: identity?.idNumber,
                 },
               },
             },
@@ -150,29 +137,14 @@ export const patient = router({
       } else {
         return ctx.db.patient.update({
           where: {
-            id: input.basePatient.id,
+            id: basePatient.id,
           },
           data: {
-            ...input.basePatient.data,
+            ...basePatient.data,
             dateOfBirth:
               DateTime.fromISO(input.basePatient.data.dateOfBirth)
                 .setZone("local")
                 .toISO() ?? undefined,
-            location: {
-              connect: {
-                id: input.locationId,
-              },
-            },
-            pcp: {
-              connect: {
-                id: input.pcpId,
-              },
-            },
-            user: {
-              connect: {
-                id: input.userId,
-              },
-            },
           },
         });
       }

@@ -44,7 +44,10 @@ import { Input } from "@/components/ui/input.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { DateTime } from "luxon";
 import { updateSchema } from "common/src/zod-utils.ts";
+import { X } from "lucide-react";
 import { useLocation } from "wouter";
+import BackgroundWave from "@/components/BackgroundWave.tsx";
+import { PatientRecords } from "@/components/PatientRecords.tsx";
 
 // Add your type-specific form schema to this array.
 const FormSchema = z.object({
@@ -66,7 +69,7 @@ interface EditPatientProps {
 
 export default function EditPatient({ patientId }: EditPatientProps) {
   const [patient] = trpc.patient.getOne.useSuspenseQuery({ id: patientId });
-
+  //
   const [, setLocation] = useLocation();
   const unfilteredQuery = trpc.node.getAll.useQuery();
   const unfilteredStaffQuery = trpc.staff.getAll.useQuery();
@@ -131,6 +134,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
 
   const utils = trpc.useUtils();
   const updatePatientRequest = trpc.patient.updatePatient.useMutation();
+  const patientDeleteMutation = trpc.patient.deleteOne.useMutation();
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data);
@@ -156,7 +160,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
       },
       {
         onSuccess: () => {
-          utils.patient.getAll.invalidate();
+          utils.patient.getOne.refetch();
         },
       },
     );
@@ -169,12 +173,9 @@ export default function EditPatient({ patientId }: EditPatientProps) {
 
     try {
       await updatePatient;
-      form.reset();
     } catch {
       console.error("Error :(");
     }
-
-    setLocation("/patients");
   }
 
   if (!patient) {
@@ -182,409 +183,461 @@ export default function EditPatient({ patientId }: EditPatientProps) {
   }
 
   return (
-    <div className="flex">
-      <Card className="h-full backdrop-blur-md flex-1 flex flex-col overflow-auto z-0 bg-white/90 ">
-        <CardHeader>
-          <CardTitle className="capitalize">Edit Patient Details</CardTitle>
-        </CardHeader>
-        <CardFooter className="text-muted-foreground text-xs ">
-          * Required fields
-        </CardFooter>
-        <CardContent className="flex-1 flex flex-col justify-between items-center h-full gap-2 ">
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full h-full flex flex-col justify-between items-stretch gap-4"
+    <>
+      <BackgroundWave />
+      <div className="flex flex-row basis-1/2 gap-4 mx-10 my-6 h-[95%] w-[95%]">
+        <Card className="h-full backdrop-blur-md flex-1 flex flex-col overflow-auto z-0 bg-white/90">
+          <CardHeader>
+            <CardTitle className="capitalize">Patient Records</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <PatientRecords patientId={patientId} />
+          </CardContent>
+        </Card>
+        <Card className="h-full backdrop-blur-md flex-1 flex flex-col overflow-auto z-0 bg-white/90">
+          <div className="absolute top-2 right-2">
+            <Button
+              className="flex-1"
+              variant="ghost"
+              onClick={() => {
+                setLocation(`/patients`);
+              }}
             >
-              <div className="flex flex-row gap-2 items-stretch">
+              <X />
+            </Button>
+          </div>
+          <CardHeader>
+            <CardTitle className="capitalize">Edit Patient Details</CardTitle>
+          </CardHeader>
+          <CardFooter className="text-muted-foreground text-xs ">
+            * Required fields
+          </CardFooter>
+          <CardContent className="flex-1 flex flex-col justify-between items-center h-full gap-2 ">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="w-full h-full flex flex-col justify-between items-stretch gap-4"
+              >
+                <div className="flex flex-row gap-2 items-stretch">
+                  <FormField
+                    control={form.control}
+                    name="basePatient.data.firstName"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>First Name*</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="basePatient.data.middleName"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>Middle Name</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="basePatient.data.lastName"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>Last Name*</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex flex-row gap-2 items-stretch">
+                  <FormField
+                    control={form.control}
+                    name="basePatient.data.insurance"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col flex-1">
+                        <FormLabel>Patient's Insurance</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a insurance provider" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="None">None</SelectItem>
+                            <SelectItem value="MassHealth">
+                              MassHealth
+                            </SelectItem>
+                            <SelectItem value="Aetna">Aetna</SelectItem>
+                            <SelectItem value="Cigna">Cigna</SelectItem>
+                            <SelectItem value="Blue Cross">
+                              Blue Cross
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="locationId"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col h-full justify-between flex-1">
+                        <FormLabel>Location</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className={cn(
+                                  "w-full justify-between",
+                                  !field.value && "text-muted-foreground",
+                                )}
+                              >
+                                {field.value
+                                  ? nodesQuery.find(
+                                      (node) => node.longName === field.value,
+                                    )?.longName
+                                  : "Select location"}
+                                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[310px] max-h-[200px] overflow-scroll p-0">
+                            <Command>
+                              <CommandInput
+                                placeholder="Search locations..."
+                                className="h-9"
+                              />
+                              <CommandEmpty>No location found.</CommandEmpty>
+                              <CommandGroup>
+                                {nodesQuery.map((location) => (
+                                  <CommandItem
+                                    value={location.longName}
+                                    key={location.longName}
+                                    onSelect={() => {
+                                      form.setValue(
+                                        "locationId",
+                                        location.longName,
+                                      );
+                                    }}
+                                  >
+                                    {location.longName}
+                                    <CheckIcon
+                                      className={cn(
+                                        "ml-auto h-4 w-4",
+                                        location.longName === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0",
+                                      )}
+                                    />
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex flex-row gap-2 items-stretch">
+                  <FormField
+                    control={form.control}
+                    name="identity.idNumber"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>ID*</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="text" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="identity.idType"
+                    render={({ field }) => (
+                      <FormItem className="flex-1 ">
+                        <FormLabel>Type of ID*</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a insurance provider" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="ssn">SSN</SelectItem>
+                            <SelectItem value="passport">Passport</SelectItem>
+                            <SelectItem value="driverLicense">
+                              Driver License
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="pcpId"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>Primary Care Provider</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className={cn(
+                                  "w-full justify-between",
+                                  !field.value && "text-muted-foreground",
+                                )}
+                              >
+                                {field.value
+                                  ? staffQuery.find(
+                                      (staff) => staff.id === field.value,
+                                    )?.name
+                                  : "Select Staff"}
+                                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[310px] max-h-[200px] overflow-scroll p-0">
+                            <Command>
+                              <CommandInput
+                                placeholder="Search employee..."
+                                className="h-9"
+                              />
+                              <CommandEmpty>No employee found.</CommandEmpty>
+                              <CommandGroup>
+                                {staffQuery.map((assignee) => (
+                                  <CommandItem
+                                    value={assignee.name}
+                                    key={assignee.name}
+                                    onSelect={() => {
+                                      form.setValue("pcpId", assignee.id);
+                                    }}
+                                  >
+                                    {assignee.name}
+                                    <CheckIcon
+                                      className={cn(
+                                        "ml-auto h-4 w-4",
+                                        assignee.id === field.value
+                                          ? "opacity-100"
+                                          : "opacity-0",
+                                      )}
+                                    />
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="flex flex-row gap-2 items-stretch">
+                  <FormField
+                    control={form.control}
+                    name="basePatient.data.dateOfBirth"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>Date of Birth*</FormLabel>
+                        <FormControl>
+                          <Input type="date" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="basePatient.data.phoneNumber"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>Primary Phone Number</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="basePatient.data.sex"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel>Sex assigned at birth*</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select Patients Sex" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="male">Male</SelectItem>
+                            <SelectItem value="female">Female</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <FormField
                   control={form.control}
-                  name="basePatient.data.firstName"
+                  name="userId"
                   render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>First Name*</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
+                    <FormItem>
+                      <FormLabel>Link user email</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              className={cn(
+                                "w-full justify-between",
+                                !field.value && "text-muted-foreground",
+                              )}
+                            >
+                              {field.value
+                                ? userQuery.find(
+                                    (user) => user.id === field.value,
+                                  )?.email
+                                : "Select User Email"}
+                              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[310px] max-h-[200px] overflow-scroll p-0">
+                          <Command>
+                            <CommandInput
+                              placeholder="Search user..."
+                              className="h-9"
+                            />
+                            <CommandEmpty>No email found.</CommandEmpty>
+                            <CommandGroup>
+                              {userQuery.map((user) => (
+                                <CommandItem
+                                  value={user.email ?? ""}
+                                  key={user.email}
+                                  onSelect={() => {
+                                    form.setValue("userId", user.id);
+                                  }}
+                                >
+                                  {user.email}
+                                  <CheckIcon
+                                    className={cn(
+                                      "ml-auto h-4 w-4",
+                                      user.email === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0",
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 <FormField
                   control={form.control}
-                  name="basePatient.data.middleName"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Middle Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="basePatient.data.lastName"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Last Name*</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="flex flex-row gap-2 items-stretch">
-                <FormField
-                  control={form.control}
-                  name="basePatient.data.insurance"
+                  name="basePatient.data.notes"
                   render={({ field }) => (
                     <FormItem className="flex flex-col flex-1">
-                      <FormLabel>Patient's Insurance</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a insurance provider" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="None">None</SelectItem>
-                          <SelectItem value="MassHealth">MassHealth</SelectItem>
-                          <SelectItem value="Aetna">Aetna</SelectItem>
-                          <SelectItem value="Cigna">Cigna</SelectItem>
-                          <SelectItem value="Blue Cross">Blue Cross</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="locationId"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col h-full justify-between flex-1">
-                      <FormLabel>Location</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant="outline"
-                              role="combobox"
-                              className={cn(
-                                "w-full justify-between",
-                                !field.value && "text-muted-foreground",
-                              )}
-                            >
-                              {field.value
-                                ? nodesQuery.find(
-                                    (node) => node.longName === field.value,
-                                  )?.longName
-                                : "Select location"}
-                              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[310px] max-h-[200px] overflow-scroll p-0">
-                          <Command>
-                            <CommandInput
-                              placeholder="Search locations..."
-                              className="h-9"
-                            />
-                            <CommandEmpty>No location found.</CommandEmpty>
-                            <CommandGroup>
-                              {nodesQuery.map((location) => (
-                                <CommandItem
-                                  value={location.longName}
-                                  key={location.longName}
-                                  onSelect={() => {
-                                    form.setValue(
-                                      "locationId",
-                                      location.longName,
-                                    );
-                                  }}
-                                >
-                                  {location.longName}
-                                  <CheckIcon
-                                    className={cn(
-                                      "ml-auto h-4 w-4",
-                                      location.longName === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0",
-                                    )}
-                                  />
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="flex flex-row gap-2 items-stretch">
-                <FormField
-                  control={form.control}
-                  name="identity.idNumber"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>ID*</FormLabel>
+                      <FormLabel>Notes</FormLabel>
                       <FormControl>
-                        <Input {...field} type="text" />
+                        <Textarea className="flex-1" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="identity.idType"
-                  render={({ field }) => (
-                    <FormItem className="flex-1 ">
-                      <FormLabel>Type of ID*</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a insurance provider" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="ssn">SSN</SelectItem>
-                          <SelectItem value="passport">Passport</SelectItem>
-                          <SelectItem value="driverLicense">
-                            Driver License
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="pcpId"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Primary Care Provider</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant="outline"
-                              role="combobox"
-                              className={cn(
-                                "w-full justify-between",
-                                !field.value && "text-muted-foreground",
-                              )}
-                            >
-                              {field.value
-                                ? staffQuery.find(
-                                    (staff) => staff.id === field.value,
-                                  )?.name
-                                : "Select Staff"}
-                              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[310px] max-h-[200px] overflow-scroll p-0">
-                          <Command>
-                            <CommandInput
-                              placeholder="Search employee..."
-                              className="h-9"
-                            />
-                            <CommandEmpty>No employee found.</CommandEmpty>
-                            <CommandGroup>
-                              {staffQuery.map((assignee) => (
-                                <CommandItem
-                                  value={assignee.name}
-                                  key={assignee.name}
-                                  onSelect={() => {
-                                    form.setValue("pcpId", assignee.id);
-                                  }}
-                                >
-                                  {assignee.name}
-                                  <CheckIcon
-                                    className={cn(
-                                      "ml-auto h-4 w-4",
-                                      assignee.id === field.value
-                                        ? "opacity-100"
-                                        : "opacity-0",
-                                    )}
-                                  />
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="flex flex-row gap-2 items-stretch">
-                <FormField
-                  control={form.control}
-                  name="basePatient.data.dateOfBirth"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Date of Birth*</FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="basePatient.data.phoneNumber"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Primary Phone Number</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="basePatient.data.sex"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Sex assigned at birth*</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Patients Sex" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="male">Male</SelectItem>
-                          <SelectItem value="female">Female</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <FormField
-                control={form.control}
-                name="userId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Link user email</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              "w-full justify-between",
-                              !field.value && "text-muted-foreground",
-                            )}
-                          >
-                            {field.value
-                              ? userQuery.find(
-                                  (user) => user.id === field.value,
-                                )?.email
-                              : "Select User Email"}
-                            <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-[310px] max-h-[200px] overflow-scroll p-0">
-                        <Command>
-                          <CommandInput
-                            placeholder="Search user..."
-                            className="h-9"
-                          />
-                          <CommandEmpty>No email found.</CommandEmpty>
-                          <CommandGroup>
-                            {userQuery.map((user) => (
-                              <CommandItem
-                                value={user.email ?? ""}
-                                key={user.email}
-                                onSelect={() => {
-                                  form.setValue("userId", user.id);
-                                }}
-                              >
-                                {user.email}
-                                <CheckIcon
-                                  className={cn(
-                                    "ml-auto h-4 w-4",
-                                    user.email === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0",
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="basePatient.data.notes"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col flex-1">
-                    <FormLabel>Notes</FormLabel>
-                    <FormControl>
-                      <Textarea className="flex-1" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="flex gap-2">
-                <Button
-                  className="flex-1"
-                  variant="outline"
-                  type="button"
-                  onClick={() => {
-                    form.reset();
-                  }}
-                >
-                  Reset
-                </Button>
-                <Button
-                  className="flex-1 "
-                  type="button"
-                  onClick={() => {
-                    onSubmit(form.getValues());
-                  }}
-                >
-                  Submit
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="destructive"
+                    className="flex-1"
+                    onClick={() => {
+                      toast.promise(
+                        patientDeleteMutation.mutateAsync(
+                          {
+                            id: patientId,
+                          },
+                          {
+                            onSuccess: () => {
+                              utils.patient.getAll.invalidate();
+                              setLocation(`/patients`);
+                            },
+                          },
+                        ),
+                        {
+                          success: "Deleted patient!",
+                          error: "Error deleting patient.",
+                          loading: "Deleting patient...",
+                        },
+                      );
+                    }}
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    className="flex-1"
+                    variant="outline"
+                    type="button"
+                    onClick={() => {
+                      form.reset();
+                    }}
+                  >
+                    Reset
+                  </Button>
+                  <Button
+                    className="flex-1 "
+                    type="button"
+                    onClick={() => {
+                      onSubmit(form.getValues());
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 }

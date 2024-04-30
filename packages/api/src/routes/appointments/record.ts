@@ -10,6 +10,7 @@ export const recordRouter = router({
       z.object({
         byVisit: z.string().optional(),
         byNotVisit: z.string().optional(),
+        byPatient: z.string().optional(),
       }),
     )
     .query(({ input, ctx }) => {
@@ -24,6 +25,13 @@ export const recordRouter = router({
             {
               visitId: input.byVisit,
             },
+            input.byPatient
+              ? {
+                  visit: {
+                    patientId: input.byPatient,
+                  },
+                }
+              : {},
           ],
         },
         include: {
