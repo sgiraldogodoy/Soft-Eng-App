@@ -12,7 +12,7 @@ export function NextAppointment() {
 
   if (appointments?.length === 0) {
     return (
-      <div className="flex flex-col gap-3 w-1/2">
+      <div className="flex-1 flex flex-col gap-3">
         <p className="text-xl">Next appointment</p>
         <Card className="w-auto h-full">
           <CardContent className="pt-6 w-auto">
@@ -33,7 +33,7 @@ export function NextAppointment() {
     nextAppointment = appointments[0];
   }
   return (
-    <div className="flex flex-col gap-3 w-1/2">
+    <div className="flex-1 flex flex-col gap-3">
       <p className="text-xl">Next Appointment</p>
       <Card className="">
         <CardContent className="flex flex-col gap-4 w-full pt-6">

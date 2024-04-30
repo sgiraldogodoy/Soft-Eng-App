@@ -46,7 +46,7 @@ export default function UpcomingAppointmentsList() {
 
   return (
     <>
-      <div className="min-w-[66vw] overflow-auto flex flex-col gap-3 h-full">
+      <div className="overflow-auto flex flex-col gap-3 h-full">
         <p className="text-xl">Upcoming Appointments</p>
         <Card className="gap-2 flex-1 h-full  overflow-auto ">
           <CardContent className="overflow-auto space-y-2 pt-6">
