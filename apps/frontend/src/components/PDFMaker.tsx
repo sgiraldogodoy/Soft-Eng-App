@@ -1,6 +1,5 @@
 import React from "react";
 import generatePDF, { Resolution, Margin, Options } from "react-to-pdf";
-//import { ButtonExample } from "./ButtonExample";
 import { Button } from "@/components/ui/button.tsx";
 
 const options: Options = {
@@ -44,35 +43,25 @@ type ContainerProps = {
 };
 
 export const Container = ({ children }: ContainerProps) => {
-  return <div className="container">{children}</div>;
+  return <div className="container bg-slate-50">{children}</div>;
 };
 
 interface CardProps {
   title?: string;
-  imageId: number;
 }
 
 export const Card = ({
   title = "Welcome to Our Sample Component",
-  imageId,
 }: CardProps) => {
   return (
-    <div className="card-container">
-      <img
-        src={`https://picsum.photos/id/${imageId}/400/200`}
-        alt="Sample"
-        className="card-image"
-      />
-      <h2 className="card-title">{title}</h2>
-      <p className="card-paragraph">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget
-        libero quam. Fusce efficitur, lectus ac commodo maximus, neque augue
-        tincidunt tellus, id dictum odio eros ac nulla.
+    <div className="card-container bg-slate-50">
+      <img src={"/cut-corridor.jpeg"} alt="BHW Corridor" className="" />
+      <h2 className="card-title bg-slate-50">{title}</h2>
+      <p className="flex flex-col w-full justify-center content-center items-center bg-slate-50">
+        HI
       </p>
-      <p className="card-paragraph">
-        Vivamus at urna sit amet justo auctor vestibulum ut nec nisl. Sed auctor
-        augue eget libero tincidunt, ut dictum libero facilisis. Phasellus non
-        libero at nisi eleifend tincidunt a eget ligula.
+      <p className="flex flex-col w-full justify-center content-center items-center bg-slate-50">
+        Pookie
       </p>
     </div>
   );
@@ -88,7 +77,7 @@ const PDF = () => {
     <Container>
       <Button onClick={downloadPdf}>Download PDF</Button>
       <div id="container">
-        <Card imageId={30} title="Using advanced example" />
+        <Card title="Using advanced example" />
       </div>
     </Container>
   );
