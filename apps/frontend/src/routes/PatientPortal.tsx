@@ -12,18 +12,29 @@ import { Button } from "@/components/ui/button.tsx";
 import { Suspense } from "react";
 import PatientName from "@/components/PatientName.tsx";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
-import { Route, useLocation } from "wouter";
+import { Redirect, Route, useLocation } from "wouter";
 import { ScheduleAppointmentDialogue } from "@/components/ScheduleAppointmentDialogue.tsx";
 import { CareTeam } from "@/components/CareTeam.tsx";
 import { NextAppointment } from "@/components/NextAppointment.tsx";
 import UpcomingAppointmentsList from "@/components/UpcomingAppointmentsList.tsx";
 import MyRecordsList from "@/components/MyRecordsList";
+import { useMe } from "@/components/MeContext";
 
 // import {ScheduleAppointmentDialogue} from "@/components/ScheduleAppointmentDialogue.tsx";
 
 export function PatientPortal() {
   const session = useAuth0();
   const [, setLocation] = useLocation();
+
+  const me = useMe();
+
+  if (!me) {
+    return <Redirect to="/" />;
+  }
+
+  if (me.role !== "patient") {
+    return <Redirect to="~/pathfind" />;
+  }
 
   return (
     <>
