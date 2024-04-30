@@ -5,40 +5,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import HelpCommand from "@/components/HelpCommandDialog.tsx";
 import React from "react";
-import { Route, Redirect, useLocation } from "wouter";
+import { Route, Redirect } from "wouter";
+import { navigate } from "wouter/use-browser-location";
 import { Button } from "@/components/ui/button.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import PatientGuidePage from "@/routes/PatientGuidePage.tsx";
 import StaffGuidePage from "@/routes/StaffGuidePage.tsx";
 import AdminGuidePage from "@/routes/AdminGuidePage.tsx";
+import HomeGuidePage from "@/routes/HomeGuidePage.tsx";
 
 export default function HelpMenu() {
   const { isAuthenticated, isLoading } = useAuth0();
   const isDefinitelyNotAuthed = !isAuthenticated && !isLoading;
-  const [, setLocation] = useLocation();
 
   const goback = () => {
-    setLocation("/pathfind");
+    navigate("/pathfind", { replace: true });
   };
 
-  const goPatient = () => {
-    setLocation("/patientguide");
-  };
-
-  const goStaff = () => {
-    setLocation("/staffguide");
-  };
-
-  const goAdmin = () => {
-    setLocation("/adminguide");
+  const gohome = () => {
+    navigate("/help/home", { replace: true });
   };
 
   return (
@@ -47,101 +34,42 @@ export default function HelpMenu() {
         <CardHeader>
           <CardTitle className="text-2xl flex justify-center">
             User Manual
+            <Button onClick={goback} className="absolute right-5 top-5">
+              Back to Map
+            </Button>
           </CardTitle>
-          <Button variant="secondary" onClick={goback}>
-            Back
-          </Button>
           <div className="flex justify-center">
             <HelpCommand />
+            <Button
+              onClick={gohome}
+              variant="secondary"
+              className="bg-white border-2 mx-2"
+            >
+              Help Home
+            </Button>
           </div>
         </CardHeader>
         <CardContent>
           <CardDescription className="flex w-full grid grid-cols-3 gap-y-4">
-            <Accordion
-              type="single"
-              collapsible
-              className="w-auto col-span-3 mx-10"
-            >
-              <AccordionItem value="Intro">
-                <AccordionTrigger className="text-black">
-                  Introduction: The Basics
-                </AccordionTrigger>
-                <AccordionContent>*Put Intro Here*</AccordionContent>
-              </AccordionItem>
-            </Accordion>
-
-            <Button
-              variant="ghost"
-              onClick={goPatient}
-              className="h-auto w-full"
-            >
-              <Card className="w-full h-fit shadow-md">
-                <CardHeader>
-                  <CardTitle>Patient</CardTitle>
-                </CardHeader>
-                <CardContent className="text-left">
-                  <CardDescription>
-                    Patients Features:
-                    <ul className="ps-5 list-disc">
-                      <li>Appointment Check in</li>
-                      <li>Appointment Management</li>
-                      <li>Appointment Scheduling</li>
-                    </ul>
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </Button>
-
-            <Button variant="ghost" onClick={goStaff} className="h-auto w-full">
-              <Card className="w-full h-fit shadow-md">
-                <CardHeader>
-                  <CardTitle>Staff</CardTitle>
-                </CardHeader>
-                <CardContent className="text-left">
-                  <CardDescription>
-                    Staff Features:
-                    <ul className="ps-5 list-disc">
-                      <li>Create Service Requests</li>
-                      <li>Patient Management</li>
-                      <li>Create Patients and Staff</li>
-                    </ul>
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </Button>
-
-            <Button variant="ghost" onClick={goAdmin} className="h-auto w-full">
-              <Card className="w-full h-fit shadow-md">
-                <CardHeader>
-                  <CardTitle>Admin</CardTitle>
-                </CardHeader>
-                <CardContent className="text-left">
-                  <CardDescription>
-                    Admin Features:
-                    <ul className="ps-5 list-disc">
-                      <li>Map Editing</li>
-                      <li>Database Management</li>
-                      <li>Create Users</li>
-                    </ul>
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </Button>
+            <Route path="/patientguide" nest>
+              <PatientGuidePage />
+              {isDefinitelyNotAuthed && <Redirect to="/" />}
+            </Route>
+            <Route path="/staffguide" nest>
+              <StaffGuidePage />
+              {isDefinitelyNotAuthed && <Redirect to="/" />}
+            </Route>
+            <Route path="/adminguide" nest>
+              <AdminGuidePage />
+              {isDefinitelyNotAuthed && <Redirect to="/" />}
+            </Route>
+            <Route path="/home" nest>
+              <HomeGuidePage />
+              {isDefinitelyNotAuthed && <Redirect to="/" />}
+            </Route>
           </CardDescription>
         </CardContent>
       </Card>
-      <Route path="/patientguide" nest>
-        <PatientGuidePage />
-        {isDefinitelyNotAuthed && <Redirect to="/" />}
-      </Route>
-      <Route path="/staffguide" nest>
-        <StaffGuidePage />
-        {isDefinitelyNotAuthed && <Redirect to="/" />}
-      </Route>
-      <Route path="/adminguide" nest>
-        <AdminGuidePage />
-        {isDefinitelyNotAuthed && <Redirect to="/" />}
-      </Route>
     </>
   );
 }

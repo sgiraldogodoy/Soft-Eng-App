@@ -8,19 +8,17 @@ import {
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button.tsx";
 import React from "react";
-import { useLocation } from "wouter";
+import { navigate } from "wouter/use-browser-location";
 
 export default function HelpCommand() {
-  const [, setLocation] = useLocation();
-
   const [open, setOpen] = React.useState(false);
 
   const buttonchange = () => {
     setOpen((open) => !open);
   };
 
-  const goback = () => {
-    setLocation("/help");
+  const gohome = () => {
+    navigate("/help/home", { replace: true });
     setOpen(!open);
   };
 
@@ -38,7 +36,11 @@ export default function HelpCommand() {
 
   return (
     <>
-      <Button variant="ghost" onClick={buttonchange} className="w-fit border-2">
+      <Button
+        variant="secondary"
+        onClick={buttonchange}
+        className="bg-white w-fit border-2"
+      >
         Search the User Manual
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
@@ -46,7 +48,7 @@ export default function HelpCommand() {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Patient">
-            <CommandItem onSelect={goback}>Create Appointment</CommandItem>
+            <CommandItem onSelect={gohome}>Create Appointment</CommandItem>
           </CommandGroup>
         </CommandList>
       </CommandDialog>
