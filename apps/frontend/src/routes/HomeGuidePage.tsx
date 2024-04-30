@@ -316,7 +316,25 @@ export default function HomeGuidePage() {
                 <AccordionTrigger className="text-black">
                   Session TimeOut
                 </AccordionTrigger>
-                <AccordionContent></AccordionContent>
+                <AccordionContent>
+                  <p>
+                    &emsp;&emsp;To protect the hospital from users gaining
+                    unauthorized access to accounts, an automatic timeout
+                    feature has been incorporated to help mitigate this. After 3
+                    minutes have passed without the user showing any sign of
+                    activity, the user will be automatically logged out of their
+                    account. To warn idle users, a warning that their session
+                    will expire soon will pop up 30 seconds before they are
+                    forcibly logged out.
+                  </p>
+                  <div className="w-full flex justify-center">
+                    <img
+                      src="./helpmenucaptures/Pathfind0.PNG"
+                      alt="homescreen"
+                      className="object-scale-down w-[50%] h-auto rounded-md m-2"
+                    />
+                  </div>
+                </AccordionContent>
               </AccordionItem>
             </Accordion>
           </AccordionContent>
