@@ -255,7 +255,7 @@ export default function InputForm() {
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a insurance provider" />
+                            <SelectValue placeholder="Select an insurance provider" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -361,7 +361,7 @@ export default function InputForm() {
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a insurance provider" />
+                            <SelectValue placeholder="Select a type of ID" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
