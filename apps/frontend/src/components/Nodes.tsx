@@ -416,15 +416,17 @@ export function Nodes({
 
     setDoPan(false);
 
+    const panSpeed = 7;
+
     if (mouseX <= rect.left + marginX) {
-      panX = 10 * ((marginX - (mouseX - rect.left)) / marginX);
+      panX = panSpeed * ((marginX - (mouseX - rect.left)) / marginX);
     } else if (mouseX >= rect.right - marginX) {
-      panX = -10 * ((marginX - (rect.right - mouseX)) / marginX);
+      panX = -panSpeed * ((marginX - (rect.right - mouseX)) / marginX);
     }
     if (mouseY <= rect.top + marginY) {
-      panY = 10 * ((marginY - (mouseY - rect.top)) / marginY);
+      panY = panSpeed * ((marginY - (mouseY - rect.top)) / marginY);
     } else if (mouseY >= rect.bottom - marginY) {
-      panY = -10 * ((marginY - (rect.bottom - mouseY)) / marginY);
+      panY = -panSpeed * ((marginY - (rect.bottom - mouseY)) / marginY);
     }
     if (panX != 0 || panY != 0) {
       setDoPan(true);
