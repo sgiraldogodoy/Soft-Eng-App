@@ -313,6 +313,7 @@ export function Nodes({
           nodeElement.style.left = nodePosition.x + deltaX - offSetX + "px";
           nodeElement.style.top = nodePosition.y + deltaY - offSetY + "px";
           handleDragMove(newX, newY, node.id);
+          handlePan(e);
         }
         nodeData[node.id] = { x: newX, y: newY };
       });
