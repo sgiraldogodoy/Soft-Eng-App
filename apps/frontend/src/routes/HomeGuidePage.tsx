@@ -233,6 +233,91 @@ export default function HomeGuidePage() {
                   </div>
                 </AccordionContent>
               </AccordionItem>
+              <AccordionItem value="about">
+                <AccordionTrigger className="text-black">
+                  About Page
+                </AccordionTrigger>
+                <AccordionContent>
+                  <p>
+                    &emsp;&emsp;To learn about the developers of the kiosk,
+                    users can access the about page by selecting the About Us
+                    link at the bottom of the home page. This will then direct
+                    the user to the our about page which displays information
+                    about every member of our team.
+                  </p>
+                  <div className="w-full flex justify-center">
+                    <img
+                      src="./helpmenucaptures/Pathfind0.PNG"
+                      alt="homescreen"
+                      className="object-scale-down w-[50%] h-auto rounded-md m-2"
+                    />
+                  </div>
+                  <p>
+                    &emsp;&emsp;By selecting any of the developer’s icons, a
+                    popup will appear for the user displaying a quote selected
+                    by the given developer, users can exit this by simply
+                    selecting the X in the top right of the popup.
+                  </p>
+                  <div className="w-full flex justify-center">
+                    <img
+                      src="./helpmenucaptures/Pathfind0.PNG"
+                      alt="homescreen"
+                      className="object-scale-down w-[50%] h-auto rounded-md m-2"
+                    />
+                  </div>
+                  <p>
+                    &emsp;&emsp;To leave the about page, users can select the
+                    arrow in the top right of the screen.
+                  </p>
+                  <div className="w-full flex justify-center">
+                    <img
+                      src="./helpmenucaptures/Pathfind0.PNG"
+                      alt="homescreen"
+                      className="object-scale-down w-[50%] h-auto rounded-md m-2"
+                    />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="credit">
+                <AccordionTrigger className="text-black">
+                  Credits Page
+                </AccordionTrigger>
+                <AccordionContent>
+                  <p>
+                    &emsp;&emsp;To Learn what tools our developers used to
+                    create the kiosk, users can access the credits page by
+                    selecting the Credits link at the bottom of the home page.
+                    This will then redirect users to the credits page with all
+                    information on the tools and utilities used in order to make
+                    this application possible.
+                  </p>
+                  <div className="w-full flex justify-center">
+                    <img
+                      src="./helpmenucaptures/Pathfind0.PNG"
+                      alt="homescreen"
+                      className="object-scale-down w-[50%] h-auto rounded-md m-2"
+                    />
+                  </div>
+                  <p>
+                    &emsp;&emsp;Users can exit the credits page by selecting the
+                    arrow in the top right of the screen, which will redirect
+                    them to the home page.
+                  </p>
+                  <div className="w-full flex justify-center">
+                    <img
+                      src="./helpmenucaptures/Pathfind0.PNG"
+                      alt="homescreen"
+                      className="object-scale-down w-[50%] h-auto rounded-md m-2"
+                    />
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="timeout">
+                <AccordionTrigger className="text-black">
+                  Session TimeOut
+                </AccordionTrigger>
+                <AccordionContent></AccordionContent>
+              </AccordionItem>
             </Accordion>
           </AccordionContent>
         </AccordionItem>
