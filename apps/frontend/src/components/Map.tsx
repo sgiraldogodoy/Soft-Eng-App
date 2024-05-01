@@ -52,6 +52,14 @@ export default function Map({
   const { isAuthenticated } = useAuth0();
   const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [dragNode, setDragNode] = useState<boolean>(false);
+
+  const changeDragNode = (drag: boolean) => {
+    setDragNode(drag);
+  };
+  const [nodeMouse, setNodeMouse] = useState<MouseEvent>();
+  const panRef = useRef<number>(0);
+
   const [dragging, setDragging] = useState(false);
   const [startDragOffset, setStartDragOffset] = useState({ x: 0, y: 0 });
   const [selecting, setSelecting] = useState(false);
@@ -139,6 +147,10 @@ export default function Map({
 
     // pans map when mouse is dragged while mouse button down
     const handleMouseMove = (e: MouseEvent) => {
+      if (!e.isTrusted) {
+        return;
+      }
+      setNodeMouse(e);
       if (!dragging) return;
       const dx = (e.clientX - startDragOffset.x) / scale;
       const dy = (e.clientY - startDragOffset.y) / scale;
@@ -196,6 +208,79 @@ export default function Map({
     startDragOffset.y,
     typeEdit,
   ]);
+
+  const handlePan = useCallback(() => {
+    if (!nodeMouse) {
+      return;
+    }
+
+    const rect = document.getElementById("mapDiv")?.getBoundingClientRect();
+
+    if (rect == null) {
+      return;
+    }
+
+    const marginX = rect.width * 0.2;
+    const marginY = rect.height * 0.2;
+
+    const mouseX = nodeMouse.clientX;
+    const mouseY = nodeMouse.clientY;
+
+    let panX = 0;
+    let panY = 0;
+
+    const panSpeed = 7;
+
+    if (mouseX <= rect.left + marginX) {
+      panX = panSpeed * ((marginX - (mouseX - rect.left)) / marginX);
+    } else if (mouseX >= rect.right - marginX) {
+      panX = -panSpeed * ((marginX - (rect.right - mouseX)) / marginX);
+    }
+    if (mouseY <= rect.top + marginY) {
+      panY = panSpeed * ((marginY - (mouseY - rect.top)) / marginY);
+    } else if (mouseY >= rect.bottom - marginY) {
+      panY = -panSpeed * ((marginY - (rect.bottom - mouseY)) / marginY);
+    }
+
+    const limitX: number = ((imgWidth * scale) / 2 - imgWidth / 2) / scale;
+    const limitY: number = ((imgHeight * scale) / 2 - imgHeight / 2) / scale;
+
+    if (offset.x + panX > limitX) {
+      panX = limitX - offset.x;
+    } else if (offset.x + panX < -limitX) {
+      panX = -limitX - offset.x;
+    }
+
+    if (offset.y + panY > limitY) {
+      panY = limitY - offset.y;
+    } else if (offset.y + panY < -limitY) {
+      panY = -limitY - offset.y;
+    }
+
+    if (panX != 0 || panY != 0) {
+      setOffset({
+        x: offset.x + panX,
+        y: offset.y + panY,
+      });
+      document.dispatchEvent(nodeMouse);
+    }
+
+    panRef.current = requestAnimationFrame(handlePan);
+  }, [imgHeight, imgWidth, nodeMouse, offset.x, offset.y, scale]);
+
+  useEffect(() => {
+    if (dragNode) {
+      panRef.current = requestAnimationFrame(handlePan);
+    } else {
+      if (panRef.current) {
+        cancelAnimationFrame(panRef.current);
+      }
+    }
+
+    return () => {
+      cancelAnimationFrame(panRef.current);
+    };
+  }, [dragNode, handlePan]);
 
   const handleCreateNodeSubmit = (data: z.infer<typeof newNodeSchema>) => {
     createNode.mutate(
@@ -403,7 +488,7 @@ export default function Map({
         path={path}
         selectedNodes={selectedMultiNodes}
         setSelectedNodes={handleEscape}
-        map={document.getElementById("mapDiv") as HTMLElement}
+        draggingNode={changeDragNode}
       />
       {path && (
         <Lines

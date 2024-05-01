@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { Node, Prisma } from "database";
 import {
   scaleCoordinate,
@@ -29,7 +29,7 @@ interface NodesProps {
   selectedNodes?: Node[];
   setSelectedNodes?: () => void;
   path?: Node[];
-  map: HTMLElement;
+  draggingNode: (drag: boolean) => void;
 }
 
 export function Nodes({
@@ -49,7 +49,7 @@ export function Nodes({
   selectedNodes,
   setSelectedNodes,
   path,
-  map,
+  draggingNode,
 }: NodesProps) {
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [hoveredNodeString, setHoveredNodeString] = useState<string | null>(
@@ -63,14 +63,6 @@ export function Nodes({
   const deleteNode = trpc.node.deleteOne.useMutation();
   const createEdge = trpc.edge.createOne.useMutation();
   const deleteManyNodes = trpc.node.deleteMany.useMutation();
-
-  const [nodePan, setNodePan] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
-  const [doPan, setDoPan] = useState<boolean>(false);
-  const panRef = useRef<number>(0);
-  const [dragMouse, setDragMouse] = useState<MouseEvent>();
 
   const { firstNode, setNode, clearNodes } = useSelectNodes();
 
@@ -314,7 +306,6 @@ export function Nodes({
           nodeElement.style.left = nodePosition.x + deltaX - offSetX + "px";
           nodeElement.style.top = nodePosition.y + deltaY - offSetY + "px";
           handleDragMove(newX, newY, node.id);
-          handlePan(e);
         }
         nodeData[node.id] = { x: newX, y: newY };
       });
@@ -334,6 +325,8 @@ export function Nodes({
   };
 
   const handleDragStart = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    draggingNode(true);
+
     if (!hoveredNode) return;
     if (
       selectedNodes &&
@@ -371,25 +364,11 @@ export function Nodes({
         scale,
       );
       handleDragMove(newX, newY, hoveredNode);
-
-      if (e.isTrusted) {
-        if (panRef.current) {
-          cancelAnimationFrame(panRef.current);
-        }
-
-        setDragMouse(e);
-        handlePan(e);
-      }
     };
 
     const handleDragEnd = () => {
       document.removeEventListener("mousemove", handleDrag);
       document.removeEventListener("mouseup", handleDragEnd);
-
-      if (panRef.current) {
-        cancelAnimationFrame(panRef.current);
-      }
-
       handleDragFinish(newX, newY, hoveredNode);
     };
 
@@ -409,6 +388,8 @@ export function Nodes({
   };
 
   const handleDragFinish = (newX: number, newY: number, nodeId: string) => {
+    draggingNode(false);
+
     if (!nodeId) return;
     // console.log(newX, newY);
     nodeUpdate.mutate({
@@ -416,81 +397,6 @@ export function Nodes({
       data: { x: Math.floor(newX), y: Math.floor(newY) },
     });
   };
-
-  const handlePan = (e: MouseEvent) => {
-    const rect = map.getBoundingClientRect();
-    const marginX = rect.width * 0.2;
-    const marginY = rect.height * 0.2;
-
-    const mouseX = e.clientX;
-    const mouseY = e.clientY;
-
-    let panX = 0;
-    let panY = 0;
-
-    setDoPan(false);
-
-    const panSpeed = 7;
-
-    if (mouseX <= rect.left + marginX) {
-      panX = panSpeed * ((marginX - (mouseX - rect.left)) / marginX);
-    } else if (mouseX >= rect.right - marginX) {
-      panX = -panSpeed * ((marginX - (rect.right - mouseX)) / marginX);
-    }
-    if (mouseY <= rect.top + marginY) {
-      panY = panSpeed * ((marginY - (mouseY - rect.top)) / marginY);
-    } else if (mouseY >= rect.bottom - marginY) {
-      panY = -panSpeed * ((marginY - (rect.bottom - mouseY)) / marginY);
-    }
-    if (panX != 0 || panY != 0) {
-      setDoPan(true);
-    }
-    setNodePan({ x: panX, y: panY });
-  };
-
-  const moveMap = useCallback(() => {
-    if (!doPan) {
-      return;
-    }
-
-    const limitX: number = ((imgWidth * scale) / 2 - imgWidth / 2) / scale;
-    const limitY: number = ((imgHeight * scale) / 2 - imgHeight / 2) / scale;
-
-    if (dragOffset.x + nodePan.x > limitX) {
-      nodePan.x = limitX - dragOffset.x;
-    } else if (dragOffset.x + nodePan.x < -limitX) {
-      nodePan.x = -limitX - dragOffset.x;
-    }
-
-    if (dragOffset.y + nodePan.y > limitY) {
-      nodePan.y = limitY - dragOffset.y;
-    } else if (dragOffset.y + nodePan.y < -limitY) {
-      nodePan.y = -limitY - dragOffset.y;
-    }
-
-    dragOffset.x += nodePan.x;
-    dragOffset.y += nodePan.y;
-
-    if (dragMouse) {
-      document.dispatchEvent(dragMouse);
-    }
-
-    panRef.current = requestAnimationFrame(moveMap);
-  }, [doPan, dragMouse, dragOffset, imgHeight, imgWidth, nodePan, scale]);
-
-  useEffect(() => {
-    if (doPan) {
-      panRef.current = requestAnimationFrame(moveMap);
-    } else {
-      if (panRef.current) {
-        cancelAnimationFrame(panRef.current);
-      }
-    }
-
-    return () => {
-      cancelAnimationFrame(panRef.current);
-    };
-  }, [doPan, moveMap]);
 
   let filteredNodes = nodes.filter((node) => node.floor === floor);
   if (!filter)
