@@ -52,11 +52,6 @@ export default function Map({
   const { isAuthenticated } = useAuth0();
   const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
-
-  const setTheOffset = (x: number, y: number) => {
-    setOffset({ x: x, y: y });
-  };
-
   const [dragging, setDragging] = useState(false);
   const [startDragOffset, setStartDragOffset] = useState({ x: 0, y: 0 });
   const [selecting, setSelecting] = useState(false);
@@ -401,7 +396,6 @@ export default function Map({
         goalNode={goalNode}
         floor={floor}
         dragOffset={offset}
-        setDragOffset={setTheOffset}
         scale={scale}
         editable={editable}
         filter={filter}

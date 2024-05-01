@@ -23,7 +23,6 @@ interface NodesProps {
   floor: string;
   filter?: boolean;
   dragOffset: { x: number; y: number };
-  setDragOffset: (x: number, y: number) => void;
   scale: number;
   editable?: boolean;
   typeEdit?: string;
@@ -44,7 +43,6 @@ export function Nodes({
   floor,
   filter,
   dragOffset,
-  setDragOffset,
   scale,
   editable,
   typeEdit,
@@ -72,6 +70,7 @@ export function Nodes({
   });
   const [doPan, setDoPan] = useState<boolean>(false);
   const panRef = useRef<number>(0);
+  const [dragMouse, setDragMouse] = useState<MouseEvent>();
 
   const { firstNode, setNode, clearNodes } = useSelectNodes();
 
@@ -372,12 +371,25 @@ export function Nodes({
         scale,
       );
       handleDragMove(newX, newY, hoveredNode);
-      handlePan(e);
+
+      if (e.isTrusted) {
+        if (panRef.current) {
+          cancelAnimationFrame(panRef.current);
+        }
+
+        setDragMouse(e);
+        handlePan(e);
+      }
     };
 
     const handleDragEnd = () => {
       document.removeEventListener("mousemove", handleDrag);
       document.removeEventListener("mouseup", handleDragEnd);
+
+      if (panRef.current) {
+        cancelAnimationFrame(panRef.current);
+      }
+
       handleDragFinish(newX, newY, hoveredNode);
     };
 
@@ -456,19 +468,15 @@ export function Nodes({
       nodePan.y = -limitY - dragOffset.y;
     }
 
-    setDragOffset(dragOffset.x + nodePan.x, dragOffset.y + nodePan.y);
+    dragOffset.x += nodePan.x;
+    dragOffset.y += nodePan.y;
+
+    if (dragMouse) {
+      document.dispatchEvent(dragMouse);
+    }
 
     panRef.current = requestAnimationFrame(moveMap);
-  }, [
-    doPan,
-    dragOffset.x,
-    dragOffset.y,
-    imgHeight,
-    imgWidth,
-    nodePan,
-    scale,
-    setDragOffset,
-  ]);
+  }, [doPan, dragMouse, dragOffset, imgHeight, imgWidth, nodePan, scale]);
 
   useEffect(() => {
     if (doPan) {
