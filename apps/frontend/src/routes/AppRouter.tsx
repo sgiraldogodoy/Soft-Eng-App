@@ -13,6 +13,7 @@ import { CreditPage } from "@/routes/CreditPage.tsx";
 import Music from "@/routes/MusicPlayerEasterEgg.tsx";
 import { PatientPortal } from "@/routes/PatientPortal.tsx";
 import PhoneTextToNav from "@/routes/PhoneTextToNav.tsx";
+import HelpMenu from "@/routes/HelpMenu.tsx";
 import { EmrEntry } from "@/components/emr/EmrEntry";
 import Analytics from "@/routes/Analytics.tsx";
 import EditPatient from "@/routes/EditPatient.tsx";
@@ -76,6 +77,10 @@ export function AppRouter() {
           </Route>
           <Route path="/music">
             <Music />
+            {isDefinitelyNotAuthed && <Redirect to="/" />}
+          </Route>
+          <Route path="/help" nest>
+            <HelpMenu />
             {isDefinitelyNotAuthed && <Redirect to="/" />}
           </Route>
           <Route path="/emr" nest>

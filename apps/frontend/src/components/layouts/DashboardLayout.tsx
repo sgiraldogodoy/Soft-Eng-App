@@ -8,6 +8,7 @@ import {
   AreaChart,
   FolderHeart,
   UserSearch,
+  CircleHelp,
   Settings,
 } from "lucide-react";
 import {
@@ -190,6 +191,9 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
             </SidebarButton>
           </nav>
           <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
+            <SidebarButton link="/help/home" name="Help">
+              <CircleHelp />
+            </SidebarButton>
             <SidebarButton link="/settings" name="Settings">
               <Settings className="h-5 w-5" />
             </SidebarButton>
