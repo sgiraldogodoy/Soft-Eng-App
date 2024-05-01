@@ -36,6 +36,7 @@ import { CheckIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { toast } from "sonner";
+import { useMemo } from "react";
 
 const preprocessNested = (v: unknown) => {
   if (typeof v !== "object" || !v) {
@@ -73,15 +74,21 @@ export function ScheduleAppointmentDialogue({
   open,
   setOpen,
 }: ScheduleAppointmentDialogueProps) {
-  const unfilteredStaffQuery = trpc.staff.getAll.useQuery();
-  const unsortedStaffQuery = unfilteredStaffQuery.data
-    ? unfilteredStaffQuery.data
-    : [];
-  const staffQuery = unsortedStaffQuery.sort(function (a, b) {
-    const staffA = a.name.toUpperCase();
-    const staffB = b.name.toUpperCase();
-    return staffA < staffB ? -1 : staffA > staffB ? 1 : 0;
-  });
+  const staffQuery = trpc.staff.getAll.useQuery();
+  // const unsortedStaffQuery = unfilteredStaffQuery.data
+  //   ? unfilteredStaffQuery.data
+  //   : [];
+  // const staffQuery = unsortedStaffQuery.sort(function (a, b) {
+  //   const staffA = a.name.toUpperCase();
+  //   const staffB = b.name.toUpperCase();
+  //   return staffA < staffB ? -1 : staffA > staffB ? 1 : 0;
+  // });
+
+  const staffData = useMemo(
+    () => staffQuery.data?.sort((a, b) => a.name.localeCompare(b.name)),
+    [staffQuery],
+  );
+
   const patientQuery = trpc.patient.getAll.useQuery();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -157,7 +164,7 @@ export function ScheduleAppointmentDialogue({
                           )}
                         >
                           {field.value
-                            ? staffQuery.find(
+                            ? staffData?.find(
                                 (staff) => staff.id === field.value,
                               )?.name
                             : "Select staff"}
@@ -173,7 +180,7 @@ export function ScheduleAppointmentDialogue({
                         />
                         <CommandEmpty>No doctors found.</CommandEmpty>
                         <CommandGroup>
-                          {staffQuery.map((staff) => (
+                          {staffData?.map((staff) => (
                             <CommandItem
                               value={staff.name}
                               key={staff.name}
