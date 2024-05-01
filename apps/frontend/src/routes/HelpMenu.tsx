@@ -20,10 +20,6 @@ export default function HelpMenu() {
   const { isAuthenticated, isLoading } = useAuth0();
   const isDefinitelyNotAuthed = !isAuthenticated && !isLoading;
 
-  const goback = () => {
-    navigate("/pathfind", { replace: true });
-  };
-
   const gohome = () => {
     navigate("/help/home", { replace: true });
   };
@@ -34,19 +30,12 @@ export default function HelpMenu() {
         <CardHeader>
           <CardTitle className="text-2xl flex justify-center">
             User Manual
-            <Button onClick={goback} className="absolute right-5 top-5">
-              Back to Map
+            <Button onClick={gohome} className="absolute right-5 top-5">
+              Back to Help Home
             </Button>
           </CardTitle>
           <div className="flex justify-center">
             <HelpCommand />
-            <Button
-              onClick={gohome}
-              variant="secondary"
-              className="bg-white border-2 mx-2"
-            >
-              Help Home
-            </Button>
           </div>
         </CardHeader>
         <CardContent>

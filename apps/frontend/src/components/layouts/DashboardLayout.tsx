@@ -9,6 +9,7 @@ import {
   StethoscopeIcon,
   UserCog,
   AreaChart,
+  CircleHelp,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -174,6 +175,9 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
             </SidebarButton>
           </nav>
           <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
+            <SidebarButton link="/help/home" name="Help">
+              <CircleHelp />
+            </SidebarButton>
             <SidebarButton link="/settings" name="Settings">
               <UserCog className="h-5 w-5" />
             </SidebarButton>
