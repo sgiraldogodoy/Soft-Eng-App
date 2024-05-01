@@ -17,7 +17,7 @@ export function WarningProvider({ children }: { children: ReactNode }) {
 
       timeoutRef.current = setTimeout(() => {
         toast("Session will expire soon.");
-      }, 150000);
+      }, 570000);
     };
 
     window.addEventListener("mousemove", handleWindowEvents);
