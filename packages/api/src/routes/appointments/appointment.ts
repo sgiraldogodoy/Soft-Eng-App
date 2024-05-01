@@ -256,17 +256,25 @@ export const appointmentRouter = router({
         });
       }
 
-      const year = appointment.appointmentTime.getFullYear();
-      const month = appointment.appointmentTime.getMonth();
-      const day = appointment.appointmentTime.getDay();
-      const hours = appointment.appointmentTime.getHours();
-      const minutes = appointment.appointmentTime.getMinutes();
+      const date = appointment.appointmentTime;
+
+      const pre =
+        date.getFullYear().toString() +
+        (date.getMonth() + 1 < 10
+          ? "0" + (date.getMonth() + 1).toString()
+          : (date.getMonth() + 1).toString()) +
+        (date.getDate() + 1 < 10
+          ? "0" + date.getDate().toString()
+          : date.getDate().toString());
+
+      const post =
+        (date.getHours() % 12).toString() + date.getMinutes().toString() + "00";
 
       try {
         const file: File = await new Promise((resolve, reject) => {
           ics.createEvent(
             {
-              start: [year, month, day, hours, minutes],
+              start: pre + "T" + post,
               duration: { hours: 1, minutes: 0 },
               title: "Appointment with " + appointment.staff?.name,
               description: "Your appointment at Brigham and Women's Hospital",
