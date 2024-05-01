@@ -5,7 +5,7 @@ import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect.tsx";
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-export function CreditPage() {
+export function CreditPage2() {
   return (
     <>
       <div className="flex flex-col w-full justify-center content-center items-center bg-slate-50">
@@ -191,10 +191,6 @@ export const Icon = ({ className, ...rest }: IconProps) => {
   );
 };
 
-const handleClickWebstorm = () => {
-  window.open("https://www.jetbrains.com/webstorm/", "_blank");
-};
-
 const WebstormIcon = () => {
   return (
     <svg
@@ -203,7 +199,6 @@ const WebstormIcon = () => {
       viewBox="0 0 70 70"
       xmlSpace="preserve"
       xmlns="http://www.w3.org/2000/svg"
-      onClick={handleClickWebstorm}
     >
       <linearGradient
         id="c"
@@ -261,16 +256,11 @@ const WebstormIcon = () => {
   );
 };
 
-const handleClickReact = () => {
-  window.open("https://react.dev/", "_blank");
-};
-
 const ReactIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="-11.5 -10.23174 23 20.46348"
-      onClick={handleClickReact}
     >
       <title>React Logo</title>
       <circle cx="0" cy="0" r="2.05" fill="#61dafb" />
@@ -283,10 +273,6 @@ const ReactIcon = () => {
   );
 };
 
-const handleClickShadcn = () => {
-  window.open("https://ui.shadcn.com/", "_blank");
-};
-
 const ShadcnIcon = () => {
   return (
     <svg
@@ -294,7 +280,6 @@ const ShadcnIcon = () => {
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0, 0, 400,400"
-      onClick={handleClickShadcn}
     >
       <g id="svgg">
         <path
@@ -337,18 +322,9 @@ const ShadcnIcon = () => {
   );
 };
 
-const handleClickTailwind = () => {
-  window.open("https://tailwindcss.com/", "_blank");
-};
-
 const TailwindIcon = () => {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 54 33"
-      onClick={handleClickTailwind}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 54 33">
       <g clip-path="url(#prefix__clip0)">
         <path
           fill="#38bdf8"
@@ -366,18 +342,9 @@ const TailwindIcon = () => {
   );
 };
 
-const handleClickPrisma = () => {
-  window.open("https://www.prisma.io/", "_blank");
-};
-
 const PrismaIcon = () => {
   return (
-    <svg
-      viewBox="0 0 90 28"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      onClick={handleClickPrisma}
-    >
+    <svg viewBox="0 0 90 28" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fill-rule="evenodd"
         clip-rule="evenodd"
@@ -388,10 +355,6 @@ const PrismaIcon = () => {
   );
 };
 
-const handleClickTRPC = () => {
-  window.open("https://trpc.io/", "_blank");
-};
-
 const TRPCIcon = () => {
   return (
     <svg
@@ -399,7 +362,6 @@ const TRPCIcon = () => {
       data-name="Layer 1"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 204.73 243.53"
-      onClick={handleClickTRPC}
     >
       <path
         d="M22.85,195.53H40.43v8.92H22.85v20.24a13.5,13.5,0,0,0,.59,4.29,6.52,6.52,0,0,0,1.67,2.72,6.25,6.25,0,0,0,2.64,1.48,12.75,12.75,0,0,0,3.46.43c.92,0,1.87,0,2.85-.13s1.9-.2,2.8-.35,1.69-.24,2.46-.39,1.43-.29,2-.43l1.18,8.31a14.8,14.8,0,0,1-3,1.28,28.87,28.87,0,0,1-3.61.89c-1.28.24-2.61.42-4,.55s-2.73.19-4.07.19a22.71,22.71,0,0,1-7-1,13.46,13.46,0,0,1-5.38-3.2A13.87,13.87,0,0,1,12,233.85a23.35,23.35,0,0,1-1.22-8V204.45H0v-8.92H10.75V184h12.1Z"
@@ -447,17 +409,9 @@ const TRPCIcon = () => {
   );
 };
 
-const handleClickDocker = () => {
-  window.open("https://www.docker.com/#build", "_blank");
-};
-
 const DockerIcon = () => {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-      onClick={handleClickDocker}
-    >
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path
         fill="#0DB7ED"
         fill-rule="evenodd"
@@ -467,17 +421,12 @@ const DockerIcon = () => {
   );
 };
 
-const handleClickPost = () => {
-  window.open("https://www.postgresql.org/", "_blank");
-};
-
 const PostgreSQLIcon = () => {
   return (
     <svg
       viewBox="0 0 432.071 445.383"
       xmlSpace="preserve"
       xmlns="http://www.w3.org/2000/svg"
-      onClick={handleClickPost}
     >
       <g
         id="orginal"
@@ -549,18 +498,9 @@ const PostgreSQLIcon = () => {
   );
 };
 
-const handleClickJira = () => {
-  window.open("https://www.atlassian.com/software/jira", "_blank");
-};
-
 const JiraIcon = () => {
   return (
-    <svg
-      viewBox="0 0 76 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      onClick={handleClickJira}
-    >
+    <svg viewBox="0 0 76 32" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="logo-gradient-blue-jira">
         <g id="Jira">
           <path
@@ -626,10 +566,6 @@ const JiraIcon = () => {
   );
 };
 
-const handleClickGithub = () => {
-  window.open("https://github.com/", "_blank");
-};
-
 const GithubIcon = () => {
   return (
     <svg
@@ -637,7 +573,6 @@ const GithubIcon = () => {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 240.000000 240.000000"
       preserveAspectRatio="xMidYMid meet"
-      onClick={handleClickGithub}
     >
       <g
         transform="translate(0.000000,240.000000) scale(0.100000,-0.100000)"
@@ -663,17 +598,9 @@ const GithubIcon = () => {
   );
 };
 
-const handleClickFigma = () => {
-  window.open("https://www.figma.com/", "_blank");
-};
-
 const FigmaIcon = () => {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 7.678 7.68"
-      onClick={handleClickFigma}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7.678 7.68">
       <path
         d="M2.56 7.68A1.28 1.28 0 0 0 3.84 6.4V5.12H2.56a1.28 1.28 0 0 0 0 2.56z"
         fill="#0acf83"
@@ -695,10 +622,6 @@ const FigmaIcon = () => {
   );
 };
 
-const handleClickNode = () => {
-  window.open("https://nodejs.org/en", "_blank");
-};
-
 const NodeJSIcon = () => {
   return (
     <svg
@@ -706,7 +629,6 @@ const NodeJSIcon = () => {
       version="1.1"
       viewBox="0 0 590 159"
       id="svg3030"
-      onClick={handleClickNode}
     >
       <defs id="defs3032" />
       <g transform="translate(-115.94417,-501.42131)" id="layer1">
