@@ -2,9 +2,29 @@ import app from "../app.ts";
 import http from "http";
 import { AddressInfo } from "net";
 import { createHttpTerminator } from "http-terminator";
+import { db } from "database";
 
 // Get port from environment and store in Express
 const port: string | undefined = process.env.BACKEND_PORT;
+
+db.user
+  .create({
+    data: {
+      name: "CS3733 TeamQ Admin",
+      sub: "auth0|661837e38de330f2e3a4ca6a",
+      email: "admind24q@gmail.com",
+      role: "admin",
+      staff: {
+        create: {
+          name: "CS3733 TeamQ Admin",
+          jobTitle: "Administrator",
+        },
+      },
+    },
+  })
+  .catch(() => {
+    console.log("Admin acount exists.");
+  });
 
 if (port === undefined) {
   console.error("Failed to start: Missing PORT environment variable");

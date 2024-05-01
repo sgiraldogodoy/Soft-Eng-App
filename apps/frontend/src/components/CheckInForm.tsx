@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/form.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { useForm } from "react-hook-form";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input.tsx";
@@ -39,6 +39,8 @@ export default function CheckInForm({ onOpenChange }: Props) {
     },
   });
 
+  const [success, setSuccess] = useState(false);
+
   const onSubmit = useCallback(
     //(data: z.input<typeof formSchema>) => {console.log(data);}, []);
     async (data: z.input<typeof formSchema>) => {
@@ -51,6 +53,7 @@ export default function CheckInForm({ onOpenChange }: Props) {
         {
           onSuccess: () => {
             utils.appointment.getAll.invalidate();
+            setSuccess(true);
           },
         },
       );
@@ -66,6 +69,22 @@ export default function CheckInForm({ onOpenChange }: Props) {
     },
     [updateCheckIn, utils, form],
   );
+
+  if (success) {
+    return (
+      <div className="w-full">
+        <p className="mx-auto text-3xl text-center">Checked In!</p>
+        <Button
+          onClick={() => {
+            onOpenChange(false);
+          }}
+          className="w-full mt-10"
+        >
+          Go Home
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>

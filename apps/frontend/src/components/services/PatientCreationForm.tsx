@@ -188,7 +188,7 @@ export default function InputForm() {
 
   return (
     <>
-      <Card className="h-full backdrop-blur-md flex-1 flex flex-col overflow-auto z-0 bg-white/90 ">
+      <Card className="h-full backdrop-blur-lg flex-1 flex flex-col overflow-auto z-0 bg-white/90 ">
         <CardHeader>
           <CardTitle className="capitalize">Patient Creation</CardTitle>
         </CardHeader>
@@ -201,7 +201,7 @@ export default function InputForm() {
               onSubmit={form.handleSubmit(onSubmit)}
               className="w-full h-full flex flex-col justify-between items-stretch gap-4"
             >
-              <div className="flex flex-row gap-2 items-stretch">
+              <div className="flex flex-row gap-2 items-end">
                 <FormField
                   control={form.control}
                   name="firstName"
@@ -242,7 +242,7 @@ export default function InputForm() {
                   )}
                 />
               </div>
-              <div className="flex flex-row gap-2 items-stretch">
+              <div className="flex flex-row gap-2 items-end">
                 <FormField
                   control={form.control}
                   name="insurance"
@@ -335,7 +335,7 @@ export default function InputForm() {
                   )}
                 />
               </div>
-              <div className="flex flex-row gap-2 items-stretch">
+              <div className="flex flex-row gap-2 items-end">
                 <FormField
                   control={form.control}
                   name="identity.create.idNumber"
@@ -354,7 +354,7 @@ export default function InputForm() {
                   name="identity.create.idType"
                   render={({ field }) => (
                     <FormItem className="flex-1 ">
-                      <FormLabel>Type of ID*</FormLabel>
+                      <FormLabel>ID Type</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
@@ -381,7 +381,7 @@ export default function InputForm() {
                   name="pcp.connect.id"
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>Primary Care Provider</FormLabel>
+                      <FormLabel>PCP</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -441,7 +441,7 @@ export default function InputForm() {
                   )}
                 />
               </div>
-              <div className="flex flex-row gap-2 items-stretch">
+              <div className="flex flex-row gap-2 items-end">
                 <FormField
                   control={form.control}
                   name="dateOfBirth"
@@ -460,7 +460,7 @@ export default function InputForm() {
                   name="phoneNumber"
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>Primary Phone Number</FormLabel>
+                      <FormLabel>Phone #</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>

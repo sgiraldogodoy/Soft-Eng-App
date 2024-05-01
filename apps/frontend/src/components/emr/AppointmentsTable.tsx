@@ -33,15 +33,29 @@ import {
 import { RouterOutput, trpc } from "@/utils/trpc.ts";
 import { Route, useLocation } from "wouter";
 import { DateTime } from "luxon";
-import { CirclePlay } from "lucide-react";
+import { CheckSquareIcon, CirclePlay, X, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import { ScheduleAppointmentDialogue } from "../ScheduleAppointmentDialogue";
+import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Switch } from "../ui/switch";
 
 export function AppointmentsTable({ className }: { className?: string }) {
+  const utils = trpc.useUtils();
   const [data] = trpc.appointment.getAll.useSuspenseQuery({
     onlyUpcoming: true,
+  });
+  const cancelAppointment = trpc.appointment.deleteOne.useMutation({
+    onSuccess: () => {
+      utils.appointment.getAll.invalidate();
+    },
+  });
+  const updateAppointment = trpc.appointment.updateOne.useMutation({
+    onSuccess: () => {
+      utils.appointment.getAll.invalidate();
+    },
   });
   const createVisit = trpc.visit.createOne.useMutation();
 
@@ -52,7 +66,6 @@ export function AppointmentsTable({ className }: { className?: string }) {
 
   const deleteMutation = trpc.record.deleteOne.useMutation();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const utils = trpc.useUtils();
 
   const columns: ColumnDef<RouterOutput["appointment"]["getAll"][0]>[] = [
     {
@@ -80,44 +93,141 @@ export function AppointmentsTable({ className }: { className?: string }) {
       id: "appointmentTime",
     },
     {
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Notes" />
+      ),
+      accessorKey: "notes",
+    },
+    {
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Checked In" />
+      ),
+      accessorKey: "checkedIn",
+      cell: ({ row }) => {
+        const appointment = row.original;
+
+        if (appointment.checkedIn) {
+          return <CheckCircledIcon className="w-4 h-4 stroke-green-700" />;
+        } else {
+          return <XCircle className="w-4 h-4 stroke-red-700" />;
+        }
+      },
+    },
+    {
+      id: "doCheckIn",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const appointment = row.original;
+
+        return (
+          <Tooltip delayDuration={100}>
+            <TooltipTrigger>
+              <Button
+                disabled={appointment.checkedIn}
+                variant="ghost"
+                size="icon"
+                onClick={async () => {
+                  const checkedInAppointment = updateAppointment.mutateAsync({
+                    id: appointment.id,
+                    data: {
+                      checkedIn: true,
+                    },
+                  });
+
+                  toast.promise(checkedInAppointment, {
+                    success: "Checked in appointment.",
+                    loading: "Checking in appointment...",
+                    error: "Failed to check in appointment",
+                  });
+                }}
+              >
+                <CheckSquareIcon className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Check In</TooltipContent>
+          </Tooltip>
+        );
+      },
+    },
+    {
       id: "start",
       enableHiding: false,
       cell: ({ row }) => {
         const appointment = row.original;
 
         return (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={async () => {
-              const visit =
-                appointment.visit?.id ??
-                (
-                  await createVisit.mutateAsync({
-                    appointment: {
-                      connect: {
-                        id: appointment.id,
-                      },
-                    },
-                    patient: {
-                      connect: {
-                        id: appointment.patient.id,
-                      },
-                    },
-                    visitTime: new Date().toISOString(),
-                    staff: {
-                      connect: {
-                        id: me!.staff!.id,
-                      },
-                    },
-                  })
-                ).id;
+          <Tooltip delayDuration={100}>
+            <TooltipTrigger>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={async () => {
+                  const visit =
+                    appointment.visit?.id ??
+                    (
+                      await createVisit.mutateAsync({
+                        appointment: {
+                          connect: {
+                            id: appointment.id,
+                          },
+                        },
+                        patient: {
+                          connect: {
+                            id: appointment.patient.id,
+                          },
+                        },
+                        visitTime: new Date().toISOString(),
+                        staff: {
+                          connect: {
+                            id: me!.staff!.id,
+                          },
+                        },
+                      })
+                    ).id;
 
-              setLocation("/visit/" + visit);
-            }}
-          >
-            <CirclePlay className="h-4 w-4" />
-          </Button>
+                  setLocation("/visit/" + visit);
+                }}
+              >
+                <CirclePlay className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              {appointment.visit ? "Resume" : "Begin"} Appointment
+            </TooltipContent>
+          </Tooltip>
+        );
+      },
+    },
+    {
+      id: "cancel",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const appointment = row.original;
+
+        return (
+          <Tooltip delayDuration={100}>
+            <TooltipTrigger>
+              <Button
+                disabled={!!appointment.visit}
+                variant="ghost"
+                size="icon"
+                onClick={async () => {
+                  const deletion = cancelAppointment.mutateAsync({
+                    id: appointment.id,
+                  });
+
+                  toast.promise(deletion, {
+                    success: "Cancelled appointment.",
+                    loading: "Cancelling appointment...",
+                    error: "Failed to cancel appointment",
+                  });
+                }}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Cancel Appointment</TooltipContent>
+          </Tooltip>
         );
       },
     },
@@ -132,7 +242,7 @@ export function AppointmentsTable({ className }: { className?: string }) {
       sorting: [
         {
           id: "appointmentTime",
-          desc: true,
+          desc: false,
         },
       ],
     },
@@ -196,7 +306,26 @@ export function AppointmentsTable({ className }: { className?: string }) {
 
       <Card>
         <CardContent className="pt-6 space-y-4">
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger>
+                <Switch
+                  checked={
+                    table.getColumn("checkedIn")?.getFilterValue() as boolean
+                  }
+                  onCheckedChange={(c) => {
+                    table
+                      .getColumn("checkedIn")
+                      ?.setFilterValue(c ? true : undefined);
+                  }}
+                >
+                  Test
+                </Switch>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>Show only checked in appointments.</p>
+              </TooltipContent>
+            </Tooltip>
             <Input
               type="text"
               placeholder="Filter names..."

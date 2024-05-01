@@ -1,11 +1,10 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link, Redirect } from "wouter";
 import { Check, Navigation, ExternalLink, BookUser } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import WeatherWidget from "@/components/WeatherWidget.tsx";
 import { DateTime } from "luxon";
 import CheckInForm from "@/components/CheckInForm.tsx";
-import { motion } from "framer-motion";
 import LaserMap from "@/components/LaserMap.tsx";
 import { useMe } from "@/components/MeContext";
 
@@ -49,18 +48,12 @@ export default function HomePage() {
 
   return (
     <div className="h-screen min-w-screen flex">
-      <motion.div
-        layout
-        className="flex flex-col h-full justify-center gap-12 items-start w-full px-6"
-      >
+      <div className="flex flex-col h-full justify-center gap-12 items-start w-full px-6">
         {session.isAuthenticated && <Redirect to="/pathfind" />}
         {!checkingIn && (
           <>
             <Link to="/pathfind" asChild>
-              <motion.div
-                layout
-                className="w-full space-y-2 cursor-pointer transition transform origin-left hover:scale-105"
-              >
+              <div className="w-full space-y-2 cursor-pointer transition transform origin-left hover:scale-105">
                 <Navigation size={75} strokeWidth={1.5} />
                 <div className="space-y-1">
                   <p className="text-2xl">Get Directions</p>
@@ -68,13 +61,12 @@ export default function HomePage() {
                     Find your way around BWH
                   </p>
                 </div>
-              </motion.div>
+              </div>
             </Link>
             <hr className="w-full" />
           </>
         )}
-        <motion.div
-          layout
+        <div
           onClick={() => {
             setCheckingIn(true);
           }}
@@ -87,7 +79,7 @@ export default function HomePage() {
               Check-in to your appointment
             </p>
           </div>
-        </motion.div>
+        </div>
         <hr className="w-full" />
         {!checkingIn && (
           <div
@@ -109,15 +101,15 @@ export default function HomePage() {
           </div>
         )}
         {checkingIn && (
-          <motion.div className="w-full" layout>
+          <div className="w-full">
             <CheckInForm onOpenChange={setCheckingIn} />
-          </motion.div>
+          </div>
         )}
         <div
           onClick={() => session.loginWithRedirect()}
           className="flex gap-2 cursor-pointer"
         ></div>
-      </motion.div>
+      </div>
       <Link to="/pathfind" asChild>
         <div className="basis-2/3 shrink-0 h-full relative bg-[#001430] cursor-pointer">
           <LaserMap

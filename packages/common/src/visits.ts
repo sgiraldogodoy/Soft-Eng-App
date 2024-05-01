@@ -31,6 +31,16 @@ export const ZCreateAppointmentSchema = z.object({
       return z.NEVER;
     }
 
+    if (new Date(data).getTime() - new Date().getTime() < 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Cannot schedule appointment in the past",
+
+        path: ["appointmentTime"],
+      });
+      return z.NEVER;
+    }
+
     return data;
   }),
   checkedIn: z.boolean().default(false),

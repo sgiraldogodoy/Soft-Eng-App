@@ -36,7 +36,6 @@ import { CheckIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { toast } from "sonner";
-import { useLocation } from "wouter";
 
 const preprocessNested = (v: unknown) => {
   if (typeof v !== "object" || !v) {
@@ -85,8 +84,6 @@ export function ScheduleAppointmentDialogue({
   });
   const patientQuery = trpc.patient.getAll.useQuery();
 
-  const [, setLocation] = useLocation();
-
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     shouldUnregister: true,
@@ -113,7 +110,6 @@ export function ScheduleAppointmentDialogue({
         onSuccess: () => {
           utils.appointment.getAll.invalidate();
           utils.user.me.invalidate();
-          setLocation("~/portal");
         },
       },
     );
@@ -200,10 +196,7 @@ export function ScheduleAppointmentDialogue({
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  <FormDescription>
-                    This is the doctor you will see on the day of your
-                    appointment.
-                  </FormDescription>
+                  <FormDescription>Who will see the patient?</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -269,10 +262,7 @@ export function ScheduleAppointmentDialogue({
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  <FormDescription>
-                    This is the patient you will see on the day of your
-                    appointment.
-                  </FormDescription>
+                  <FormDescription>Who is the patient?</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -283,8 +273,12 @@ export function ScheduleAppointmentDialogue({
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Select a date</FormLabel>
-                  <Input type="datetime-local" {...field} />
-                  <FormMessage />
+                  <FormControl>
+                    <Input type="datetime-local" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Appointment date must be in the future.
+                  </FormDescription>
                 </FormItem>
               )}
             />
