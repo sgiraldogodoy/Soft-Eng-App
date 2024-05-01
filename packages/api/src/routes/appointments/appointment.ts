@@ -262,47 +262,53 @@ export const appointmentRouter = router({
       const hours = appointment.appointmentTime.getHours();
       const minutes = appointment.appointmentTime.getMinutes();
 
-      const file: File = await new Promise((resolve, reject) => {
-        ics.createEvent(
-          {
-            start: [year, month, day, hours, minutes],
-            duration: { hours: 1, minutes: 0 },
-            title: "Appointment with " + appointment.staff?.name,
-            description: "Your appointment at Brigham and Women's Hospital",
-            location: "Brigham and Women's Hospital",
-            url: "http://www.cs3733teamq.org/",
-            geo: { lat: 42.33529, lon: -71.10833 },
-            status: "CONFIRMED",
-            busyStatus: "BUSY",
-            organizer: { name: "Admin", email: "noreply@cs3733teamq.org" },
-          },
-          (error, value) => {
-            if (error) {
-              reject(error);
-            }
+      try {
+        const file: File = await new Promise((resolve, reject) => {
+          ics.createEvent(
+            {
+              start: [year, month, day, hours, minutes],
+              duration: { hours: 1, minutes: 0 },
+              title: "Appointment with " + appointment.staff?.name,
+              description: "Your appointment at Brigham and Women's Hospital",
+              location: "Brigham and Women's Hospital",
+              url: "https://www.cs3733teamq.org/",
+              geo: { lat: 42.33529, lon: -71.10833 },
+              status: "CONFIRMED",
+              busyStatus: "BUSY",
+              organizer: { name: "Admin", email: "noreply@cs3733teamq.org" },
+            },
+            (error, value) => {
+              if (error) {
+                reject(error);
+              }
 
-            resolve(new File([value], "invite.ics", { type: "text/calendar" }));
-          },
-        );
-      });
+              resolve(
+                new File([value], "invite.ics", { type: "text/calendar" }),
+              );
+            },
+          );
+        });
 
-      const { data, error } = await ctx.resend.emails.send({
-        from: "no-reply@cs3733teamq.org",
-        to: input.email,
-        subject: "Invite: Your BWH Appointment",
-        html: "Your appointment invite is attached!",
-        attachments: [
-          {
-            filename: file.name,
-            content: await file.text(),
-          },
-        ],
-      });
+        const { data, error } = await ctx.resend.emails.send({
+          from: "no-reply@cs3733teamq.org",
+          to: input.email,
+          subject: "Invite: Your BWH Appointment",
+          html: "Your appointment invite is attached!",
+          attachments: [
+            {
+              filename: file.name,
+              content: await file.text(),
+            },
+          ],
+        });
 
-      if (error) {
-        return console.error({ error });
+        if (error) {
+          return console.error({ error });
+        }
+
+        console.log({ data });
+      } catch (e) {
+        console.error(e);
       }
-
-      console.log({ data });
     }),
 });
