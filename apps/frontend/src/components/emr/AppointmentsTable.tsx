@@ -31,12 +31,13 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { RouterOutput, trpc } from "@/utils/trpc.ts";
-import { useLocation } from "wouter";
+import { Route, useLocation } from "wouter";
 import { DateTime } from "luxon";
 import { CirclePlay } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
+import { ScheduleAppointmentDialogue } from "../ScheduleAppointmentDialogue";
 
 export function AppointmentsTable({ className }: { className?: string }) {
   const [data] = trpc.appointment.getAll.useSuspenseQuery({
@@ -195,14 +196,25 @@ export function AppointmentsTable({ className }: { className?: string }) {
 
       <Card>
         <CardContent className="pt-6 space-y-4">
-          <Input
-            type="text"
-            placeholder="Filter names..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-          />
+          <div className="flex gap-2">
+            <Input
+              type="text"
+              placeholder="Filter names..."
+              value={
+                (table.getColumn("name")?.getFilterValue() as string) ?? ""
+              }
+              onChange={(event) =>
+                table.getColumn("name")?.setFilterValue(event.target.value)
+              }
+              className="flex-1"
+            />
+            <Button
+              className="shrink-0"
+              onClick={() => setLocation("/schedule")}
+            >
+              Schedule
+            </Button>
+          </div>
           <Table className="overflow-auto bg-white shadow-md">
             <TableHeader className="sticky top-0">
               {table.getHeaderGroups().map((headerGroup) => (
@@ -253,6 +265,12 @@ export function AppointmentsTable({ className }: { className?: string }) {
           </Table>
         </CardContent>
       </Card>
+      <Route path="/schedule" nest>
+        <ScheduleAppointmentDialogue
+          open={true}
+          setOpen={() => setLocation("/")}
+        />
+      </Route>
     </div>
   );
 }

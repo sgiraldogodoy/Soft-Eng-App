@@ -8,12 +8,10 @@ import { LogOut } from "lucide-react";
 // import { trpc } from "@/utils/trpc.ts";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Card, CardContent } from "@/components/ui/card.tsx";
-import { Button } from "@/components/ui/button.tsx";
 import { Suspense } from "react";
 import PatientName from "@/components/PatientName.tsx";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
-import { Redirect, Route, useLocation } from "wouter";
-import { ScheduleAppointmentDialogue } from "@/components/ScheduleAppointmentDialogue.tsx";
+import { Redirect } from "wouter";
 import { CareTeam } from "@/components/CareTeam.tsx";
 import { NextAppointment } from "@/components/NextAppointment.tsx";
 import UpcomingAppointmentsList from "@/components/UpcomingAppointmentsList.tsx";
@@ -24,7 +22,6 @@ import { useMe } from "@/components/MeContext";
 
 export function PatientPortal() {
   const session = useAuth0();
-  const [, setLocation] = useLocation();
 
   const me = useMe();
 
@@ -119,12 +116,6 @@ export function PatientPortal() {
                     View and manage your appointments here
                   </p>
                 </div>
-                <Button
-                  className="bg-blue-600"
-                  onClick={() => setLocation("/schedule")}
-                >
-                  Schedule an appointment
-                </Button>
               </CardContent>
             </Card>
             <div className="flex flex-1 h-full overflow-y-hidden gap-6 py-6">
@@ -140,12 +131,6 @@ export function PatientPortal() {
             </div>
           </Suspense>
         </div>
-        <Route path="/schedule" nest>
-          <ScheduleAppointmentDialogue
-            open={true}
-            setOpen={() => setLocation("/")}
-          />
-        </Route>
       </div>
     </>
   );

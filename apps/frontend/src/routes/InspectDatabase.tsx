@@ -28,6 +28,7 @@ import { z } from "zod";
 import { CreateNodeDialog } from "@/components/CreateNodeDialog.tsx";
 import { CreateEdgeDialog } from "@/components/CreateEdgeDialog.tsx";
 import { CreateStaffDialog } from "@/components/CreateStaffDialog.tsx";
+import { AdminOnly } from "@/components/AdminOnly";
 const newNodeSchema = nodeSchema.omit({ id: true });
 
 export function InspectDatabase() {
@@ -91,6 +92,7 @@ export function InspectDatabase() {
 
   return (
     <>
+      <AdminOnly />
       <Tabs defaultValue="nodes" asChild>
         <div className="relative h-full min-h-full p-6 flex flex-col gap-2 overflow-auto">
           <div className="absolute bottom-0 left-0 w-full h-full">

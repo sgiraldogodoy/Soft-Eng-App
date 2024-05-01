@@ -108,7 +108,7 @@ export const patient = router({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const { identity, basePatient } = input;
+      const { identity, basePatient, ...rest } = input;
       if (identity?.idType && identity?.idNumber) {
         return ctx.db.patient.update({
           where: {
@@ -116,8 +116,29 @@ export const patient = router({
           },
           data: {
             ...basePatient.data,
+            pcp: rest.pcpId
+              ? {
+                  connect: {
+                    id: rest.pcpId,
+                  },
+                }
+              : undefined,
+            location: rest.locationId
+              ? {
+                  connect: {
+                    id: rest.locationId,
+                  },
+                }
+              : undefined,
+            user: rest.userId
+              ? {
+                  connect: {
+                    id: rest.userId,
+                  },
+                }
+              : undefined,
             dateOfBirth:
-              DateTime.fromISO(input.basePatient.data.dateOfBirth)
+              DateTime.fromISO(basePatient.data.dateOfBirth)
                 .setZone("local")
                 .toISO() ?? undefined,
             identity: {
@@ -141,8 +162,9 @@ export const patient = router({
           },
           data: {
             ...basePatient.data,
+            ...rest,
             dateOfBirth:
-              DateTime.fromISO(input.basePatient.data.dateOfBirth)
+              DateTime.fromISO(basePatient.data.dateOfBirth)
                 .setZone("local")
                 .toISO() ?? undefined,
           },

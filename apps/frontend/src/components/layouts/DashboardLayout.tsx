@@ -1,14 +1,14 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import {
-  BookHeart,
   DatabaseIcon,
   HammerIcon,
   LogOut,
   MapIcon,
   PencilRuler,
-  StethoscopeIcon,
-  UserCog,
   AreaChart,
+  FolderHeart,
+  UserSearch,
+  Settings,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -168,15 +168,18 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
                 <PencilRuler />
               </SidebarButton>
             )}
+            <hr className="w-2/3 border-slate-300" />
             <SidebarButton link="/services" name="Service Requests">
               <HammerIcon />
             </SidebarButton>
+            <hr className="w-2/3 border-slate-300" />
             <SidebarButton link="/patients" name="Patients">
-              <BookHeart />
+              <UserSearch />
             </SidebarButton>
             <SidebarButton link="/emr" name="EMR">
-              <StethoscopeIcon />
+              <FolderHeart />
             </SidebarButton>
+            <hr className="w-2/3 border-slate-300" />
             {isAdmin && (
               <SidebarButton link="/database" name="Database">
                 <DatabaseIcon />
@@ -188,7 +191,7 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
           </nav>
           <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
             <SidebarButton link="/settings" name="Settings">
-              <UserCog className="h-5 w-5" />
+              <Settings className="h-5 w-5" />
             </SidebarButton>
           </nav>
         </aside>

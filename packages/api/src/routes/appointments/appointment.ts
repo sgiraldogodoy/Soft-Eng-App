@@ -29,9 +29,16 @@ export const appointmentRouter = router({
       return ctx.db.appointment.findMany({
         where: input?.onlyUpcoming
           ? {
-              visit: {
-                closed: false,
-              },
+              OR: [
+                {
+                  visit: {
+                    closed: false,
+                  },
+                },
+                {
+                  visit: null,
+                },
+              ],
             }
           : undefined,
         include: {
