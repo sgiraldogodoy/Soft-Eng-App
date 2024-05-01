@@ -10,6 +10,7 @@ import { TooltipProvider } from "@/components/ui/tooltip.tsx";
 import { WarningProvider } from "@/components/providers/warning-provider.tsx";
 import { MeProvider } from "./components/MeContext.tsx";
 import { LoadingSpinner } from "./components/ui/loader.tsx";
+import { NoUserScreen } from "./components/NoUserScreen.tsx";
 
 export default function App() {
   const session = useAuth0();
@@ -48,6 +49,7 @@ export default function App() {
             <QueryClientProvider client={queryClient}>
               <Toaster />
               <TooltipProvider>
+                <NoUserScreen />
                 <AppRouter />
               </TooltipProvider>
             </QueryClientProvider>

@@ -28,10 +28,9 @@ export function NextAppointment() {
       </div>
     );
   }
-  let nextAppointment;
-  if (appointments) {
-    nextAppointment = appointments[0];
-  }
+
+  const nextAppointment = appointments ? appointments[0] : undefined;
+
   return (
     <div className="flex-1 flex flex-col gap-3">
       <p className="text-xl">Next Appointment</p>
@@ -72,10 +71,15 @@ export function NextAppointment() {
           </div>
           <Button
             className="flex gap-2 w-full justify-center items-center bg-blue-600"
-            onClick={() => sendEmail.mutate({ email: me?.email ?? "" })}
+            onClick={() =>
+              sendEmail.mutate({
+                email: me?.email ?? "",
+                appointmentId: nextAppointment!.id,
+              })
+            }
           >
             <Bell />
-            Set a reminder
+            Send an email invitation.
           </Button>
         </CardContent>
       </Card>

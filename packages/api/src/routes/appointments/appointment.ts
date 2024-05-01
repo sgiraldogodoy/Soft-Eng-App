@@ -1,4 +1,5 @@
 import { protectedProcedure, publicProcedure } from "../../trpc.ts";
+import * as ics from "ics";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
 import { ZCreateAppointmentSchema, ZCreateStaffSchema } from "common";
@@ -238,13 +239,64 @@ export const appointmentRouter = router({
     }),
 
   sendReminder: protectedProcedure
-    .input(z.object({ email: z.string().email() }))
+    .input(z.object({ email: z.string().email(), appointmentId: z.string() }))
     .mutation(async ({ input, ctx }) => {
+      const appointment = await ctx.db.appointment.findUnique({
+        where: {
+          id: input.appointmentId,
+        },
+        include: {
+          staff: true,
+        },
+      });
+      if (!appointment) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "No appointment found",
+        });
+      }
+
+      const year = appointment.appointmentTime.getFullYear();
+      const month = appointment.appointmentTime.getMonth();
+      const day = appointment.appointmentTime.getDay();
+      const hours = appointment.appointmentTime.getHours();
+      const minutes = appointment.appointmentTime.getMinutes();
+
+      const file: File = await new Promise((resolve, reject) => {
+        ics.createEvent(
+          {
+            start: [year, month, day, hours, minutes],
+            duration: { hours: 1, minutes: 0 },
+            title: "Appointment with " + appointment.staff?.name,
+            description: "Your appointment at Brigham and Women's Hospital",
+            location: "Brigham and Women's Hospital",
+            url: "http://www.cs3733teamq.org/",
+            geo: { lat: 42.33529, lon: -71.10833 },
+            status: "CONFIRMED",
+            busyStatus: "BUSY",
+            organizer: { name: "Admin", email: "noreply@cs3733teamq.org" },
+          },
+          (error, value) => {
+            if (error) {
+              reject(error);
+            }
+
+            resolve(new File([value], "invite.ics", { type: "text/calendar" }));
+          },
+        );
+      });
+
       const { data, error } = await ctx.resend.emails.send({
         from: "no-reply@cs3733teamq.org",
         to: input.email,
-        subject: "Hello World",
-        html: "<strong>It works!</strong>",
+        subject: "Invite: Your BWH Appointment",
+        html: "Your appointment invite is attached!",
+        attachments: [
+          {
+            filename: file.name,
+            content: await file.text(),
+          },
+        ],
       });
 
       if (error) {
