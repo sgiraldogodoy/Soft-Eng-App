@@ -16,6 +16,9 @@ import PhoneTextToNav from "@/routes/PhoneTextToNav.tsx";
 import HelpMenu from "@/routes/HelpMenu.tsx";
 import { EmrEntry } from "@/components/emr/EmrEntry";
 import Analytics from "@/routes/Analytics.tsx";
+import EditPatient from "@/routes/EditPatient.tsx";
+import { LoadingSpinner } from "@/components/ui/loader.tsx";
+import { Suspense } from "react";
 
 export function AppRouter() {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -57,6 +60,16 @@ export function AppRouter() {
           <Route path="/settings" nest>
             <Settings />
             {isDefinitelyNotAuthed && <Redirect to="/" />}
+          </Route>
+          <Route path="/patient/:id">
+            {({ id }) => (
+              <>
+                <Suspense fallback={<LoadingSpinner />}>
+                  <EditPatient patientId={id} />
+                </Suspense>
+                {isDefinitelyNotAuthed && <Redirect to="/" />}
+              </>
+            )}
           </Route>
           <Route path="/patients">
             <PatientIntegration />

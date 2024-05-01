@@ -21,6 +21,7 @@ const origImageHeight = 3400;
 
 interface MapProps {
   onNodeClick?: (clickedNode: string) => void;
+  onElevClick?: (clickedFloor: string, clickedForURL: string) => void;
   nodes: Node[] | undefined; // Change prop type
   path?: Node[] | undefined;
   edges?: Edge[] | undefined;
@@ -45,6 +46,7 @@ export default function Map({
   editable,
   filter,
   typeEdit,
+  onElevClick,
 }: MapProps) {
   const [imgWidth, setImageWidth] = useState(0); //set image width
   const [imgHeight, setImageHeight] = useState(0); //set image height
@@ -407,6 +409,7 @@ export default function Map({
         <Lines
           imgWidth={imgWidth}
           imgHeight={imgHeight}
+          onElevClick={onElevClick}
           nodes={nodes}
           path={path}
           dragOffset={offset}

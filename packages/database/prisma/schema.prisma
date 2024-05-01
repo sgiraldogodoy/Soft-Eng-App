@@ -275,10 +275,13 @@ enum sex {
 }
 
 model Identity {
-  id       String    @id @default(uuid())
+  id String @unique @default(uuid())
+
   idType   IDTypes
   idNumber String    @unique
   patients Patient[] @relation(name: "PatientToIdentity")
+
+  @@id(name: "uniqueId", [idType, idNumber])
 }
 
 enum IDTypes {

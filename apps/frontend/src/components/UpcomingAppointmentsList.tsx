@@ -28,7 +28,7 @@ export default function UpcomingAppointmentsList() {
   if (upcomingAppointments?.length === 0) {
     return (
       <div className="flex flex-1 flex-col h-full gap-3">
-        <p className="text-xl">Upcoming Appointments</p>
+        <p className="text-xl">Upcoming appointments</p>
         <Card className="h-full flex-1">
           <CardContent className="pt-6 h-full flex-1">
             <div className="text-lg font-semibold">
@@ -47,7 +47,7 @@ export default function UpcomingAppointmentsList() {
   return (
     <>
       <div className="overflow-auto flex flex-col gap-3 h-full">
-        <p className="text-xl">Upcoming Appointments</p>
+        <p className="text-xl">Upcoming appointments</p>
         <Card className="gap-2 flex-1 h-full  overflow-auto ">
           <CardContent className="overflow-auto space-y-2 pt-6">
             {upcomingAppointments?.map((appointment) => {
@@ -115,8 +115,8 @@ export default function UpcomingAppointmentsList() {
             <AlertDialogHeader>
               <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete this
-                user and remove the data from our servers.
+                This action cannot be undone. To reschedule an appointment
+                contact your care team.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

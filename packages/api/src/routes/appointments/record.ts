@@ -1,4 +1,4 @@
-import { protectedProcedure } from "../../trpc.ts";
+import { loggedInProcedure, protectedProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
 import { ZCreateRecordSchema } from "common";
@@ -10,6 +10,7 @@ export const recordRouter = router({
       z.object({
         byVisit: z.string().optional(),
         byNotVisit: z.string().optional(),
+        byPatient: z.string().optional(),
       }),
     )
     .query(({ input, ctx }) => {
@@ -24,6 +25,13 @@ export const recordRouter = router({
             {
               visitId: input.byVisit,
             },
+            input.byPatient
+              ? {
+                  visit: {
+                    patientId: input.byPatient,
+                  },
+                }
+              : {},
           ],
         },
         include: {
@@ -168,4 +176,31 @@ export const recordRouter = router({
         },
       });
     }),
+
+  myRecords: loggedInProcedure.query(({ ctx }) => {
+    return ctx.db.record.findMany({
+      where: {
+        visit: {
+          patient: {
+            user: {
+              sub: ctx.token.payload.sub as string,
+            },
+          },
+        },
+      },
+      include: {
+        vitals: true,
+        author: true,
+        diagnoses: {
+          include: {
+            prescriptions: {
+              include: {
+                pharmacy: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }),
 });

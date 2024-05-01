@@ -2,7 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { RouterOutput } from "@/utils/trpc";
 import { DataTableColumnHeader } from "../ui/dt-sortable";
 import { Button } from "@/components/ui/button.tsx";
-import { ReceiptText } from "lucide-react";
+import { PencilIcon } from "lucide-react";
 import { DateTime } from "luxon";
 
 export const patientColumns: ColumnDef<RouterOutput["patient"]["getAll"][0]>[] =
@@ -65,7 +65,7 @@ export const patientColumns: ColumnDef<RouterOutput["patient"]["getAll"][0]>[] =
             variant="ghost"
             size="icon"
           >
-            <ReceiptText />
+            <PencilIcon className="w-5 h-5" />
           </Button>
         );
       },
