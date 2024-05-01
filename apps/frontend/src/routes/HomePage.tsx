@@ -1,16 +1,18 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link, Redirect } from "wouter";
-import { Check, CalendarDays, Navigation, ExternalLink } from "lucide-react";
+import { Check, Navigation, ExternalLink, BookUser } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import WeatherWidget from "@/components/WeatherWidget.tsx";
 import { DateTime } from "luxon";
 import CheckInForm from "@/components/CheckInForm.tsx";
 import { motion } from "framer-motion";
 import LaserMap from "@/components/LaserMap.tsx";
+import { useMe } from "@/components/MeContext";
 
 export default function HomePage() {
   const session = useAuth0();
 
+  const me = useMe();
   const [checkingIn, setCheckingIn] = useState(false);
 
   const [dateTime, setDateTime] = useState(DateTime.now());
@@ -35,6 +37,14 @@ export default function HomePage() {
   if (laserFloor == "") {
     const choices = ["L2", "L1", "1", "2"];
     setLaserFloor(choices[Math.floor(Math.random() * choices.length)]);
+  }
+
+  if (me) {
+    if (me.role === "patient") {
+      return <Redirect to="/portal" />;
+    } else {
+      return <Redirect to="/pathfind" />;
+    }
   }
 
   return (
@@ -79,22 +89,24 @@ export default function HomePage() {
           </div>
         </motion.div>
         <hr className="w-full" />
-
         {!checkingIn && (
-          <Link to="/" asChild>
-            <motion.div
-              layout
-              className="w-full cursor-pointer space-y-2 transition transform origin-left hover:scale-105"
-            >
-              <CalendarDays size={75} strokeWidth={1.5} />
-              <div className="space-y-1">
-                <p className="text-2xl">Manage Appointments</p>
-                <p className="text-md text-gray-600">
-                  Schedule, cancel, or change upcoming appointments
-                </p>
-              </div>
-            </motion.div>
-          </Link>
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              session.loginWithRedirect().catch((e) => {
+                console.error(e);
+              });
+            }}
+            className="w-full cursor-pointer space-y-2 transition transform origin-left hover:scale-105"
+          >
+            <BookUser size={75} strokeWidth={1.5} />
+            <div className="space-y-1">
+              <p className="text-2xl">Patient Portal</p>
+              <p className="text-md text-gray-600">
+                Schedule, cancel, or change upcoming appointments
+              </p>
+            </div>
+          </div>
         )}
         {checkingIn && (
           <motion.div className="w-full" layout>

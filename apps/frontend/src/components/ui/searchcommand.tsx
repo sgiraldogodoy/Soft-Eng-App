@@ -12,11 +12,15 @@ import {
 import { Button } from "@/components/ui/button.tsx";
 import React from "react";
 import { useLocation } from "wouter";
+import { useMe } from "../MeContext";
 
 export default function SearchCommand() {
   const [, setLocation] = useLocation();
 
   const [open, setOpen] = React.useState(false);
+
+  const me = useMe();
+  const isAdmin = me && me.role === "admin";
 
   const mapedit = () => {
     setLocation("/mapediting");
@@ -105,11 +109,13 @@ export default function SearchCommand() {
           <CommandGroup heading="Map">
             <CommandItem onSelect={map}>Hospital Map</CommandItem>
           </CommandGroup>
-          <CommandGroup heading="Map Edit">
-            <CommandItem onSelect={nodec}>Create Node</CommandItem>
-            <CommandItem onSelect={mapedit}>Create Edge</CommandItem>
-            <CommandItem onSelect={mapedit}>Edit Node</CommandItem>
-          </CommandGroup>
+          {isAdmin && (
+            <CommandGroup heading="Map Edit">
+              <CommandItem onSelect={nodec}>Create Node</CommandItem>
+              <CommandItem onSelect={mapedit}>Create Edge</CommandItem>
+              <CommandItem onSelect={mapedit}>Edit Node</CommandItem>
+            </CommandGroup>
+          )}
           <CommandGroup heading="Services">
             <CommandItem onSelect={services}>Manage Services</CommandItem>
           </CommandGroup>
@@ -117,9 +123,11 @@ export default function SearchCommand() {
             <CommandItem onSelect={patients}>Manage Patients</CommandItem>
             <CommandItem onSelect={patients}>Create Patients</CommandItem>
           </CommandGroup>
-          <CommandGroup heading="Database">
-            <CommandItem onSelect={database}>Manage database</CommandItem>
-          </CommandGroup>
+          {isAdmin && (
+            <CommandGroup heading="Database">
+              <CommandItem onSelect={database}>Manage database</CommandItem>
+            </CommandGroup>
+          )}
           <CommandGroup heading="Users">
             <CommandItem onSelect={muser}>Manage Users</CommandItem>
             <CommandItem onSelect={cuser}>Create Users</CommandItem>

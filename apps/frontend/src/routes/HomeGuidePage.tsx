@@ -95,7 +95,7 @@ export default function HomeGuidePage() {
                   </p>
                   <div className="w-full flex justify-center">
                     <img
-                      src="./helpmenucaptures/Pathfind0.PNG"
+                      src="./helpmenucaptures/floorselect.PNG"
                       alt="homescreen"
                       className="object-scale-down w-[50%] h-auto rounded-md m-2"
                     />
@@ -107,7 +107,7 @@ export default function HomeGuidePage() {
                   </p>
                   <div className="w-full flex justify-center">
                     <img
-                      src="./helpmenucaptures/Pathfind0.PNG"
+                      src="./helpmenucaptures/mapkeypop.PNG"
                       alt="homescreen"
                       className="object-scale-down w-[50%] h-auto rounded-md m-2"
                     />
@@ -125,7 +125,7 @@ export default function HomeGuidePage() {
                   </p>
                   <div className="w-full flex justify-center">
                     <img
-                      src="./helpmenucaptures/Pathfind0.PNG"
+                      src="./helpmenucaptures/mapsettings.PNG"
                       alt="homescreen"
                       className="object-scale-down w-[50%] h-auto rounded-md m-2"
                     />
@@ -139,7 +139,7 @@ export default function HomeGuidePage() {
                   </p>
                   <div className="w-full flex justify-center">
                     <img
-                      src="./helpmenucaptures/Pathfind0.PNG"
+                      src="./helpmenucaptures/mapstart.PNG"
                       alt="homescreen"
                       className="object-scale-down w-[50%] h-auto rounded-md m-2"
                     />
@@ -160,7 +160,7 @@ export default function HomeGuidePage() {
                   </p>
                   <div className="w-full flex justify-center">
                     <img
-                      src="./helpmenucaptures/Pathfind0.PNG"
+                      src="./helpmenucaptures/mapdirections.PNG"
                       alt="homescreen"
                       className="object-scale-down w-[50%] h-auto rounded-md m-2"
                     />
@@ -175,7 +175,7 @@ export default function HomeGuidePage() {
                   </p>
                   <div className="w-full flex justify-center">
                     <img
-                      src="./helpmenucaptures/Pathfind0.PNG"
+                      src="./helpmenucaptures/loggedinmap.PNG"
                       alt="homescreen"
                       className="object-scale-down w-[50%] h-auto rounded-md m-2"
                     />

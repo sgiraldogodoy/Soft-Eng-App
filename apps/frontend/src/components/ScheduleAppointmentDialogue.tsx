@@ -57,7 +57,6 @@ const preprocessNested = (v: unknown) => {
 };
 
 const FormSchema = ZCreateAppointmentSchema.extend({
-  patient: z.undefined(),
   staff: z.preprocess(
     preprocessNested,
     z.object({ connect: z.object({ id: z.string() }) }),
@@ -84,7 +83,8 @@ export function ScheduleAppointmentDialogue({
     const staffB = b.name.toUpperCase();
     return staffA < staffB ? -1 : staffA > staffB ? 1 : 0;
   });
-  const me = trpc.user.me.useQuery();
+  const patientQuery = trpc.patient.getAll.useQuery();
+
   const [, setLocation] = useLocation();
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -107,11 +107,6 @@ export function ScheduleAppointmentDialogue({
     const createAppointment = createAppointmentMutation.mutateAsync(
       {
         ...data,
-        patient: {
-          connect: {
-            id: me!.data!.patient!.id,
-          },
-        },
         appointmentTime: data.appointmentTime ?? "",
       },
       {
@@ -152,7 +147,7 @@ export function ScheduleAppointmentDialogue({
               control={form.control}
               name="staff.connect.id"
               render={({ field }) => (
-                <FormItem className="flex flex-col">
+                <FormItem className="flex flex-col flex-1">
                   <FormLabel>Select a doctor</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -161,7 +156,7 @@ export function ScheduleAppointmentDialogue({
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            "w-[200px] justify-between",
+                            "flex-1 justify-between",
                             !field.value && "text-muted-foreground",
                           )}
                         >
@@ -174,7 +169,7 @@ export function ScheduleAppointmentDialogue({
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[200px] p-0">
+                    <PopoverContent className="w-full p-0" align="start">
                       <Command>
                         <CommandInput
                           placeholder="Search doctor..."
@@ -207,6 +202,75 @@ export function ScheduleAppointmentDialogue({
                   </Popover>
                   <FormDescription>
                     This is the doctor you will see on the day of your
+                    appointment.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="patient.connect.id"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Select a patient</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "flex-1 justify-between",
+                            !field.value && "text-muted-foreground",
+                          )}
+                        >
+                          {field.value
+                            ? patientQuery.data?.find(
+                                (staff) => staff.id === field.value,
+                              )?.firstName +
+                              " " +
+                              patientQuery.data?.find(
+                                (staff) => staff.id === field.value,
+                              )?.lastName
+                            : "Select patient"}
+                          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0" align="start">
+                      <Command>
+                        <CommandInput
+                          placeholder="Search patient..."
+                          className="h-9"
+                        />
+                        <CommandEmpty>No patient found.</CommandEmpty>
+                        <CommandGroup>
+                          {patientQuery.data?.map((patient) => (
+                            <CommandItem
+                              value={patient.firstName + " " + patient.lastName}
+                              key={patient.firstName + " " + patient.lastName}
+                              onSelect={() => {
+                                form.setValue("patient.connect.id", patient.id);
+                              }}
+                            >
+                              {patient.firstName + " " + patient.lastName}
+                              <CheckIcon
+                                className={cn(
+                                  "ml-auto h-4 w-4",
+                                  patient.id === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormDescription>
+                    This is the patient you will see on the day of your
                     appointment.
                   </FormDescription>
                   <FormMessage />

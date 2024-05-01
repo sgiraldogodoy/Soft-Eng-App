@@ -226,11 +226,12 @@ export function Lines({
                 if (onElevClick)
                   onElevClick(floorString, FLOOR_URLS[floorString as Floor]);
               }}
+              cursor="pointer"
             >
               <circle
                 cx={10 * scale}
                 cy={10 * scale}
-                r={3 * scale}
+                r={5 * scale}
                 fill="#003A96"
               />
               <text

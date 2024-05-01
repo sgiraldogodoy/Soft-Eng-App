@@ -4,6 +4,7 @@ import FloorSelection2 from "@/components/FloorSelection2.tsx";
 import React, { useCallback, useState } from "react";
 import { MapEditTab } from "@/components/MapEditToggle.tsx";
 import { LoadingSpinner } from "@/components/ui/loader.tsx";
+import { AdminOnly } from "@/components/AdminOnly";
 
 export default function MapEdit() {
   const [imgUrl, setImgUrl] = useState("/02_thesecondfloor.png");
@@ -34,6 +35,7 @@ export default function MapEdit() {
 
   return (
     <div className="relative h-full">
+      <AdminOnly />
       <Map
         nodes={nodesQuery.data} // Pass node data as a prop
         imgURL={imgUrl}

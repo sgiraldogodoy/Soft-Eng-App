@@ -40,6 +40,7 @@ import { nestSchema } from "common/src/zod-utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { LinkIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useMe } from "./MeContext";
 
 interface CreateUserDialogProps {
   open: boolean;
@@ -298,6 +299,9 @@ const CreateBaseUser = ({
   const watchName = form.watch("name");
   const watchRole = form.watch("role");
 
+  const me = useMe();
+  const isAdmin = me?.role === "admin";
+
   const [staffCreateMode, setStaffCreateMode] = useState("create");
   const [staffId, setStaffId] = useState<string | null>(null);
   const [patientCreateMode, setPatientCreateMode] = useState("search");
@@ -358,8 +362,12 @@ const CreateBaseUser = ({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="staff">Staff</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    {isAdmin && (
+                      <>
+                        <SelectItem value="staff">Staff</SelectItem>
+                        <SelectItem value="admin">Admin</SelectItem>
+                      </>
+                    )}
                     <SelectItem value="patient">Patient</SelectItem>
                   </SelectContent>
                 </Select>
