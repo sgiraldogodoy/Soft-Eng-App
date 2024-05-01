@@ -1,14 +1,14 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import {
-  BookHeart,
   DatabaseIcon,
   HammerIcon,
   LogOut,
   MapIcon,
   PencilRuler,
-  StethoscopeIcon,
-  UserCog,
   AreaChart,
+  FolderHeart,
+  UserSearch,
+  Settings,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -25,17 +25,20 @@ import { Button } from "../ui/button";
 import ConnectRfidDialog from "../ConnectRfidDialog";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useMe } from "../MeContext";
+import { Redirect, useRoute } from "wouter";
 
 export default function DashboardLayout({ children }: React.PropsWithChildren) {
   const session = useAuth0();
   const utils = trpc.useUtils();
-  const me = trpc.user.me.useQuery();
+  const me = useMe();
   const lock = trpc.user.lockMe.useMutation({
     onSuccess: () => {
       utils.user.me.invalidate();
     },
   });
   const [connectingRfid, setConnectingRfid] = useState(false);
+  const [match] = useRoute("/pathfind");
 
   const lockMe = async () => {
     lock.mutate(undefined, {
@@ -51,7 +54,7 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
     });
   };
 
-  if (!session.isAuthenticated) {
+  if (match && !me) {
     return (
       <div className="w-full h-screen min-h-screen overflow-auto relative bg-muted/40">
         {children}
@@ -59,9 +62,15 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
     );
   }
 
+  if (!me || me.role === "patient") {
+    return <Redirect to="/portal" />;
+  }
+
+  const isAdmin = me.role === "admin";
+
   return (
     <div className="flex flex-col bg-background min-h-screen max-h-screen overflow-auto">
-      {me.data?.locked && <LockScreen />}
+      {me.locked && <LockScreen />}
       <ConnectRfidDialog
         open={connectingRfid}
         onOpenChange={setConnectingRfid}
@@ -125,7 +134,7 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
           <p className="text-lg">
             Welcome,{" "}
             <span className="font-semibold">
-              {me.data?.name ?? session.user?.email}
+              {me.name ?? session.user?.email}
             </span>
           </p>
           <DropdownMenu>
@@ -154,28 +163,35 @@ export default function DashboardLayout({ children }: React.PropsWithChildren) {
             <SidebarButton link="/pathfind" name="Map">
               <MapIcon />
             </SidebarButton>
-            <SidebarButton link="/mapediting" name="Map Editor">
-              <PencilRuler />
-            </SidebarButton>
+            {isAdmin && (
+              <SidebarButton link="/mapediting" name="Map Editor">
+                <PencilRuler />
+              </SidebarButton>
+            )}
+            <hr className="w-2/3 border-slate-300" />
             <SidebarButton link="/services" name="Service Requests">
               <HammerIcon />
             </SidebarButton>
+            <hr className="w-2/3 border-slate-300" />
             <SidebarButton link="/patients" name="Patients">
-              <BookHeart />
+              <UserSearch />
             </SidebarButton>
             <SidebarButton link="/emr" name="EMR">
-              <StethoscopeIcon />
+              <FolderHeart />
             </SidebarButton>
-            <SidebarButton link="/database" name="Database">
-              <DatabaseIcon />
-            </SidebarButton>
+            <hr className="w-2/3 border-slate-300" />
+            {isAdmin && (
+              <SidebarButton link="/database" name="Database">
+                <DatabaseIcon />
+              </SidebarButton>
+            )}
             <SidebarButton link="/analytics" name="Analytics">
               <AreaChart />
             </SidebarButton>
           </nav>
           <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
             <SidebarButton link="/settings" name="Settings">
-              <UserCog className="h-5 w-5" />
+              <Settings className="h-5 w-5" />
             </SidebarButton>
           </nav>
         </aside>

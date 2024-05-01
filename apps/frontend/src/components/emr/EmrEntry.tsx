@@ -78,7 +78,7 @@ const AppointmentCard = ({ appointmentId }: { appointmentId: string }) => {
 
 export function EmrEntry() {
   const appointmentsQuery = trpc.appointment.getAll.useQuery({
-    onlyUpcoming: false,
+    onlyUpcoming: true,
   });
 
   const upcoming = useMemo(() => {
@@ -98,7 +98,7 @@ export function EmrEntry() {
           </Suspense>
         )}
       </Route>
-      <Route path="/">
+      <Route path="/" nest>
         <div className="flex flex-col gap-4 w-full h-full p-4">
           <div className="flex flex-row items-center gap-2">
             {upcoming?.map((a) => (

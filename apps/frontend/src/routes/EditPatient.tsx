@@ -138,9 +138,6 @@ export default function EditPatient({ patientId }: EditPatientProps) {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data);
-    if (data.locationId)
-      data.locationId =
-        nodesQuery.find((n) => data.locationId === n.longName)?.id ?? "";
 
     const updatePatient = updatePatientRequest.mutateAsync(
       {
@@ -310,7 +307,7 @@ export default function EditPatient({ patientId }: EditPatientProps) {
                               >
                                 {field.value
                                   ? nodesQuery.find(
-                                      (node) => node.longName === field.value,
+                                      (node) => node.id === field.value,
                                     )?.longName
                                   : "Select location"}
                                 <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -330,17 +327,14 @@ export default function EditPatient({ patientId }: EditPatientProps) {
                                     value={location.longName}
                                     key={location.longName}
                                     onSelect={() => {
-                                      form.setValue(
-                                        "locationId",
-                                        location.longName,
-                                      );
+                                      form.setValue("locationId", location.id);
                                     }}
                                   >
                                     {location.longName}
                                     <CheckIcon
                                       className={cn(
                                         "ml-auto h-4 w-4",
-                                        location.longName === field.value
+                                        location.id === field.value
                                           ? "opacity-100"
                                           : "opacity-0",
                                       )}

@@ -1,4 +1,4 @@
-import { loggedInProcedure, protectedProcedure } from "../../trpc.ts";
+import { protectedProcedure, publicProcedure } from "../../trpc.ts";
 import { router } from "../../trpc.ts";
 import { z } from "zod";
 import { ZCreateBaseUserSchema, ZCreateUserWithAuth0AndNested } from "common";
@@ -120,7 +120,9 @@ export const userRouter = router({
       });
     }),
 
-  me: loggedInProcedure.query(async ({ ctx }) => {
+  me: publicProcedure.query(async ({ ctx }) => {
+    if (!ctx.token?.payload.sub) return null;
+
     const user = await ctx.db.user.findUnique({
       where: {
         sub: ctx.token.payload.sub as string,
