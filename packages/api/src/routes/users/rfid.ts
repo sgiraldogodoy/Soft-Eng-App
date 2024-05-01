@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { loggedInProcedure, protectedProcedure, router } from "../../trpc";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { TRPCError } from "@trpc/server";
 
 export const rfidRouter = router({
